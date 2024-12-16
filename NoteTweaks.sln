@@ -1,0 +1,16 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NoteTweaks", "NoteTweaks\NoteTweaks.csproj", "{5470ACDB-CE6B-4791-8F32-3F5E5CB70FFD}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5470ACDB-CE6B-4791-8F32-3F5E5CB70FFD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5470ACDB-CE6B-4791-8F32-3F5E5CB70FFD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5470ACDB-CE6B-4791-8F32-3F5E5CB70FFD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5470ACDB-CE6B-4791-8F32-3F5E5CB70FFD}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
