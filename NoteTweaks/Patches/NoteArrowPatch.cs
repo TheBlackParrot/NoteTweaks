@@ -97,7 +97,7 @@ namespace NoteTweaks.Patches
                             _initialDotPosition = dotGlowTransform.localPosition;
                         }
                         
-                        Vector3 glowPosition = new Vector3(Plugin.Config.ArrowPosition.x, _initialDotPosition.y + Plugin.Config.ArrowPosition.y, _initialDotPosition.z);
+                        Vector3 glowPosition = new Vector3(Plugin.Config.DotPosition.x, _initialDotPosition.y + Plugin.Config.DotPosition.y, _initialDotPosition.z);
                         
                         dotGlowTransform.localScale = scale;
                         dotGlowTransform.localPosition = glowPosition;
