@@ -2,31 +2,31 @@
     <toggle-setting apply-on-change="true" value="Enabled" text="Mod Enabled"
                     hover-hint="Remember to drink water! Hydrate!"/>
 
-    <vertical min-height="15"/>
+    <horizontal><text text="-----" font-size="2" color="#00000000"/></horizontal>
 
     <slider-setting apply-on-change="true" value="NoteScale" text="Note Scale"
-                    min="0.05" max="3.0" increment="0.05" show-buttons="true" formatter="PercentageFormatter"/>
+                    min="0.1" max="2.0" increment="0.01" show-buttons="true" formatter="PercentageFormatter"/>
 
-    <vertical min-height="15"/>
+    <horizontal><text text="-----" font-size="2" color="#00000000"/></horizontal>
 
     <toggle-setting apply-on-change="true" value="EnableFaceGlow" text="Enable Glowing Arrows"
                     hover-hint="Show glow around arrows"/>
     
     <slider-setting apply-on-change="true" value="ArrowScaleX" text="Horizontal Arrow Scale"
-                    min="0.05" max="3.0" increment="0.05" show-buttons="true" formatter="PercentageFormatter"
+                    min="0.05" max="2.0" increment="0.05" show-buttons="true" formatter="PercentageFormatter"
                     hover-hint="Horizontal scale (X-axis) of note arrows"/>
     <slider-setting apply-on-change="true" value="ArrowScaleY" text="Vertical Arrow Scale"
-                    min="0.05" max="3.0" increment="0.05" show-buttons="true" formatter="PercentageFormatter"
+                    min="0.05" max="5.0" increment="0.05" show-buttons="true" formatter="PercentageFormatter"
                     hover-hint="Vertical scale (Y-axis) of note arrows"/>
 
     <slider-setting apply-on-change="true" value="ArrowOffsetX" text="Horizontal Arrow Offset"
-                    min="-2.0" max="2.0" increment="0.05" show-buttons="true"
+                    min="-2.0" max="2.0" increment="0.005" show-buttons="true"
                     hover-hint="Horizontal offset (X-axis) of note arrows"/>
     <slider-setting apply-on-change="true" value="ArrowOffsetY" text="Vertical Arrow Offset"
-                    min="-2.0" max="2.0" increment="0.05" show-buttons="true"
+                    min="-2.0" max="2.0" increment="0.005" show-buttons="true"
                     hover-hint="Vertical offset (Y-axis) of note arrows"/>
 
-    <vertical min-height="15"/>
+    <horizontal><text text="-----" font-size="2" color="#00000000"/></horizontal>
 
     <toggle-setting apply-on-change="true" value="EnableDots" text="Show Dots"
                     hover-hint="Show dots"/>
@@ -39,9 +39,9 @@
                     hover-hint="Vertical scale (Y-axis) of note dots"/>
 
     <slider-setting apply-on-change="true" value="DotOffsetX" text="Horizontal Dot Offset"
-                    min="-2.0" max="2.0" increment="0.05" show-buttons="true"
+                    min="-2.0" max="2.0" increment="0.005" show-buttons="true"
                     hover-hint="Horizontal offset (X-axis) of note dots"/>
     <slider-setting apply-on-change="true" value="DotOffsetY" text="Vertical Dot Offset"
-                    min="-2.0" max="2.0" increment="0.05" show-buttons="true"
+                    min="-2.0" max="2.0" increment="0.005" show-buttons="true"
                     hover-hint="Vertical offset (Y-axis) of note dots"/>
 </settings-container>
