@@ -8,7 +8,7 @@
                     min="0.1" max="2.0" increment="0.01" show-buttons="true" formatter="PercentageFormatter"/>
     <slider-setting apply-on-change="true" value="LinkScale" text="Chain Link Scale"
                     min="0.1" max="2.0" increment="0.01" show-buttons="true" formatter="PercentageFormatter"
-                    hover-hint="Scale of chain links relative to note scale (ex. note @ 97% + chain @ 100% = chain @ 97%)"/>
+                    hover-hint="Scale of chain links relative to note scale"/>
 
     <horizontal><text text="-----" font-size="3" color="#00000000"/></horizontal>
 

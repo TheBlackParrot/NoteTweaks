@@ -32,7 +32,8 @@ Configuration is done in-game via a Menu button in the left panel of the Main Me
     "x": 0.0,
     "y": 0.0
   },
-  "NoteScale": 1.0
+  "NoteScale": 1.0,
+  "LinkScale": 1.0
 }
 ```
 `bool` **Enabled**
@@ -59,6 +60,9 @@ Configuration is done in-game via a Menu button in the left panel of the Main Me
 `float` **NoteScale**
 > Scale notes themselves by the specified factor
 
+`float` **LinkScale**
+> Scale of chain links relative to note scaling
+
 ## Dependencies
 - BSIPA
 - BeatSaberMarkupLanguage
@@ -69,3 +73,4 @@ Configuration is done in-game via a Menu button in the left panel of the Main Me
 - BSExtraColorPresets
 - SoundReplacer *(Meivyn's fork)*
 - BeatSaberPlus
+- JDFixer
