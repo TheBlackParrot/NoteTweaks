@@ -2,12 +2,15 @@
     <toggle-setting apply-on-change="true" value="Enabled" text="Mod Enabled"
                     hover-hint="Remember to drink water! Hydrate!"/>
 
-    <horizontal><text text="-----" font-size="2" color="#00000000"/></horizontal>
+    <horizontal><text text="-----" font-size="3" color="#00000000"/></horizontal>
 
     <slider-setting apply-on-change="true" value="NoteScale" text="Note Scale"
                     min="0.1" max="2.0" increment="0.01" show-buttons="true" formatter="PercentageFormatter"/>
+    <slider-setting apply-on-change="true" value="LinkScale" text="Chain Link Scale"
+                    min="0.1" max="2.0" increment="0.01" show-buttons="true" formatter="PercentageFormatter"
+                    hover-hint="Scale of chain links relative to note scale (ex. note @ 97% + chain @ 100% = chain @ 97%)"/>
 
-    <horizontal><text text="-----" font-size="2" color="#00000000"/></horizontal>
+    <horizontal><text text="-----" font-size="3" color="#00000000"/></horizontal>
 
     <toggle-setting apply-on-change="true" value="EnableFaceGlow" text="Enable Glowing Arrows"
                     hover-hint="Show glow around arrows"/>
@@ -26,7 +29,7 @@
                     min="-2.0" max="2.0" increment="0.005" show-buttons="true"
                     hover-hint="Vertical offset (Y-axis) of note arrows"/>
 
-    <horizontal><text text="-----" font-size="2" color="#00000000"/></horizontal>
+    <horizontal><text text="-----" font-size="3" color="#00000000"/></horizontal>
 
     <toggle-setting apply-on-change="true" value="EnableDots" text="Show Dots"
                     hover-hint="Show dots"/>

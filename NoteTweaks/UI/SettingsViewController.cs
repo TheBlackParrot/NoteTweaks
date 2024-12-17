@@ -130,5 +130,11 @@ namespace NoteTweaks.UI
             get => _config.NoteScale;
             set => _config.NoteScale = value;
         }
+        
+        protected float LinkScale
+        {
+            get => _config.LinkScale;
+            set => _config.LinkScale = value;
+        }
     }
 }

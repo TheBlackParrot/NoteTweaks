@@ -22,5 +22,7 @@ namespace NoteTweaks.Configuration
         public virtual Vector2 DotPosition { get; set; } = Vector2.zero;
         
         public virtual float NoteScale { get; set; } = 1.0f;
+        
+        public virtual float LinkScale { get; set; } = 1.0f;
     }
 }

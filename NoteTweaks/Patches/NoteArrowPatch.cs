@@ -37,6 +37,35 @@ namespace NoteTweaks.Patches
                 return !(_gameplayModifiers.proMode || _gameplayModifiers.smallCubes || _gameplayModifiers.strictAngles);
             }
         }
+
+        [HarmonyPatch(typeof(BurstSliderGameNoteController), "Init")]
+        internal class BurstSliderPatch
+        {
+            internal static void Postfix(ref BurstSliderGameNoteController __instance, ref BoxCuttableBySaber[] ____bigCuttableBySaberList, ref BoxCuttableBySaber[] ____smallCuttableBySaberList)
+            {
+                if (!Plugin.Config.Enabled || !IsAllowedToScaleNotes)
+                {
+                    return;
+                }
+
+                float linkScale = (Plugin.Config.NoteScale * Plugin.Config.LinkScale);
+                
+                Vector3 scale = linkScale * Vector3.one;
+                Vector3 invertedScale = (1.0f / linkScale) * Vector3.one;
+
+                __instance.transform.localScale = scale;
+                
+                foreach (BoxCuttableBySaber saberBox in ____bigCuttableBySaberList)
+                {
+                    saberBox.transform.localScale = invertedScale;
+                }
+                
+                foreach (BoxCuttableBySaber saberBox in ____smallCuttableBySaberList)
+                {
+                    saberBox.transform.localScale = invertedScale;
+                }
+            }
+        }
         
         [HarmonyPatch(typeof(GameNoteController), "Init")]
         internal class NotePatch
