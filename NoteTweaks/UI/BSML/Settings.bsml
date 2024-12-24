@@ -19,8 +19,10 @@
 
     <horizontal><text text="-----" font-size="4" color="#00000000"/></horizontal>
 
-    <toggle-setting apply-on-change="true" value="EnableFaceGlow" text="Enable Glowing Arrows"
-                    hover-hint="Show glow around arrows"/>
+    <toggle-setting apply-on-change="true" value="EnableFaceGlow" text="Enable Glowing Symbols"
+                    hover-hint="Show glow around symbols"/>
+
+    <horizontal><text text="-----" font-size="4" color="#00000000"/></horizontal>
     
     <slider-setting apply-on-change="true" value="ArrowScaleX" text="Horizontal Arrow Scale"
                     min="0.05" max="2.0" increment="0.05" show-buttons="true" formatter="PercentageFormatter"
@@ -30,10 +32,10 @@
                     hover-hint="Vertical scale (Y-axis) of note arrows"/>
 
     <slider-setting apply-on-change="true" value="ArrowOffsetX" text="Horizontal Arrow Offset"
-                    min="-2.0" max="2.0" increment="0.005" show-buttons="true"
+                    min="-2.0" max="2.0" increment="0.005" show-buttons="true" formatter="PreciseFloatFormatter"
                     hover-hint="Horizontal offset (X-axis) of note arrows"/>
     <slider-setting apply-on-change="true" value="ArrowOffsetY" text="Vertical Arrow Offset"
-                    min="-2.0" max="2.0" increment="0.005" show-buttons="true"
+                    min="-2.0" max="2.0" increment="0.005" show-buttons="true" formatter="PreciseFloatFormatter"
                     hover-hint="Vertical offset (Y-axis) of note arrows"/>
 
     <horizontal><text text="-----" font-size="3" color="#00000000"/></horizontal>
@@ -49,18 +51,18 @@
                     hover-hint="Vertical scale (Y-axis) of note dots"/>
 
     <slider-setting apply-on-change="true" value="DotOffsetX" text="Horizontal Dot Offset"
-                    min="-2.0" max="2.0" increment="0.005" show-buttons="true"
+                    min="-2.0" max="2.0" increment="0.005" show-buttons="true" formatter="PreciseFloatFormatter"
                     hover-hint="Horizontal offset (X-axis) of note dots"/>
     <slider-setting apply-on-change="true" value="DotOffsetY" text="Vertical Dot Offset"
-                    min="-2.0" max="2.0" increment="0.005" show-buttons="true"
+                    min="-2.0" max="2.0" increment="0.005" show-buttons="true" formatter="PreciseFloatFormatter"
                     hover-hint="Vertical offset (Y-axis) of note dots"/>
 
     <horizontal><text text="-----" font-size="4" color="#00000000"/></horizontal>
 
     <slider-setting apply-on-change="true" value="ColorBoostLeft" text="Left Color Boost"
-                    min="0" max="3.0" increment="0.05" show-buttons="true"
+                    min="-1.0" max="3.0" increment="0.05" show-buttons="true" formatter="PercentageFormatter"
                     hover-hint="Boost left note colors beyond the normal clamping levels"/>
     <slider-setting apply-on-change="true" value="ColorBoostRight" text="Right Color Boost"
-                    min="0" max="3.0" increment="0.05" show-buttons="true"
+                    min="-1.0" max="3.0" increment="0.05" show-buttons="true" formatter="PercentageFormatter"
                     hover-hint="Boost right note colors beyond the normal clamping levels"/>
 </settings-container>

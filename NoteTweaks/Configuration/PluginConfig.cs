@@ -12,7 +12,7 @@ namespace NoteTweaks.Configuration
         
         public virtual bool Enabled { get; set; } = true;
         
-        public virtual bool EnableArrowGlow { get; set; } = true;
+        public virtual bool EnableFaceGlow { get; set; } = true;
 
         public virtual Vector2 ArrowScale { get; set; } = Vector2.one;
         public virtual Vector2 ArrowPosition { get; set; } = Vector2.zero;

@@ -150,7 +150,7 @@ namespace NoteTweaks.Patches
                     Transform arrowGlowObject = meshRenderer.transform.parent.Find("NoteArrowGlow");
                     if (arrowGlowObject)
                     {
-                        arrowGlowObject.gameObject.SetActive(Plugin.Config.EnableArrowGlow);
+                        arrowGlowObject.gameObject.SetActive(Plugin.Config.EnableFaceGlow);
                         
                         Transform arrowGlowTransform = arrowGlowObject.transform;
                         
@@ -181,7 +181,7 @@ namespace NoteTweaks.Patches
 
                         if (!Plugin.Config.EnableDots)
                         {
-                            return;
+                            continue;
                         }
                         
                         Transform originalDotTransform = originalDot.transform;
@@ -200,6 +200,16 @@ namespace NoteTweaks.Patches
                             Object.DestroyImmediate(originalDot.parent.Find("AddedNoteCircleGlow").gameObject);
                         }
                         
+                        meshRenderer.GetComponent<MeshFilter>().mesh = DotMesh;
+                        
+                        meshRenderer.material = ReplacementDotMaterial;
+                        meshRenderer.sharedMaterial = ReplacementDotMaterial;
+
+                        if (!Plugin.Config.EnableFaceGlow)
+                        {
+                            continue;
+                        }
+                        
                         GameObject newGlowObject = Object.Instantiate(originalDot.gameObject, originalDot.parent).gameObject;
                         newGlowObject.name = "AddedNoteCircleGlow";
                         newGlowObject.GetComponent<MeshFilter>().mesh = _dotGlowMesh;
@@ -210,11 +220,6 @@ namespace NoteTweaks.Patches
                         newGlowMeshRenderer.material = DotGlowMaterial;
                         newGlowMeshRenderer.sharedMaterial = DotGlowMaterial;
                         newGlowMeshRenderer.material.color = originalDot.parent.parent.GetComponent<ColorNoteVisuals>()._noteColor;
-                        
-                        meshRenderer.GetComponent<MeshFilter>().mesh = DotMesh;
-                        
-                        meshRenderer.material = ReplacementDotMaterial;
-                        meshRenderer.sharedMaterial = ReplacementDotMaterial;
                     }
                 }
             }

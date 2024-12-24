@@ -13,6 +13,7 @@ namespace NoteTweaks.UI
     {
         private PluginConfig _config;
         public string PercentageFormatter(float x) => x.ToString("0%");
+        public string PreciseFloatFormatter(float x) => x.ToString("F3");
 
         [Inject]
         private void Construct(PluginConfig config)
@@ -28,12 +29,8 @@ namespace NoteTweaks.UI
         
         protected bool EnableFaceGlow
         {
-            get => _config.EnableArrowGlow;
-            set
-            {
-                _config.EnableArrowGlow = value;
-                NotePhysicalTweaks.ReplacementDotMaterial.color = new Color(1f, 1f, 1f, value ? 2f : 0f);
-            }
+            get => _config.EnableFaceGlow;
+            set => _config.EnableFaceGlow = value;
         }
 
         protected float ArrowScaleX
