@@ -169,34 +169,38 @@ namespace NoteTweaks.Patches
                         _dotGlowMesh = meshRenderer.GetComponent<MeshFilter>().mesh;
                     }
                     
-                    Vector3 scale = new Vector3(Plugin.Config.DotScale.x / 5f, Plugin.Config.DotScale.y / 5f, 0.0001f);
+                    Vector3 dotPosition = new Vector3(_initialDotPosition.x + Plugin.Config.DotPosition.x, _initialDotPosition.y + Plugin.Config.DotPosition.y, _initialDotPosition.z - 0.1f);
+                    Vector3 glowPosition = new Vector3(_initialDotPosition.x + Plugin.Config.DotPosition.x, _initialDotPosition.y + Plugin.Config.DotPosition.y, _initialDotPosition.z - 0.101f);
+                    Vector3 dotScale = new Vector3(Plugin.Config.DotScale.x / 5f, Plugin.Config.DotScale.y / 5f, 0.0001f);
                     Vector3 glowScale = new Vector3(Plugin.Config.DotScale.x / 1.5f, Plugin.Config.DotScale.y / 1.5f, 0.0001f);
                     
-                    Transform dotGlowObject = meshRenderer.transform.parent.Find("NoteCircleGlow");
-                    if (dotGlowObject)
+                    Transform originalDot = meshRenderer.transform.parent.Find("NoteCircleGlow");
+                    if (originalDot)
                     {
-                        dotGlowObject.gameObject.SetActive(Plugin.Config.EnableDots);
+                        originalDot.gameObject.SetActive(Plugin.Config.EnableDots);
+
+                        if (!Plugin.Config.EnableDots)
+                        {
+                            return;
+                        }
                         
-                        Transform dotGlowTransform = dotGlowObject.transform;
+                        Transform originalDotTransform = originalDot.transform;
                         
                         if (!_initialDotPositionDidSet)
                         {
                             _initialDotPositionDidSet = true;
-                            _initialDotPosition = dotGlowTransform.localPosition;
+                            _initialDotPosition = originalDotTransform.localPosition;
                         }
                         
-                        Vector3 dotPosition = new Vector3(_initialDotPosition.x + Plugin.Config.DotPosition.x, _initialDotPosition.y + Plugin.Config.DotPosition.y, _initialDotPosition.z - 0.1f);
-                        Vector3 glowPosition = new Vector3(_initialDotPosition.x + Plugin.Config.DotPosition.x, _initialDotPosition.y + Plugin.Config.DotPosition.y, _initialDotPosition.z - 0.101f);
-                        
-                        dotGlowTransform.localScale = scale;
-                        dotGlowTransform.localPosition = dotPosition;
+                        originalDotTransform.localScale = dotScale;
+                        originalDotTransform.localPosition = dotPosition;
 
-                        while (dotGlowObject.parent.Find("AddedNoteCircleGlow"))
+                        while (originalDot.parent.Find("AddedNoteCircleGlow"))
                         {
-                            Object.DestroyImmediate(dotGlowObject.parent.Find("AddedNoteCircleGlow").gameObject);
+                            Object.DestroyImmediate(originalDot.parent.Find("AddedNoteCircleGlow").gameObject);
                         }
                         
-                        GameObject newGlowObject = Object.Instantiate(dotGlowObject.gameObject, dotGlowObject.parent).gameObject;
+                        GameObject newGlowObject = Object.Instantiate(originalDot.gameObject, originalDot.parent).gameObject;
                         newGlowObject.name = "AddedNoteCircleGlow";
                         newGlowObject.GetComponent<MeshFilter>().mesh = _dotGlowMesh;
                         newGlowObject.transform.localPosition = glowPosition;
@@ -205,27 +209,13 @@ namespace NoteTweaks.Patches
                         MeshRenderer newGlowMeshRenderer = newGlowObject.GetComponent<MeshRenderer>();
                         newGlowMeshRenderer.material = DotGlowMaterial;
                         newGlowMeshRenderer.sharedMaterial = DotGlowMaterial;
-                        newGlowMeshRenderer.material.color = dotGlowObject.parent.parent.GetComponent<ColorNoteVisuals>()._noteColor;
+                        newGlowMeshRenderer.material.color = originalDot.parent.parent.GetComponent<ColorNoteVisuals>()._noteColor;
                         
                         meshRenderer.GetComponent<MeshFilter>().mesh = DotMesh;
                         
                         meshRenderer.material = ReplacementDotMaterial;
                         meshRenderer.sharedMaterial = ReplacementDotMaterial;
                     }
-                }
-            }
-        }
-        
-        // thanks Loloppe
-        // https://github.com/Loloppe/BeatSaber_NoteCutGuide/blob/master/HarmonyPatches/GuideInitializer.cs
-        [HarmonyPatch(typeof(NoteJump), nameof(NoteJump.ManualUpdate))]
-        static class DestroyGuide {
-            static void Prefix(ref Transform ____rotatedObject, ref PlayerTransforms ____playerTransforms) {
-                // Compatible with Custom Notes and replay, a bit wacky but oh well.
-                if (____rotatedObject.position.z <= ____playerTransforms.headPseudoLocalPos.z - 1f) {
-                    var guide = ____rotatedObject?.Find("AddedNoteCircleGlow");
-                    if(guide != null)
-                        Object.DestroyImmediate(guide.gameObject);
                 }
             }
         }
