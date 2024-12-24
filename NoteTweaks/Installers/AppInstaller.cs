@@ -16,8 +16,6 @@ namespace NoteTweaks.Installers
         public override void InstallBindings()
         {
             Container.BindInstance(_config).AsSingle();
-            //Container.BindInterfacesAndSelfTo<SoundLoader>().AsSingle();
-            //Container.BindInterfacesTo<BadCutSoundPatch>().AsSingle();
         }
     }
 }
