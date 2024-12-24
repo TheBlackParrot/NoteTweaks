@@ -2,15 +2,22 @@
     <toggle-setting apply-on-change="true" value="Enabled" text="Mod Enabled"
                     hover-hint="Remember to drink water! Hydrate!"/>
 
-    <horizontal><text text="-----" font-size="3" color="#00000000"/></horizontal>
+    <horizontal><text text="-----" font-size="4" color="#00000000"/></horizontal>
 
-    <slider-setting apply-on-change="true" value="NoteScale" text="Note Scale"
-                    min="0.1" max="2.0" increment="0.01" show-buttons="true" formatter="PercentageFormatter"/>
+    <slider-setting apply-on-change="true" value="NoteScaleX" text="Horizontal Note Scale"
+                    min="0.1" max="2.0" increment="0.01" show-buttons="true" formatter="PercentageFormatter"
+                    hover-hint="Horizontal scale (X-axis) of notes"/>
+    <slider-setting apply-on-change="true" value="NoteScaleY" text="Vertical Note Scale"
+                    min="0.1" max="2.0" increment="0.01" show-buttons="true" formatter="PercentageFormatter"
+                    hover-hint="Vertical scale (Y-axis) of notes"/>
+    <slider-setting apply-on-change="true" value="NoteScaleZ" text="Length Note Scale"
+                    min="0.1" max="2.0" increment="0.01" show-buttons="true" formatter="PercentageFormatter"
+                    hover-hint="Length scale (Z-axis) of notes"/>
     <slider-setting apply-on-change="true" value="LinkScale" text="Chain Link Scale"
                     min="0.1" max="2.0" increment="0.01" show-buttons="true" formatter="PercentageFormatter"
                     hover-hint="Scale of chain links relative to note scale"/>
 
-    <horizontal><text text="-----" font-size="3" color="#00000000"/></horizontal>
+    <horizontal><text text="-----" font-size="4" color="#00000000"/></horizontal>
 
     <toggle-setting apply-on-change="true" value="EnableFaceGlow" text="Enable Glowing Arrows"
                     hover-hint="Show glow around arrows"/>

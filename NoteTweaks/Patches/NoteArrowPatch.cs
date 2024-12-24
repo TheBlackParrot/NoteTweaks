@@ -47,11 +47,9 @@ namespace NoteTweaks.Patches
                 {
                     return;
                 }
-
-                float linkScale = (Plugin.Config.NoteScale * Plugin.Config.LinkScale);
                 
-                Vector3 scale = linkScale * Vector3.one;
-                Vector3 invertedScale = (1.0f / linkScale) * Vector3.one;
+                Vector3 scale = Plugin.Config.NoteScale * Plugin.Config.LinkScale;
+                Vector3 invertedScale = new Vector3(1.0f / scale.x, 1.0f / scale.y, 1.0f / scale.z);
 
                 __instance.transform.localScale = scale;
                 
@@ -77,8 +75,8 @@ namespace NoteTweaks.Patches
                     return;
                 }
                 
-                Vector3 scale = Plugin.Config.NoteScale * Vector3.one;
-                Vector3 invertedScale = (1.0f / Plugin.Config.NoteScale) * Vector3.one;
+                Vector3 scale = Plugin.Config.NoteScale;
+                Vector3 invertedScale = new Vector3(1.0f / scale.x, 1.0f / scale.y, 1.0f / scale.z);
 
                 __instance.transform.localScale = scale;
                 

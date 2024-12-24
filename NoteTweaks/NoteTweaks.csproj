@@ -34,6 +34,10 @@
             <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\BeatSaber.ViewSystem.dll</HintPath>
             <Private>false</Private>
         </Reference>
+        <Reference Include="Colors">
+            <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\Colors.dll</HintPath>
+            <Private>false</Private>
+        </Reference>
         <Reference Include="DataModels">
             <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\DataModels.dll</HintPath>
             <Private>false</Private>

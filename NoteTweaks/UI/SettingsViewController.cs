@@ -125,10 +125,37 @@ namespace NoteTweaks.UI
             set => _config.EnableDots = value;
         }
         
-        protected float NoteScale
+        protected float NoteScaleX
         {
-            get => _config.NoteScale;
-            set => _config.NoteScale = value;
+            get => _config.NoteScale.x;
+            set
+            {
+                Vector3 scale = _config.NoteScale;
+                scale.x = value;
+                _config.NoteScale = scale;
+            }
+        }
+        
+        protected float NoteScaleY
+        {
+            get => _config.NoteScale.y;
+            set
+            {
+                Vector3 scale = _config.NoteScale;
+                scale.y = value;
+                _config.NoteScale = scale;
+            }
+        }
+        
+        protected float NoteScaleZ
+        {
+            get => _config.NoteScale.z;
+            set
+            {
+                Vector3 scale = _config.NoteScale;
+                scale.z = value;
+                _config.NoteScale = scale;
+            }
         }
         
         protected float LinkScale
