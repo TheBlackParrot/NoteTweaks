@@ -1,6 +1,7 @@
 ﻿using BeatSaberMarkupLanguage.Attributes;
 using BeatSaberMarkupLanguage.ViewControllers;
 using NoteTweaks.Configuration;
+using NoteTweaks.Patches;
 using UnityEngine;
 using Zenject;
 
@@ -28,7 +29,11 @@ namespace NoteTweaks.UI
         protected bool EnableFaceGlow
         {
             get => _config.EnableArrowGlow;
-            set => _config.EnableArrowGlow = value;
+            set
+            {
+                _config.EnableArrowGlow = value;
+                NotePhysicalTweaks.ReplacementDotMaterial.color = new Color(1f, 1f, 1f, value ? 2f : 0f);
+            }
         }
 
         protected float ArrowScaleX

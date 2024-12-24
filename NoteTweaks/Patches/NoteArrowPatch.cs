@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Reflection;
 using BeatmapLevelSaveDataVersion4;
+using BeatSaberMarkupLanguage;
 using HarmonyLib;
 using UnityEngine;
 
@@ -11,7 +12,14 @@ namespace NoteTweaks.Patches
     internal class NotePhysicalTweaks
     {
         private static GameplayModifiers _gameplayModifiers;
-        
+        internal static readonly Material ReplacementDotMaterial = new Material(Shader.Find("Standard"))
+        {
+            name = "ReplacementDotMaterial",
+            color = new Color(1f, 1f, 1f, Plugin.Config.EnableArrowGlow ? 2f : 0f)
+        };
+        private static readonly GameObject DotObject = GameObject.CreatePrimitive(PrimitiveType.Sphere).gameObject;
+        private static readonly Mesh DotMesh = DotObject.GetComponent<MeshFilter>().mesh;
+
         // thanks BeatLeader
         [HarmonyPatch]
         internal class StandardLevelScenesTransitionSetupDataPatch
@@ -107,30 +115,6 @@ namespace NoteTweaks.Patches
                     return;
                 }
                 
-                foreach (MeshRenderer meshRenderer in ____circleMeshRenderers)
-                {
-                    Vector3 scale = new Vector3(Plugin.Config.DotScale.x / 2, Plugin.Config.DotScale.y / 2, 1.0f);
-                    
-                    Transform dotGlowObject = meshRenderer.transform.parent.Find("NoteCircleGlow");
-                    if (dotGlowObject)
-                    {
-                        dotGlowObject.gameObject.SetActive(Plugin.Config.EnableDots);
-                        
-                        Transform dotGlowTransform = dotGlowObject.transform;
-                        
-                        if (!_initialDotPositionDidSet)
-                        {
-                            _initialDotPositionDidSet = true;
-                            _initialDotPosition = dotGlowTransform.localPosition;
-                        }
-                        
-                        Vector3 glowPosition = new Vector3(Plugin.Config.DotPosition.x, _initialDotPosition.y + Plugin.Config.DotPosition.y, _initialDotPosition.z);
-                        
-                        dotGlowTransform.localScale = scale;
-                        dotGlowTransform.localPosition = glowPosition;
-                    }
-                }
-                
                 foreach (MeshRenderer meshRenderer in ____arrowMeshRenderers)
                 {
                     Transform arrowTransform = meshRenderer.gameObject.transform;
@@ -159,6 +143,36 @@ namespace NoteTweaks.Patches
                         
                         arrowGlowTransform.localScale = glowScale;
                         arrowGlowTransform.localPosition = glowPosition;
+                    }
+                }
+                
+                foreach (MeshRenderer meshRenderer in ____circleMeshRenderers)
+                {
+                    Vector3 scale = new Vector3(Plugin.Config.DotScale.x / 5, Plugin.Config.DotScale.y / 5, 0.001f);
+                    
+                    Transform dotGlowObject = meshRenderer.transform.parent.Find("NoteCircleGlow");
+                    if (dotGlowObject)
+                    {
+                        dotGlowObject.gameObject.SetActive(Plugin.Config.EnableDots);
+                        
+                        Transform dotGlowTransform = dotGlowObject.transform;
+                        
+                        if (!_initialDotPositionDidSet)
+                        {
+                            _initialDotPositionDidSet = true;
+                            _initialDotPosition = dotGlowTransform.localPosition;
+                        }
+                        
+                        Vector3 glowPosition = new Vector3(Plugin.Config.DotPosition.x, _initialDotPosition.y + Plugin.Config.DotPosition.y, _initialDotPosition.z - 0.1f);
+                        
+                        dotGlowTransform.localScale = scale;
+                        dotGlowTransform.localPosition = glowPosition;
+                        //dotGlowTransform.localRotation = Quaternion.FromToRotation(Vector3.one, Vector3.forward);
+                        
+                        meshRenderer.GetComponent<MeshFilter>().mesh = DotMesh;
+                        
+                        meshRenderer.material = ReplacementDotMaterial;
+                        meshRenderer.sharedMaterial = ReplacementDotMaterial;
                     }
                 }
             }
