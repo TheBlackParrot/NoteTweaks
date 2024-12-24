@@ -8,7 +8,7 @@ using UnityEngine;
 namespace NoteTweaks.Patches
 {
     [HarmonyPatch]
-    internal class Container
+    internal class NotePhysicalTweaks
     {
         private static GameplayModifiers _gameplayModifiers;
         

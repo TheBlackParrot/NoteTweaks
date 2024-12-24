@@ -37,6 +37,7 @@
         <Reference Include="Colors">
             <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\Colors.dll</HintPath>
             <Private>false</Private>
+            <Publicize>True</Publicize>
         </Reference>
         <Reference Include="DataModels">
             <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\DataModels.dll</HintPath>
@@ -59,6 +60,7 @@
         <Reference Include="Main">
             <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\Main.dll</HintPath>
             <Private>False</Private>
+            <Publicize>True</Publicize>
         </Reference>
         <Reference Include="HMLib">
             <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\HMLib.dll</HintPath>
@@ -122,6 +124,10 @@
             <Version>2.0.0-beta7</Version>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
             <PrivateAssets>all</PrivateAssets>
+        </PackageReference>
+        <PackageReference Include="BepInEx.AssemblyPublicizer.MSBuild" Version="0.4.2">
+          <PrivateAssets>all</PrivateAssets>
+          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
         <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     </ItemGroup>

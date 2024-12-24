@@ -24,5 +24,8 @@ namespace NoteTweaks.Configuration
         public virtual Vector3 NoteScale { get; set; } = Vector3.one;
         
         public virtual float LinkScale { get; set; } = 1.0f;
+        
+        public virtual float ColorBoostLeft { get; set; }
+        public virtual float ColorBoostRight { get; set; }
     }
 }

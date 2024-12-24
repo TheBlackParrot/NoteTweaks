@@ -163,5 +163,17 @@ namespace NoteTweaks.UI
             get => _config.LinkScale;
             set => _config.LinkScale = value;
         }
+        
+        protected float ColorBoostLeft
+        {
+            get => _config.ColorBoostLeft;
+            set => _config.ColorBoostLeft = value;
+        }
+        
+        protected float ColorBoostRight
+        {
+            get => _config.ColorBoostRight;
+            set => _config.ColorBoostRight = value;
+        }
     }
 }
