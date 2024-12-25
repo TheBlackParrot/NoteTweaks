@@ -1,16 +1,13 @@
-﻿using System.Linq;
-using System.Reflection;
-using HarmonyLib;
+﻿using HarmonyLib;
 using UnityEngine;
-// ReSharper disable InconsistentNaming
 
 namespace NoteTweaks.Patches
 {
     [HarmonyPatch]
     internal class NoteColorTweaks
     {
-        private static Color originalLeftColor;
-        private static Color originalRightColor;
+        private static Color _originalLeftColor;
+        private static Color _originalRightColor;
         
         [HarmonyPatch(typeof(StandardLevelScenesTransitionSetupDataSO), "InitColorInfo")]
         [HarmonyPostfix]
@@ -25,17 +22,17 @@ namespace NoteTweaks.Patches
             float leftScale = 1.0f + Plugin.Config.ColorBoostLeft;
             float rightScale = 1.0f + Plugin.Config.ColorBoostRight;
             
-            if (originalLeftColor != oldScheme._saberAColor && originalLeftColor != (oldScheme._saberAColor * leftScale))
+            if (_originalLeftColor != oldScheme._saberAColor && _originalLeftColor != (oldScheme._saberAColor * leftScale))
             {
-                originalLeftColor = oldScheme._saberAColor;
+                _originalLeftColor = oldScheme._saberAColor;
             }
-            if (originalRightColor != oldScheme._saberBColor && originalRightColor != (oldScheme._saberBColor * rightScale))
+            if (_originalRightColor != oldScheme._saberBColor && _originalRightColor != (oldScheme._saberBColor * rightScale))
             {
-                originalRightColor = oldScheme._saberBColor;
+                _originalRightColor = oldScheme._saberBColor;
             }
             
-            oldScheme._saberAColor = originalLeftColor * leftScale;
-            oldScheme._saberBColor = originalRightColor * rightScale;
+            oldScheme._saberAColor = _originalLeftColor * leftScale;
+            oldScheme._saberBColor = _originalRightColor * rightScale;
             __instance.colorScheme = oldScheme;
         }
         

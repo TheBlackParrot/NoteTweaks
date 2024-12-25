@@ -1,8 +1,5 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Reflection;
-using BeatmapLevelSaveDataVersion4;
-using BeatSaberMarkupLanguage;
 using HarmonyLib;
 using UnityEngine;
 using Object = UnityEngine.Object;
@@ -13,8 +10,8 @@ namespace NoteTweaks.Patches
     internal class NotePhysicalTweaks
     {
         private static GameplayModifiers _gameplayModifiers;
-        internal static Material ReplacementDotMaterial;
-        internal static Material DotGlowMaterial;
+        private static Material _replacementDotMaterial;
+        private static Material _dotGlowMaterial;
         private static readonly GameObject DotObject = GameObject.CreatePrimitive(PrimitiveType.Sphere).gameObject;
         private static readonly Mesh DotMesh = DotObject.GetComponent<MeshFilter>().mesh;
         private static Mesh _dotGlowMesh;
@@ -114,18 +111,18 @@ namespace NoteTweaks.Patches
                     return;
                 }
 
-                if (ReplacementDotMaterial == null)
+                if (_replacementDotMaterial == null)
                 {
                     Plugin.Log.Info("Creating replacement dot material");
-                    ReplacementDotMaterial = new Material(Shader.Find("Standard"))
+                    _replacementDotMaterial = new Material(Shader.Find("Standard"))
                     {
                         color = new Color(1f, 1f, 1f, 0f)
                     };
                 }
-                if(DotGlowMaterial == null) {
+                if(_dotGlowMaterial == null) {
                     Plugin.Log.Info("Creating new dot glow material");
                     Texture dotGlowTexture = Resources.FindObjectsOfTypeAll<Material>().ToList().Find(x => x.name == "NoteCircleGlow").mainTexture;
-                    DotGlowMaterial = new Material(Resources.FindObjectsOfTypeAll<Material>().ToList().Find(x => x.name == "NoteArrowGlow"))
+                    _dotGlowMaterial = new Material(Resources.FindObjectsOfTypeAll<Material>().ToList().Find(x => x.name == "NoteArrowGlow"))
                     {
                         mainTexture = dotGlowTexture
                     };
@@ -208,8 +205,8 @@ namespace NoteTweaks.Patches
                         
                         meshRenderer.GetComponent<MeshFilter>().mesh = DotMesh;
                         
-                        meshRenderer.material = ReplacementDotMaterial;
-                        meshRenderer.sharedMaterial = ReplacementDotMaterial;
+                        meshRenderer.material = _replacementDotMaterial;
+                        meshRenderer.sharedMaterial = _replacementDotMaterial;
 
                         if (!Plugin.Config.EnableFaceGlow)
                         {
@@ -223,8 +220,8 @@ namespace NoteTweaks.Patches
                         newGlowObject.transform.localScale = glowScale;
                         
                         MeshRenderer newGlowMeshRenderer = newGlowObject.GetComponent<MeshRenderer>();
-                        newGlowMeshRenderer.material = DotGlowMaterial;
-                        newGlowMeshRenderer.sharedMaterial = DotGlowMaterial;
+                        newGlowMeshRenderer.material = _dotGlowMaterial;
+                        newGlowMeshRenderer.sharedMaterial = _dotGlowMaterial;
                         Color noteColor = originalDot.parent.parent.GetComponent<ColorNoteVisuals>()._noteColor;
                         noteColor *= Plugin.Config.GlowIntensity;
                         newGlowMeshRenderer.material.color = noteColor;

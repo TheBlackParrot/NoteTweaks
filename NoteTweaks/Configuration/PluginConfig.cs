@@ -6,6 +6,7 @@ using UnityEngine;
 
 namespace NoteTweaks.Configuration
 {
+    // ReSharper disable once ClassNeverInstantiated.Global
     internal class PluginConfig
     {
         public static PluginConfig Instance { get; set; }

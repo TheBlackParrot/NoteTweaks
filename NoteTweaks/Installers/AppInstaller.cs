@@ -1,9 +1,9 @@
 ﻿using NoteTweaks.Configuration;
-using NoteTweaks.Patches;
 using Zenject;
 
 namespace NoteTweaks.Installers
 {
+    // ReSharper disable once ClassNeverInstantiated.Global
     internal class AppInstaller : Installer
     {
         private readonly PluginConfig _config;

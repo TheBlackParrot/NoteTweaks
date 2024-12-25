@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using System.Reflection;
+﻿using System.Reflection;
 using HarmonyLib;
 using IPA;
 using IPA.Config;
@@ -13,6 +12,7 @@ namespace NoteTweaks
 {
     [Plugin(RuntimeOptions.DynamicInit)]
     [NoEnableDisable]
+    // ReSharper disable once ClassNeverInstantiated.Global
     internal class Plugin
     {
         internal static IPALogger Log { get; private set; }

@@ -1,7 +1,5 @@
-﻿using System.Linq;
-using BeatSaberMarkupLanguage.Attributes;
+﻿using BeatSaberMarkupLanguage.Attributes;
 using BeatSaberMarkupLanguage.ViewControllers;
-using UnityEngine;
 
 namespace NoteTweaks.UI
 {

@@ -1,9 +1,9 @@
-﻿using NoteTweaks.Patches;
-using NoteTweaks.UI;
+﻿using NoteTweaks.UI;
 using Zenject;
 
 namespace NoteTweaks.Installers
 {
+    // ReSharper disable once ClassNeverInstantiated.Global
     internal class MenuInstaller : Installer
     {
         public override void InstallBindings()

@@ -4,6 +4,7 @@ using Zenject;
 
 namespace NoteTweaks.UI
 {
+    // ReSharper disable once ClassNeverInstantiated.Global
     internal class MenuButtonManager : IInitializable, IDisposable
     {
         private readonly MainFlowCoordinator _mainFlowCoordinator;
