@@ -31,5 +31,8 @@ namespace NoteTweaks.Configuration
 
         public virtual float GlowIntensity { get; set; } = 1.0f;
         public virtual float GlowScale { get; set; } = 1.0f;
+        public bool EnableChainDots { get; set; } = true;
+        public Vector2 ChainDotScale { get; set; } = Vector2.one;
+        public bool EnableChainDotGlow { get; set; } = true;
     }
 }

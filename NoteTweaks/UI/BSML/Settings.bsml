@@ -13,9 +13,6 @@
     <slider-setting apply-on-change="true" value="NoteScaleZ" text="Length Note Scale"
                     min="0.01" max="2.5" increment="0.01" show-buttons="true" formatter="PercentageFormatter"
                     hover-hint="Length scale (Z-axis) of notes"/>
-    <slider-setting apply-on-change="true" value="LinkScale" text="Chain Link Scale"
-                    min="0.01" max="2.5" increment="0.01" show-buttons="true" formatter="PercentageFormatter"
-                    hover-hint="Scale of chain links relative to note scale"/>
 
     <horizontal><text text="-----" font-size="4" color="#00000000"/></horizontal>
 
@@ -62,6 +59,23 @@
     <slider-setting apply-on-change="true" value="DotOffsetY" text="Vertical Dot Offset"
                     min="-2.0" max="2.0" increment="0.005" show-buttons="true" formatter="PreciseFloatFormatter"
                     hover-hint="Vertical offset (Y-axis) of note dots"/>
+
+    <horizontal><text text="-----" font-size="4" color="#00000000"/></horizontal>
+
+    <slider-setting apply-on-change="true" value="LinkScale" text="Chain Link Scale"
+                    min="0.01" max="2.5" increment="0.01" show-buttons="true" formatter="PercentageFormatter"
+                    hover-hint="Scale of chain links relative to note scale"/>
+    
+    <toggle-setting apply-on-change="true" value="EnableChainDots" text="Show Chain Dots"
+                    hover-hint="Show dots on chain links"/>
+    <toggle-setting apply-on-change="true" value="EnableChainDotGlow" text="Enable Glowing Chain Dots"
+                    hover-hint="Show glow around chain dots"/>
+    <slider-setting apply-on-change="true" value="ChainDotScaleX" text="Horizontal Chain Dot Scale"
+                    min="0.05" max="5.0" increment="0.05" show-buttons="true" formatter="PercentageFormatter"
+                    hover-hint="Horizontal scale (X-axis) of chain link dots"/>
+    <slider-setting apply-on-change="true" value="ChainDotScaleY" text="Vertical Chain Dot Scale"
+                    min="0.05" max="2.0" increment="0.05" show-buttons="true" formatter="PercentageFormatter"
+                    hover-hint="Vertical scale (Y-axis) of chain link dots"/>
 
     <horizontal><text text="-----" font-size="4" color="#00000000"/></horizontal>
 

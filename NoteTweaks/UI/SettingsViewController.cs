@@ -188,5 +188,38 @@ namespace NoteTweaks.UI
             get => _config.GlowIntensity;
             set => _config.GlowIntensity = value;
         }
+
+        protected bool EnableChainDots
+        {
+            get => _config.EnableChainDots;
+            set => _config.EnableChainDots = value;
+        }
+        protected float ChainDotScaleX
+        {
+            get => _config.ChainDotScale.x;
+            set
+            {
+                Vector3 scale = _config.ChainDotScale;
+                scale.x = value;
+                _config.ChainDotScale = scale;
+            }
+        }
+        
+        protected float ChainDotScaleY
+        {
+            get => _config.ChainDotScale.y;
+            set
+            {
+                Vector3 scale = _config.ChainDotScale;
+                scale.y = value;
+                _config.ChainDotScale = scale;
+            }
+        }
+        
+        protected bool EnableChainDotGlow
+        {
+            get => _config.EnableChainDotGlow;
+            set => _config.EnableChainDotGlow = value;
+        }
     }
 }

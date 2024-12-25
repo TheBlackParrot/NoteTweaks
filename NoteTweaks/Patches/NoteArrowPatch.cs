@@ -103,6 +103,8 @@ namespace NoteTweaks.Patches
             private static Vector3 _initialPosition = Vector3.zero;
             private static bool _initialDotPositionDidSet = false;
             private static Vector3 _initialDotPosition = Vector3.zero;
+            private static bool _initialChainDotPositionDidSet = false;
+            private static Vector3 _initialChainDotPosition = Vector3.zero;
             
             internal static void Postfix(ColorNoteVisuals __instance, ref MeshRenderer[] ____arrowMeshRenderers, ref MeshRenderer[] ____circleMeshRenderers)
             {
@@ -114,9 +116,10 @@ namespace NoteTweaks.Patches
                 if (_replacementDotMaterial == null)
                 {
                     Plugin.Log.Info("Creating replacement dot material");
-                    _replacementDotMaterial = new Material(Shader.Find("Standard"))
+                    Material arrowMat = Resources.FindObjectsOfTypeAll<Material>().ToList().Find(x => x.name == "NoteArrowHD");
+                    _replacementDotMaterial = new Material(arrowMat.shader)
                     {
-                        color = new Color(1f, 1f, 1f, 0f)
+                        color = new Color(1f, 1f, 1f, 1f)
                     };
                 }
                 if(_dotGlowMaterial == null) {
@@ -165,26 +168,54 @@ namespace NoteTweaks.Patches
                     }
                 }
                 
+                bool isChainLink = __instance.GetComponent<BurstSliderGameNoteController>() != null;
+                
                 foreach (MeshRenderer meshRenderer in ____circleMeshRenderers)
                 {
                     if (_dotGlowMesh == null)
                     {
                         _dotGlowMesh = meshRenderer.GetComponent<MeshFilter>().mesh;
                     }
+
+                    Vector3 dotPosition;
+                    Vector3 glowPosition;
+                    Vector3 dotScale;
+                    Vector3 glowScale;
+                    if (isChainLink)
+                    {
+                        dotPosition = new Vector3(_initialChainDotPosition.x, _initialChainDotPosition.y, _initialChainDotPosition.z);
+                        glowPosition = new Vector3(_initialChainDotPosition.x, _initialChainDotPosition.y, _initialChainDotPosition.z + 0.001f);
+                        dotScale = new Vector3(Plugin.Config.ChainDotScale.x / 18f, Plugin.Config.ChainDotScale.y / 18f, 0.0001f);
+                        glowScale = new Vector3((Plugin.Config.ChainDotScale.x / 6f) * Plugin.Config.GlowScale, (Plugin.Config.ChainDotScale.y / 6f) * Plugin.Config.GlowScale, 0.0001f);
+                    }
+                    else
+                    {
+                        dotPosition = new Vector3(_initialDotPosition.x + Plugin.Config.DotPosition.x, _initialDotPosition.y + Plugin.Config.DotPosition.y, _initialDotPosition.z);
+                        glowPosition = new Vector3(_initialDotPosition.x + Plugin.Config.DotPosition.x, _initialDotPosition.y + Plugin.Config.DotPosition.y, _initialDotPosition.z + 0.001f);
+                        dotScale = new Vector3(Plugin.Config.DotScale.x / 5f, Plugin.Config.DotScale.y / 5f, 0.0001f);
+                        glowScale = new Vector3((Plugin.Config.DotScale.x / 1.5f) * Plugin.Config.GlowScale, (Plugin.Config.DotScale.y / 1.5f) * Plugin.Config.GlowScale, 0.0001f);
+                    }
                     
-                    Vector3 dotPosition = new Vector3(_initialDotPosition.x + Plugin.Config.DotPosition.x, _initialDotPosition.y + Plugin.Config.DotPosition.y, _initialDotPosition.z - 0.1f);
-                    Vector3 glowPosition = new Vector3(_initialDotPosition.x + Plugin.Config.DotPosition.x, _initialDotPosition.y + Plugin.Config.DotPosition.y, _initialDotPosition.z - 0.101f);
-                    Vector3 dotScale = new Vector3(Plugin.Config.DotScale.x / 5f, Plugin.Config.DotScale.y / 5f, 0.0001f);
-                    Vector3 glowScale = new Vector3((Plugin.Config.DotScale.x / 1.5f) * Plugin.Config.GlowScale, (Plugin.Config.DotScale.y / 1.5f) * Plugin.Config.GlowScale, 0.0001f);
-                    
-                    Transform originalDot = meshRenderer.transform.parent.Find("NoteCircleGlow");
+                    Transform originalDot = isChainLink ? meshRenderer.transform.parent.Find("Circle") : meshRenderer.transform.parent.Find("NoteCircleGlow");
                     if (originalDot)
                     {
-                        originalDot.gameObject.SetActive(Plugin.Config.EnableDots);
-
-                        if (!Plugin.Config.EnableDots)
+                        if (isChainLink)
                         {
-                            continue;
+                            originalDot.gameObject.SetActive(Plugin.Config.EnableChainDots);
+
+                            if (!Plugin.Config.EnableChainDots)
+                            {
+                                continue;
+                            }
+                        }
+                        else
+                        {
+                            originalDot.gameObject.SetActive(Plugin.Config.EnableDots);
+
+                            if (!Plugin.Config.EnableDots)
+                            {
+                                continue;
+                            }   
                         }
                         
                         Transform originalDotTransform = originalDot.transform;
@@ -193,6 +224,11 @@ namespace NoteTweaks.Patches
                         {
                             _initialDotPositionDidSet = true;
                             _initialDotPosition = originalDotTransform.localPosition;
+                        }
+                        if (!_initialChainDotPositionDidSet)
+                        {
+                            _initialChainDotPositionDidSet = true;
+                            _initialChainDotPosition = originalDotTransform.localPosition;
                         }
                         
                         originalDotTransform.localScale = dotScale;
@@ -208,9 +244,19 @@ namespace NoteTweaks.Patches
                         meshRenderer.material = _replacementDotMaterial;
                         meshRenderer.sharedMaterial = _replacementDotMaterial;
 
-                        if (!Plugin.Config.EnableFaceGlow)
+                        if (isChainLink)
                         {
-                            continue;
+                            if (!Plugin.Config.EnableChainDotGlow)
+                            {
+                                continue;
+                            }
+                        }
+                        else
+                        {
+                            if (!Plugin.Config.EnableFaceGlow)
+                            {
+                                continue;
+                            }   
                         }
                         
                         GameObject newGlowObject = Object.Instantiate(originalDot.gameObject, originalDot.parent).gameObject;
