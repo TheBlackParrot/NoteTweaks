@@ -1,12 +1,9 @@
 # NoteTweaks
 This is a Beat Saber mod that lets you tweak various aspects of notes.
 
-Still heavily WIP, core stuff works tho
-
 ## Notes
-- I'm currently unsure if this conflicts with BeatSaberPlus's NoteTweaker module, or CustomNotes
+- I'm currently unsure if this conflicts with BeatSaberPlus's NoteTweaker module
 - Note Scaling is forcibly turned off if the Pro Mode, Strict Angles, or Small Notes modifiers are enabled
-- I haven't added any tweaks for chain *links* yet, these can be customized separately too!
 - UI is very rudimentary, I'll spice it up eventually.
 
 ## Configuration
@@ -14,7 +11,7 @@ Configuration is done in-game via a Menu button in the left panel of the Main Me
 ```json
 {
   "Enabled": true,
-  "EnableArrowGlow": true,
+  "EnableFaceGlow": true,
   "ArrowScale": {
     "x": 1.0,
     "y": 1.0
@@ -32,15 +29,29 @@ Configuration is done in-game via a Menu button in the left panel of the Main Me
     "x": 0.0,
     "y": 0.0
   },
-  "NoteScale": 1.0,
-  "LinkScale": 1.0
+  "NoteScale": {
+    "x": 1.0,
+    "y": 1.0,
+    "z": 1.0
+  },
+  "LinkScale": 1.0,
+  "ColorBoostLeft": 0.0,
+  "ColorBoostRight": 0.0,
+  "GlowIntensity": 1.0,
+  "GlowScale": 1.0,
+  "EnableChainDots": true,
+  "ChainDotScale": {
+    "x": 1.0,
+    "y": 1.0
+  },
+  "EnableChainDotGlow": true
 }
 ```
 `bool` **Enabled**
 > *self-explanatory I hope lol*
 
-`bool` **EnableArrowGlow**
-> Make the arrows glow or not glow
+`bool` **EnableFaceGlow**
+> Make the face symbols glow or not glow
 
 `Vector2` **ArrowScale**
 > Scales the note arrows by the specified factor along the x-axis and y-axis
@@ -57,11 +68,33 @@ Configuration is done in-game via a Menu button in the left panel of the Main Me
 `Vector2` **DotPosition**
 > Moves the dots on dote notes by the specified amount along the x-axis and y-axis
 
-`float` **NoteScale**
-> Scale notes themselves by the specified factor
+`Vector3` **NoteScale**
+> Scale notes themselves by the specified factor along the X, Y, and/or Z axis
 
 `float` **LinkScale**
 > Scale of chain links relative to note scaling
+
+`float` **ColorBoostLeft**
+> Multiplies left note colors by a defined factor, even to numbers outside clamping ranges
+
+`float` **ColorBoostRight**
+> Multiplies right note colors by a defined factor, even to numbers outside clamping ranges
+
+`float` **GlowIntensity**
+> Intensity of glow around face symbols
+> > *(currently capped at 100% as arrow glow seems to be a bit stubborn, will fix eventually)*
+
+`float` **GlowScale**
+> Scales the glow around face symbols
+
+`bool` **EnableChainDots**
+> Show dots on chain links
+
+`Vector2` **ChainDotScale**
+> Scales the dots on chain links by the specified factor along the x-axis and y-axis
+
+`bool` **EnableChainDotGlow**
+> Make the dots on chain links glow or not glow
 
 ## Dependencies
 - BSIPA
@@ -74,3 +107,4 @@ Configuration is done in-game via a Menu button in the left panel of the Main Me
 - SoundReplacer *(Meivyn's fork)*
 - BeatSaberPlus
 - JDFixer
+- CustomNotes
