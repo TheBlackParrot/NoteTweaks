@@ -177,5 +177,17 @@ namespace NoteTweaks.UI
             get => _config.ColorBoostRight;
             set => _config.ColorBoostRight = value;
         }
+        
+        protected float GlowScale
+        {
+            get => _config.GlowScale;
+            set => _config.GlowScale = value;
+        }
+        
+        protected float GlowIntensity
+        {
+            get => _config.GlowIntensity;
+            set => _config.GlowIntensity = value;
+        }
     }
 }

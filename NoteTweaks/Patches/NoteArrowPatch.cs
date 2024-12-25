@@ -154,11 +154,17 @@ namespace NoteTweaks.Patches
                         
                         Transform arrowGlowTransform = arrowGlowObject.transform;
                         
-                        Vector3 glowScale = new Vector3(scale.x * 0.6f, scale.y * 0.3f, 0.6f);
+                        Vector3 glowScale = new Vector3(scale.x * Plugin.Config.GlowScale * 0.6f, scale.y * Plugin.Config.GlowScale * 0.3f, 0.6f);
                         Vector3 glowPosition = new Vector3(_initialPosition.x + Plugin.Config.ArrowPosition.x, _initialPosition.y + Plugin.Config.ArrowPosition.y, _initialPosition.z);
                         
                         arrowGlowTransform.localScale = glowScale;
                         arrowGlowTransform.localPosition = glowPosition;
+                        
+                        MeshRenderer arrowGlowMeshRenderer = arrowGlowObject.GetComponent<MeshRenderer>();
+                        
+                        Color noteColor = arrowGlowObject.parent.parent.GetComponent<ColorNoteVisuals>()._noteColor;
+                        noteColor *= Plugin.Config.GlowIntensity;
+                        arrowGlowMeshRenderer.material.color = noteColor;
                     }
                 }
                 
@@ -172,7 +178,7 @@ namespace NoteTweaks.Patches
                     Vector3 dotPosition = new Vector3(_initialDotPosition.x + Plugin.Config.DotPosition.x, _initialDotPosition.y + Plugin.Config.DotPosition.y, _initialDotPosition.z - 0.1f);
                     Vector3 glowPosition = new Vector3(_initialDotPosition.x + Plugin.Config.DotPosition.x, _initialDotPosition.y + Plugin.Config.DotPosition.y, _initialDotPosition.z - 0.101f);
                     Vector3 dotScale = new Vector3(Plugin.Config.DotScale.x / 5f, Plugin.Config.DotScale.y / 5f, 0.0001f);
-                    Vector3 glowScale = new Vector3(Plugin.Config.DotScale.x / 1.5f, Plugin.Config.DotScale.y / 1.5f, 0.0001f);
+                    Vector3 glowScale = new Vector3((Plugin.Config.DotScale.x / 1.5f) * Plugin.Config.GlowScale, (Plugin.Config.DotScale.y / 1.5f) * Plugin.Config.GlowScale, 0.0001f);
                     
                     Transform originalDot = meshRenderer.transform.parent.Find("NoteCircleGlow");
                     if (originalDot)
@@ -219,7 +225,9 @@ namespace NoteTweaks.Patches
                         MeshRenderer newGlowMeshRenderer = newGlowObject.GetComponent<MeshRenderer>();
                         newGlowMeshRenderer.material = DotGlowMaterial;
                         newGlowMeshRenderer.sharedMaterial = DotGlowMaterial;
-                        newGlowMeshRenderer.material.color = originalDot.parent.parent.GetComponent<ColorNoteVisuals>()._noteColor;
+                        Color noteColor = originalDot.parent.parent.GetComponent<ColorNoteVisuals>()._noteColor;
+                        noteColor *= Plugin.Config.GlowIntensity;
+                        newGlowMeshRenderer.material.color = noteColor;
                     }
                 }
             }
