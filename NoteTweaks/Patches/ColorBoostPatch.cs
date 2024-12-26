@@ -9,7 +9,7 @@ namespace NoteTweaks.Patches
         private static Color _originalLeftColor;
         private static Color _originalRightColor;
         
-        [HarmonyPatch(typeof(StandardLevelScenesTransitionSetupDataSO), "InitColorInfo")]
+        [HarmonyPatch(typeof(StandardLevelScenesTransitionSetupDataSO), "Init")]
         [HarmonyPostfix]
         private static void InitColorInfoPatch(StandardLevelScenesTransitionSetupDataSO __instance)
         {
