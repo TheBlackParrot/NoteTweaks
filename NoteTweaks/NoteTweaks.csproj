@@ -30,10 +30,6 @@
             <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\BGLib.UnityExtension.dll</HintPath>
             <Private>false</Private>
         </Reference>
-        <Reference Include="BeatSaber.ViewSystem">
-            <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\BeatSaber.ViewSystem.dll</HintPath>
-            <Private>false</Private>
-        </Reference>
         <Reference Include="BeatmapCore">
             <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\BeatmapCore.dll</HintPath>
             <Private>false</Private>
@@ -57,6 +53,10 @@
         </Reference>
         <Reference Include="MediaLoader">
             <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\MediaLoader.dll</HintPath>
+            <Private>false</Private>
+        </Reference>
+        <Reference Include="Menu.CommonLib">
+            <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\Menu.CommonLib.dll</HintPath>
             <Private>false</Private>
         </Reference>
         <Reference Include="System.Data.DataSetExtensions"/>

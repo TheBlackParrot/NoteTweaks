@@ -22,7 +22,7 @@ namespace NoteTweaks.UI
 
         public void Initialize()
         {
-            _menuButtons.RegisterButton(_menuButton);
+            MenuButtons.instance.RegisterButton(_menuButton);
         }
 
         public void Dispose()
