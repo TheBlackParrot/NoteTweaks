@@ -1,6 +1,9 @@
-﻿using System.Linq;
+﻿using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using HarmonyLib;
+using IPA.Utilities;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
@@ -15,6 +18,11 @@ namespace NoteTweaks.Patches
         private static readonly GameObject DotObject = GameObject.CreatePrimitive(PrimitiveType.Sphere).gameObject;
         private static readonly Mesh DotMesh = DotObject.GetComponent<MeshFilter>().mesh;
         private static Mesh _dotGlowMesh;
+        
+        private static readonly Texture2D OriginalArrowGlowTexture = Resources.FindObjectsOfTypeAll<Texture2D>().ToList().First(x => x.name == "ArrowGlow");
+        private static readonly Texture2D ReplacementArrowGlowTexture = Utils.Textures.PrepareTexture(OriginalArrowGlowTexture);
+        private static readonly Texture2D OriginalDotGlowTexture = Resources.FindObjectsOfTypeAll<Texture2D>().ToList().First(x => x.name == "NoteCircleBakedGlow");
+        private static readonly Texture2D ReplacementDotGlowTexture = Utils.Textures.PrepareTexture(OriginalDotGlowTexture);
 
         // thanks BeatLeader
         [HarmonyPatch]
@@ -124,10 +132,9 @@ namespace NoteTweaks.Patches
                 }
                 if(_dotGlowMaterial == null) {
                     Plugin.Log.Info("Creating new dot glow material");
-                    Texture dotGlowTexture = Resources.FindObjectsOfTypeAll<Material>().ToList().Find(x => x.name == "NoteCircleGlow").mainTexture;
                     _dotGlowMaterial = new Material(Resources.FindObjectsOfTypeAll<Material>().ToList().Find(x => x.name == "NoteArrowGlow"))
                     {
-                        mainTexture = dotGlowTexture
+                        mainTexture = ReplacementDotGlowTexture
                     };
                 }
                 
@@ -161,10 +168,7 @@ namespace NoteTweaks.Patches
                         arrowGlowTransform.localPosition = glowPosition;
                         
                         MeshRenderer arrowGlowMeshRenderer = arrowGlowObject.GetComponent<MeshRenderer>();
-                        
-                        Color noteColor = arrowGlowObject.parent.parent.GetComponent<ColorNoteVisuals>()._noteColor;
-                        noteColor *= Plugin.Config.GlowIntensity;
-                        arrowGlowMeshRenderer.material.color = noteColor;
+                        arrowGlowMeshRenderer.material.mainTexture = ReplacementArrowGlowTexture;
                     }
                 }
                 
@@ -197,6 +201,7 @@ namespace NoteTweaks.Patches
                     }
                     
                     Transform originalDot = isChainLink ? meshRenderer.transform.parent.Find("Circle") : meshRenderer.transform.parent.Find("NoteCircleGlow");
+                    Transform addedDot = meshRenderer.transform.parent.Find("AddedNoteCircleGlow");
                     if (originalDot)
                     {
                         if (isChainLink)
@@ -233,11 +238,6 @@ namespace NoteTweaks.Patches
                         
                         originalDotTransform.localScale = dotScale;
                         originalDotTransform.localPosition = dotPosition;
-
-                        while (originalDot.parent.Find("AddedNoteCircleGlow"))
-                        {
-                            Object.DestroyImmediate(originalDot.parent.Find("AddedNoteCircleGlow").gameObject);
-                        }
                         
                         meshRenderer.GetComponent<MeshFilter>().mesh = DotMesh;
                         
@@ -258,9 +258,29 @@ namespace NoteTweaks.Patches
                                 continue;
                             }   
                         }
+
+                        GameObject newGlowObject;
+                        if (addedDot)
+                        {
+                            newGlowObject = addedDot.gameObject;
+                        }
+                        else
+                        {
+                            newGlowObject = Object.Instantiate(originalDot.gameObject, originalDot.parent);
+                            newGlowObject.name = "AddedNoteCircleGlow";
+                            
+                            /*MaterialPropertyBlockController[] newList = new MaterialPropertyBlockController[4];
+                            __instance._materialPropertyBlockControllers.CopyTo(newList, 0);
+                            newList.SetValue(newGlowObject.GetComponent<MaterialPropertyBlockController>(), 3);
+                            __instance._materialPropertyBlockControllers = newList;*/
+                            __instance._materialPropertyBlockControllers.SetValue(newGlowObject.GetComponent<MaterialPropertyBlockController>(), 2);
+
+                            MeshRenderer[] newRendererList = new MeshRenderer[2];
+                            __instance._circleMeshRenderers.CopyTo(newRendererList, 0);
+                            newRendererList.SetValue(newGlowObject.GetComponent<MeshRenderer>(), 1);
+                            __instance._circleMeshRenderers = newRendererList;
+                        }
                         
-                        GameObject newGlowObject = Object.Instantiate(originalDot.gameObject, originalDot.parent).gameObject;
-                        newGlowObject.name = "AddedNoteCircleGlow";
                         newGlowObject.GetComponent<MeshFilter>().mesh = _dotGlowMesh;
                         newGlowObject.transform.localPosition = glowPosition;
                         newGlowObject.transform.localScale = glowScale;
@@ -268,11 +288,18 @@ namespace NoteTweaks.Patches
                         MeshRenderer newGlowMeshRenderer = newGlowObject.GetComponent<MeshRenderer>();
                         newGlowMeshRenderer.material = _dotGlowMaterial;
                         newGlowMeshRenderer.sharedMaterial = _dotGlowMaterial;
-                        Color noteColor = originalDot.parent.parent.GetComponent<ColorNoteVisuals>()._noteColor;
-                        noteColor *= Plugin.Config.GlowIntensity;
-                        newGlowMeshRenderer.material.color = noteColor;
                     }
                 }
+                
+                __instance._materialPropertyBlockControllers.DoIf(x => x.name != "NoteCube", controller =>
+                {
+                    Color noteColor = __instance._colorManager.ColorForType(__instance._noteController.noteData.colorType);
+                    noteColor.a *= Plugin.Config.GlowIntensity;
+                    Plugin.Log.Info(noteColor.ToString());
+                    
+                    controller.materialPropertyBlock.SetColor(ColorNoteVisuals._colorId, noteColor);
+                    controller.ApplyChanges();
+                });
             }
         }
     }
