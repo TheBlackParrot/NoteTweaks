@@ -34,5 +34,7 @@ namespace NoteTweaks.Configuration
         public bool EnableChainDots { get; set; } = true;
         public Vector2 ChainDotScale { get; set; } = Vector2.one;
         public bool EnableChainDotGlow { get; set; } = true;
+        
+        public Color FaceColor { get; set; } = new Color(1f, 1f, 1f, 1f);
     }
 }

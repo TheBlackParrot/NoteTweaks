@@ -125,15 +125,16 @@ namespace NoteTweaks.Patches
                 {
                     Plugin.Log.Info("Creating replacement dot material");
                     Material arrowMat = Resources.FindObjectsOfTypeAll<Material>().ToList().Find(x => x.name == "NoteArrowHD");
-                    _replacementDotMaterial = new Material(arrowMat.shader)
+                    _replacementDotMaterial = new Material(arrowMat)
                     {
-                        color = new Color(1f, 1f, 1f, 1f)
-                        //color = new Color(0f, 0f, 0f, 0f)
+                        color = Plugin.Config.FaceColor,
+                        shaderKeywords = arrowMat.shaderKeywords.Where(x => x != "_ENABLE_COLOR_INSTANCING").ToArray()
                     };
                 }
                 if(_dotGlowMaterial == null) {
                     Plugin.Log.Info("Creating new dot glow material");
-                    _dotGlowMaterial = new Material(Resources.FindObjectsOfTypeAll<Material>().ToList().Find(x => x.name == "NoteArrowGlow"))
+                    Material arrowGlowMat = Resources.FindObjectsOfTypeAll<Material>().ToList().Find(x => x.name == "NoteArrowGlow");
+                    _dotGlowMaterial = new Material(arrowGlowMat)
                     {
                         mainTexture = ReplacementDotGlowTexture
                     };
@@ -154,7 +155,14 @@ namespace NoteTweaks.Patches
                     
                     arrowTransform.localScale = scale;
                     arrowTransform.localPosition = position;
-                    //meshRenderer.material.SetColor(ColorNoteVisuals._colorId, new Color(0f, 0f, 0f, 0f));
+                    
+                    Color _c = Plugin.Config.FaceColor;
+                    _c.a = 0f;
+                    if (meshRenderer.TryGetComponent(out MaterialPropertyBlockController materialPropertyBlockController))
+                    {
+                        materialPropertyBlockController.materialPropertyBlock.SetColor(ColorNoteVisuals._colorId, Plugin.Config.FaceColor);
+                        materialPropertyBlockController.ApplyChanges();   
+                    }
                     
                     Transform arrowGlowObject = meshRenderer.transform.parent.Find("NoteArrowGlow");
                     if (arrowGlowObject)
@@ -245,6 +253,14 @@ namespace NoteTweaks.Patches
                         
                         meshRenderer.material = _replacementDotMaterial;
                         meshRenderer.sharedMaterial = _replacementDotMaterial;
+                        
+                        Color _c = Plugin.Config.FaceColor;
+                        _c.a = 0f;
+                        if (meshRenderer.TryGetComponent(out MaterialPropertyBlockController materialPropertyBlockController))
+                        {
+                            materialPropertyBlockController.materialPropertyBlock.SetColor(ColorNoteVisuals._colorId, Plugin.Config.FaceColor);
+                            materialPropertyBlockController.ApplyChanges();   
+                        }
 
                         if (isChainLink)
                         {
@@ -289,7 +305,7 @@ namespace NoteTweaks.Patches
                     }
                 }
                 
-                __instance._materialPropertyBlockControllers.DoIf(x => x.name != "NoteCube", controller =>
+                __instance._materialPropertyBlockControllers.DoIf(x => x.name != "NoteCube" && x.name != "NoteCircleGlow" && x.name != "Circle", controller =>
                 {
                     Color noteColor = __instance._noteColor;
                     noteColor.a = Plugin.Config.GlowIntensity;

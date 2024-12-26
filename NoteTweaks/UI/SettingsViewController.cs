@@ -221,5 +221,11 @@ namespace NoteTweaks.UI
             get => _config.EnableChainDotGlow;
             set => _config.EnableChainDotGlow = value;
         }
+
+        protected Color FaceColor
+        {
+            get => _config.FaceColor;
+            set => _config.FaceColor = value;
+        }
     }
 }

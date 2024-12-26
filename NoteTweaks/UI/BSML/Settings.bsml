@@ -16,7 +16,7 @@
 
     <horizontal><text text="-----" font-size="4" color="#00000000"/></horizontal>
 
-    <toggle-setting apply-on-change="true" value="EnableFaceGlow" text="Enable Glowing Symbols"
+    <toggle-setting apply-on-change="true" value="EnableFaceGlow" text="Enable Glowing Face Symbols"
                     hover-hint="Show glow around symbols"/>
     <slider-setting apply-on-change="true" value="GlowScale" text="Glow Scale"
                     min="0.01" max="2.0" increment="0.01" show-buttons="true" formatter="PercentageFormatter"
@@ -24,6 +24,9 @@
     <slider-setting apply-on-change="true" value="GlowIntensity" text="Glow Intensity"
                     min="0.01" max="3.0" increment="0.01" show-buttons="true" formatter="PercentageFormatter"
                     hover-hint="Intensity of glow on face symbols"/>
+
+    <color-setting apply-on-change="true" value="FaceColor" text="Face Symbol Color"
+                    hover-hint="Color of arrows and dots themselves"/>
 
     <horizontal><text text="-----" font-size="4" color="#00000000"/></horizontal>
     
