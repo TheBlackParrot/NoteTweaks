@@ -44,7 +44,13 @@ Configuration is done in-game via a Menu button in the left panel of the Main Me
     "x": 1.0,
     "y": 1.0
   },
-  "EnableChainDotGlow": true
+  "EnableChainDotGlow": true,
+  "FaceColor": {
+    "r": 1.0,
+    "g": 1.0,
+    "b": 1.0,
+    "a": 1.0
+  }
 }
 ```
 `bool` **Enabled**
@@ -82,7 +88,6 @@ Configuration is done in-game via a Menu button in the left panel of the Main Me
 
 `float` **GlowIntensity**
 > Intensity of glow around face symbols
-> > *(currently capped at 100% as arrow glow seems to be a bit stubborn, will fix eventually)*
 
 `float` **GlowScale**
 > Scales the glow around face symbols
@@ -96,6 +101,9 @@ Configuration is done in-game via a Menu button in the left panel of the Main Me
 `bool` **EnableChainDotGlow**
 > Make the dots on chain links glow or not glow
 
+`Color` **FaceColor**
+> Set the color of face symbols *(does not affect glow colors)*
+
 ## Dependencies
 - BSIPA
 - BeatSaberMarkupLanguage
@@ -108,3 +116,4 @@ Configuration is done in-game via a Menu button in the left panel of the Main Me
 - BeatSaberPlus
 - JDFixer
 - CustomNotes
+- CustomSabersLite
