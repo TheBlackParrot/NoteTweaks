@@ -197,14 +197,14 @@ namespace NoteTweaks.Patches
                         dotPosition = new Vector3(_initialChainDotPosition.x, _initialChainDotPosition.y, _initialChainDotPosition.z);
                         glowPosition = new Vector3(_initialChainDotPosition.x, _initialChainDotPosition.y, _initialChainDotPosition.z + 0.001f);
                         dotScale = new Vector3(Plugin.Config.ChainDotScale.x / 18f, Plugin.Config.ChainDotScale.y / 18f, 0.0001f);
-                        glowScale = new Vector3((Plugin.Config.ChainDotScale.x / 6f) * Plugin.Config.GlowScale, (Plugin.Config.ChainDotScale.y / 6f) * Plugin.Config.GlowScale, 0.0001f);
+                        glowScale = new Vector3((Plugin.Config.ChainDotScale.x / 5.4f) * Plugin.Config.GlowScale, (Plugin.Config.ChainDotScale.y / 5.4f) * Plugin.Config.GlowScale, 0.0001f);
                     }
                     else
                     {
                         dotPosition = new Vector3(_initialDotPosition.x + Plugin.Config.DotPosition.x, _initialDotPosition.y + Plugin.Config.DotPosition.y, _initialDotPosition.z);
                         glowPosition = new Vector3(_initialDotPosition.x + Plugin.Config.DotPosition.x, _initialDotPosition.y + Plugin.Config.DotPosition.y, _initialDotPosition.z + 0.001f);
                         dotScale = new Vector3(Plugin.Config.DotScale.x / 5f, Plugin.Config.DotScale.y / 5f, 0.0001f);
-                        glowScale = new Vector3((Plugin.Config.DotScale.x / 1.333f) * Plugin.Config.GlowScale, (Plugin.Config.DotScale.y / 1.333f) * Plugin.Config.GlowScale, 0.0001f);
+                        glowScale = new Vector3((Plugin.Config.DotScale.x / 1.5f) * Plugin.Config.GlowScale, (Plugin.Config.DotScale.y / 1.5f) * Plugin.Config.GlowScale, 0.0001f);
                     }
                     
                     Transform originalDot = isChainLink ? meshRenderer.transform.parent.Find("Circle") : meshRenderer.transform.parent.Find("NoteCircleGlow");
@@ -284,7 +284,7 @@ namespace NoteTweaks.Patches
                             newGlowObject = Object.Instantiate(originalDot.gameObject, originalDot.parent);
                             newGlowObject.name = "AddedNoteCircleGlow";
                             
-                            __instance._materialPropertyBlockControllers.SetValue(newGlowObject.GetComponent<MaterialPropertyBlockController>(), 2);
+                            __instance._materialPropertyBlockControllers.SetValue(newGlowObject.GetComponent<MaterialPropertyBlockController>(), __instance._materialPropertyBlockControllers.Length - 1);
 
                             MeshRenderer[] newRendererList = new MeshRenderer[2];
                             __instance._circleMeshRenderers.CopyTo(newRendererList, 0);
