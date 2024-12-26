@@ -18,7 +18,7 @@ namespace NoteTweaks.UI
             //_notePreviewViewController = notePreviewViewController;
         }
 
-        protected override void DidActivate(bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling)
+        public override void DidActivate(bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling)
         {
             if (firstActivation)
             {
@@ -29,7 +29,7 @@ namespace NoteTweaks.UI
             }
         }
 
-        protected override void BackButtonWasPressed(ViewController topViewController)
+        public override void BackButtonWasPressed(ViewController topViewController)
         {
             _mainFlowCoordinator.DismissFlowCoordinator(this);
         }

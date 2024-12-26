@@ -12,11 +12,11 @@ namespace NoteTweaks.UI
         private readonly MenuButtons _menuButtons;
         private readonly MenuButton _menuButton;
 
-        private MenuButtonManager(MainFlowCoordinator mainFlowCoordinator, SettingsFlowCoordinator settingsFlowCoordinator, MenuButtons menuButtons)
+        private MenuButtonManager(MainFlowCoordinator mainFlowCoordinator, SettingsFlowCoordinator settingsFlowCoordinator)
         {
             _mainFlowCoordinator = mainFlowCoordinator;
             _settingsFlowCoordinator = settingsFlowCoordinator;
-            _menuButtons = menuButtons;
+            _menuButtons = MenuButtons.instance;
             _menuButton = new MenuButton(nameof(NoteTweaks), null, HandleMenuButtonOnClick);
         }
 
