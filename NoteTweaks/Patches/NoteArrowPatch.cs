@@ -128,6 +128,7 @@ namespace NoteTweaks.Patches
                     _replacementDotMaterial = new Material(arrowMat.shader)
                     {
                         color = new Color(1f, 1f, 1f, 1f)
+                        //color = new Color(0f, 0f, 0f, 0f)
                     };
                 }
                 if(_dotGlowMaterial == null) {
@@ -153,6 +154,7 @@ namespace NoteTweaks.Patches
                     
                     arrowTransform.localScale = scale;
                     arrowTransform.localPosition = position;
+                    //meshRenderer.material.SetColor(ColorNoteVisuals._colorId, new Color(0f, 0f, 0f, 0f));
                     
                     Transform arrowGlowObject = meshRenderer.transform.parent.Find("NoteArrowGlow");
                     if (arrowGlowObject)
@@ -197,7 +199,7 @@ namespace NoteTweaks.Patches
                         dotPosition = new Vector3(_initialDotPosition.x + Plugin.Config.DotPosition.x, _initialDotPosition.y + Plugin.Config.DotPosition.y, _initialDotPosition.z);
                         glowPosition = new Vector3(_initialDotPosition.x + Plugin.Config.DotPosition.x, _initialDotPosition.y + Plugin.Config.DotPosition.y, _initialDotPosition.z + 0.001f);
                         dotScale = new Vector3(Plugin.Config.DotScale.x / 5f, Plugin.Config.DotScale.y / 5f, 0.0001f);
-                        glowScale = new Vector3((Plugin.Config.DotScale.x / 1.5f) * Plugin.Config.GlowScale, (Plugin.Config.DotScale.y / 1.5f) * Plugin.Config.GlowScale, 0.0001f);
+                        glowScale = new Vector3((Plugin.Config.DotScale.x / 1.333f) * Plugin.Config.GlowScale, (Plugin.Config.DotScale.y / 1.333f) * Plugin.Config.GlowScale, 0.0001f);
                     }
                     
                     Transform originalDot = isChainLink ? meshRenderer.transform.parent.Find("Circle") : meshRenderer.transform.parent.Find("NoteCircleGlow");
@@ -269,10 +271,6 @@ namespace NoteTweaks.Patches
                             newGlowObject = Object.Instantiate(originalDot.gameObject, originalDot.parent);
                             newGlowObject.name = "AddedNoteCircleGlow";
                             
-                            /*MaterialPropertyBlockController[] newList = new MaterialPropertyBlockController[4];
-                            __instance._materialPropertyBlockControllers.CopyTo(newList, 0);
-                            newList.SetValue(newGlowObject.GetComponent<MaterialPropertyBlockController>(), 3);
-                            __instance._materialPropertyBlockControllers = newList;*/
                             __instance._materialPropertyBlockControllers.SetValue(newGlowObject.GetComponent<MaterialPropertyBlockController>(), 2);
 
                             MeshRenderer[] newRendererList = new MeshRenderer[2];
@@ -293,9 +291,8 @@ namespace NoteTweaks.Patches
                 
                 __instance._materialPropertyBlockControllers.DoIf(x => x.name != "NoteCube", controller =>
                 {
-                    Color noteColor = __instance._colorManager.ColorForType(__instance._noteController.noteData.colorType);
-                    noteColor.a *= Plugin.Config.GlowIntensity;
-                    Plugin.Log.Info(noteColor.ToString());
+                    Color noteColor = __instance._noteColor;
+                    noteColor.a = Plugin.Config.GlowIntensity;
                     
                     controller.materialPropertyBlock.SetColor(ColorNoteVisuals._colorId, noteColor);
                     controller.ApplyChanges();
