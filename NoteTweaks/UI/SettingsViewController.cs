@@ -1,4 +1,5 @@
-﻿using BeatSaberMarkupLanguage.Attributes;
+﻿using System.Reflection;
+using BeatSaberMarkupLanguage.Attributes;
 using BeatSaberMarkupLanguage.ViewControllers;
 using NoteTweaks.Configuration;
 using UnityEngine;
@@ -13,6 +14,8 @@ namespace NoteTweaks.UI
         private PluginConfig _config;
         public string PercentageFormatter(float x) => x.ToString("0%");
         public string PreciseFloatFormatter(float x) => x.ToString("F3");
+        
+        readonly string version = $"<smallcaps><alpha=#CC>NoteTweaks</smallcaps>  <alpha=#FF><b>v{Assembly.GetExecutingAssembly().GetName().Version.ToString(3)}</b>";
 
         [Inject]
         private void Construct(PluginConfig config)

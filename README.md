@@ -109,7 +109,7 @@ Configuration is done in-game via a Menu button in the left panel of the Main Me
 - BeatSaberMarkupLanguage
 - SiraUtil
 
-## Credits/Reference Mods
+## Reference Mods
 - BeatLeader
 - BSExtraColorPresets
 - SoundReplacer *(Meivyn's fork)*
@@ -117,3 +117,5 @@ Configuration is done in-game via a Menu button in the left panel of the Main Me
 - JDFixer
 - CustomNotes
 - CustomSabersLite
+- Camera2
+- BetterSongSearch

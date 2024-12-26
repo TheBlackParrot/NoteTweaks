@@ -1,91 +1,123 @@
-<settings-container>
-    <toggle-setting apply-on-change="true" value="Enabled" text="Mod Enabled"
-                    hover-hint="Remember to drink water! Hydrate!"/>
-
-    <horizontal><text text="-----" font-size="4" color="#00000000"/></horizontal>
-
-    <slider-setting apply-on-change="true" value="NoteScaleX" text="Horizontal Note Scale"
-                    min="0.01" max="2.5" increment="0.01" show-buttons="true" formatter="PercentageFormatter"
-                    hover-hint="Horizontal scale (X-axis) of notes"/>
-    <slider-setting apply-on-change="true" value="NoteScaleY" text="Vertical Note Scale"
-                    min="0.01" max="2.5" increment="0.01" show-buttons="true" formatter="PercentageFormatter"
-                    hover-hint="Vertical scale (Y-axis) of notes"/>
-    <slider-setting apply-on-change="true" value="NoteScaleZ" text="Length Note Scale"
-                    min="0.01" max="2.5" increment="0.01" show-buttons="true" formatter="PercentageFormatter"
-                    hover-hint="Length scale (Z-axis) of notes"/>
-
-    <horizontal><text text="-----" font-size="4" color="#00000000"/></horizontal>
-
-    <toggle-setting apply-on-change="true" value="EnableFaceGlow" text="Enable Glowing Face Symbols"
-                    hover-hint="Show glow around symbols"/>
-    <slider-setting apply-on-change="true" value="GlowScale" text="Glow Scale"
-                    min="0.01" max="2.0" increment="0.01" show-buttons="true" formatter="PercentageFormatter"
-                    hover-hint="Scale of glow on face symbols"/>
-    <slider-setting apply-on-change="true" value="GlowIntensity" text="Glow Intensity"
-                    min="0.01" max="3.0" increment="0.01" show-buttons="true" formatter="PercentageFormatter"
-                    hover-hint="Intensity of glow on face symbols"/>
-
-    <color-setting apply-on-change="true" value="FaceColor" text="Face Symbol Color"
-                    hover-hint="Color of arrows and dots themselves"/>
-
-    <horizontal><text text="-----" font-size="4" color="#00000000"/></horizontal>
+<vertical child-control-height="false">
+    <tab-selector tab-tag="tabs" id="tabSelector"/>
     
-    <slider-setting apply-on-change="true" value="ArrowScaleX" text="Horizontal Arrow Scale"
-                    min="0.05" max="2.0" increment="0.05" show-buttons="true" formatter="PercentageFormatter"
-                    hover-hint="Horizontal scale (X-axis) of note arrows"/>
-    <slider-setting apply-on-change="true" value="ArrowScaleY" text="Vertical Arrow Scale"
-                    min="0.05" max="5.0" increment="0.05" show-buttons="true" formatter="PercentageFormatter"
-                    hover-hint="Vertical scale (Y-axis) of note arrows"/>
-
-    <slider-setting apply-on-change="true" value="ArrowOffsetX" text="Horizontal Arrow Offset"
-                    min="-2.0" max="2.0" increment="0.005" show-buttons="true" formatter="PreciseFloatFormatter"
-                    hover-hint="Horizontal offset (X-axis) of note arrows"/>
-    <slider-setting apply-on-change="true" value="ArrowOffsetY" text="Vertical Arrow Offset"
-                    min="-2.0" max="2.0" increment="0.005" show-buttons="true" formatter="PreciseFloatFormatter"
-                    hover-hint="Vertical offset (Y-axis) of note arrows"/>
-
-    <horizontal><text text="-----" font-size="3" color="#00000000"/></horizontal>
-
-    <toggle-setting apply-on-change="true" value="EnableDots" text="Show Dots"
-                    hover-hint="Show dots"/>
-
-    <slider-setting apply-on-change="true" value="DotScaleX" text="Horizontal Dot Scale"
-                    min="0.05" max="3.0" increment="0.05" show-buttons="true" formatter="PercentageFormatter"
-                    hover-hint="Horizontal scale (X-axis) of note dots"/>
-    <slider-setting apply-on-change="true" value="DotScaleY" text="Vertical Dot Scale"
-                    min="0.05" max="3.0" increment="0.05" show-buttons="true" formatter="PercentageFormatter"
-                    hover-hint="Vertical scale (Y-axis) of note dots"/>
-
-    <slider-setting apply-on-change="true" value="DotOffsetX" text="Horizontal Dot Offset"
-                    min="-2.0" max="2.0" increment="0.005" show-buttons="true" formatter="PreciseFloatFormatter"
-                    hover-hint="Horizontal offset (X-axis) of note dots"/>
-    <slider-setting apply-on-change="true" value="DotOffsetY" text="Vertical Dot Offset"
-                    min="-2.0" max="2.0" increment="0.005" show-buttons="true" formatter="PreciseFloatFormatter"
-                    hover-hint="Vertical offset (Y-axis) of note dots"/>
-
-    <horizontal><text text="-----" font-size="4" color="#00000000"/></horizontal>
-
-    <slider-setting apply-on-change="true" value="LinkScale" text="Chain Link Scale"
-                    min="0.01" max="2.5" increment="0.01" show-buttons="true" formatter="PercentageFormatter"
-                    hover-hint="Scale of chain links relative to note scale"/>
+    <tab tags="tabs" tab-name="General">
+        <modifier-container child-expand-width="true" horizontal-fit="PreferredSize">
+            <horizontal spacing="2" child-align="MiddleCenter">
+                <text text="~version" font-size="10" align="Center" font-color="#CBADFF" rich-text="true"/>
+            </horizontal>
+            <toggle-setting apply-on-change="true" value="Enabled" text="Mod Enabled"
+                            hover-hint="Remember to drink water! Hydrate!"/>
+        </modifier-container>
+    </tab>
     
-    <toggle-setting apply-on-change="true" value="EnableChainDots" text="Show Chain Dots"
-                    hover-hint="Show dots on chain links"/>
-    <toggle-setting apply-on-change="true" value="EnableChainDotGlow" text="Enable Glowing Chain Dots"
-                    hover-hint="Show glow around chain dots"/>
-    <slider-setting apply-on-change="true" value="ChainDotScaleX" text="Horizontal Chain Dot Scale"
-                    min="0.05" max="5.0" increment="0.05" show-buttons="true" formatter="PercentageFormatter"
-                    hover-hint="Horizontal scale (X-axis) of chain link dots"/>
-    <slider-setting apply-on-change="true" value="ChainDotScaleY" text="Vertical Chain Dot Scale"
-                    min="0.05" max="2.0" increment="0.05" show-buttons="true" formatter="PercentageFormatter"
-                    hover-hint="Vertical scale (Y-axis) of chain link dots"/>
+    <tab tags="tabs" tab-name="Notes">
+        <modifier-container child-expand-width="true" horizontal-fit="PreferredSize">
+            <slider-setting apply-on-change="true" value="NoteScaleX" text="Horizontal Note Scale"
+                            min="0.01" max="2.5" increment="0.01" show-buttons="true" formatter="PercentageFormatter"
+                            hover-hint="Horizontal scale (X-axis) of notes"/>
+            <slider-setting apply-on-change="true" value="NoteScaleY" text="Vertical Note Scale"
+                            min="0.01" max="2.5" increment="0.01" show-buttons="true" formatter="PercentageFormatter"
+                            hover-hint="Vertical scale (Y-axis) of notes"/>
+            <slider-setting apply-on-change="true" value="NoteScaleZ" text="Length Note Scale"
+                            min="0.01" max="2.5" increment="0.01" show-buttons="true" formatter="PercentageFormatter"
+                            hover-hint="Length scale (Z-axis) of notes"/>
 
-    <horizontal><text text="-----" font-size="4" color="#00000000"/></horizontal>
+            <horizontal><text text="-----" font-size="4" color="#00000000"/></horizontal>
 
-    <slider-setting apply-on-change="true" value="ColorBoostLeft" text="Left Color Boost"
-                    min="-0.95" max="3.0" increment="0.05" show-buttons="true" formatter="PercentageFormatter"
-                    hover-hint="Boost left note colors beyond the normal clamping levels"/>
-    <slider-setting apply-on-change="true" value="ColorBoostRight" text="Right Color Boost"
-                    min="-0.95" max="3.0" increment="0.05" show-buttons="true" formatter="PercentageFormatter"
-                    hover-hint="Boost right note colors beyond the normal clamping levels"/>
-</settings-container>
+            <slider-setting apply-on-change="true" value="ColorBoostLeft" text="Left Color Boost"
+                            min="-0.95" max="3.0" increment="0.05" show-buttons="true" formatter="PercentageFormatter"
+                            hover-hint="Boost left note colors beyond the normal clamping levels"/>
+            <slider-setting apply-on-change="true" value="ColorBoostRight" text="Right Color Boost"
+                            min="-0.95" max="3.0" increment="0.05" show-buttons="true" formatter="PercentageFormatter"
+                            hover-hint="Boost right note colors beyond the normal clamping levels"/>
+        </modifier-container>
+    </tab>
+
+    <tab tags="tabs" tab-name="Symbols">
+        <modifier-container child-expand-width="true" horizontal-fit="PreferredSize">
+            <color-setting apply-on-change="true" value="FaceColor" text="Face Symbol Color"
+                           hover-hint="Color of arrows and dots themselves"/>
+
+            <horizontal><text text="-----" font-size="4" color="#00000000"/></horizontal>
+            
+            <toggle-setting apply-on-change="true" value="EnableFaceGlow" text="Enable Glowing Face Symbols"
+                            hover-hint="Show glow around symbols"/>
+            <slider-setting apply-on-change="true" value="GlowScale" text="Glow Scale"
+                            min="0.01" max="2.0" increment="0.01" show-buttons="true" formatter="PercentageFormatter"
+                            hover-hint="Scale of glow on face symbols"/>
+            <slider-setting apply-on-change="true" value="GlowIntensity" text="Glow Intensity"
+                            min="0.01" max="3.0" increment="0.01" show-buttons="true" formatter="PercentageFormatter"
+                            hover-hint="Intensity of glow on face symbols"/>
+        </modifier-container>
+    </tab>
+
+    <tab tags="tabs" tab-name="Arrows">
+        <modifier-container child-expand-width="true" horizontal-fit="PreferredSize">
+            <slider-setting apply-on-change="true" value="ArrowScaleX" text="Horizontal Arrow Scale"
+                            min="0.05" max="2.0" increment="0.05" show-buttons="true" formatter="PercentageFormatter"
+                            hover-hint="Horizontal scale (X-axis) of note arrows"/>
+            <slider-setting apply-on-change="true" value="ArrowScaleY" text="Vertical Arrow Scale"
+                            min="0.05" max="5.0" increment="0.05" show-buttons="true" formatter="PercentageFormatter"
+                            hover-hint="Vertical scale (Y-axis) of note arrows"/>
+    
+            <horizontal><text text="-----" font-size="4" color="#00000000"/></horizontal>
+    
+            <slider-setting apply-on-change="true" value="ArrowOffsetX" text="Horizontal Arrow Offset"
+                            min="-2.0" max="2.0" increment="0.005" show-buttons="true" formatter="PreciseFloatFormatter"
+                            hover-hint="Horizontal offset (X-axis) of note arrows"/>
+            <slider-setting apply-on-change="true" value="ArrowOffsetY" text="Vertical Arrow Offset"
+                            min="-2.0" max="2.0" increment="0.005" show-buttons="true" formatter="PreciseFloatFormatter"
+                            hover-hint="Vertical offset (Y-axis) of note arrows"/>
+        </modifier-container>
+    </tab>
+
+    <tab tags="tabs" tab-name="Dots">
+        <modifier-container child-expand-width="true" horizontal-fit="PreferredSize">
+            <toggle-setting apply-on-change="true" value="EnableDots" text="Show Dots"
+                            hover-hint="Show dots"/>
+    
+            <horizontal><text text="-----" font-size="4" color="#00000000"/></horizontal>
+    
+            <slider-setting apply-on-change="true" value="DotScaleX" text="Horizontal Dot Scale"
+                            min="0.05" max="3.0" increment="0.05" show-buttons="true" formatter="PercentageFormatter"
+                            hover-hint="Horizontal scale (X-axis) of note dots"/>
+            <slider-setting apply-on-change="true" value="DotScaleY" text="Vertical Dot Scale"
+                            min="0.05" max="3.0" increment="0.05" show-buttons="true" formatter="PercentageFormatter"
+                            hover-hint="Vertical scale (Y-axis) of note dots"/>
+    
+            <horizontal><text text="-----" font-size="4" color="#00000000"/></horizontal>
+    
+            <slider-setting apply-on-change="true" value="DotOffsetX" text="Horizontal Dot Offset"
+                            min="-2.0" max="2.0" increment="0.005" show-buttons="true" formatter="PreciseFloatFormatter"
+                            hover-hint="Horizontal offset (X-axis) of note dots"/>
+            <slider-setting apply-on-change="true" value="DotOffsetY" text="Vertical Dot Offset"
+                            min="-2.0" max="2.0" increment="0.005" show-buttons="true" formatter="PreciseFloatFormatter"
+                            hover-hint="Vertical offset (Y-axis) of note dots"/>
+        </modifier-container>
+    </tab>
+
+    <tab tags="tabs" tab-name="Chains">
+        <modifier-container child-expand-width="true" horizontal-fit="PreferredSize">
+            <slider-setting apply-on-change="true" value="LinkScale" text="Chain Link Scale"
+                            min="0.01" max="2.5" increment="0.01" show-buttons="true" formatter="PercentageFormatter"
+                            hover-hint="Scale of chain links relative to note scale"/>
+    
+            <horizontal><text text="-----" font-size="4" color="#00000000"/></horizontal>
+    
+            <toggle-setting apply-on-change="true" value="EnableChainDots" text="Show Chain Dots"
+                            hover-hint="Show dots on chain links"/>
+            <toggle-setting apply-on-change="true" value="EnableChainDotGlow" text="Enable Glowing Chain Dots"
+                            hover-hint="Show glow around chain dots"/>
+    
+            <horizontal><text text="-----" font-size="4" color="#00000000"/></horizontal>
+            
+            <slider-setting apply-on-change="true" value="ChainDotScaleX" text="Horizontal Chain Dot Scale"
+                            min="0.05" max="5.0" increment="0.05" show-buttons="true" formatter="PercentageFormatter"
+                            hover-hint="Horizontal scale (X-axis) of chain link dots"/>
+            <slider-setting apply-on-change="true" value="ChainDotScaleY" text="Vertical Chain Dot Scale"
+                            min="0.05" max="2.0" increment="0.05" show-buttons="true" formatter="PercentageFormatter"
+                            hover-hint="Vertical scale (Y-axis) of chain link dots"/>
+        </modifier-container>
+    </tab>
+</vertical>
