@@ -1,4 +1,4 @@
-﻿using BeatSaberMarkupLanguage.Attributes;
+﻿/*using BeatSaberMarkupLanguage.Attributes;
 using BeatSaberMarkupLanguage.ViewControllers;
 
 namespace NoteTweaks.UI
@@ -9,7 +9,7 @@ namespace NoteTweaks.UI
     {
         public NotePreviewViewController()
         {
-            /*if (GameObject.Find("PreviewNote"))
+            if (GameObject.Find("PreviewNote"))
             {
                 DestroyImmediate(GameObject.Find("PreviewNote"));
             }
@@ -20,7 +20,7 @@ namespace NoteTweaks.UI
                 GameObject test = Instantiate(originalObject);
                 test.name = "PreviewNote";
                 test.SetActive(true);
-            }*/
+            }
         }
     }
-}
+}*/
