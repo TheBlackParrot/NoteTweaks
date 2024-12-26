@@ -21,6 +21,16 @@ namespace NoteTweaks.Patches
         private static readonly Texture2D OriginalDotGlowTexture = Resources.FindObjectsOfTypeAll<Texture2D>().ToList().First(x => x.name == "NoteCircleBakedGlow");
         private static readonly Texture2D ReplacementDotGlowTexture = Utils.Textures.PrepareTexture(OriginalDotGlowTexture);
 
+        [HarmonyPatch(typeof(StandardLevelScenesTransitionSetupDataSO), "Finish")]
+        [HarmonyPostfix]
+        private static void GetRidOfFunnySphere(StandardLevelScenesTransitionSetupDataSO __instance)
+        {
+            if (DotObject != null)
+            {
+                Object.DestroyImmediate(DotObject);
+            }
+        }
+
         // thanks BeatLeader
         [HarmonyPatch]
         internal class StandardLevelScenesTransitionSetupDataPatch
