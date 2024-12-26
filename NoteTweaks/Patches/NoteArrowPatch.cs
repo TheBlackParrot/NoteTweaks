@@ -18,8 +18,8 @@ namespace NoteTweaks.Patches
         
         private static readonly Texture2D OriginalArrowGlowTexture = Resources.FindObjectsOfTypeAll<Texture2D>().ToList().First(x => x.name == "ArrowGlow");
         private static readonly Texture2D ReplacementArrowGlowTexture = Utils.Textures.PrepareTexture(OriginalArrowGlowTexture);
-        private static readonly Texture2D OriginalDotGlowTexture = Resources.FindObjectsOfTypeAll<Texture2D>().ToList().First(x => x.name == "NoteCircleBakedGlow");
-        private static readonly Texture2D ReplacementDotGlowTexture = Utils.Textures.PrepareTexture(OriginalDotGlowTexture);
+        private static Texture2D OriginalDotGlowTexture;
+        private static Texture2D ReplacementDotGlowTexture;
 
         [HarmonyPatch(typeof(StandardLevelScenesTransitionSetupDataSO), "Finish")]
         [HarmonyPostfix]
@@ -126,6 +126,12 @@ namespace NoteTweaks.Patches
                 if (!Plugin.Config.Enabled)
                 {
                     return;
+                }
+                
+                if (OriginalDotGlowTexture == null)
+                {
+                    OriginalDotGlowTexture = Resources.FindObjectsOfTypeAll<Texture2D>().ToList().First(x => x.name == "NoteCircleBakedGlow");
+                    ReplacementDotGlowTexture = Utils.Textures.PrepareTexture(OriginalDotGlowTexture);
                 }
 
                 if (_replacementDotMaterial == null)
