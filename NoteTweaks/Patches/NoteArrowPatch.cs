@@ -145,7 +145,7 @@ namespace NoteTweaks.Patches
                     return;
                 }
 
-                if (Plugin.Config.EnableAccDot)
+                if (Plugin.Config.EnableAccDot && __instance.gameplayType != NoteData.GameplayType.BurstSliderHead)
                 {
                     if (!_accDotObject)
                     {
@@ -262,6 +262,12 @@ namespace NoteTweaks.Patches
                         renderQueue = 1999
                     };
                 }
+
+                bool isChainHead = false;
+                if (__instance.gameObject.TryGetComponent(out GameNoteController c))
+                {
+                    isChainHead = c.gameplayType == NoteData.GameplayType.BurstSliderHead;   
+                }
                 
                 if (Plugin.Config.EnableAccDot)
                 {
@@ -323,14 +329,22 @@ namespace NoteTweaks.Patches
                         if (arrowGlowObject.TryGetComponent(out MeshRenderer arrowGlowMeshRenderer))
                         {
                             arrowGlowMeshRenderer.material.mainTexture = ReplacementArrowGlowTexture;
-                            if (Plugin.Config.EnableAccDot)
+                            if (isChainHead)
                             {
-                                arrowGlowMeshRenderer.material.renderQueue = Plugin.Config.RenderAccDotsAboveSymbols ? 1998 : 1999;
+                                arrowGlowMeshRenderer.material.renderQueue = 2092;
                             }
                             else
                             {
-                                arrowGlowMeshRenderer.material.renderQueue = 1999;
+                                if (Plugin.Config.EnableAccDot)
+                                {
+                                    arrowGlowMeshRenderer.material.renderQueue = Plugin.Config.RenderAccDotsAboveSymbols ? 1998 : 1999;
+                                }
+                                else
+                                {
+                                    arrowGlowMeshRenderer.material.renderQueue = 1999;
+                                }
                             }
+                            
                         }
                     }
                 }
@@ -455,7 +469,14 @@ namespace NoteTweaks.Patches
                         if (newGlowObject.TryGetComponent(out MeshRenderer newGlowMeshRenderer))
                         {
                             newGlowMeshRenderer.material = _dotGlowMaterial;
-                            newGlowMeshRenderer.sharedMaterial = _dotGlowMaterial;   
+                            newGlowMeshRenderer.sharedMaterial = _dotGlowMaterial;
+
+                            if (isChainLink)
+                            {
+                                // :|
+                                newGlowMeshRenderer.sharedMaterial.renderQueue = 2092;
+                                newGlowMeshRenderer.material.renderQueue = 2092;
+                            }
                         }
                     }
                 }
