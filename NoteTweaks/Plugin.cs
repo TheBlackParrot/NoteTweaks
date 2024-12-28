@@ -6,6 +6,7 @@ using IPA.Config.Stores;
 using NoteTweaks.Configuration;
 using NoteTweaks.Installers;
 using SiraUtil.Zenject;
+using UnityEngine;
 using IPALogger = IPA.Logging.Logger;
 
 namespace NoteTweaks
@@ -18,6 +19,21 @@ namespace NoteTweaks
         internal static IPALogger Log { get; private set; }
         internal static PluginConfig Config;
         private static Harmony _harmony;
+
+        private static void ClampSettings()
+        {
+            Vector3 noteScale = Config.NoteScale;
+            // surely there's a better way :clueless:
+            noteScale.x = Mathf.Max(noteScale.x, 0.1f);
+            noteScale.y = Mathf.Max(noteScale.y, 0.1f);
+            noteScale.z = Mathf.Max(noteScale.z, 0.1f);
+            Config.NoteScale = noteScale;
+            
+            Config.LinkScale = Mathf.Max(Config.LinkScale, 0.1f);
+            
+            Config.ColorBoostLeft = Mathf.Max(Config.ColorBoostLeft, -0.95f);
+            Config.ColorBoostRight = Mathf.Max(Config.ColorBoostRight, -0.95f);
+        }
 
         [Init]
         public Plugin(IPALogger logger, Config config, Zenjector zenjector)
@@ -33,6 +49,8 @@ namespace NoteTweaks
         [OnEnable]
         public void OnEnable()
         {
+            ClampSettings();
+            
             _harmony = new Harmony("TheBlackParrot.NoteTweaks");
             _harmony.PatchAll(Assembly.GetExecutingAssembly());
         }
