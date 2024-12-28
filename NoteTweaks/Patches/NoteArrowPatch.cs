@@ -41,7 +41,6 @@ namespace NoteTweaks.Patches
             }
 
             GameObject obj = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-            Resources.FindObjectsOfTypeAll<Material>().First(x => x.name == "NoteHD").renderQueue = 1995;
             if (obj.TryGetComponent(out MeshRenderer meshRenderer))
             {
                 Color _c = Plugin.Config.AccDotColor;
