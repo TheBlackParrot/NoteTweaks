@@ -41,8 +41,10 @@
 
             <horizontal><text text="-----" font-size="4" color="#00000000"/></horizontal>
 
+            <toggle-setting apply-on-change="true" value="RenderAccDotsAboveSymbols" text="Render Above Symbols"
+                            hover-hint="Render acc dots on top of symbols, rather than beneath them"/>
             <slider-setting apply-on-change="true" value="AccDotSize" text="Acc Dot Size"
-                            min="15" max="5" increment="1" integer-only="true" show-buttons="true"
+                            min="15" max="5" increment="1" integer-only="true" show-buttons="true" formatter="AccFormatter"
                             hover-hint="Size of the acc dot relative to where to score for that accuracy value"/>
             <color-setting apply-on-change="true" value="AccDotColor" text="Acc Dot Color"
                            hover-hint="Color of the acc dots"/>
