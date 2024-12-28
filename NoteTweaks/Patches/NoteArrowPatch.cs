@@ -41,7 +41,6 @@ namespace NoteTweaks.Patches
             }
 
             GameObject obj = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-            Resources.FindObjectsOfTypeAll<Material>().First(x => x.name == "NoteHD").renderQueue = 1995;
             if (obj.TryGetComponent(out MeshRenderer meshRenderer))
             {
                 Color _c = Plugin.Config.AccDotColor;
@@ -271,13 +270,14 @@ namespace NoteTweaks.Patches
                 
                 if (Plugin.Config.EnableAccDot)
                 {
+                    Resources.FindObjectsOfTypeAll<Material>().First(x => x.name == "NoteHD").renderQueue = 1995;
                     _replacementDotMaterial.renderQueue = Plugin.Config.RenderAccDotsAboveSymbols ? 1997 : 2000;
                     _dotGlowMaterial.renderQueue = Plugin.Config.RenderAccDotsAboveSymbols ? 1998 : 1999;
                 }
                 else
                 {
                     _replacementDotMaterial.renderQueue = 2000;
-                    _dotGlowMaterial.renderQueue = 1999;
+                    _dotGlowMaterial.renderQueue = 2091;
                 }
                 
                 foreach (MeshRenderer meshRenderer in ____arrowMeshRenderers)
@@ -335,7 +335,7 @@ namespace NoteTweaks.Patches
                             }
                             else
                             {
-                                arrowGlowMeshRenderer.material.renderQueue = 1999;
+                                arrowGlowMeshRenderer.material.renderQueue = 2092;
                             }
                         }
                     }
