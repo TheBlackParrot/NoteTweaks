@@ -116,6 +116,9 @@ namespace NoteTweaks.Patches
                 }
                 
                 Vector3 scale = Plugin.Config.NoteScale * Plugin.Config.LinkScale;
+                scale.x = Mathf.Max(0.1f, scale.x);
+                scale.y = Mathf.Max(0.1f, scale.y);
+                scale.z = Mathf.Max(0.1f, scale.z);
                 Vector3 invertedScale = new Vector3(1.0f / scale.x, 1.0f / scale.y, 1.0f / scale.z);
 
                 __instance.transform.localScale = scale;
