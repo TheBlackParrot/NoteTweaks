@@ -175,10 +175,10 @@ namespace NoteTweaks.Patches
                         if (!originalAccDot && saberBox.transform.parent.TryGetComponent(out MeshRenderer saberBoxMeshRenderer))
                         {
                             GameObject originalAccDotClearDepthObject = Object.Instantiate(_accDotObject, saberBox.transform.parent);
-                            originalAccDotClearDepthObject.GetComponent<MeshRenderer>().material = AccDotDepthMaterial;
                             originalAccDotClearDepthObject.name = "AccDotObjectDepthClear";
                             if (originalAccDotClearDepthObject.TryGetComponent(out MeshRenderer originalAccDotClearDepthMeshRenderer))
                             {
+                                originalAccDotClearDepthMeshRenderer.material = AccDotDepthMaterial;
                                 originalAccDotClearDepthMeshRenderer.allowOcclusionWhenDynamic = false;
                                 originalAccDotClearDepthMeshRenderer.renderingLayerMask = saberBoxMeshRenderer.renderingLayerMask;
                             }
@@ -319,16 +319,18 @@ namespace NoteTweaks.Patches
                         
                         arrowGlowTransform.localScale = glowScale;
                         arrowGlowTransform.localPosition = glowPosition;
-                        
-                        MeshRenderer arrowGlowMeshRenderer = arrowGlowObject.GetComponent<MeshRenderer>();
-                        arrowGlowMeshRenderer.material.mainTexture = ReplacementArrowGlowTexture;
-                        if (Plugin.Config.EnableAccDot)
+
+                        if (arrowGlowObject.TryGetComponent(out MeshRenderer arrowGlowMeshRenderer))
                         {
-                            arrowGlowMeshRenderer.material.renderQueue = Plugin.Config.RenderAccDotsAboveSymbols ? 1998 : 1999;
-                        }
-                        else
-                        {
-                            arrowGlowMeshRenderer.material.renderQueue = 1999;
+                            arrowGlowMeshRenderer.material.mainTexture = ReplacementArrowGlowTexture;
+                            if (Plugin.Config.EnableAccDot)
+                            {
+                                arrowGlowMeshRenderer.material.renderQueue = Plugin.Config.RenderAccDotsAboveSymbols ? 1998 : 1999;
+                            }
+                            else
+                            {
+                                arrowGlowMeshRenderer.material.renderQueue = 1999;
+                            }
                         }
                     }
                 }
@@ -449,10 +451,12 @@ namespace NoteTweaks.Patches
                         newGlowObject.GetComponent<MeshFilter>().mesh = _dotGlowMesh;
                         newGlowObject.transform.localPosition = glowPosition;
                         newGlowObject.transform.localScale = glowScale;
-                        
-                        MeshRenderer newGlowMeshRenderer = newGlowObject.GetComponent<MeshRenderer>();
-                        newGlowMeshRenderer.material = _dotGlowMaterial;
-                        newGlowMeshRenderer.sharedMaterial = _dotGlowMaterial;
+
+                        if (newGlowObject.TryGetComponent(out MeshRenderer newGlowMeshRenderer))
+                        {
+                            newGlowMeshRenderer.material = _dotGlowMaterial;
+                            newGlowMeshRenderer.sharedMaterial = _dotGlowMaterial;   
+                        }
                     }
                 }
                 
