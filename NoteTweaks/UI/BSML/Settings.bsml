@@ -34,6 +34,21 @@
         </modifier-container>
     </tab>
 
+    <tab tags="tabs" tab-name="Acc Dots">
+        <modifier-container child-expand-width="true" horizontal-fit="PreferredSize">
+            <toggle-setting apply-on-change="true" value="EnableAccDot" text="Enable Acc Dots"
+                            hover-hint="Enable small dots in the center of notes to help show where to swing for accuracy"/>
+
+            <horizontal><text text="-----" font-size="4" color="#00000000"/></horizontal>
+
+            <slider-setting apply-on-change="true" value="AccDotSize" text="Acc Dot Size"
+                            min="15" max="5" increment="1" integer-only="true" show-buttons="true"
+                            hover-hint="Size of the acc dot relative to where to score for that accuracy value"/>
+            <color-setting apply-on-change="true" value="AccDotColor" text="Acc Dot Color"
+                           hover-hint="Color of the acc dots"/>
+        </modifier-container>
+    </tab>
+
     <tab tags="tabs" tab-name="Symbols">
         <modifier-container child-expand-width="true" horizontal-fit="PreferredSize">
             <color-setting apply-on-change="true" value="FaceColor" text="Face Symbol Color"

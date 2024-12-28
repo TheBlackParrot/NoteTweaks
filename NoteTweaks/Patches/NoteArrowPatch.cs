@@ -22,14 +22,13 @@ namespace NoteTweaks.Patches
         private static readonly Material AccDotDepthMaterial = new Material(Resources.FindObjectsOfTypeAll<Shader>().First(x => x.name == "Custom/ClearDepth"))
         {
             name = "AccDotMaterialDepthClear",
-            renderQueue = 3000,
+            renderQueue = 1996,
             enableInstancing = true
         };
         private static readonly Material AccDotMaterial = new Material(Resources.FindObjectsOfTypeAll<Shader>().First(x => x.name == "Standard"))
         {
             name = "AccDotMaterial",
-            renderQueue = 3001,
-            color = Plugin.Config.AccDotColor,
+            renderQueue = 1997,
             globalIlluminationFlags = MaterialGlobalIlluminationFlags.RealtimeEmissive,
             enableInstancing = true
         };
@@ -41,8 +40,8 @@ namespace NoteTweaks.Patches
 
         static NotePhysicalTweaks()
         {
+            Resources.FindObjectsOfTypeAll<Material>().First(x => x.name == "NoteHD").renderQueue = 1995;
             AccDotObject.GetComponent<MeshRenderer>().material = AccDotMaterial;
-            AccDotObject.transform.localScale = Vector3.one * (AccDotSizeStep * (Mathf.Abs(Plugin.Config.AccDotSize - 15) + 1));
             if (AccDotObject.TryGetComponent(out SphereCollider sphereCollider))
             {
                 Object.DestroyImmediate(sphereCollider);
@@ -123,30 +122,38 @@ namespace NoteTweaks.Patches
                 {
                     return;
                 }
-                
-                foreach (BoxCuttableBySaber saberBox in ____bigCuttableBySaberList)
+
+                if (Plugin.Config.EnableAccDot)
                 {
-                    Transform originalAccDot = saberBox.transform.parent.Find("AccDotObject");
-                    if (!originalAccDot && saberBox.transform.parent.TryGetComponent(out MeshRenderer saberBoxMeshRenderer))
+                    AccDotObject.transform.localScale = Vector3.one * (AccDotSizeStep * (Mathf.Abs(Plugin.Config.AccDotSize - 15) + 1));
+                    AccDotMaterial.color = Plugin.Config.AccDotColor;
+                    
+                    foreach (BoxCuttableBySaber saberBox in ____bigCuttableBySaberList)
                     {
-                        GameObject originalAccDotClearDepthObject = Object.Instantiate(AccDotObject, saberBox.transform.parent);
-                        originalAccDotClearDepthObject.GetComponent<MeshRenderer>().material = AccDotDepthMaterial;
-                        originalAccDotClearDepthObject.name = "AccDotObjectDepthClear"; 
-                        if (originalAccDotClearDepthObject.TryGetComponent(out MeshRenderer originalAccDotClearDepthMeshRenderer))
+                        Transform originalAccDot = saberBox.transform.parent.Find("AccDotObject");
+                        if (!originalAccDot && saberBox.transform.parent.TryGetComponent(out MeshRenderer saberBoxMeshRenderer))
                         {
-                            originalAccDotClearDepthMeshRenderer.allowOcclusionWhenDynamic = false;
-                            originalAccDotClearDepthMeshRenderer.renderingLayerMask = saberBoxMeshRenderer.renderingLayerMask;
+                            GameObject originalAccDotClearDepthObject = Object.Instantiate(AccDotObject, saberBox.transform.parent);
+                            originalAccDotClearDepthObject.GetComponent<MeshRenderer>().material = AccDotDepthMaterial;
+                            originalAccDotClearDepthObject.name = "AccDotObjectDepthClear";
+                            if (originalAccDotClearDepthObject.TryGetComponent(out MeshRenderer originalAccDotClearDepthMeshRenderer))
+                            {
+                                originalAccDotClearDepthMeshRenderer.allowOcclusionWhenDynamic = false;
+                                originalAccDotClearDepthMeshRenderer.renderingLayerMask = saberBoxMeshRenderer.renderingLayerMask;
+                            }
+
+                            originalAccDotClearDepthObject.SetActive(true);
+
+                            GameObject originalAccDotObject = Object.Instantiate(AccDotObject, saberBox.transform.parent);
+                            originalAccDotObject.name = "AccDotObject";
+                            if (originalAccDotObject.TryGetComponent(out MeshRenderer originalAccDotMeshRenderer))
+                            {
+                                originalAccDotMeshRenderer.allowOcclusionWhenDynamic = false;
+                                originalAccDotMeshRenderer.renderingLayerMask = saberBoxMeshRenderer.renderingLayerMask;
+                            }
+
+                            originalAccDotObject.SetActive(true);
                         }
-                        originalAccDotClearDepthObject.SetActive(true);
-                        
-                        GameObject originalAccDotObject = Object.Instantiate(AccDotObject, saberBox.transform.parent);
-                        originalAccDotObject.name = "AccDotObject";
-                        if (originalAccDotObject.TryGetComponent(out MeshRenderer originalAccDotMeshRenderer))
-                        {
-                            originalAccDotMeshRenderer.allowOcclusionWhenDynamic = false;
-                            originalAccDotMeshRenderer.renderingLayerMask = saberBoxMeshRenderer.renderingLayerMask;
-                        }
-                        originalAccDotObject.SetActive(true);   
                     }
                 }
 
@@ -196,7 +203,8 @@ namespace NoteTweaks.Patches
                     _replacementDotMaterial = new Material(arrowMat)
                     {
                         color = Plugin.Config.FaceColor,
-                        shaderKeywords = arrowMat.shaderKeywords.Where(x => x != "_ENABLE_COLOR_INSTANCING").ToArray()
+                        shaderKeywords = arrowMat.shaderKeywords.Where(x => x != "_ENABLE_COLOR_INSTANCING").ToArray(),
+                        renderQueue = 2000
                     };
                 }
                 if(_dotGlowMaterial == null) {
@@ -204,7 +212,8 @@ namespace NoteTweaks.Patches
                     Material arrowGlowMat = Resources.FindObjectsOfTypeAll<Material>().ToList().Find(x => x.name == "NoteArrowGlow");
                     _dotGlowMaterial = new Material(arrowGlowMat)
                     {
-                        mainTexture = ReplacementDotGlowTexture
+                        mainTexture = ReplacementDotGlowTexture,
+                        renderQueue = 1999
                     };
                 }
                 
@@ -232,6 +241,8 @@ namespace NoteTweaks.Patches
                         materialPropertyBlockController.ApplyChanges();   
                     }
                     
+                    meshRenderer.sharedMaterial.renderQueue = 2000;
+                    
                     Transform arrowGlowObject = meshRenderer.transform.parent.Find("NoteArrowGlow");
                     if (arrowGlowObject)
                     {
@@ -247,6 +258,7 @@ namespace NoteTweaks.Patches
                         
                         MeshRenderer arrowGlowMeshRenderer = arrowGlowObject.GetComponent<MeshRenderer>();
                         arrowGlowMeshRenderer.material.mainTexture = ReplacementArrowGlowTexture;
+                        arrowGlowMeshRenderer.material.renderQueue = 1999;
                     }
                 }
                 
