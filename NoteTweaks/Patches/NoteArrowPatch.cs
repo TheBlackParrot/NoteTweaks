@@ -10,16 +10,46 @@ namespace NoteTweaks.Patches
     internal class NotePhysicalTweaks
     {
         private static GameplayModifiers _gameplayModifiers;
+        
         private static Material _replacementDotMaterial;
         private static Material _dotGlowMaterial;
         private static readonly GameObject DotObject = GameObject.CreatePrimitive(PrimitiveType.Sphere).gameObject;
         private static readonly Mesh DotMesh = DotObject.GetComponent<MeshFilter>().mesh;
         private static Mesh _dotGlowMesh;
         
+        private static readonly GameObject AccDotObject = GameObject.CreatePrimitive(PrimitiveType.Sphere).gameObject;
+        private static readonly float AccDotSizeStep = ScoreModel.kMaxDistanceForDistanceToCenterScore / ScoreModel.kMaxCenterDistanceCutScore;
+        private static readonly Material AccDotDepthMaterial = new Material(Resources.FindObjectsOfTypeAll<Shader>().First(x => x.name == "Custom/ClearDepth"))
+        {
+            name = "AccDotMaterialDepthClear",
+            renderQueue = 3000,
+            enableInstancing = true
+        };
+        private static readonly Material AccDotMaterial = new Material(Resources.FindObjectsOfTypeAll<Shader>().First(x => x.name == "Standard"))
+        {
+            name = "AccDotMaterial",
+            renderQueue = 3001,
+            color = Plugin.Config.AccDotColor,
+            globalIlluminationFlags = MaterialGlobalIlluminationFlags.RealtimeEmissive,
+            enableInstancing = true
+        };
+
         private static readonly Texture2D OriginalArrowGlowTexture = Resources.FindObjectsOfTypeAll<Texture2D>().ToList().First(x => x.name == "ArrowGlow");
         private static readonly Texture2D ReplacementArrowGlowTexture = Utils.Textures.PrepareTexture(OriginalArrowGlowTexture);
         private static readonly Texture2D OriginalDotGlowTexture = Resources.FindObjectsOfTypeAll<Texture2D>().ToList().First(x => x.name == "NoteCircleBakedGlow");
         private static readonly Texture2D ReplacementDotGlowTexture = Utils.Textures.PrepareTexture(OriginalDotGlowTexture);
+
+        static NotePhysicalTweaks()
+        {
+            AccDotObject.GetComponent<MeshRenderer>().material = AccDotMaterial;
+            AccDotObject.transform.localScale = Vector3.one * (AccDotSizeStep * (Mathf.Abs(Plugin.Config.AccDotSize - 15) + 1));
+            if (AccDotObject.TryGetComponent(out SphereCollider sphereCollider))
+            {
+                Object.DestroyImmediate(sphereCollider);
+            }
+            AccDotObject.SetActive(false);
+            Plugin.Log.Info("setup acc dot object");
+        }
 
         [HarmonyPatch(typeof(StandardLevelScenesTransitionSetupDataSO), "Finish")]
         [HarmonyPostfix]
@@ -89,7 +119,38 @@ namespace NoteTweaks.Patches
         {
             internal static void Postfix(ref GameNoteController __instance, ref BoxCuttableBySaber[] ____bigCuttableBySaberList, ref BoxCuttableBySaber[] ____smallCuttableBySaberList)
             {
-                if (!Plugin.Config.Enabled || !IsAllowedToScaleNotes)
+                if (!Plugin.Config.Enabled)
+                {
+                    return;
+                }
+                
+                foreach (BoxCuttableBySaber saberBox in ____bigCuttableBySaberList)
+                {
+                    Transform originalAccDot = saberBox.transform.parent.Find("AccDotObject");
+                    if (!originalAccDot && saberBox.transform.parent.TryGetComponent(out MeshRenderer saberBoxMeshRenderer))
+                    {
+                        GameObject originalAccDotClearDepthObject = Object.Instantiate(AccDotObject, saberBox.transform.parent);
+                        originalAccDotClearDepthObject.GetComponent<MeshRenderer>().material = AccDotDepthMaterial;
+                        originalAccDotClearDepthObject.name = "AccDotObjectDepthClear"; 
+                        if (originalAccDotClearDepthObject.TryGetComponent(out MeshRenderer originalAccDotClearDepthMeshRenderer))
+                        {
+                            originalAccDotClearDepthMeshRenderer.allowOcclusionWhenDynamic = false;
+                            originalAccDotClearDepthMeshRenderer.renderingLayerMask = saberBoxMeshRenderer.renderingLayerMask;
+                        }
+                        originalAccDotClearDepthObject.SetActive(true);
+                        
+                        GameObject originalAccDotObject = Object.Instantiate(AccDotObject, saberBox.transform.parent);
+                        originalAccDotObject.name = "AccDotObject";
+                        if (originalAccDotObject.TryGetComponent(out MeshRenderer originalAccDotMeshRenderer))
+                        {
+                            originalAccDotMeshRenderer.allowOcclusionWhenDynamic = false;
+                            originalAccDotMeshRenderer.renderingLayerMask = saberBoxMeshRenderer.renderingLayerMask;
+                        }
+                        originalAccDotObject.SetActive(true);   
+                    }
+                }
+
+                if (!IsAllowedToScaleNotes)
                 {
                     return;
                 }

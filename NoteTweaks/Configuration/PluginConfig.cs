@@ -36,5 +36,9 @@ namespace NoteTweaks.Configuration
         public bool EnableChainDotGlow { get; set; } = true;
         
         public Color FaceColor { get; set; } = new Color(1f, 1f, 1f, 1f);
+        
+        public bool EnableAccDot { get; set; } = false;
+        public int AccDotSize { get; set; } = 15;
+        public Color AccDotColor { get; set; } = new Color(1f, 1f, 1f, 1f);
     }
 }
