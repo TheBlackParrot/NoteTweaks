@@ -14,6 +14,7 @@ namespace NoteTweaks.UI
         private PluginConfig _config;
         public string PercentageFormatter(float x) => x.ToString("0%");
         public string PreciseFloatFormatter(float x) => x.ToString("F3");
+        public string AccFormatter(int x) => (x + 100).ToString();
         
         readonly string version = $"<smallcaps><alpha=#CC>NoteTweaks</smallcaps>  <alpha=#FF><b>v{Assembly.GetExecutingAssembly().GetName().Version.ToString(3)}</b>";
 
@@ -247,6 +248,12 @@ namespace NoteTweaks.UI
         {
             get => _config.AccDotColor;
             set => _config.AccDotColor = value;
+        }
+
+        protected bool RenderAccDotsAboveSymbols
+        {
+            get => _config.RenderAccDotsAboveSymbols;
+            set => _config.RenderAccDotsAboveSymbols = value;
         }
     }
 }
