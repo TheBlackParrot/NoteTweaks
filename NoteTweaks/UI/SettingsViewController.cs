@@ -230,5 +230,23 @@ namespace NoteTweaks.UI
             get => _config.FaceColor;
             set => _config.FaceColor = value;
         }
+        
+        protected bool EnableAccDot
+        {
+            get => _config.EnableAccDot;
+            set => _config.EnableAccDot = value;
+        }
+
+        protected int AccDotSize
+        {
+            get => _config.AccDotSize;
+            set => _config.AccDotSize = value;
+        }
+
+        protected Color AccDotColor
+        {
+            get => _config.AccDotColor;
+            set => _config.AccDotColor = value;
+        }
     }
 }
