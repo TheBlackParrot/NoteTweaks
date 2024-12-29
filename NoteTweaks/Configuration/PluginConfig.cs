@@ -42,6 +42,6 @@ namespace NoteTweaks.Configuration
         public Color AccDotColor { get; set; } = new Color(1f, 1f, 1f, 1f);
         public bool RenderAccDotsAboveSymbols { get; set; } = false;
         
-        public int DotMeshSides { get; set; } = 12;
+        public int DotMeshSides { get; set; } = 16;
     }
 }
