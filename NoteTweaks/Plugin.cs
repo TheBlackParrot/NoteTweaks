@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Reflection;
 using HarmonyLib;
 using IPA;
 using IPA.Config;
@@ -33,6 +34,8 @@ namespace NoteTweaks
             
             Config.ColorBoostLeft = Mathf.Max(Config.ColorBoostLeft, -0.95f);
             Config.ColorBoostRight = Mathf.Max(Config.ColorBoostRight, -0.95f);
+            
+            Config.DotMeshSides = Math.Max(Config.DotMeshSides, 4);
         }
 
         [Init]
