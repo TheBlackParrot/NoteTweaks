@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using AssetBundleLoadingTools.Models.Shaders;
-using AssetBundleLoadingTools.Utilities;
+//using AssetBundleLoadingTools.Models.Shaders;
+//using AssetBundleLoadingTools.Utilities;
 using UnityEngine;
 
 namespace NoteTweaks.Utils
@@ -21,7 +20,7 @@ namespace NoteTweaks.Utils
         }
     }
 
-    internal static class Materials
+    /*internal static class Materials
     {
         public static void RepairShader(Material material)
         {
@@ -36,7 +35,7 @@ namespace NoteTweaks.Utils
                 }
             }
         }
-    }
+    }*/
 
     internal static class Meshes
     {
