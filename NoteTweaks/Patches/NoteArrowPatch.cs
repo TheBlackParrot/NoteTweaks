@@ -38,6 +38,8 @@ namespace NoteTweaks.Patches
                     enableInstancing = true,
                     shaderKeywords = arrowMat.shaderKeywords.Where(x => x != "_ENABLE_COLOR_INSTANCING").ToArray()
                 };
+                
+                Utils.Materials.RepairShader(AccDotDepthMaterial);
             }
 
             GameObject obj = GameObject.CreatePrimitive(PrimitiveType.Sphere);
