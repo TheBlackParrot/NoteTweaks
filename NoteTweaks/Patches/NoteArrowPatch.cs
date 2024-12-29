@@ -13,8 +13,7 @@ namespace NoteTweaks.Patches
         
         private static Material _replacementDotMaterial;
         private static Material _dotGlowMaterial;
-        private static readonly GameObject DotObject = GameObject.CreatePrimitive(PrimitiveType.Sphere).gameObject;
-        private static readonly Mesh DotMesh = DotObject.GetComponent<MeshFilter>().mesh;
+        private static Mesh _dotMesh;
         private static Mesh _dotGlowMesh;
         
         private static readonly Material AccDotDepthMaterial = new Material(Resources.FindObjectsOfTypeAll<Shader>().First(x => x.name == "Custom/ClearDepth"))
@@ -71,16 +70,6 @@ namespace NoteTweaks.Patches
         private static readonly Texture2D OriginalDotGlowTexture = Resources.FindObjectsOfTypeAll<Texture2D>().ToList().First(x => x.name == "NoteCircleBakedGlow");
         private static readonly Texture2D ReplacementDotGlowTexture = Utils.Textures.PrepareTexture(OriginalDotGlowTexture);
 
-        [HarmonyPatch(typeof(StandardLevelScenesTransitionSetupDataSO), "Finish")]
-        [HarmonyPostfix]
-        private static void GetRidOfFunnySphere(StandardLevelScenesTransitionSetupDataSO __instance)
-        {
-            if (DotObject != null)
-            {
-                Object.DestroyImmediate(DotObject);
-            }
-        }
-
         // thanks BeatLeader
         [HarmonyPatch]
         internal class StandardLevelScenesTransitionSetupDataPatch
@@ -92,6 +81,8 @@ namespace NoteTweaks.Patches
             {
                 _gameplayModifiers = gameplayModifiers;
                 Plugin.ClampSettings();
+
+                _dotMesh = Utils.Meshes.GenerateFaceMesh(Plugin.Config.DotMeshSides);
             }
         }
 
@@ -418,8 +409,12 @@ namespace NoteTweaks.Patches
                         
                         originalDotTransform.localScale = dotScale;
                         originalDotTransform.localPosition = dotPosition;
-                        
-                        meshRenderer.GetComponent<MeshFilter>().mesh = DotMesh;
+
+                        if (_dotMesh == null)
+                        {
+                            _dotMesh = Utils.Meshes.GenerateFaceMesh(Plugin.Config.DotMeshSides);
+                        }
+                        meshRenderer.GetComponent<MeshFilter>().mesh = _dotMesh;
                         
                         meshRenderer.material = _replacementDotMaterial;
                         meshRenderer.sharedMaterial = _replacementDotMaterial;

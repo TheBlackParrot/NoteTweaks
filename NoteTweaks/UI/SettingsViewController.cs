@@ -255,5 +255,11 @@ namespace NoteTweaks.UI
             get => _config.RenderAccDotsAboveSymbols;
             set => _config.RenderAccDotsAboveSymbols = value;
         }
+
+        protected int DotMeshSides
+        {
+            get => _config.DotMeshSides;
+            set => _config.DotMeshSides = value;
+        }
     }
 }
