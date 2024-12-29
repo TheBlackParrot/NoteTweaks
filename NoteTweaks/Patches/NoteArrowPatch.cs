@@ -347,7 +347,7 @@ namespace NoteTweaks.Patches
                                 }
                                 else
                                 {
-                                    arrowGlowMeshRenderer.material.renderQueue = 1999;
+                                    arrowGlowMeshRenderer.material.renderQueue = 2092;
                                 }
                             }
                             
