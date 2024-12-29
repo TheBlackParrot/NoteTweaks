@@ -73,6 +73,7 @@ namespace NoteTweaks.Utils
                 vertices = vertices.ToArray(),
                 triangles = triangles.ToArray()
             };
+            mesh.Optimize();
             
             Plugin.Log.Info($"generated face mesh with {sides} sides");
             
