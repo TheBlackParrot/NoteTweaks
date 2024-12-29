@@ -90,6 +90,7 @@ namespace NoteTweaks.Patches
             internal static void Postfix(in GameplayModifiers gameplayModifiers)
             {
                 _gameplayModifiers = gameplayModifiers;
+                Plugin.ClampSettings();
             }
         }
 
