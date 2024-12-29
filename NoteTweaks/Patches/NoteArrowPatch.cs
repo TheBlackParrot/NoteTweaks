@@ -99,6 +99,19 @@ namespace NoteTweaks.Patches
             }
         }
 
+        private static bool IsAllowedToUseAccDots
+        {
+            get
+            {
+                if (_gameplayModifiers == null)
+                {
+                    return false;
+                }
+
+                return !(_gameplayModifiers.disappearingArrows || _gameplayModifiers.ghostNotes);
+            }
+        }
+
         [HarmonyPatch(typeof(BurstSliderGameNoteController), "Init")]
         internal class BurstSliderPatch
         {
@@ -139,7 +152,7 @@ namespace NoteTweaks.Patches
                     return;
                 }
 
-                if (Plugin.Config.EnableAccDot && __instance.gameplayType != NoteData.GameplayType.BurstSliderHead)
+                if (Plugin.Config.EnableAccDot && __instance.gameplayType != NoteData.GameplayType.BurstSliderHead && IsAllowedToUseAccDots)
                 {
                     if (!_accDotObject)
                     {
@@ -269,7 +282,7 @@ namespace NoteTweaks.Patches
                     isChainHead = c.gameplayType == NoteData.GameplayType.BurstSliderHead;   
                 }
                 
-                if (Plugin.Config.EnableAccDot)
+                if (Plugin.Config.EnableAccDot && IsAllowedToUseAccDots)
                 {
                     Resources.FindObjectsOfTypeAll<Material>().First(x => x.name == "NoteHD").renderQueue = 1995;
                     _replacementDotMaterial.renderQueue = Plugin.Config.RenderAccDotsAboveSymbols ? 1997 : 2000;
@@ -305,7 +318,7 @@ namespace NoteTweaks.Patches
                         materialPropertyBlockController.ApplyChanges();   
                     }
 
-                    if (Plugin.Config.EnableAccDot)
+                    if (Plugin.Config.EnableAccDot && IsAllowedToUseAccDots)
                     {
                         meshRenderer.sharedMaterial.renderQueue = Plugin.Config.RenderAccDotsAboveSymbols ? 1997 : 2000;
                     }
@@ -336,7 +349,7 @@ namespace NoteTweaks.Patches
                             }
                             else
                             {
-                                if (Plugin.Config.EnableAccDot)
+                                if (Plugin.Config.EnableAccDot && IsAllowedToUseAccDots)
                                 {
                                     arrowGlowMeshRenderer.material.renderQueue = Plugin.Config.RenderAccDotsAboveSymbols ? 1998 : 1999;
                                 }
