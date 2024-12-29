@@ -20,7 +20,7 @@ namespace NoteTweaks
         internal static PluginConfig Config;
         private static Harmony _harmony;
 
-        private static void ClampSettings()
+        internal static void ClampSettings()
         {
             Vector3 noteScale = Config.NoteScale;
             // surely there's a better way :clueless:
