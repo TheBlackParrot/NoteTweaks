@@ -261,5 +261,11 @@ namespace NoteTweaks.UI
             get => _config.DotMeshSides;
             set => _config.DotMeshSides = value;
         }
+
+        protected float FaceColorNoteSkew
+        {
+            get => _config.FaceColorNoteSkew;
+            set => _config.FaceColorNoteSkew = value;
+        }
     }
 }

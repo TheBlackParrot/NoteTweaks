@@ -31,17 +31,19 @@ namespace NoteTweaks.Configuration
 
         public virtual float GlowIntensity { get; set; } = 1.0f;
         public virtual float GlowScale { get; set; } = 1.0f;
-        public bool EnableChainDots { get; set; } = true;
-        public Vector2 ChainDotScale { get; set; } = Vector2.one;
-        public bool EnableChainDotGlow { get; set; } = true;
+        public virtual bool EnableChainDots { get; set; } = true;
+        public virtual Vector2 ChainDotScale { get; set; } = Vector2.one;
+        public virtual bool EnableChainDotGlow { get; set; } = true;
         
-        public Color FaceColor { get; set; } = new Color(1f, 1f, 1f, 1f);
+        public virtual Color FaceColor { get; set; } = new Color(1f, 1f, 1f, 1f);
         
-        public bool EnableAccDot { get; set; } = false;
-        public int AccDotSize { get; set; } = 15;
-        public Color AccDotColor { get; set; } = new Color(1f, 1f, 1f, 1f);
-        public bool RenderAccDotsAboveSymbols { get; set; } = false;
+        public virtual bool EnableAccDot { get; set; } = false;
+        public virtual int AccDotSize { get; set; } = 15;
+        public virtual Color AccDotColor { get; set; } = new Color(1f, 1f, 1f, 1f);
+        public virtual bool RenderAccDotsAboveSymbols { get; set; } = false;
         
-        public int DotMeshSides { get; set; } = 16;
+        public virtual int DotMeshSides { get; set; } = 16;
+
+        public virtual float FaceColorNoteSkew { get; set; } = 0.04f;
     }
 }

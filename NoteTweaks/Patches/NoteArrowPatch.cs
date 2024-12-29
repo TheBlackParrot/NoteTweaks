@@ -304,11 +304,11 @@ namespace NoteTweaks.Patches
                     arrowTransform.localScale = scale;
                     arrowTransform.localPosition = position;
                     
-                    Color _c = Plugin.Config.FaceColor;
+                    Color _c = Color.LerpUnclamped(Plugin.Config.FaceColor, __instance._noteColor, Plugin.Config.FaceColorNoteSkew);
                     _c.a = 0f;
                     if (meshRenderer.TryGetComponent(out MaterialPropertyBlockController materialPropertyBlockController))
                     {
-                        materialPropertyBlockController.materialPropertyBlock.SetColor(ColorNoteVisuals._colorId, Plugin.Config.FaceColor);
+                        materialPropertyBlockController.materialPropertyBlock.SetColor(ColorNoteVisuals._colorId, _c);
                         materialPropertyBlockController.ApplyChanges();   
                     }
 
@@ -433,11 +433,11 @@ namespace NoteTweaks.Patches
                         meshRenderer.material = _replacementDotMaterial;
                         meshRenderer.sharedMaterial = _replacementDotMaterial;
                         
-                        Color _c = Plugin.Config.FaceColor;
+                        Color _c = Color.LerpUnclamped(Plugin.Config.FaceColor, __instance._noteColor, Plugin.Config.FaceColorNoteSkew);
                         _c.a = 0f;
                         if (meshRenderer.TryGetComponent(out MaterialPropertyBlockController materialPropertyBlockController))
                         {
-                            materialPropertyBlockController.materialPropertyBlock.SetColor(ColorNoteVisuals._colorId, Plugin.Config.FaceColor);
+                            materialPropertyBlockController.materialPropertyBlock.SetColor(ColorNoteVisuals._colorId, _c);
                             materialPropertyBlockController.ApplyChanges();   
                         }
 

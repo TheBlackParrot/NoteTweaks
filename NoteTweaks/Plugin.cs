@@ -36,6 +36,8 @@ namespace NoteTweaks
             Config.ColorBoostRight = Mathf.Max(Config.ColorBoostRight, -0.95f);
             
             Config.DotMeshSides = Math.Max(Config.DotMeshSides, 4);
+            
+            Config.FaceColorNoteSkew = Mathf.Max(0, Mathf.Min(Config.FaceColorNoteSkew, 1.0f));
         }
 
         [Init]
