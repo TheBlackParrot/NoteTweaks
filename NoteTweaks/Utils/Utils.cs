@@ -1,4 +1,7 @@
-﻿using UnityEngine;
+﻿using System;
+using AssetBundleLoadingTools.Models.Shaders;
+using AssetBundleLoadingTools.Utilities;
+using UnityEngine;
 
 namespace NoteTweaks.Utils
 {
@@ -13,6 +16,23 @@ namespace NoteTweaks.Utils
             Graphics.ConvertTexture(source, readableTexture);
             readableTexture.name = source.name + "-Duplicate";
             return readableTexture;
+        }
+    }
+
+    internal static class Materials
+    {
+        public static void RepairShader(Material material)
+        {
+            ShaderReplacementInfo info = ShaderRepair.FixShaderOnMaterial(material);
+            
+            if (!info.AllShadersReplaced)
+            {
+                Plugin.Log.Info("Could not repair shaders:");
+                foreach (String name in info.MissingShaderNames)
+                {
+                    Plugin.Log.Info($"\t - {name}");
+                }
+            }
         }
     }
 }
