@@ -36,12 +36,23 @@ namespace NoteTweaks.UI
 
         public static void UpdateDotMesh()
         {
+            if (_dotGlowMesh == null)
+            {
+                _dotGlowMesh = NoteContainer.transform.GetChild(0).Find("NoteCircleGlow").GetComponent<MeshFilter>().mesh;
+            }
+            
             if (_dotMesh != null)
             {
                 _dotMesh.Clear();
             }
 
             _dotMesh = Utils.Meshes.GenerateFaceMesh(Plugin.Config.DotMeshSides);
+
+            for (int i = 0; i < NoteContainer.transform.childCount; i++)
+            {
+                GameObject noteCube = NoteContainer.transform.GetChild(i).gameObject;
+                noteCube.transform.Find("NoteCircleGlow").GetComponent<MeshFilter>().mesh = _dotMesh;
+            }
         }
 
         public static void UpdateVisibility()
@@ -60,11 +71,7 @@ namespace NoteTweaks.UI
                     // is a dot note
                     GameObject dotObject = noteCube.transform.Find("NoteCircleGlow").gameObject;
                     dotObject.SetActive(Plugin.Config.EnableDots);
-
-                    if (dotObject.activeSelf)
-                    {
-                        noteCube.transform.Find("AddedNoteCircleGlow").gameObject.SetActive(Plugin.Config.EnableFaceGlow);
-                    }
+                    noteCube.transform.Find("AddedNoteCircleGlow").gameObject.SetActive(Plugin.Config.EnableFaceGlow && Plugin.Config.EnableDots);
                 }
             }
         }
