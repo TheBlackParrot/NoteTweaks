@@ -14,7 +14,7 @@ namespace NoteTweaks.UI
         internal static GameObject NoteContainer = new GameObject("_NoteTweaks_NoteContainer");
         
         private static readonly float NoteSize = 0.5f;
-        private static readonly Vector3 InitialPosition = new Vector3(-2.5f, 1.5f, 3f);
+        private static readonly Vector3 InitialPosition = new Vector3(-2.6f, 1.5f, 3.4f);
         
         internal static bool _hasInitialized;
         private static Vector3 _initialArrowPosition = Vector3.one;
@@ -317,7 +317,7 @@ namespace NoteTweaks.UI
             }
             
             NoteContainer.transform.position = InitialPosition;
-            NoteContainer.transform.localRotation = Quaternion.Euler(0, 315, 0);
+            NoteContainer.transform.localRotation = Quaternion.Euler(0, 330, 0);
             
             MenuTransitionsHelper menuTransitionsHelper = Resources.FindObjectsOfTypeAll<MenuTransitionsHelper>().FirstOrDefault();
             StandardLevelScenesTransitionSetupDataSO standardLevelScenesTransitionSetupData = menuTransitionsHelper._standardLevelScenesTransitionSetupData;
