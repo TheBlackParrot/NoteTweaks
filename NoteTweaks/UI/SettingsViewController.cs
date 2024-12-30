@@ -1,6 +1,7 @@
 ﻿using System.Reflection;
 using BeatSaberMarkupLanguage.Attributes;
 using BeatSaberMarkupLanguage.ViewControllers;
+using IPA.Loader;
 using NoteTweaks.Configuration;
 using UnityEngine;
 using Zenject;
@@ -16,7 +17,8 @@ namespace NoteTweaks.UI
         public string PreciseFloatFormatter(float x) => x.ToString("F3");
         public string AccFormatter(int x) => (x + 100).ToString();
         
-        readonly string version = $"<smallcaps><alpha=#CC>NoteTweaks</smallcaps>  <alpha=#FF><b>v{Assembly.GetExecutingAssembly().GetName().Version.ToString(3)}</b>";
+        readonly string version = $"<size=80%><smallcaps><alpha=#CC>NoteTweaks</smallcaps></size> <alpha=#FF><b>v{Assembly.GetExecutingAssembly().GetName().Version.ToString(3)}</b>";
+        readonly string gameVersion = $"<alpha=#CC>(<alpha=#77><size=80%>for</size> <b><alpha=#FF>{Plugin.Manifest.GameVersion}<alpha=#CC></b>)";
 
         [Inject]
         private void Construct(PluginConfig config)
