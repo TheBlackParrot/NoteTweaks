@@ -149,9 +149,13 @@ namespace NoteTweaks.UI
         protected bool EnableDots
         {
             get => _config.EnableDots;
-            set => _config.EnableDots = value;
+            set
+            {
+                _config.EnableDots = value;
+                NotePreviewViewController.UpdateVisibility();
+            }
         }
-        
+
         protected float NoteScaleX
         {
             get => _config.NoteScale.x;

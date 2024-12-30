@@ -50,23 +50,20 @@ namespace NoteTweaks.UI
             {
                 GameObject noteCube = NoteContainer.transform.GetChild(i).gameObject;
                 
-                switch (i)
+                if (noteCube.transform.Find("NoteArrow").gameObject.activeSelf)
                 {
-                    case 0:
-                    case 1:
-                    {
-                        if (noteCube.transform.Find("NoteArrow").gameObject.activeSelf)
-                        {
-                            GlowNames.ForEach(glowName => noteCube.transform.Find("NoteArrowGlow").gameObject.SetActive(Plugin.Config.EnableFaceGlow));
-                        }
+                    // is not a dot note
+                    noteCube.transform.Find("NoteArrowGlow").gameObject.SetActive(Plugin.Config.EnableFaceGlow);
+                }
+                else
+                {
+                    // is a dot note
+                    GameObject dotObject = noteCube.transform.Find("NoteCircleGlow").gameObject;
+                    dotObject.SetActive(Plugin.Config.EnableDots);
 
-                        break;
-                    }
-
-                    case 2:
-                    case 3:
+                    if (dotObject.activeSelf)
                     {
-                        break;
+                        noteCube.transform.Find("AddedNoteCircleGlow").gameObject.SetActive(Plugin.Config.EnableFaceGlow);
                     }
                 }
             }
@@ -337,6 +334,7 @@ namespace NoteTweaks.UI
                             UpdateDotPosition();
                             UpdateDotScale();
                             UpdateNoteScale();
+                            UpdateVisibility();
 
                             NoteContainer.SetActive(true);
 
