@@ -221,13 +221,22 @@ namespace NoteTweaks.UI
             }
         }
 
-        protected float GlowScale
+        protected float ArrowGlowScale
         {
-            get => _config.GlowScale;
+            get => _config.ArrowGlowScale;
             set
             {
-                _config.GlowScale = value;
+                _config.ArrowGlowScale = value;
                 NotePreviewViewController.UpdateArrowScale();
+            }
+        }
+        
+        protected float DotGlowScale
+        {
+            get => _config.DotGlowScale;
+            set
+            {
+                _config.DotGlowScale = value;
                 NotePreviewViewController.UpdateDotScale();
             }
         }
