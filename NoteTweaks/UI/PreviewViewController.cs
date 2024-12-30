@@ -264,17 +264,21 @@ namespace NoteTweaks.UI
                 }
             }
             
+            noteCube.transform.Find("NoteArrowGlow").GetComponent<MeshRenderer>().material.mainTexture = ReplacementArrowGlowTexture;
+            
             if (cell >= 2)
             {
                 // dot notes
                 noteCube.transform.Find("NoteArrow").gameObject.SetActive(false);
                 noteCube.transform.Find("NoteArrowGlow").gameObject.SetActive(false);
+                noteCube.transform.Find("NoteArrow").GetComponent<Renderer>().enabled = false;
+                noteCube.transform.Find("NoteArrowGlow").GetComponent<Renderer>().enabled = false;
                 
                 noteCube.transform.Find("NoteCircleGlow").gameObject.SetActive(true);
                 noteCube.transform.Find("AddedNoteCircleGlow").gameObject.SetActive(true);
+                noteCube.transform.Find("NoteCircleGlow").GetComponent<Renderer>().enabled = true;
+                noteCube.transform.Find("AddedNoteCircleGlow").GetComponent<Renderer>().enabled = true;
             }
-            
-            noteCube.transform.Find("NoteArrowGlow").GetComponent<MeshRenderer>().material.mainTexture = ReplacementArrowGlowTexture;
             
             noteCube.gameObject.SetActive(true);
         }
