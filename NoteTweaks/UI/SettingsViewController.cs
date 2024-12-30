@@ -228,6 +228,7 @@ namespace NoteTweaks.UI
             {
                 _config.GlowScale = value;
                 NotePreviewViewController.UpdateArrowScale();
+                NotePreviewViewController.UpdateDotScale();
             }
         }
 
