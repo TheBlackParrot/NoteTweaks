@@ -69,9 +69,6 @@
             
             <toggle-setting apply-on-change="true" value="EnableFaceGlow" text="Enable Glowing Face Symbols"
                             hover-hint="Show glow around symbols"/>
-            <slider-setting apply-on-change="true" value="GlowScale" text="Glow Scale"
-                            min="0.01" max="2.0" increment="0.01" show-buttons="true" formatter="PercentageFormatter"
-                            hover-hint="Scale of glow on face symbols"/>
             <slider-setting apply-on-change="true" value="GlowIntensity" text="Glow Intensity"
                             min="0.01" max="3.0" increment="0.01" show-buttons="true" formatter="PercentageFormatter"
                             hover-hint="Intensity of glow on face symbols"/>
@@ -95,6 +92,12 @@
             <slider-setting apply-on-change="true" value="ArrowOffsetY" text="Vertical Arrow Offset"
                             min="-2.0" max="2.0" increment="0.005" show-buttons="true" formatter="PreciseFloatFormatter"
                             hover-hint="Vertical offset (Y-axis) of note arrows"/>
+
+            <horizontal><text text="-----" font-size="4" color="#00000000"/></horizontal>
+
+            <slider-setting apply-on-change="true" value="ArrowGlowScale" text="Arrow Glow Scale"
+                            min="0.01" max="2.0" increment="0.01" show-buttons="true" formatter="PercentageFormatter"
+                            hover-hint="Scale of glow on arrows"/>
         </modifier-container>
     </tab>
 
@@ -103,13 +106,13 @@
             <toggle-setting apply-on-change="true" value="EnableDots" text="Show Dots"
                             hover-hint="Show dots"/>
 
-            <horizontal><text text="-----" font-size="4" color="#00000000"/></horizontal>
+            <horizontal><text text="-----" font-size="2" color="#00000000"/></horizontal>
 
             <slider-setting apply-on-change="true" value="DotMeshSides" text="Dot Shape Sides"
                             min="4" max="48" increment="1" integer-only="true" show-buttons="true"
                             hover-hint="Amount of sides on the dot symbol"/>
     
-            <horizontal><text text="-----" font-size="4" color="#00000000"/></horizontal>
+            <horizontal><text text="-----" font-size="2" color="#00000000"/></horizontal>
     
             <slider-setting apply-on-change="true" value="DotScaleX" text="Horizontal Dot Scale"
                             min="0.05" max="3.0" increment="0.05" show-buttons="true" formatter="PercentageFormatter"
@@ -118,7 +121,7 @@
                             min="0.05" max="3.0" increment="0.05" show-buttons="true" formatter="PercentageFormatter"
                             hover-hint="Vertical scale (Y-axis) of note dots"/>
     
-            <horizontal><text text="-----" font-size="4" color="#00000000"/></horizontal>
+            <horizontal><text text="-----" font-size="2" color="#00000000"/></horizontal>
     
             <slider-setting apply-on-change="true" value="DotOffsetX" text="Horizontal Dot Offset"
                             min="-2.0" max="2.0" increment="0.005" show-buttons="true" formatter="PreciseFloatFormatter"
@@ -126,6 +129,12 @@
             <slider-setting apply-on-change="true" value="DotOffsetY" text="Vertical Dot Offset"
                             min="-2.0" max="2.0" increment="0.005" show-buttons="true" formatter="PreciseFloatFormatter"
                             hover-hint="Vertical offset (Y-axis) of note dots"/>
+
+            <horizontal><text text="-----" font-size="2" color="#00000000"/></horizontal>
+
+            <slider-setting apply-on-change="true" value="DotGlowScale" text="Dot Glow Scale"
+                            min="0.01" max="2.0" increment="0.01" show-buttons="true" formatter="PercentageFormatter"
+                            hover-hint="Scale of glow on dots"/>
         </modifier-container>
     </tab>
 
