@@ -11,10 +11,10 @@ namespace NoteTweaks.UI
     [HotReload(RelativePathToLayout = "BSML.Empty.bsml")]
     internal class NotePreviewViewController : BSMLAutomaticViewController
     {
-        internal static readonly GameObject NoteContainer = new GameObject("_NoteTweaks_NoteContainer");
+        internal static GameObject NoteContainer = new GameObject("_NoteTweaks_NoteContainer");
         private static readonly float NoteSize = 0.5f;
-        private static readonly Vector3 InitialPosition = new Vector3(-3.0f, 1.0f, 2.2f);
-        private static bool _hasInitialized;
+        private static readonly Vector3 InitialPosition = new Vector3(-2.5f, 1.5f, 3f);
+        internal static bool _hasInitialized;
         private static readonly int Color0 = Shader.PropertyToID("_Color");
         private static Vector3 _initialPosition = Vector3.one;
         
@@ -126,6 +126,17 @@ namespace NoteTweaks.UI
             Vector3 position = new Vector3((cell % 2) * NoteSize, -(int)Math.Floor((float)cell / 2) * NoteSize, 0);
             noteCube.transform.localPosition = position;
             noteCube.transform.Rotate(90f, 0f, 0f);
+
+            /*Animation animationComponent = noteCube.AddComponent<Animation>();
+            AnimationClip animationClip = Resources.FindObjectsOfTypeAll<AnimationClip>().First(x => x.name.Contains("LevitatingCube"));
+            animationComponent.AddClip(animationClip, "LevitatingCube");
+            animationComponent.clip = animationClip;
+            foreach (var animationEvent in animationComponent.clip.events)
+            {
+                animationEvent.objectReferenceParameter = noteCube;
+            }
+            animationComponent.Play("LevitatingCube", PlayMode.StopAll);
+            animationComponent["LevitatingCube"].wrapMode = WrapMode.Loop;*/
             
             noteCube.gameObject.SetActive(true);
         }

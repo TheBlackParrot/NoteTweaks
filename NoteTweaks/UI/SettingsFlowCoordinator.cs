@@ -1,4 +1,5 @@
 ﻿using HMUI;
+using UnityEngine;
 using Zenject;
 
 namespace NoteTweaks.UI
@@ -25,7 +26,12 @@ namespace NoteTweaks.UI
                 showBackButton = true;
                 ProvideInitialViewControllers(_settingsViewController, _notePreviewViewController);
             }
-            
+
+            if (NotePreviewViewController.NoteContainer == null && NotePreviewViewController._hasInitialized)
+            {
+                NotePreviewViewController._hasInitialized = false;
+                NotePreviewViewController.NoteContainer = new GameObject("_NoteTweaks_NoteContainer");
+            }
             NotePreviewViewController.NoteContainer.SetActive(true);
         }
 
