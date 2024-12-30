@@ -102,6 +102,8 @@ namespace NoteTweaks.UI
                 Vector2 scale = _config.DotScale;
                 scale.x = value;
                 _config.DotScale = scale;
+                
+                NotePreviewViewController.UpdateDotScale();
             }
         }
         
@@ -113,6 +115,8 @@ namespace NoteTweaks.UI
                 Vector2 scale = _config.DotScale;
                 scale.y = value;
                 _config.DotScale = scale;
+                
+                NotePreviewViewController.UpdateDotScale();
             }
         }
         
@@ -124,6 +128,8 @@ namespace NoteTweaks.UI
                 Vector3 position = _config.DotPosition;
                 position.x = value;
                 _config.DotPosition = position;
+                
+                NotePreviewViewController.UpdateDotPosition();
             }
         }
         
@@ -135,6 +141,8 @@ namespace NoteTweaks.UI
                 Vector3 position = _config.DotPosition;
                 position.y = value;
                 _config.DotPosition = position;
+                
+                NotePreviewViewController.UpdateDotPosition();
             }
         }
 
@@ -299,7 +307,11 @@ namespace NoteTweaks.UI
         protected int DotMeshSides
         {
             get => _config.DotMeshSides;
-            set => _config.DotMeshSides = value;
+            set
+            {
+                _config.DotMeshSides = value;
+                NotePreviewViewController.UpdateDotMesh();
+            }
         }
 
         protected float FaceColorNoteSkew

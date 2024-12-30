@@ -12,37 +12,105 @@ namespace NoteTweaks.UI
     internal class NotePreviewViewController : BSMLAutomaticViewController
     {
         internal static GameObject NoteContainer = new GameObject("_NoteTweaks_NoteContainer");
+        
         private static readonly float NoteSize = 0.5f;
         private static readonly Vector3 InitialPosition = new Vector3(-2.5f, 1.5f, 3f);
-        internal static bool _hasInitialized;
-        private static readonly int Color0 = Shader.PropertyToID("_Color");
-        private static Vector3 _initialPosition = Vector3.one;
         
-        private static readonly List<String> FaceNames = new List<String> { "NoteArrow" };
-        private static readonly List<String> GlowNames = new List<String> { "NoteArrowGlow" };
+        internal static bool _hasInitialized;
+        private static Vector3 _initialArrowPosition = Vector3.one;
+        private static Vector3 _initialDotPosition = Vector3.one;
+
+        private static Material _replacementDotMaterial;
+        private static Material _dotGlowMaterial;
+        private static Mesh _dotMesh;
+        private static Mesh _dotGlowMesh;
+        private static readonly Texture2D OriginalArrowGlowTexture = Resources.FindObjectsOfTypeAll<Texture2D>().ToList().First(x => x.name == "ArrowGlow");
+        private static readonly Texture2D ReplacementArrowGlowTexture = Utils.Textures.PrepareTexture(OriginalArrowGlowTexture);
+        private static readonly Texture2D OriginalDotGlowTexture = Resources.FindObjectsOfTypeAll<Texture2D>().ToList().First(x => x.name == "NoteCircleBakedGlow");
+        private static readonly Texture2D ReplacementDotGlowTexture = Utils.Textures.PrepareTexture(OriginalDotGlowTexture);
+        
+        private static readonly int Color0 = Shader.PropertyToID("_Color");
+        
+        private static readonly List<String> FaceNames = new List<String> { "NoteArrow", "NoteCircleGlow" };
+        private static readonly List<String> GlowNames = new List<String> { "NoteArrowGlow", "AddedNoteCircleGlow" };
+
+        public static void UpdateDotMesh()
+        {
+            if (_dotMesh != null)
+            {
+                _dotMesh.Clear();
+            }
+
+            _dotMesh = Utils.Meshes.GenerateFaceMesh(Plugin.Config.DotMeshSides);
+        }
 
         public static void UpdateVisibility()
         {
-            if (Plugin.Config.EnableDots)
-            {
-                // todo
-            }
-
             for (int i = 0; i < NoteContainer.transform.childCount; i++)
             {
                 GameObject noteCube = NoteContainer.transform.GetChild(i).gameObject;
-                GlowNames.ForEach(glowName => noteCube.transform.Find("NoteArrowGlow").gameObject.SetActive(Plugin.Config.EnableFaceGlow));
+                
+                switch (i)
+                {
+                    case 0:
+                    case 1:
+                    {
+                        if (noteCube.transform.Find("NoteArrow").gameObject.activeSelf)
+                        {
+                            GlowNames.ForEach(glowName => noteCube.transform.Find("NoteArrowGlow").gameObject.SetActive(Plugin.Config.EnableFaceGlow));
+                        }
+
+                        break;
+                    }
+
+                    case 2:
+                    case 3:
+                    {
+                        break;
+                    }
+                }
+            }
+        }
+        
+        public static void UpdateDotPosition()
+        {
+            if (_initialDotPosition == Vector3.one)
+            {
+                _initialDotPosition = NoteContainer.transform.GetChild(0).Find("NoteCircleGlow").localPosition;
+            }
+            
+            Vector3 position = new Vector3(_initialDotPosition.x + Plugin.Config.DotPosition.x, _initialDotPosition.y + Plugin.Config.DotPosition.y, _initialDotPosition.z);
+            Vector3 glowPosition = new Vector3(_initialDotPosition.x + Plugin.Config.DotPosition.x, _initialDotPosition.y + Plugin.Config.DotPosition.y, _initialDotPosition.z + 0.001f);
+            
+            for (int i = 0; i < NoteContainer.transform.childCount; i++)
+            {
+                GameObject noteCube = NoteContainer.transform.GetChild(i).gameObject;
+                noteCube.transform.Find("NoteCircleGlow").localPosition = position;
+                noteCube.transform.Find("AddedNoteCircleGlow").localPosition = glowPosition;
+            }
+        }
+
+        public static void UpdateDotScale()
+        {
+            Vector3 scale = new Vector3(Plugin.Config.DotScale.x / 5f, Plugin.Config.DotScale.y / 5f, 1.0f);
+            Vector3 glowScale = new Vector3((Plugin.Config.DotScale.x / 1.5f) * Plugin.Config.GlowScale, (Plugin.Config.DotScale.y / 1.5f) * Plugin.Config.GlowScale, 1.0f);
+            
+            for (int i = 0; i < NoteContainer.transform.childCount; i++)
+            {
+                GameObject noteCube = NoteContainer.transform.GetChild(i).gameObject;
+                noteCube.transform.Find("NoteCircleGlow").localScale = scale;
+                noteCube.transform.Find("AddedNoteCircleGlow").localScale = glowScale;
             }
         }
         
         public static void UpdateArrowPosition()
         {
-            if (_initialPosition == Vector3.one)
+            if (_initialArrowPosition == Vector3.one)
             {
-                _initialPosition = NoteContainer.transform.GetChild(0).Find("NoteArrow").localPosition;
+                _initialArrowPosition = NoteContainer.transform.GetChild(0).Find("NoteArrow").localPosition;
             }
             
-            Vector3 position = new Vector3(Plugin.Config.ArrowPosition.x, _initialPosition.y + Plugin.Config.ArrowPosition.y, _initialPosition.z);
+            Vector3 position = new Vector3(Plugin.Config.ArrowPosition.x, _initialArrowPosition.y + Plugin.Config.ArrowPosition.y, _initialArrowPosition.z);
             
             for (int i = 0; i < NoteContainer.transform.childCount; i++)
             {
@@ -99,16 +167,28 @@ namespace NoteTweaks.UI
 
                     FaceNames.ForEach(childName =>
                     {
-                        MaterialPropertyBlockController childController = controller.transform.Find(childName).GetComponent<MaterialPropertyBlockController>();
-                        childController.materialPropertyBlock.SetColor(Color0, faceColor);
-                        childController.ApplyChanges(); 
+                        Transform childTransform = controller.transform.Find(childName);
+                        if (childTransform)
+                        {
+                            if (childTransform.TryGetComponent(out MaterialPropertyBlockController childController))
+                            {
+                                childController.materialPropertyBlock.SetColor(Color0, faceColor);
+                                childController.ApplyChanges();
+                            }   
+                        }
                     });
                     
                     GlowNames.ForEach(childName =>
                     {
-                        MaterialPropertyBlockController childController = controller.transform.Find(childName).GetComponent<MaterialPropertyBlockController>();
-                        childController.materialPropertyBlock.SetColor(Color0, glowColor);
-                        childController.ApplyChanges(); 
+                        Transform childTransform = controller.transform.Find(childName);
+                        if (childTransform)
+                        {
+                            if (childTransform.TryGetComponent(out MaterialPropertyBlockController childController))
+                            {
+                                childController.materialPropertyBlock.SetColor(Color0, glowColor);
+                                childController.ApplyChanges();
+                            }   
+                        }
                     });
                 }
             }
@@ -137,6 +217,67 @@ namespace NoteTweaks.UI
             }
             animationComponent.Play("LevitatingCube", PlayMode.StopAll);
             animationComponent["LevitatingCube"].wrapMode = WrapMode.Loop;*/
+
+            if (_dotMesh == null)
+            {
+                UpdateDotMesh();
+            }
+
+            if (_dotGlowMesh == null)
+            {
+                _dotGlowMesh = noteCube.transform.Find("NoteCircleGlow").GetComponent<MeshFilter>().mesh;
+            }
+            
+            Transform originalDot = noteCube.transform.Find("NoteCircleGlow");
+            if (originalDot)
+            {
+                Transform originalDotTransform = originalDot.transform;
+                        
+                if (_initialDotPosition == Vector3.one)
+                {
+                    _initialDotPosition = originalDotTransform.localPosition;
+                }
+                    
+                Vector3 dotPosition = new Vector3(_initialDotPosition.x + Plugin.Config.DotPosition.x, _initialDotPosition.y + Plugin.Config.DotPosition.y, _initialDotPosition.z);
+                Vector3 glowPosition = new Vector3(_initialDotPosition.x + Plugin.Config.DotPosition.x, _initialDotPosition.y + Plugin.Config.DotPosition.y, _initialDotPosition.z + 0.001f);
+                Vector3 dotScale = new Vector3(Plugin.Config.DotScale.x / 5f, Plugin.Config.DotScale.y / 5f, 1.0f);
+                Vector3 glowScale = new Vector3((Plugin.Config.DotScale.x / 1.5f) * Plugin.Config.GlowScale, (Plugin.Config.DotScale.y / 1.5f) * Plugin.Config.GlowScale, 1.0f);
+
+                originalDotTransform.localScale = dotScale;
+                originalDotTransform.localPosition = dotPosition;
+                    
+                MeshRenderer meshRenderer = originalDot.GetComponent<MeshRenderer>();
+                    
+                meshRenderer.GetComponent<MeshFilter>().mesh = _dotMesh;
+                        
+                meshRenderer.material = _replacementDotMaterial;
+                meshRenderer.sharedMaterial = _replacementDotMaterial;
+                    
+                GameObject newGlowObject = Instantiate(originalDot.gameObject, originalDot.parent);
+                newGlowObject.name = "AddedNoteCircleGlow";
+                        
+                newGlowObject.GetComponent<MeshFilter>().mesh = _dotGlowMesh;
+                newGlowObject.transform.localPosition = glowPosition;
+                newGlowObject.transform.localScale = glowScale;
+
+                if (newGlowObject.TryGetComponent(out MeshRenderer newGlowMeshRenderer))
+                {
+                    newGlowMeshRenderer.material = _dotGlowMaterial;
+                    newGlowMeshRenderer.sharedMaterial = _dotGlowMaterial;
+                }
+            }
+            
+            if (cell >= 2)
+            {
+                // dot notes
+                noteCube.transform.Find("NoteArrow").gameObject.SetActive(false);
+                noteCube.transform.Find("NoteArrowGlow").gameObject.SetActive(false);
+                
+                noteCube.transform.Find("NoteCircleGlow").gameObject.SetActive(true);
+                noteCube.transform.Find("AddedNoteCircleGlow").gameObject.SetActive(true);
+            }
+            
+            noteCube.transform.Find("NoteArrowGlow").GetComponent<MeshRenderer>().material.mainTexture = ReplacementArrowGlowTexture;
             
             noteCube.gameObject.SetActive(true);
         }
@@ -146,6 +287,25 @@ namespace NoteTweaks.UI
             if (_hasInitialized)
             {
                 return;
+            }
+            
+            if (_replacementDotMaterial == null)
+            {
+                Plugin.Log.Info("Creating replacement dot material");
+                Material arrowMat = Resources.FindObjectsOfTypeAll<Material>().ToList().Find(x => x.name == "NoteArrowHD");
+                _replacementDotMaterial = new Material(arrowMat)
+                {
+                    color = Plugin.Config.FaceColor,
+                    shaderKeywords = arrowMat.shaderKeywords.Where(x => x != "_ENABLE_COLOR_INSTANCING").ToArray()
+                };
+            }
+            if(_dotGlowMaterial == null) {
+                Plugin.Log.Info("Creating new dot glow material");
+                Material arrowGlowMat = Resources.FindObjectsOfTypeAll<Material>().ToList().Find(x => x.name == "NoteArrowGlow");
+                _dotGlowMaterial = new Material(arrowGlowMat)
+                {
+                    mainTexture = ReplacementDotGlowTexture
+                };
             }
             
             NoteContainer.transform.position = InitialPosition;
@@ -174,6 +334,8 @@ namespace NoteTweaks.UI
                             UpdateColors();
                             UpdateArrowPosition();
                             UpdateArrowScale();
+                            UpdateDotPosition();
+                            UpdateDotScale();
                             UpdateNoteScale();
 
                             NoteContainer.SetActive(true);
