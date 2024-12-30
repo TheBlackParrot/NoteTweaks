@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using BeatSaberMarkupLanguage.Attributes;
 using BeatSaberMarkupLanguage.ViewControllers;
@@ -10,37 +11,129 @@ namespace NoteTweaks.UI
     [HotReload(RelativePathToLayout = "BSML.Empty.bsml")]
     internal class NotePreviewViewController : BSMLAutomaticViewController
     {
-        private static readonly GameObject NoteContainer = new GameObject("_NoteTweaks_NoteContainer");
+        internal static readonly GameObject NoteContainer = new GameObject("_NoteTweaks_NoteContainer");
         private static readonly float NoteSize = 0.5f;
-        private static readonly Vector3 InitialPosition = new Vector3(-2.6f, 0.8f, 2.0f);
+        private static readonly Vector3 InitialPosition = new Vector3(-3.0f, 1.0f, 2.2f);
         private static bool _hasInitialized;
+        private static readonly int Color0 = Shader.PropertyToID("_Color");
+        private static Vector3 _initialPosition = Vector3.one;
+        
+        private static readonly List<String> FaceNames = new List<String> { "NoteArrow" };
+        private static readonly List<String> GlowNames = new List<String> { "NoteArrowGlow" };
 
-        private static GameObject CreateNote(GameNoteController notePrefab, string extraName, int cell)
+        public static void UpdateVisibility()
+        {
+            if (Plugin.Config.EnableDots)
+            {
+                // todo
+            }
+
+            for (int i = 0; i < NoteContainer.transform.childCount; i++)
+            {
+                GameObject noteCube = NoteContainer.transform.GetChild(i).gameObject;
+                GlowNames.ForEach(glowName => noteCube.transform.Find("NoteArrowGlow").gameObject.SetActive(Plugin.Config.EnableFaceGlow));
+            }
+        }
+        
+        public static void UpdateArrowPosition()
+        {
+            if (_initialPosition == Vector3.one)
+            {
+                _initialPosition = NoteContainer.transform.GetChild(0).Find("NoteArrow").localPosition;
+            }
+            
+            Vector3 position = new Vector3(Plugin.Config.ArrowPosition.x, _initialPosition.y + Plugin.Config.ArrowPosition.y, _initialPosition.z);
+            
+            for (int i = 0; i < NoteContainer.transform.childCount; i++)
+            {
+                GameObject noteCube = NoteContainer.transform.GetChild(i).gameObject;
+                noteCube.transform.Find("NoteArrow").localPosition = position;
+                noteCube.transform.Find("NoteArrowGlow").localPosition = position;
+            }
+        }
+
+        public static void UpdateArrowScale()
+        {
+            Vector3 scale = new Vector3(Plugin.Config.ArrowScale.x, Plugin.Config.ArrowScale.y, 1.0f);
+            Vector3 glowScale = new Vector3(scale.x * Plugin.Config.GlowScale * 0.6f, scale.y * Plugin.Config.GlowScale * 0.3f, 0.6f);
+            
+            for (int i = 0; i < NoteContainer.transform.childCount; i++)
+            {
+                GameObject noteCube = NoteContainer.transform.GetChild(i).gameObject;
+                noteCube.transform.Find("NoteArrow").localScale = scale;
+                noteCube.transform.Find("NoteArrowGlow").localScale = glowScale;
+            }
+        }
+
+        public static void UpdateNoteScale()
+        {
+            for (int i = 0; i < NoteContainer.transform.childCount; i++)
+            {
+                GameObject noteCube = NoteContainer.transform.GetChild(i).gameObject;
+                noteCube.transform.localScale = Plugin.Config.NoteScale;
+            }
+        }
+
+        public static void UpdateColors()
         {
             PlayerData playerData = Resources.FindObjectsOfTypeAll<PlayerDataModel>().First().playerData;
             ColorScheme colors = playerData.colorSchemesSettings.GetSelectedColorScheme();
             
-            GameObject noteTemplate = Instantiate(notePrefab.transform.GetChild(0).gameObject, NoteContainer.transform);
+            float leftScale = 1.0f + Plugin.Config.ColorBoostLeft;
+            float rightScale = 1.0f + Plugin.Config.ColorBoostRight;
+
+            for (int i = 0; i < NoteContainer.transform.childCount; i++)
+            {
+                GameObject noteCube = NoteContainer.transform.GetChild(i).gameObject;
+
+                Color noteColor = (i % 2 == 0) ? colors._saberAColor * leftScale : colors._saberBColor * rightScale;
+                Color faceColor = Color.LerpUnclamped(Plugin.Config.FaceColor, noteColor, Plugin.Config.FaceColorNoteSkew);
+                faceColor.a = 0f;
+                Color glowColor = noteColor;
+                glowColor.a = Plugin.Config.GlowIntensity;
+                
+                foreach (MaterialPropertyBlockController controller in noteCube.GetComponents<MaterialPropertyBlockController>())
+                {
+                    controller.materialPropertyBlock.SetColor(Color0, noteColor);
+                    controller.ApplyChanges();
+
+                    FaceNames.ForEach(childName =>
+                    {
+                        MaterialPropertyBlockController childController = controller.transform.Find(childName).GetComponent<MaterialPropertyBlockController>();
+                        childController.materialPropertyBlock.SetColor(Color0, faceColor);
+                        childController.ApplyChanges(); 
+                    });
+                    
+                    GlowNames.ForEach(childName =>
+                    {
+                        MaterialPropertyBlockController childController = controller.transform.Find(childName).GetComponent<MaterialPropertyBlockController>();
+                        childController.materialPropertyBlock.SetColor(Color0, glowColor);
+                        childController.ApplyChanges(); 
+                    });
+                }
+            }
+        }
+
+        private static void CreateNote(GameNoteController notePrefab, string extraName, int cell)
+        {
+            GameObject noteCube = Instantiate(notePrefab.transform.GetChild(0).gameObject, NoteContainer.transform);
+            noteCube.gameObject.SetActive(false);
             
-            noteTemplate.name = "_NoteTweaks_PreviewNote_" + extraName;
-            DestroyImmediate(noteTemplate.transform.Find("BigCuttable").gameObject);
-            DestroyImmediate(noteTemplate.transform.Find("SmallCuttable").gameObject);
+            noteCube.name = "_NoteTweaks_PreviewNote_" + extraName;
+            DestroyImmediate(noteCube.transform.Find("BigCuttable").gameObject);
+            DestroyImmediate(noteCube.transform.Find("SmallCuttable").gameObject);
             
             Vector3 position = new Vector3((cell % 2) * NoteSize, -(int)Math.Floor((float)cell / 2) * NoteSize, 0);
-            noteTemplate.transform.localPosition = position;
-            noteTemplate.transform.Rotate(90f, 0f, 0f);
+            noteCube.transform.localPosition = position;
+            noteCube.transform.Rotate(90f, 0f, 0f);
             
-            noteTemplate.GetComponent<MeshRenderer>().material.color = (cell % 2 == 0) ? colors._saberAColor : colors._saberBColor;
-            noteTemplate.gameObject.SetActive(true);
-            
-            return noteTemplate;
+            noteCube.gameObject.SetActive(true);
         }
         
         protected void OnEnable()
         {
             if (_hasInitialized)
             {
-                NoteContainer.gameObject.SetActive(true);
                 return;
             }
             
@@ -53,21 +146,25 @@ namespace NoteTweaks.UI
             SceneInfo standardGameplaySceneInfo = standardLevelScenesTransitionSetupData._standardGameplaySceneInfo;
 
             UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(gameCoreSceneInfo.sceneName, UnityEngine.SceneManagement.LoadSceneMode.Additive).completed +=
-                (_) =>
+                operation1 =>
                 {
                     UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(standardGameplaySceneInfo.sceneName, UnityEngine.SceneManagement.LoadSceneMode.Additive).completed +=
-                        (__) =>
+                        operation2 =>
                         {
                             BeatmapObjectsInstaller beatmapObjectsInstaller = Resources.FindObjectsOfTypeAll<BeatmapObjectsInstaller>().FirstOrDefault();
                             GameNoteController notePrefab = beatmapObjectsInstaller._normalBasicNotePrefab;
-
-                            //notePrefab.Init(NoteData.CreateBasicNoteData(1f, 1f, 0, 1, NoteLineLayer.Upper, ColorType.ColorA, NoteCutDirection.Down), 0f, Vector3.zero, Vector3.one, Vector3.one, 0f, 1f, 0f, NoteVisualModifierType.Normal, 0f, 1f );
-
-                            CreateNote(notePrefab, "L_Arrow", 0);
-                            CreateNote(notePrefab, "R_Arrow", 1);
-                            CreateNote(notePrefab, "L_Dot", 2);
-                            CreateNote(notePrefab, "R_Dot", 3);
                             
+                            List<String> noteNames = new List<string> { "L_Arrow", "R_Arrow", "L_Dot", "R_Dot" };
+                            for (int i = 0; i < noteNames.Count; i++)
+                            {
+                                CreateNote(notePrefab, noteNames[i], i);
+                            }
+                            
+                            UpdateColors();
+                            UpdateArrowPosition();
+                            UpdateArrowScale();
+                            UpdateNoteScale();
+
                             NoteContainer.SetActive(true);
 
                             _hasInitialized = true;
@@ -80,7 +177,6 @@ namespace NoteTweaks.UI
 
         protected void OnDisable()
         {
-            NoteContainer.SetActive(false);
         }
     }
 }

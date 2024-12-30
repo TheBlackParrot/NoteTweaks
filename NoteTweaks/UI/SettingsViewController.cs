@@ -33,7 +33,11 @@ namespace NoteTweaks.UI
         protected bool EnableFaceGlow
         {
             get => _config.EnableFaceGlow;
-            set => _config.EnableFaceGlow = value;
+            set
+            {
+                _config.EnableFaceGlow = value;
+                NotePreviewViewController.UpdateVisibility();
+            }
         }
 
         protected float ArrowScaleX
@@ -44,6 +48,8 @@ namespace NoteTweaks.UI
                 Vector2 scale = _config.ArrowScale;
                 scale.x = value;
                 _config.ArrowScale = scale;
+                
+                NotePreviewViewController.UpdateArrowScale();
             }
         }
         
@@ -55,6 +61,8 @@ namespace NoteTweaks.UI
                 Vector2 scale = _config.ArrowScale;
                 scale.y = value;
                 _config.ArrowScale = scale;
+                
+                NotePreviewViewController.UpdateArrowScale();
             }
         }
         
@@ -66,6 +74,8 @@ namespace NoteTweaks.UI
                 Vector3 position = _config.ArrowPosition;
                 position.x = value;
                 _config.ArrowPosition = position;
+                
+                NotePreviewViewController.UpdateArrowPosition();
             }
         }
         
@@ -77,6 +87,8 @@ namespace NoteTweaks.UI
                 Vector3 position = _config.ArrowPosition;
                 position.y = value;
                 _config.ArrowPosition = position;
+                
+                NotePreviewViewController.UpdateArrowPosition();
             }
         }
         
@@ -138,6 +150,8 @@ namespace NoteTweaks.UI
                 Vector3 scale = _config.NoteScale;
                 scale.x = value;
                 _config.NoteScale = scale;
+                
+                NotePreviewViewController.UpdateNoteScale();
             }
         }
         
@@ -149,6 +163,8 @@ namespace NoteTweaks.UI
                 Vector3 scale = _config.NoteScale;
                 scale.y = value;
                 _config.NoteScale = scale;
+                
+                NotePreviewViewController.UpdateNoteScale();
             }
         }
         
@@ -160,6 +176,8 @@ namespace NoteTweaks.UI
                 Vector3 scale = _config.NoteScale;
                 scale.z = value;
                 _config.NoteScale = scale;
+                
+                NotePreviewViewController.UpdateNoteScale();
             }
         }
         
@@ -172,25 +190,41 @@ namespace NoteTweaks.UI
         protected float ColorBoostLeft
         {
             get => _config.ColorBoostLeft;
-            set => _config.ColorBoostLeft = value;
+            set
+            {
+                _config.ColorBoostLeft = value;
+                NotePreviewViewController.UpdateColors();
+            }
         }
-        
+
         protected float ColorBoostRight
         {
             get => _config.ColorBoostRight;
-            set => _config.ColorBoostRight = value;
+            set
+            {
+                _config.ColorBoostRight = value;
+                NotePreviewViewController.UpdateColors();
+            }
         }
-        
+
         protected float GlowScale
         {
             get => _config.GlowScale;
-            set => _config.GlowScale = value;
+            set
+            {
+                _config.GlowScale = value;
+                NotePreviewViewController.UpdateArrowScale();
+            }
         }
-        
+
         protected float GlowIntensity
         {
             get => _config.GlowIntensity;
-            set => _config.GlowIntensity = value;
+            set
+            {
+                _config.GlowIntensity = value;
+                NotePreviewViewController.UpdateColors();
+            }
         }
 
         protected bool EnableChainDots
@@ -229,9 +263,13 @@ namespace NoteTweaks.UI
         protected Color FaceColor
         {
             get => _config.FaceColor;
-            set => _config.FaceColor = value;
+            set
+            {
+                _config.FaceColor = value;
+                NotePreviewViewController.UpdateColors();
+            }
         }
-        
+
         protected bool EnableAccDot
         {
             get => _config.EnableAccDot;
@@ -265,7 +303,11 @@ namespace NoteTweaks.UI
         protected float FaceColorNoteSkew
         {
             get => _config.FaceColorNoteSkew;
-            set => _config.FaceColorNoteSkew = value;
+            set
+            {
+                _config.FaceColorNoteSkew = value;
+                NotePreviewViewController.UpdateColors();
+            }
         }
     }
 }

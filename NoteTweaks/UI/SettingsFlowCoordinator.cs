@@ -25,11 +25,15 @@ namespace NoteTweaks.UI
                 showBackButton = true;
                 ProvideInitialViewControllers(_settingsViewController, _notePreviewViewController);
             }
+            
+            NotePreviewViewController.NoteContainer.SetActive(true);
         }
 
         protected override void BackButtonWasPressed(ViewController topViewController)
         {
             _mainFlowCoordinator.DismissFlowCoordinator(this);
+            
+            NotePreviewViewController.NoteContainer.SetActive(false);
         }
     }
 }
