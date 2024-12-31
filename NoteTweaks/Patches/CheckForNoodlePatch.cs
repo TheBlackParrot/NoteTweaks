@@ -9,11 +9,11 @@ namespace NoteTweaks.Patches
     [HarmonyPatch]
     internal class CheckForNoodlePatch
     {
-        private static bool MapHasNoodle(BeatmapLevel beatmapLevel)
+        private static bool MapHasNoodle(IDifficultyBeatmap beatmapLevel)
         {
             bool hasNoodle = false;
             
-            ExtraSongData.DifficultyData diffData = RetrieveDifficultyData(beatmapLevel, beatmapLevel.GetBeatmapKeys().FirstOrDefault());
+            ExtraSongData.DifficultyData diffData = RetrieveDifficultyData(beatmapLevel);
             if (diffData != null)
             {
                 string[] requirements = diffData.additionalDifficultyData._requirements;
@@ -23,9 +23,9 @@ namespace NoteTweaks.Patches
         }
         
         [HarmonyPatch(typeof(StandardLevelDetailView), "RefreshContent")]
-        private static void Postfix(ref BeatmapLevel ____beatmapLevel)
+        private static void Postfix(StandardLevelDetailView __instance)
         {
-            NotePhysicalTweaks.AutoDisable = MapHasNoodle(____beatmapLevel) && Plugin.Config.DisableIfNoodle;
+            NotePhysicalTweaks.AutoDisable = MapHasNoodle(__instance.selectedDifficultyBeatmap) && Plugin.Config.DisableIfNoodle;
         }
     }
 }
