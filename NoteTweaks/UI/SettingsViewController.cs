@@ -337,5 +337,11 @@ namespace NoteTweaks.UI
                 NotePreviewViewController.UpdateColors();
             }
         }
+
+        protected bool DisableIfNoodle
+        {
+            get => _config.DisableIfNoodle;
+            set => _config.DisableIfNoodle = value;
+        }
     }
 }

@@ -25,9 +25,9 @@ namespace NoteTweaks.Configuration
         public virtual Vector3 NoteScale { get; set; } = Vector3.one;
         
         public virtual float LinkScale { get; set; } = 1.0f;
-        
-        public virtual float ColorBoostLeft { get; set; }
-        public virtual float ColorBoostRight { get; set; }
+
+        public virtual float ColorBoostLeft { get; set; } = 0.0f;
+        public virtual float ColorBoostRight { get; set; } = 0.0f;
 
         public virtual float GlowIntensity { get; set; } = 1.0f;
         public virtual float ArrowGlowScale { get; set; } = 1.0f;
@@ -46,5 +46,6 @@ namespace NoteTweaks.Configuration
         public virtual int DotMeshSides { get; set; } = 16;
 
         public virtual float FaceColorNoteSkew { get; set; } = 0.04f;
+        public virtual bool DisableIfNoodle { get; set; } = false;
     }
 }

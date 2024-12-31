@@ -70,6 +70,8 @@ namespace NoteTweaks.Patches
         private static readonly Texture2D ReplacementArrowGlowTexture = Utils.Textures.PrepareTexture(OriginalArrowGlowTexture);
         private static readonly Texture2D OriginalDotGlowTexture = Resources.FindObjectsOfTypeAll<Texture2D>().ToList().First(x => x.name == "NoteCircleBakedGlow");
         private static readonly Texture2D ReplacementDotGlowTexture = Utils.Textures.PrepareTexture(OriginalDotGlowTexture);
+        
+        public static bool AutoDisable = false;
 
         // thanks BeatLeader
         [HarmonyPatch]
@@ -118,7 +120,7 @@ namespace NoteTweaks.Patches
         {
             internal static void Postfix(ref BurstSliderGameNoteController __instance, ref BoxCuttableBySaber[] ____bigCuttableBySaberList, ref BoxCuttableBySaber[] ____smallCuttableBySaberList)
             {
-                if (!Plugin.Config.Enabled || !IsAllowedToScaleNotes)
+                if (!Plugin.Config.Enabled || !IsAllowedToScaleNotes || (AutoDisable && Plugin.Config.DisableIfNoodle))
                 {
                     return;
                 }
@@ -148,7 +150,7 @@ namespace NoteTweaks.Patches
         {
             internal static void Postfix(ref GameNoteController __instance, ref BoxCuttableBySaber[] ____bigCuttableBySaberList, ref BoxCuttableBySaber[] ____smallCuttableBySaberList)
             {
-                if (!Plugin.Config.Enabled)
+                if (!Plugin.Config.Enabled || (AutoDisable && Plugin.Config.DisableIfNoodle))
                 {
                     return;
                 }
@@ -245,7 +247,7 @@ namespace NoteTweaks.Patches
             
             internal static void Postfix(ColorNoteVisuals __instance, ref MeshRenderer[] ____arrowMeshRenderers, ref MeshRenderer[] ____circleMeshRenderers)
             {
-                if (!Plugin.Config.Enabled)
+                if (!Plugin.Config.Enabled || (AutoDisable && Plugin.Config.DisableIfNoodle))
                 {
                     return;
                 }

@@ -14,6 +14,8 @@
             
             <toggle-setting apply-on-change="true" value="Enabled" text="Mod Enabled"
                             hover-hint="Remember to drink water! Hydrate!"/>
+            <toggle-setting apply-on-change="true" value="DisableIfNoodle" text="Disable on Noodle Maps"
+                            hover-hint="Automatically disable the mod if the map being played requires Noodle Extensions"/>
         </modifier-container>
     </tab>
     
