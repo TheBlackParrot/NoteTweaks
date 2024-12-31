@@ -209,7 +209,7 @@ namespace NoteTweaks.UI
             DestroyImmediate(noteCube.transform.Find("BigCuttable").gameObject);
             DestroyImmediate(noteCube.transform.Find("SmallCuttable").gameObject);
             
-            Vector3 position = new Vector3((cell % 2) * NoteSize, -(int)Math.Floor((float)cell / 2) * NoteSize, 0);
+            Vector3 position = new Vector3((cell % 2) * NoteSize, (-(int)Math.Floor((float)cell / 2) + 0.5f) * NoteSize, 0);
             noteCube.transform.localPosition = position;
             noteCube.transform.Rotate(90f, 0f, 0f);
 
