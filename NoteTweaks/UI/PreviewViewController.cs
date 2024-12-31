@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using BeatSaberMarkupLanguage.Attributes;
 using BeatSaberMarkupLanguage.ViewControllers;
+using HarmonyLib;
 using UnityEngine;
 
 namespace NoteTweaks.UI
@@ -152,6 +153,11 @@ namespace NoteTweaks.UI
         {
             PlayerData playerData = Resources.FindObjectsOfTypeAll<PlayerDataModel>().First().playerData;
             ColorScheme colors = playerData.colorSchemesSettings.GetSelectedColorScheme();
+            
+            if (!playerData.colorSchemesSettings.overrideDefaultColors)
+            {
+                colors = playerData.colorSchemesSettings.GetColorSchemeForId("TheFirst");
+            }
             
             float leftScale = 1.0f + Plugin.Config.ColorBoostLeft;
             float rightScale = 1.0f + Plugin.Config.ColorBoostRight;
