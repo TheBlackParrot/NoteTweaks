@@ -32,6 +32,7 @@ namespace NoteTweaks.UI
                 NotePreviewViewController._hasInitialized = false;
                 NotePreviewViewController.NoteContainer = new GameObject("_NoteTweaks_NoteContainer");
             }
+            NotePreviewViewController.UpdateColors();
             NotePreviewViewController.NoteContainer.SetActive(true);
         }
 
