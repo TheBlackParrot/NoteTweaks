@@ -302,6 +302,8 @@ namespace NoteTweaks.UI
 
             await Animate(time =>
             {
+                NoteContainer.transform.localScale = Vector3.one * Mathf.Abs(time - 1f);
+                
                 for (int i = 0; i < NoteContainer.transform.childCount; i++)
                 {
                     GameObject noteCube = NoteContainer.transform.GetChild(i).gameObject;
@@ -335,6 +337,8 @@ namespace NoteTweaks.UI
 
             await Animate(time =>
             {
+                NoteContainer.transform.localScale = Vector3.one * time;
+                
                 for (int i = 0; i < NoteContainer.transform.childCount; i++)
                 {
                     GameObject noteCube = NoteContainer.transform.GetChild(i).gameObject;
