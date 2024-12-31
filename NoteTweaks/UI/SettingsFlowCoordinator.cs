@@ -39,7 +39,7 @@ namespace NoteTweaks.UI
         {
             _mainFlowCoordinator.DismissFlowCoordinator(this);
             
-            NotePreviewViewController.NoteContainer.SetActive(false);
+            NotePreviewViewController.CutoutFadeOut();
         }
     }
 }
