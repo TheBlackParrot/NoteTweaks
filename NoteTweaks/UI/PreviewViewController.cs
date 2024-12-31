@@ -5,7 +5,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using BeatSaberMarkupLanguage.Attributes;
 using BeatSaberMarkupLanguage.ViewControllers;
-using HarmonyLib;
 using UnityEngine;
 
 namespace NoteTweaks.UI

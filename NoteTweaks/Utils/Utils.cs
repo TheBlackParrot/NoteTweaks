@@ -1,12 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using SongCore.Data;
 //using AssetBundleLoadingTools.Models.Shaders;
 //using AssetBundleLoadingTools.Utilities;
 using UnityEngine;
-using static IPA.Loader.PluginManager;
-using static SongCore.Collections;
 
 namespace NoteTweaks.Utils
 {
