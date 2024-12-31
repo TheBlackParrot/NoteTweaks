@@ -318,7 +318,7 @@ namespace NoteTweaks.UI
                     GameObject noteCube = NoteContainer.transform.GetChild(i).gameObject;
                     if (noteCube.TryGetComponent(out CutoutEffect cutoutEffect))
                     {
-                        cutoutEffect.SetCutout(time);
+                        cutoutEffect.SetCutout(Easing.OutCirc(time));
                     }
                     
                     for (int j = 0; j < noteCube.transform.childCount; j++)
@@ -326,7 +326,7 @@ namespace NoteTweaks.UI
                         GameObject childObject = noteCube.transform.GetChild(j).gameObject;
                         if (childObject.TryGetComponent(out CutoutEffect childCutoutEffect))
                         {
-                            childCutoutEffect.SetCutout(time);
+                            childCutoutEffect.SetCutout(Easing.OutCirc(time));
                         }
                     }
                 }
@@ -357,7 +357,7 @@ namespace NoteTweaks.UI
                     GameObject noteCube = NoteContainer.transform.GetChild(i).gameObject;
                     if (noteCube.TryGetComponent(out CutoutEffect cutoutEffect))
                     {
-                        cutoutEffect.SetCutout(Mathf.Abs(time - 1f));
+                        cutoutEffect.SetCutout(Easing.OutExpo(Mathf.Abs(time - 1f)));
                     }
 
                     for (int j = 0; j < noteCube.transform.childCount; j++)
@@ -365,7 +365,7 @@ namespace NoteTweaks.UI
                         GameObject childObject = noteCube.transform.GetChild(j).gameObject;
                         if (childObject.TryGetComponent(out CutoutEffect childCutoutEffect))
                         {
-                            childCutoutEffect.SetCutout(Mathf.Abs(time - 1f));
+                            childCutoutEffect.SetCutout(Easing.OutExpo(Mathf.Abs(time - 1f)));
                         }
                     }
                 }
@@ -382,7 +382,7 @@ namespace NoteTweaks.UI
                     return;
                 }
 
-                float value = elapsedTime / duration;
+                float value = Easing.InOutCubic(elapsedTime / duration);
                 transition?.Invoke(value);
                 elapsedTime += Time.deltaTime;
                 await Task.Yield();
