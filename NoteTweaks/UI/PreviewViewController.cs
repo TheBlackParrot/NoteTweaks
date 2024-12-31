@@ -16,7 +16,7 @@ namespace NoteTweaks.UI
         internal static GameObject NoteContainer = new GameObject("_NoteTweaks_NoteContainer");
         
         private static readonly float NoteSize = 0.5f;
-        private static readonly Vector3 InitialPosition = new Vector3(-2.9f, 1.3f, 3.7f);
+        private static readonly Vector3 InitialPosition = new Vector3(-2.9f, 1.15f, 3.7f);
         
         internal static bool _hasInitialized;
         private static Vector3 _initialArrowPosition = Vector3.one;
@@ -302,7 +302,11 @@ namespace NoteTweaks.UI
 
             await Animate(time =>
             {
-                NoteContainer.transform.localScale = Vector3.one * Mathf.Abs(time - 1f);
+                NoteContainer.transform.localScale = (Vector3.one * (Mathf.Abs(time - 1f) / 2)) + new Vector3(0.5f, 0.5f, 0.5f);
+                
+                Vector3 pos = InitialPosition; ;
+                pos.y = (InitialPosition.y * (Mathf.Abs(time - 1f) * 1.5f) - 0.5f);
+                NoteContainer.transform.localPosition = pos;
                 
                 for (int i = 0; i < NoteContainer.transform.childCount; i++)
                 {
@@ -314,7 +318,7 @@ namespace NoteTweaks.UI
                     
                     for (int j = 0; j < noteCube.transform.childCount; j++)
                     {
-                        GameObject childObject = noteCube.transform.GetChild(i).gameObject;
+                        GameObject childObject = noteCube.transform.GetChild(j).gameObject;
                         if (childObject.TryGetComponent(out CutoutEffect childCutoutEffect))
                         {
                             childCutoutEffect.SetCutout(Easing.OutCirc(time));
@@ -337,7 +341,11 @@ namespace NoteTweaks.UI
 
             await Animate(time =>
             {
-                NoteContainer.transform.localScale = Vector3.one * time;
+                NoteContainer.transform.localScale = (Vector3.one * (time / 2)) + new Vector3(0.5f, 0.5f, 0.5f);
+                
+                Vector3 pos = InitialPosition;
+                pos.y = (InitialPosition.y * (time * 1.5f) - 0.5f);
+                NoteContainer.transform.localPosition = pos;
                 
                 for (int i = 0; i < NoteContainer.transform.childCount; i++)
                 {
@@ -349,7 +357,7 @@ namespace NoteTweaks.UI
 
                     for (int j = 0; j < noteCube.transform.childCount; j++)
                     {
-                        GameObject childObject = noteCube.transform.GetChild(i).gameObject;
+                        GameObject childObject = noteCube.transform.GetChild(j).gameObject;
                         if (childObject.TryGetComponent(out CutoutEffect childCutoutEffect))
                         {
                             childCutoutEffect.SetCutout(Easing.OutExpo(Mathf.Abs(time - 1f)));
