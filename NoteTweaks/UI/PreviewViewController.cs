@@ -26,10 +26,10 @@ namespace NoteTweaks.UI
         private static Material _dotGlowMaterial;
         private static Mesh _dotMesh;
         private static Mesh _dotGlowMesh;
-        private static readonly Texture2D OriginalArrowGlowTexture = Resources.FindObjectsOfTypeAll<Texture2D>().ToList().First(x => x.name == "ArrowGlow");
-        private static readonly Texture2D ReplacementArrowGlowTexture = Utils.Textures.PrepareTexture(OriginalArrowGlowTexture);
-        private static readonly Texture2D OriginalDotGlowTexture = Resources.FindObjectsOfTypeAll<Texture2D>().ToList().First(x => x.name == "NoteCircleBakedGlow");
-        private static readonly Texture2D ReplacementDotGlowTexture = Utils.Textures.PrepareTexture(OriginalDotGlowTexture);
+        private static Texture2D OriginalArrowGlowTexture = Resources.FindObjectsOfTypeAll<Texture2D>().ToList().First(x => x.name == "ArrowGlow");
+        private static Texture2D ReplacementArrowGlowTexture = Utils.Textures.PrepareTexture(OriginalArrowGlowTexture);
+        private static Texture2D OriginalDotGlowTexture;
+        private static Texture2D ReplacementDotGlowTexture;
         
         private static readonly int Color0 = Shader.PropertyToID("_Color");
         
@@ -399,25 +399,6 @@ namespace NoteTweaks.UI
                 return;
             }
             
-            if (_replacementDotMaterial == null)
-            {
-                Plugin.Log.Info("Creating replacement dot material");
-                Material arrowMat = Resources.FindObjectsOfTypeAll<Material>().ToList().Find(x => x.name == "NoteArrowHD");
-                _replacementDotMaterial = new Material(arrowMat)
-                {
-                    color = Plugin.Config.FaceColor,
-                    shaderKeywords = arrowMat.shaderKeywords.Where(x => x != "_ENABLE_COLOR_INSTANCING").ToArray()
-                };
-            }
-            if(_dotGlowMaterial == null) {
-                Plugin.Log.Info("Creating new dot glow material");
-                Material arrowGlowMat = Resources.FindObjectsOfTypeAll<Material>().ToList().Find(x => x.name == "NoteArrowGlow");
-                _dotGlowMaterial = new Material(arrowGlowMat)
-                {
-                    mainTexture = ReplacementDotGlowTexture
-                };
-            }
-            
             NoteContainer.transform.position = InitialPosition;
             NoteContainer.transform.localRotation = Quaternion.Euler(0, 330, 0);
             
@@ -432,6 +413,31 @@ namespace NoteTweaks.UI
                     UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(standardGameplaySceneInfo.sceneName, UnityEngine.SceneManagement.LoadSceneMode.Additive).completed +=
                         operation2 =>
                         {
+                            if (OriginalDotGlowTexture == null)
+                            {
+                                OriginalDotGlowTexture = Resources.FindObjectsOfTypeAll<Texture2D>().ToList().First(x => x.name == "NoteCircleBakedGlow");
+                                ReplacementDotGlowTexture = Utils.Textures.PrepareTexture(OriginalDotGlowTexture);
+                            }
+                            
+                            if (_replacementDotMaterial == null)
+                            {
+                                Plugin.Log.Info("Creating replacement dot material");
+                                Material arrowMat = Resources.FindObjectsOfTypeAll<Material>().ToList().Find(x => x.name == "NoteArrowHD");
+                                _replacementDotMaterial = new Material(arrowMat)
+                                {
+                                    color = Plugin.Config.FaceColor,
+                                    shaderKeywords = arrowMat.shaderKeywords.Where(x => x != "_ENABLE_COLOR_INSTANCING").ToArray()
+                                };
+                            }
+                            if(_dotGlowMaterial == null) {
+                                Plugin.Log.Info("Creating new dot glow material");
+                                Material arrowGlowMat = Resources.FindObjectsOfTypeAll<Material>().ToList().Find(x => x.name == "NoteArrowGlow");
+                                _dotGlowMaterial = new Material(arrowGlowMat)
+                                {
+                                    mainTexture = ReplacementDotGlowTexture
+                                };
+                            }
+                            
                             BeatmapObjectsInstaller beatmapObjectsInstaller = Resources.FindObjectsOfTypeAll<BeatmapObjectsInstaller>().FirstOrDefault();
                             GameNoteController notePrefab = beatmapObjectsInstaller._normalBasicNotePrefab;
                             
