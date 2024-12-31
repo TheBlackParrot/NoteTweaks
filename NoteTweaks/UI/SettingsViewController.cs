@@ -1,7 +1,6 @@
 ﻿using System.Reflection;
 using BeatSaberMarkupLanguage.Attributes;
 using BeatSaberMarkupLanguage.ViewControllers;
-using IPA.Loader;
 using NoteTweaks.Configuration;
 using UnityEngine;
 using Zenject;
