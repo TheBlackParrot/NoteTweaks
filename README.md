@@ -108,7 +108,6 @@ Configuration is done in-game via a Menu button in the left panel of the Main Me
 - BSIPA
 - BeatSaberMarkupLanguage
 - SiraUtil
-- *(except 1.29.1)* AssetBundleLoadingTools
 
 ## Reference Mods
 - BeatLeader
@@ -121,3 +120,4 @@ Configuration is done in-game via a Menu button in the left panel of the Main Me
 - Camera2
 - BetterSongSearch
 - ImageFactory *(DJDavid98's fork)*
+- SaberFactory

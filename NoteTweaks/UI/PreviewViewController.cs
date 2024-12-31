@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using BeatSaberMarkupLanguage.Attributes;
 using BeatSaberMarkupLanguage.ViewControllers;
 using UnityEngine;
@@ -289,11 +291,94 @@ namespace NoteTweaks.UI
             
             noteCube.gameObject.SetActive(true);
         }
+
+        private static CancellationTokenSource _currentTokenSource;
+        public static async void CutoutFadeOut()
+        {
+            _currentTokenSource?.Cancel();
+            _currentTokenSource?.Dispose();
+
+            _currentTokenSource = new CancellationTokenSource();
+
+            await Animate(time =>
+            {
+                for (int i = 0; i < NoteContainer.transform.childCount; i++)
+                {
+                    GameObject noteCube = NoteContainer.transform.GetChild(i).gameObject;
+                    if (noteCube.TryGetComponent(out CutoutEffect cutoutEffect))
+                    {
+                        cutoutEffect.SetCutout(time);
+                    }
+                    
+                    for (int j = 0; j < noteCube.transform.childCount; j++)
+                    {
+                        GameObject childObject = noteCube.transform.GetChild(i).gameObject;
+                        if (childObject.TryGetComponent(out CutoutEffect childCutoutEffect))
+                        {
+                            childCutoutEffect.SetCutout(time);
+                        }
+                    }
+                }
+
+                if (time >= 1f)
+                {
+                    NoteContainer.SetActive(false);
+                }
+            }, _currentTokenSource.Token, 0.25f);
+        }
+        public async void CutoutFadeIn()
+        {
+            _currentTokenSource?.Cancel();
+            _currentTokenSource?.Dispose();
+
+            _currentTokenSource = new CancellationTokenSource();
+
+            await Animate(time =>
+            {
+                for (int i = 0; i < NoteContainer.transform.childCount; i++)
+                {
+                    GameObject noteCube = NoteContainer.transform.GetChild(i).gameObject;
+                    if (noteCube.TryGetComponent(out CutoutEffect cutoutEffect))
+                    {
+                        cutoutEffect.SetCutout(Mathf.Abs(time - 1f));
+                    }
+
+                    for (int j = 0; j < noteCube.transform.childCount; j++)
+                    {
+                        GameObject childObject = noteCube.transform.GetChild(i).gameObject;
+                        if (childObject.TryGetComponent(out CutoutEffect childCutoutEffect))
+                        {
+                            childCutoutEffect.SetCutout(Mathf.Abs(time - 1f));
+                        }
+                    }
+                }
+            }, _currentTokenSource.Token, 0.25f);
+        }
+
+        private static async Task Animate(Action<float> transition, CancellationToken cancellationToken, float duration)
+        {
+            float elapsedTime = 0.0f;
+            while (elapsedTime <= duration)
+            {
+                if (cancellationToken.IsCancellationRequested)
+                {
+                    return;
+                }
+
+                float value = elapsedTime / duration;
+                transition?.Invoke(value);
+                elapsedTime += Time.deltaTime;
+                await Task.Yield();
+            }
+
+            transition?.Invoke(1f);
+        }
         
         protected void OnEnable()
         {
             if (_hasInitialized)
             {
+                CutoutFadeIn();
                 return;
             }
             
@@ -350,6 +435,8 @@ namespace NoteTweaks.UI
                             NoteContainer.SetActive(true);
 
                             _hasInitialized = true;
+
+                            CutoutFadeIn();
                             
                             UnityEngine.SceneManagement.SceneManager.UnloadSceneAsync(standardGameplaySceneInfo.sceneName);
                             UnityEngine.SceneManagement.SceneManager.UnloadSceneAsync(gameCoreSceneInfo.sceneName);
