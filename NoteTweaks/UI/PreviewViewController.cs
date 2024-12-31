@@ -16,7 +16,7 @@ namespace NoteTweaks.UI
         internal static GameObject NoteContainer = new GameObject("_NoteTweaks_NoteContainer");
         
         private static readonly float NoteSize = 0.5f;
-        private static readonly Vector3 InitialPosition = new Vector3(-2.6f, 1.5f, 3.4f);
+        private static readonly Vector3 InitialPosition = new Vector3(-2.9f, 1.3f, 3.7f);
         
         internal static bool _hasInitialized;
         private static Vector3 _initialArrowPosition = Vector3.one;
@@ -309,7 +309,7 @@ namespace NoteTweaks.UI
                     GameObject noteCube = NoteContainer.transform.GetChild(i).gameObject;
                     if (noteCube.TryGetComponent(out CutoutEffect cutoutEffect))
                     {
-                        cutoutEffect.SetCutout(time);
+                        cutoutEffect.SetCutout(Easing.OutCirc(time));
                     }
                     
                     for (int j = 0; j < noteCube.transform.childCount; j++)
@@ -317,7 +317,7 @@ namespace NoteTweaks.UI
                         GameObject childObject = noteCube.transform.GetChild(i).gameObject;
                         if (childObject.TryGetComponent(out CutoutEffect childCutoutEffect))
                         {
-                            childCutoutEffect.SetCutout(time);
+                            childCutoutEffect.SetCutout(Easing.OutCirc(time));
                         }
                     }
                 }
@@ -326,7 +326,7 @@ namespace NoteTweaks.UI
                 {
                     NoteContainer.SetActive(false);
                 }
-            }, _currentTokenSource.Token, 0.25f);
+            }, _currentTokenSource.Token, 0.4f);
         }
         public async void CutoutFadeIn()
         {
@@ -344,7 +344,7 @@ namespace NoteTweaks.UI
                     GameObject noteCube = NoteContainer.transform.GetChild(i).gameObject;
                     if (noteCube.TryGetComponent(out CutoutEffect cutoutEffect))
                     {
-                        cutoutEffect.SetCutout(Mathf.Abs(time - 1f));
+                        cutoutEffect.SetCutout(Easing.OutExpo(Mathf.Abs(time - 1f)));
                     }
 
                     for (int j = 0; j < noteCube.transform.childCount; j++)
@@ -352,11 +352,11 @@ namespace NoteTweaks.UI
                         GameObject childObject = noteCube.transform.GetChild(i).gameObject;
                         if (childObject.TryGetComponent(out CutoutEffect childCutoutEffect))
                         {
-                            childCutoutEffect.SetCutout(Mathf.Abs(time - 1f));
+                            childCutoutEffect.SetCutout(Easing.OutExpo(Mathf.Abs(time - 1f)));
                         }
                     }
                 }
-            }, _currentTokenSource.Token, 0.25f);
+            }, _currentTokenSource.Token, 0.8f);
         }
 
         private static async Task Animate(Action<float> transition, CancellationToken cancellationToken, float duration)
@@ -369,7 +369,7 @@ namespace NoteTweaks.UI
                     return;
                 }
 
-                float value = elapsedTime / duration;
+                float value = Easing.InOutCubic(elapsedTime / duration);
                 transition?.Invoke(value);
                 elapsedTime += Time.deltaTime;
                 await Task.Yield();
