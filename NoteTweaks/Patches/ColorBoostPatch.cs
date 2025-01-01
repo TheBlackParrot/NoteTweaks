@@ -6,8 +6,8 @@ namespace NoteTweaks.Patches
     [HarmonyPatch]
     internal class NoteColorTweaks
     {
-        private static Color _originalLeftColor;
-        private static Color _originalRightColor;
+        internal static Color OriginalLeftColor;
+        internal static Color OriginalRightColor;
         
         [HarmonyPatch(typeof(StandardLevelScenesTransitionSetupDataSO), "InitColorInfo")]
         [HarmonyPostfix]
@@ -22,17 +22,17 @@ namespace NoteTweaks.Patches
             float leftScale = 1.0f + Plugin.Config.ColorBoostLeft;
             float rightScale = 1.0f + Plugin.Config.ColorBoostRight;
             
-            if (_originalLeftColor != oldScheme._saberAColor && _originalLeftColor != (oldScheme._saberAColor * leftScale))
+            if (OriginalLeftColor != oldScheme._saberAColor && OriginalLeftColor != (oldScheme._saberAColor * leftScale))
             {
-                _originalLeftColor = oldScheme._saberAColor;
+                OriginalLeftColor = oldScheme._saberAColor;
             }
-            if (_originalRightColor != oldScheme._saberBColor && _originalRightColor != (oldScheme._saberBColor * rightScale))
+            if (OriginalRightColor != oldScheme._saberBColor && OriginalRightColor != (oldScheme._saberBColor * rightScale))
             {
-                _originalRightColor = oldScheme._saberBColor;
+                OriginalRightColor = oldScheme._saberBColor;
             }
             
-            oldScheme._saberAColor = _originalLeftColor * leftScale;
-            oldScheme._saberBColor = _originalRightColor * rightScale;
+            oldScheme._saberAColor = OriginalLeftColor * leftScale;
+            oldScheme._saberBColor = OriginalRightColor * rightScale;
             __instance.colorScheme = oldScheme;
         }
         
