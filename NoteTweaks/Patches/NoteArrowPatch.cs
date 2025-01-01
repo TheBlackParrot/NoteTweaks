@@ -1,8 +1,6 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Reflection;
 using HarmonyLib;
-using IPA.Utilities;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
@@ -238,6 +236,8 @@ namespace NoteTweaks.Patches
         }
         
         [HarmonyPatch(typeof(ColorNoteVisuals), "HandleNoteControllerDidInit")]
+        [HarmonyAfter("aeroluna.Chroma")]
+        [HarmonyPriority(int.MinValue)]
         internal class NoteArrowPatch
         {
             private static bool _initialPositionDidSet = false;
@@ -308,10 +308,10 @@ namespace NoteTweaks.Patches
                     arrowTransform.localScale = scale;
                     arrowTransform.localPosition = position;
                     
-                    Color _c = Color.LerpUnclamped(Plugin.Config.FaceColor, __instance._noteColor, Plugin.Config.FaceColorNoteSkew);
-                    _c.a = 0f;
                     if (meshRenderer.TryGetComponent(out MaterialPropertyBlockController materialPropertyBlockController))
                     {
+                        Color _c = Color.LerpUnclamped(Plugin.Config.FaceColor, __instance._noteColor, Plugin.Config.FaceColorNoteSkew);
+                        _c.a = 0f;
                         materialPropertyBlockController.materialPropertyBlock.SetColor(ColorNoteVisuals._colorId, _c);
                         materialPropertyBlockController.ApplyChanges();   
                     }
@@ -356,7 +356,6 @@ namespace NoteTweaks.Patches
                                     arrowGlowMeshRenderer.material.renderQueue = 1999;
                                 }
                             }
-                            
                         }
                     }
                 }
@@ -439,10 +438,10 @@ namespace NoteTweaks.Patches
                         meshRenderer.material = _replacementDotMaterial;
                         meshRenderer.sharedMaterial = _replacementDotMaterial;
                         
-                        Color _c = Color.LerpUnclamped(Plugin.Config.FaceColor, __instance._noteColor, Plugin.Config.FaceColorNoteSkew);
-                        _c.a = 0f;
                         if (meshRenderer.TryGetComponent(out MaterialPropertyBlockController materialPropertyBlockController))
                         {
+                            Color _c = Color.LerpUnclamped(Plugin.Config.FaceColor, __instance._noteColor, Plugin.Config.FaceColorNoteSkew);
+                            _c.a = 0f;
                             materialPropertyBlockController.materialPropertyBlock.SetColor(ColorNoteVisuals._colorId, _c);
                             materialPropertyBlockController.ApplyChanges();   
                         }
@@ -472,7 +471,10 @@ namespace NoteTweaks.Patches
                             newGlowObject = Object.Instantiate(originalDot.gameObject, originalDot.parent);
                             newGlowObject.name = "AddedNoteCircleGlow";
                             
-                            __instance._materialPropertyBlockControllers.SetValue(newGlowObject.GetComponent<MaterialPropertyBlockController>(), __instance._materialPropertyBlockControllers.Length - 1);
+                            MaterialPropertyBlockController[] newMaterialPropertyBlockControllers = new MaterialPropertyBlockController[__instance._materialPropertyBlockControllers.Length + 1];
+                            __instance._materialPropertyBlockControllers.CopyTo(newMaterialPropertyBlockControllers, 0);
+                            newMaterialPropertyBlockControllers.SetValue(newGlowObject.GetComponent<MaterialPropertyBlockController>(), __instance._materialPropertyBlockControllers.Length);
+                            __instance._materialPropertyBlockControllers = newMaterialPropertyBlockControllers;
 
                             MeshRenderer[] newRendererList = new MeshRenderer[2];
                             __instance._circleMeshRenderers.CopyTo(newRendererList, 0);
