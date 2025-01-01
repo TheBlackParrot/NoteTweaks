@@ -36,7 +36,8 @@ namespace NoteTweaks.Configuration
         public virtual Vector2 ChainDotScale { get; set; } = Vector2.one;
         public virtual bool EnableChainDotGlow { get; set; } = true;
         
-        public virtual Color FaceColor { get; set; } = new Color(1f, 1f, 1f, 1f);
+        public virtual Color LeftFaceColor { get; set; } = new Color(1f, 1f, 1f, 1f);
+        public virtual Color RightFaceColor { get; set; } = new Color(1f, 1f, 1f, 1f);
         
         public virtual bool EnableAccDot { get; set; } = false;
         public virtual int AccDotSize { get; set; } = 15;
@@ -45,7 +46,8 @@ namespace NoteTweaks.Configuration
         
         public virtual int DotMeshSides { get; set; } = 16;
 
-        public virtual float FaceColorNoteSkew { get; set; } = 0.04f;
+        public virtual float LeftFaceColorNoteSkew { get; set; } = 0.04f;
+        public virtual float RightFaceColorNoteSkew { get; set; } = 0.04f;
         public virtual bool DisableIfNoodle { get; set; } = false;
         public virtual float RotateDot { get; set; } = 0.0f;
     }
