@@ -27,9 +27,9 @@ namespace NoteTweaks.UI
                 ProvideInitialViewControllers(_settingsViewController, _notePreviewViewController);
             }
 
-            if (NotePreviewViewController.NoteContainer == null && NotePreviewViewController._hasInitialized)
+            if (NotePreviewViewController.NoteContainer == null && NotePreviewViewController.HasInitialized)
             {
-                NotePreviewViewController._hasInitialized = false;
+                NotePreviewViewController.HasInitialized = false;
                 NotePreviewViewController.NoteContainer = new GameObject("_NoteTweaks_NoteContainer");
             }
             NotePreviewViewController.UpdateColors();

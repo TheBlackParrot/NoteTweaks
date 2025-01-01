@@ -7,6 +7,7 @@ using IPA.Config.Stores;
 using Newtonsoft.Json;
 using NoteTweaks.Configuration;
 using NoteTweaks.Installers;
+using NoteTweaks.Utils;
 using SiraUtil.Zenject;
 using UnityEngine;
 using IPALogger = IPA.Logging.Logger;
@@ -31,12 +32,7 @@ namespace NoteTweaks
 
         internal static void ClampSettings()
         {
-            Vector3 noteScale = Config.NoteScale;
-            // surely there's a better way :clueless:
-            noteScale.x = Mathf.Max(noteScale.x, 0.1f);
-            noteScale.y = Mathf.Max(noteScale.y, 0.1f);
-            noteScale.z = Mathf.Max(noteScale.z, 0.1f);
-            Config.NoteScale = noteScale;
+            Config.NoteScale = Vectors.Max(Config.NoteScale, 0.1f);
             
             Config.LinkScale = Mathf.Max(Config.LinkScale, 0.1f);
             
@@ -45,7 +41,8 @@ namespace NoteTweaks
             
             Config.DotMeshSides = Math.Max(Config.DotMeshSides, 4);
             
-            Config.FaceColorNoteSkew = Mathf.Max(0, Mathf.Min(Config.FaceColorNoteSkew, 1.0f));
+            Config.LeftFaceColorNoteSkew = Mathf.Max(0, Mathf.Min(Config.LeftFaceColorNoteSkew, 1.0f));
+            Config.RightFaceColorNoteSkew = Mathf.Max(0, Mathf.Min(Config.RightFaceColorNoteSkew, 1.0f));
         }
 
         [Init]

@@ -18,7 +18,7 @@ namespace NoteTweaks.UI
         private static readonly float NoteSize = 0.5f;
         private static readonly Vector3 InitialPosition = new Vector3(-2.9f, 1.15f, 3.7f);
         
-        internal static bool _hasInitialized;
+        internal static bool HasInitialized;
         private static Vector3 _initialArrowPosition = Vector3.one;
         private static Vector3 _initialDotPosition = Vector3.one;
 
@@ -180,7 +180,7 @@ namespace NoteTweaks.UI
                 GameObject noteCube = NoteContainer.transform.GetChild(i).gameObject;
 
                 Color noteColor = (i % 2 == 0) ? colors._saberAColor * leftScale : colors._saberBColor * rightScale;
-                Color faceColor = Color.LerpUnclamped(Plugin.Config.FaceColor, noteColor, Plugin.Config.FaceColorNoteSkew);
+                Color faceColor = Color.LerpUnclamped(i % 2 == 0 ? Plugin.Config.LeftFaceColor : Plugin.Config.RightFaceColor, noteColor, i % 2 == 0 ? Plugin.Config.LeftFaceColorNoteSkew : Plugin.Config.RightFaceColorNoteSkew);
                 faceColor.a = 0f;
                 Color glowColor = noteColor;
                 glowColor.a = Plugin.Config.GlowIntensity;
@@ -323,7 +323,7 @@ namespace NoteTweaks.UI
             {
                 NoteContainer.transform.localScale = (Vector3.one * (Mathf.Abs(time - 1f) / 2)) + new Vector3(0.5f, 0.5f, 0.5f);
                 
-                Vector3 pos = InitialPosition; ;
+                Vector3 pos = InitialPosition;
                 pos.y = (InitialPosition.y * (Mathf.Abs(time - 1f) * 1.5f) - 0.5f);
                 NoteContainer.transform.localPosition = pos;
                 
@@ -407,7 +407,7 @@ namespace NoteTweaks.UI
         
         protected void OnEnable()
         {
-            if (_hasInitialized)
+            if (HasInitialized)
             {
                 CutoutFadeIn();
                 return;
@@ -419,7 +419,7 @@ namespace NoteTweaks.UI
                 Material arrowMat = Resources.FindObjectsOfTypeAll<Material>().ToList().Find(x => x.name == "NoteArrowHD");
                 _replacementDotMaterial = new Material(arrowMat)
                 {
-                    color = Plugin.Config.FaceColor,
+                    color = Color.white,
                     shaderKeywords = arrowMat.shaderKeywords.Where(x => x != "_ENABLE_COLOR_INSTANCING").ToArray()
                 };
             }
@@ -466,7 +466,7 @@ namespace NoteTweaks.UI
 
                             NoteContainer.SetActive(true);
 
-                            _hasInitialized = true;
+                            HasInitialized = true;
 
                             CutoutFadeIn();
                             
@@ -474,10 +474,6 @@ namespace NoteTweaks.UI
                             UnityEngine.SceneManagement.SceneManager.UnloadSceneAsync(gameCoreSceneInfo.sceneName);
                         };
                 };
-        }
-
-        protected void OnDisable()
-        {
         }
     }
 }

@@ -284,12 +284,22 @@ namespace NoteTweaks.UI
             set => _config.EnableChainDotGlow = value;
         }
 
-        protected Color FaceColor
+        protected Color LeftFaceColor
         {
-            get => _config.FaceColor;
+            get => _config.LeftFaceColor;
             set
             {
-                _config.FaceColor = value;
+                _config.LeftFaceColor = value;
+                NotePreviewViewController.UpdateColors();
+            }
+        }
+        
+        protected Color RightFaceColor
+        {
+            get => _config.RightFaceColor;
+            set
+            {
+                _config.RightFaceColor = value;
                 NotePreviewViewController.UpdateColors();
             }
         }
@@ -328,12 +338,22 @@ namespace NoteTweaks.UI
             }
         }
 
-        protected float FaceColorNoteSkew
+        protected float LeftFaceColorNoteSkew
         {
-            get => _config.FaceColorNoteSkew;
+            get => _config.LeftFaceColorNoteSkew;
             set
             {
-                _config.FaceColorNoteSkew = value;
+                _config.LeftFaceColorNoteSkew = value;
+                NotePreviewViewController.UpdateColors();
+            }
+        }
+        
+        protected float RightFaceColorNoteSkew
+        {
+            get => _config.RightFaceColorNoteSkew;
+            set
+            {
+                _config.RightFaceColorNoteSkew = value;
                 NotePreviewViewController.UpdateColors();
             }
         }

@@ -79,4 +79,25 @@ namespace NoteTweaks.Utils
             return mesh;
         }
     }
+
+    internal static class Vectors
+    {
+        public static Vector3 Min(Vector3 vector, float min)
+        {
+            vector.x = Mathf.Min(vector.x, min);
+            vector.y = Mathf.Min(vector.y, min);
+            vector.z = Mathf.Min(vector.z, min);
+            
+            return vector;
+        }
+        
+        public static Vector3 Max(Vector3 vector, float max)
+        {
+            vector.x = Mathf.Max(vector.x, max);
+            vector.y = Mathf.Max(vector.y, max);
+            vector.z = Mathf.Max(vector.z, max);
+            
+            return vector;
+        }
+    }
 }
