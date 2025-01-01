@@ -431,6 +431,8 @@ namespace NoteTweaks.Patches
                         
                         originalDotTransform.localScale = dotScale;
                         originalDotTransform.localPosition = dotPosition;
+                        originalDotTransform.localRotation = Quaternion.identity;
+                        originalDotTransform.Rotate(0f, 0f, Plugin.Config.RotateDot);
 
                         if (_dotMesh == null)
                         {
@@ -483,8 +485,11 @@ namespace NoteTweaks.Patches
                         }
                         
                         newGlowObject.GetComponent<MeshFilter>().mesh = _dotGlowMesh;
+                        
                         newGlowObject.transform.localPosition = glowPosition;
                         newGlowObject.transform.localScale = glowScale;
+                        newGlowObject.transform.localRotation = Quaternion.identity;
+                        newGlowObject.transform.Rotate(0f, 0f, Plugin.Config.RotateDot);
 
                         if (newGlowObject.TryGetComponent(out MeshRenderer newGlowMeshRenderer))
                         {

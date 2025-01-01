@@ -15,6 +15,7 @@ namespace NoteTweaks.UI
         public string PercentageFormatter(float x) => x.ToString("0%");
         public string PreciseFloatFormatter(float x) => x.ToString("F3");
         public string AccFormatter(int x) => (x + 100).ToString();
+        public string DegreesFormatterInt(float x) => $"{x:0.#}\u00b0";
         
         readonly string version = $"<size=80%><smallcaps><alpha=#CC>NoteTweaks</smallcaps></size> <alpha=#FF><b>v{Assembly.GetExecutingAssembly().GetName().Version.ToString(3)}</b>";
         readonly string gameVersion = $"<alpha=#CC>(<alpha=#77><size=80%>for</size> <b><alpha=#FF>{Plugin.Manifest.GameVersion}<alpha=#CC></b>)";
@@ -341,6 +342,16 @@ namespace NoteTweaks.UI
         {
             get => _config.DisableIfNoodle;
             set => _config.DisableIfNoodle = value;
+        }
+
+        protected float RotateDot
+        {
+            get => _config.RotateDot;
+            set
+            {
+                _config.RotateDot = value;
+                NotePreviewViewController.UpdateDotRotation();
+            }
         }
     }
 }
