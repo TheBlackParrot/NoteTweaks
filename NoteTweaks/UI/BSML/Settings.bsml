@@ -122,6 +122,9 @@
                 <slider-setting apply-on-change="true" value="DotMeshSides" text="Dot Shape Sides"
                                 min="4" max="48" increment="1" integer-only="true" show-buttons="true"
                                 hover-hint="Amount of sides on the dot symbol"/>
+                <slider-setting apply-on-change="true" value="RotateDot" text="Dot Rotation"
+                                min="0" max="360" increment="0.5" show-buttons="true" formatter="DegreesFormatterInt"
+                                hover-hint="Rotation of the dot"/>
         
                 <horizontal><text text="-----" font-size="2" color="#00000000"/></horizontal>
         
