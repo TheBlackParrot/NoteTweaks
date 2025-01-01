@@ -311,7 +311,18 @@ namespace NoteTweaks.Patches
                         ColorType colorType = __instance._noteController.noteData.colorType;
                         bool isLeft = colorType == ColorType.ColorA;
                         
-                        Color _c = Color.LerpUnclamped(isLeft ? Plugin.Config.LeftFaceColor : Plugin.Config.RightFaceColor, __instance._noteColor, isLeft ? Plugin.Config.LeftFaceColorNoteSkew : Plugin.Config.RightFaceColorNoteSkew);
+                        Color faceColor = __instance._noteColor;
+                            
+                        if (isLeft ? Plugin.Config.NormalizeLeftFaceColor : Plugin.Config.NormalizeRightFaceColor)
+                        {
+                            float colorScalar = __instance._noteColor.maxColorComponent;
+                            if (colorScalar != 0)
+                            {
+                                faceColor /= colorScalar;
+                            }
+                        }
+                        
+                        Color _c = Color.LerpUnclamped(isLeft ? Plugin.Config.LeftFaceColor : Plugin.Config.RightFaceColor, faceColor, isLeft ? Plugin.Config.LeftFaceColorNoteSkew : Plugin.Config.RightFaceColorNoteSkew);
                         _c.a = 0f;
                         materialPropertyBlockController.materialPropertyBlock.SetColor(ColorNoteVisuals._colorId, _c);
                         materialPropertyBlockController.ApplyChanges();   
@@ -443,8 +454,19 @@ namespace NoteTweaks.Patches
                         {
                             ColorType colorType = __instance._noteController.noteData.colorType;
                             bool isLeft = colorType == ColorType.ColorA;
+
+                            Color faceColor = __instance._noteColor;
+                            
+                            if (isLeft ? Plugin.Config.NormalizeLeftFaceColor : Plugin.Config.NormalizeRightFaceColor)
+                            {
+                                float colorScalar = __instance._noteColor.maxColorComponent;
+                                if (colorScalar != 0)
+                                {
+                                    faceColor /= colorScalar;
+                                }
+                            }
                         
-                            Color _c = Color.LerpUnclamped(isLeft ? Plugin.Config.LeftFaceColor : Plugin.Config.RightFaceColor, __instance._noteColor, isLeft ? Plugin.Config.LeftFaceColorNoteSkew : Plugin.Config.RightFaceColorNoteSkew);
+                            Color _c = Color.LerpUnclamped(isLeft ? Plugin.Config.LeftFaceColor : Plugin.Config.RightFaceColor, faceColor, isLeft ? Plugin.Config.LeftFaceColorNoteSkew : Plugin.Config.RightFaceColorNoteSkew);
                             _c.a = 0f;
                             materialPropertyBlockController.materialPropertyBlock.SetColor(ColorNoteVisuals._colorId, _c);
                             materialPropertyBlockController.ApplyChanges();   

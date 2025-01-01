@@ -179,9 +179,22 @@ namespace NoteTweaks.UI
             {
                 GameObject noteCube = NoteContainer.transform.GetChild(i).gameObject;
 
+                // scaling is intentionally done here
                 Color noteColor = (i % 2 == 0) ? colors._saberAColor * leftScale : colors._saberBColor * rightScale;
-                Color faceColor = Color.LerpUnclamped(i % 2 == 0 ? Plugin.Config.LeftFaceColor : Plugin.Config.RightFaceColor, noteColor, i % 2 == 0 ? Plugin.Config.LeftFaceColorNoteSkew : Plugin.Config.RightFaceColorNoteSkew);
+                Color faceColor = noteColor;
+
+                if (i % 2 == 0 ? Plugin.Config.NormalizeLeftFaceColor : Plugin.Config.NormalizeRightFaceColor)
+                {
+                    float colorScalar = noteColor.maxColorComponent;
+                    if (colorScalar != 0)
+                    {
+                        faceColor /= colorScalar;
+                    }
+                }
+
+                faceColor = Color.LerpUnclamped(i % 2 == 0 ? Plugin.Config.LeftFaceColor : Plugin.Config.RightFaceColor, faceColor, i % 2 == 0 ? Plugin.Config.LeftFaceColorNoteSkew : Plugin.Config.RightFaceColorNoteSkew);
                 faceColor.a = 0f;
+                
                 Color glowColor = noteColor;
                 glowColor.a = Plugin.Config.GlowIntensity;
                 

@@ -373,5 +373,25 @@ namespace NoteTweaks.UI
                 NotePreviewViewController.UpdateDotRotation();
             }
         }
+        
+        protected bool NormalizeLeftFaceColor
+        {
+            get => _config.NormalizeLeftFaceColor;
+            set
+            {
+                _config.NormalizeLeftFaceColor = value;
+                NotePreviewViewController.UpdateColors();
+            }
+        }
+        
+        protected bool NormalizeRightFaceColor
+        {
+            get => _config.NormalizeRightFaceColor;
+            set
+            {
+                _config.NormalizeRightFaceColor = value;
+                NotePreviewViewController.UpdateColors();
+            }
+        }
     }
 }
