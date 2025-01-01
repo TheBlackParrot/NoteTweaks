@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using System.Reflection;
 using HarmonyLib;
+using NoteTweaks.Utils;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
@@ -84,7 +85,7 @@ namespace NoteTweaks.Patches
                 _gameplayModifiers = gameplayModifiers;
                 Plugin.ClampSettings();
 
-                _dotMesh = Utils.Meshes.GenerateFaceMesh(Plugin.Config.DotMeshSides);
+                _dotMesh = Meshes.GenerateFaceMesh(Plugin.Config.DotMeshSides);
             }
         }
 
@@ -124,10 +125,7 @@ namespace NoteTweaks.Patches
                     return;
                 }
                 
-                Vector3 scale = Plugin.Config.NoteScale * Plugin.Config.LinkScale;
-                scale.x = Mathf.Max(0.1f, scale.x);
-                scale.y = Mathf.Max(0.1f, scale.y);
-                scale.z = Mathf.Max(0.1f, scale.z);
+                Vector3 scale = Vectors.Max(Plugin.Config.NoteScale * Plugin.Config.LinkScale, 0.1f);
                 Vector3 invertedScale = new Vector3(1.0f / scale.x, 1.0f / scale.y, 1.0f / scale.z);
 
                 __instance.transform.localScale = scale;
@@ -265,7 +263,7 @@ namespace NoteTweaks.Patches
                     Material arrowMat = Resources.FindObjectsOfTypeAll<Material>().ToList().Find(x => x.name == "NoteArrowHD");
                     _replacementDotMaterial = new Material(arrowMat)
                     {
-                        color = Plugin.Config.FaceColor,
+                        color = Color.white,
                         shaderKeywords = arrowMat.shaderKeywords.Where(x => x != "_ENABLE_COLOR_INSTANCING").ToArray(),
                         renderQueue = 2000
                     };
@@ -316,7 +314,10 @@ namespace NoteTweaks.Patches
                     
                     if (meshRenderer.TryGetComponent(out MaterialPropertyBlockController materialPropertyBlockController))
                     {
-                        Color _c = Color.LerpUnclamped(Plugin.Config.FaceColor, __instance._noteColor, Plugin.Config.FaceColorNoteSkew);
+                        ColorType colorType = __instance._noteController.noteData.colorType;
+                        bool isLeft = colorType == ColorType.ColorA;
+                        
+                        Color _c = Color.LerpUnclamped(isLeft ? Plugin.Config.LeftFaceColor : Plugin.Config.RightFaceColor, __instance._noteColor, isLeft ? Plugin.Config.LeftFaceColorNoteSkew : Plugin.Config.RightFaceColorNoteSkew);
                         _c.a = 0f;
                         materialPropertyBlockController.materialPropertyBlock.SetColor(ColorNoteVisuals._colorId, _c);
                         materialPropertyBlockController.ApplyChanges();   
@@ -437,7 +438,7 @@ namespace NoteTweaks.Patches
 
                         if (_dotMesh == null)
                         {
-                            _dotMesh = Utils.Meshes.GenerateFaceMesh(Plugin.Config.DotMeshSides);
+                            _dotMesh = Meshes.GenerateFaceMesh(Plugin.Config.DotMeshSides);
                         }
                         meshRenderer.GetComponent<MeshFilter>().mesh = _dotMesh;
                         
@@ -446,7 +447,10 @@ namespace NoteTweaks.Patches
                         
                         if (meshRenderer.TryGetComponent(out MaterialPropertyBlockController materialPropertyBlockController))
                         {
-                            Color _c = Color.LerpUnclamped(Plugin.Config.FaceColor, __instance._noteColor, Plugin.Config.FaceColorNoteSkew);
+                            ColorType colorType = __instance._noteController.noteData.colorType;
+                            bool isLeft = colorType == ColorType.ColorA;
+                        
+                            Color _c = Color.LerpUnclamped(isLeft ? Plugin.Config.LeftFaceColor : Plugin.Config.RightFaceColor, __instance._noteColor, isLeft ? Plugin.Config.LeftFaceColorNoteSkew : Plugin.Config.RightFaceColorNoteSkew);
                             _c.a = 0f;
                             materialPropertyBlockController.materialPropertyBlock.SetColor(ColorNoteVisuals._colorId, _c);
                             materialPropertyBlockController.ApplyChanges();   
