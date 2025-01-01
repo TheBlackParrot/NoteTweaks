@@ -47,5 +47,6 @@ namespace NoteTweaks.Configuration
 
         public virtual float FaceColorNoteSkew { get; set; } = 0.04f;
         public virtual bool DisableIfNoodle { get; set; } = false;
+        public virtual float RotateDot { get; set; } = 0.0f;
     }
 }
