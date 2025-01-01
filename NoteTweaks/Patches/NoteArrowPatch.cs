@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Reflection;
 using HarmonyLib;
 using IPA.Utilities;
@@ -513,16 +514,14 @@ namespace NoteTweaks.Patches
         }
 
         // this does nothing for now, trying to revert arcs back to their original color
-        [HarmonyPatch(typeof(SliderController), "Init")]
+        [HarmonyPatch(typeof(SliderController), "ManualUpdate")]
         public static class SliderControllerPatch
         {
             private static void Postfix(SliderController __instance)
             {
-                ColorScheme scheme = __instance._colorManager._colorScheme;
-                Color color = __instance._saber.saberType == 0 ? scheme.saberAColor : scheme.saberBColor;
-                color /= __instance._saber.saberType == 0 ? Plugin.Config.ColorBoostLeft : Plugin.Config.ColorBoostRight;
+                Color color = __instance._saber.saberType == SaberType.SaberA ? NoteColorTweaks.OriginalLeftColor : NoteColorTweaks.OriginalRightColor;
+
                 __instance._initColor = color;
-                
                 __instance._materialPropertyBlockController.materialPropertyBlock.SetColor(ColorNoteVisuals._colorId, color);
                 __instance._materialPropertyBlockController.ApplyChanges();
             }
