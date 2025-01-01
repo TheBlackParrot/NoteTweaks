@@ -48,7 +48,13 @@ Configuration is done in-game via a Menu button in the left panel of the Main Me
     "y": 1.0
   },
   "EnableChainDotGlow": true,
-  "FaceColor": {
+  "LeftFaceColor": {
+    "r": 1.0,
+    "g": 1.0,
+    "b": 1.0,
+    "a": 1.0
+  },
+  "RightFaceColor": {
     "r": 1.0,
     "g": 1.0,
     "b": 1.0,
@@ -64,8 +70,12 @@ Configuration is done in-game via a Menu button in the left panel of the Main Me
   },
   "RenderAccDotsAboveSymbols": false,
   "DotMeshSides": 16,
-  "FaceColorNoteSkew": 0.2,
-  "DisableIfNoodle": false
+  "LeftFaceColorNoteSkew": 0.04,
+  "RightFaceColorNoteSkew": 0.04,
+  "DisableIfNoodle": false,
+  "RotateDot": 0.0,
+  "NormalizeLeftFaceColor": false,
+  "NormalizeRightFaceColor": false
 }
 ```
 `bool` **Enabled**
@@ -109,7 +119,7 @@ Configuration is done in-game via a Menu button in the left panel of the Main Me
 
 `float` **DotGlowScale**
 > Scales the glow around dots on dot notes and chain links
-> 
+
 `bool` **EnableChainDots**
 > Show dots on chain links
 
@@ -119,8 +129,11 @@ Configuration is done in-game via a Menu button in the left panel of the Main Me
 `bool` **EnableChainDotGlow**
 > Make the dots on chain links glow or not glow
 
-`Color` **FaceColor**
-> Set the color of face symbols *(does not affect glow colors)*
+`Color` **LeftFaceColor**
+> Set the color of face symbols on left hand notes *(does not affect glow colors)*
+
+`Color` **RightFaceColor**
+> Set the color of face symbols on right hand notes *(does not affect glow colors)*
 
 `bool` **EnableAccDot**
 > Renders a dot in the center of each standard note for visual assistance with swing accuracy
@@ -137,11 +150,23 @@ Configuration is done in-game via a Menu button in the left panel of the Main Me
 `int` **DotMeshSides**
 > Change the amount of sides on the dot face mesh
 
-`float` **FaceColorNoteSkew**
-> Skew the desired color of face symbols towards the note's actual color by a set amount
+`float` **LeftFaceColorNoteSkew**
+> Skew the desired color of face symbols on left hand notes towards the note's actual color by a set percentage
+
+`float` **RightFaceColorNoteSkew**
+> Skew the desired color of face symbols on right hand notes towards the note's actual color by a set percentage
 
 `bool` **DisableIfNoodle**
 > Disables the mod if the map being played requires Noodle Extensions
+
+`float` **RotateDot**
+> Rotates the Z-axis of dot face meshes on dot notes
+
+`bool` **NormalizeLeftFaceColor**
+> Normalize the brightness of the face color on left hand notes by the highest RGB component of the note color
+
+`bool` **NormalizeLeftFaceColor**
+> Normalize the brightness of the face color on right hand notes by the highest RGB component of the note color
 
 ## Dependencies
 - BSIPA
