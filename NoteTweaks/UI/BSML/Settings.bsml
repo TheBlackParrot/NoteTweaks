@@ -20,7 +20,7 @@
     </tab>
     
     <tab tags="tabs" tab-name="Notes">
-        <vertical vertical-fit="PreferredSize" pref-height="70" pref-width="100">
+        <vertical vertical-fit="PreferredSize" pref-height="70" pref-width="100" anchored-position-x="4">
             <scroll-view spacing="0" pref-height="70" child-expand-width="true" horizontal-fit="PreferredSize">
                 <slider-setting apply-on-change="true" value="NoteScaleX" text="Horizontal Note Scale"
                                 min="0.1" max="2.5" increment="0.01" show-buttons="true" formatter="PercentageFormatter"
@@ -45,7 +45,7 @@
     </tab>
 
     <tab tags="tabs" tab-name="Acc Dots">
-        <vertical vertical-fit="PreferredSize" pref-height="70" pref-width="100">
+        <vertical vertical-fit="PreferredSize" pref-height="70" pref-width="100" anchored-position-x="4">
             <scroll-view spacing="0" pref-height="70" child-expand-width="true" horizontal-fit="PreferredSize">
                 <toggle-setting apply-on-change="true" value="EnableAccDot" text="Enable Acc Dots"
                                 hover-hint="Enable small dots in the center of notes to help show where to swing for accuracy"/>
@@ -64,7 +64,7 @@
     </tab>
 
     <tab tags="tabs" tab-name="Symbols">
-        <vertical vertical-fit="PreferredSize" pref-height="70" pref-width="100">
+        <vertical vertical-fit="PreferredSize" pref-height="70" pref-width="100" anchored-position-x="4">
             <scroll-view spacing="0" pref-height="70" child-expand-width="true" horizontal-fit="PreferredSize">
                 <color-setting apply-on-change="true" value="FaceColor" text="Face Symbol Color"
                                hover-hint="Color of arrows and dots themselves"/>
@@ -84,7 +84,7 @@
     </tab>
 
     <tab tags="tabs" tab-name="Arrows">
-        <vertical vertical-fit="PreferredSize" pref-height="70" pref-width="100">
+        <vertical vertical-fit="PreferredSize" pref-height="70" pref-width="100" anchored-position-x="4">
             <scroll-view spacing="0" pref-height="70" child-expand-width="true" horizontal-fit="PreferredSize">
                 <slider-setting apply-on-change="true" value="ArrowScaleX" text="Horizontal Arrow Scale"
                                 min="0.05" max="2.0" increment="0.05" show-buttons="true" formatter="PercentageFormatter"
@@ -112,7 +112,7 @@
     </tab>
 
     <tab tags="tabs" tab-name="Dots">
-        <vertical vertical-fit="PreferredSize" pref-height="70" pref-width="100">
+        <vertical vertical-fit="PreferredSize" pref-height="70" pref-width="100" anchored-position-x="4">
             <scroll-view spacing="0" pref-height="70" child-expand-width="true" horizontal-fit="PreferredSize">
                 <toggle-setting apply-on-change="true" value="EnableDots" text="Show Dots"
                                 hover-hint="Show dots"/>
@@ -123,7 +123,7 @@
                                 min="4" max="48" increment="1" integer-only="true" show-buttons="true"
                                 hover-hint="Amount of sides on the dot symbol"/>
                 <slider-setting apply-on-change="true" value="RotateDot" text="Dot Rotation"
-                                min="0" max="360" increment="0.5" show-buttons="true" formatter="DegreesFormatterInt"
+                                min="0" max="360" increment="0.5" show-buttons="true" formatter="DegreesFormatter"
                                 hover-hint="Rotation of the dot"/>
         
                 <horizontal><text text="-----" font-size="2" color="#00000000"/></horizontal>
@@ -154,7 +154,7 @@
     </tab>
 
     <tab tags="tabs" tab-name="Chains">
-        <vertical vertical-fit="PreferredSize" pref-height="70" pref-width="100">
+        <vertical vertical-fit="PreferredSize" pref-height="70" pref-width="100" anchored-position-x="4">
             <scroll-view spacing="0" pref-height="70" child-expand-width="true" horizontal-fit="PreferredSize">
                 <slider-setting apply-on-change="true" value="LinkScale" text="Chain Link Scale"
                                 min="0.1" max="2.5" increment="0.01" show-buttons="true" formatter="PercentageFormatter"
