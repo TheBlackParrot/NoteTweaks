@@ -108,6 +108,20 @@ namespace NoteTweaks.UI
                 noteCube.transform.Find("AddedNoteCircleGlow").localScale = glowScale;
             }
         }
+
+        public static void UpdateDotRotation()
+        {
+            for (int i = 0; i < NoteContainer.transform.childCount; i++)
+            {
+                GameObject noteCube = NoteContainer.transform.GetChild(i).gameObject;
+                
+                noteCube.transform.Find("NoteCircleGlow").localRotation = Quaternion.identity;
+                noteCube.transform.Find("AddedNoteCircleGlow").localRotation = Quaternion.identity;
+                
+                noteCube.transform.Find("NoteCircleGlow").Rotate(0f, 0f, Plugin.Config.RotateDot);
+                noteCube.transform.Find("AddedNoteCircleGlow").Rotate(0f, 0f, Plugin.Config.RotateDot);
+            }            
+        }
         
         public static void UpdateArrowPosition()
         {
@@ -446,6 +460,7 @@ namespace NoteTweaks.UI
                             UpdateArrowScale();
                             UpdateDotPosition();
                             UpdateDotScale();
+                            UpdateDotRotation();
                             UpdateNoteScale();
                             UpdateVisibility();
 
