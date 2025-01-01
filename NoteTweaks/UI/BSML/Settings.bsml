@@ -5,10 +5,10 @@
         <modifier-container child-expand-width="true" horizontal-fit="PreferredSize" spacing="4">
             <vertical background="round-rect-panel" bg-color="#FFFFFF" vertical-fit="PreferredSize" pref-height="20" pad-top="3" pad-bottom="3" pad-left="6" pad-right="6">
                 <horizontal child-align="MiddleCenter">
-                    <text text="~version" font-size="10" align="Center" font-color="#CBADFF" rich-text="true"/>
+                    <text text="~version" font-size="30" align="Center" font-color="#CBADFF" rich-text="true"/>
                 </horizontal>
                 <horizontal child-align="MiddleCenter">
-                    <text text="~gameVersion" font-size="5" align="Center" font-color="#FFFFFF" rich-text="true"/>
+                    <text text="~gameVersion" font-size="15" align="Center" font-color="#FFFFFF" rich-text="true"/>
                 </horizontal>
             </vertical>
             

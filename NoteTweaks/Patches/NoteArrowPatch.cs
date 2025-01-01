@@ -512,13 +512,20 @@ namespace NoteTweaks.Patches
                 });
             }
         }
-
-        // this does nothing for now, trying to revert arcs back to their original color
-        [HarmonyPatch(typeof(SliderController), "ManualUpdate")]
+        
+        //[HarmonyPatch(typeof(SliderController), "ManualUpdate")]
+        [HarmonyPatch(typeof(SliderController), "Init")]
+        [HarmonyPriority(int.MaxValue)]
         public static class SliderControllerPatch
         {
+            private static ColorScheme initialColorScheme;
             private static void Postfix(SliderController __instance)
             {
+                if (initialColorScheme == null)
+                {
+                    initialColorScheme = __instance._colorManager._colorScheme;
+                }
+                //__instance._colorManager.SetColorScheme();
                 Color color = __instance._saber.saberType == SaberType.SaberA ? NoteColorTweaks.OriginalLeftColor : NoteColorTweaks.OriginalRightColor;
 
                 __instance._initColor = color;

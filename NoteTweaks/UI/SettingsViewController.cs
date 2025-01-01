@@ -18,7 +18,8 @@ namespace NoteTweaks.UI
         public string DegreesFormatter(float x) => $"{x:0.#}\u00b0";
         
         readonly string version = $"<size=80%><smallcaps><alpha=#CC>NoteTweaks</smallcaps></size> <alpha=#FF><b>v{Assembly.GetExecutingAssembly().GetName().Version.ToString(3)}</b>";
-        readonly string gameVersion = $"<alpha=#CC>(<alpha=#77><size=80%>for</size> <b><alpha=#FF>{Plugin.Manifest.GameVersion}<alpha=#CC></b>)";
+        //readonly string gameVersion = $"<alpha=#CC>(<alpha=#77><size=80%>for</size> <b><alpha=#FF>{Plugin.Manifest.GameVersion}<alpha=#CC></b>)";
+        readonly string gameVersion = $"<alpha=#CC>(<alpha=#77><size=80%>for</size> <b><alpha=#FF>plucking a value from an embedded, standardized JSON file is bad got it thanks<alpha=#CC></b>)";
 
         [Inject]
         private void Construct(PluginConfig config)
