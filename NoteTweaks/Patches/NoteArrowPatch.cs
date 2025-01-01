@@ -513,24 +513,18 @@ namespace NoteTweaks.Patches
             }
         }
         
-        //[HarmonyPatch(typeof(SliderController), "ManualUpdate")]
-        [HarmonyPatch(typeof(SliderController), "Init")]
-        [HarmonyPriority(int.MaxValue)]
+        [HarmonyPatch(typeof(SliderController), "Hide")]
         public static class SliderControllerPatch
         {
-            private static ColorScheme initialColorScheme;
-            private static void Postfix(SliderController __instance)
+            private static bool Prefix(SliderController __instance)
             {
-                if (initialColorScheme == null)
-                {
-                    initialColorScheme = __instance._colorManager._colorScheme;
-                }
-                //__instance._colorManager.SetColorScheme();
                 Color color = __instance._saber.saberType == SaberType.SaberA ? NoteColorTweaks.OriginalLeftColor : NoteColorTweaks.OriginalRightColor;
 
                 __instance._initColor = color;
                 __instance._materialPropertyBlockController.materialPropertyBlock.SetColor(ColorNoteVisuals._colorId, color);
                 __instance._materialPropertyBlockController.ApplyChanges();
+
+                return true;
             }
         }
     }
