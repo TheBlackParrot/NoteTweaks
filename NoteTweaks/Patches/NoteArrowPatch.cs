@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using HarmonyLib;
 using NoteTweaks.Utils;
@@ -126,6 +127,19 @@ namespace NoteTweaks.Patches
                     return;
                 }
                 
+                Transform glowTransform = __instance.transform.GetChild(0).Find("AddedNoteCircleGlow");
+                if (glowTransform != null)
+                {
+                    if(glowTransform.gameObject.TryGetComponent(out MaterialPropertyBlockController materialPropertyBlockController) && __instance.gameObject.TryGetComponent(out ColorNoteVisuals colorNoteVisuals))
+                    {
+                        Color noteColor = colorNoteVisuals._noteColor;
+                        noteColor.a = Plugin.Config.GlowIntensity;
+                    
+                        materialPropertyBlockController.materialPropertyBlock.SetColor(ColorNoteVisuals._colorId, noteColor);
+                        materialPropertyBlockController.ApplyChanges();   
+                    }
+                } 
+                
                 Vector3 scale = Vectors.Max(Plugin.Config.NoteScale * Plugin.Config.LinkScale, 0.1f);
                 Vector3 invertedScale = new Vector3(1.0f / scale.x, 1.0f / scale.y, 1.0f / scale.z);
 
@@ -210,6 +224,26 @@ namespace NoteTweaks.Patches
                         }
                     }
                 }
+                
+                List<string> objs = new List<string> { "NoteArrowGlow", "AddedNoteCircleGlow" };
+
+                // ok buddy, ok pal
+                GameNoteController instance = __instance;
+                objs.Do(objName =>
+                {
+                    Transform glowTransform = instance.transform.GetChild(0).Find(objName);
+                    if (glowTransform != null)
+                    {
+                        if(glowTransform.gameObject.TryGetComponent(out MaterialPropertyBlockController materialPropertyBlockController) && instance.gameObject.TryGetComponent(out ColorNoteVisuals colorNoteVisuals))
+                        {
+                            Color noteColor = colorNoteVisuals._noteColor;
+                            noteColor.a = Plugin.Config.GlowIntensity;
+                    
+                            materialPropertyBlockController.materialPropertyBlock.SetColor(ColorNoteVisuals._colorId, noteColor);
+                            materialPropertyBlockController.ApplyChanges();   
+                        }
+                    } 
+                });
 
                 if (!IsAllowedToScaleNotes)
                 {
@@ -529,15 +563,6 @@ namespace NoteTweaks.Patches
                         }
                     }
                 }
-                
-                __instance._materialPropertyBlockControllers.DoIf(x => x.name != "NoteCube" && x.name != "NoteCircleGlow" && x.name != "Circle", controller =>
-                {
-                    Color noteColor = __instance._noteColor;
-                    noteColor.a = Plugin.Config.GlowIntensity;
-                    
-                    controller.materialPropertyBlock.SetColor(ColorNoteVisuals._colorId, noteColor);
-                    controller.ApplyChanges();
-                });
             }
         }
         
