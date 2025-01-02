@@ -597,6 +597,11 @@ namespace NoteTweaks.Patches
         {
             private static bool Prefix(SliderController __instance)
             {
+                if (!Plugin.Config.Enabled || (AutoDisable && Plugin.Config.DisableIfNoodle))
+                {
+                    return true;
+                }
+                
                 Color color = __instance._saber.saberType == SaberType.SaberA ? NoteColorTweaks.OriginalLeftColor : NoteColorTweaks.OriginalRightColor;
 
                 __instance._initColor = color;
