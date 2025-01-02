@@ -187,3 +187,4 @@ Configuration is done in-game via a Menu button in the left panel of the Main Me
 - ImageFactory *(DJDavid98's fork)*
 - SaberFactory
 - NoteMovementFix
+- BS Utils
