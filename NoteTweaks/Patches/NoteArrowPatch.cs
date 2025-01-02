@@ -147,15 +147,9 @@ namespace NoteTweaks.Patches
                         }
                         
                         Color _c = Color.LerpUnclamped(isLeft ? Plugin.Config.LeftFaceGlowColor : Plugin.Config.RightFaceGlowColor, glowColor, isLeft ? Plugin.Config.LeftFaceGlowColorNoteSkew : Plugin.Config.RightFaceGlowColorNoteSkew);
-                        _c.a = Plugin.Config.GlowIntensity;
+                        _c.a = isLeft ? Plugin.Config.LeftGlowIntensity : Plugin.Config.RightGlowIntensity;
                         materialPropertyBlockController.materialPropertyBlock.SetColor(ColorNoteVisuals._colorId, _c);
                         materialPropertyBlockController.ApplyChanges();
-                        
-                        /*Color noteColor = colorNoteVisuals._noteColor;
-                        noteColor.a = Plugin.Config.GlowIntensity;
-                    
-                        materialPropertyBlockController.materialPropertyBlock.SetColor(ColorNoteVisuals._colorId, noteColor);
-                        materialPropertyBlockController.ApplyChanges();*/   
                     }
                 } 
                 
@@ -270,15 +264,9 @@ namespace NoteTweaks.Patches
                             }
                         
                             Color _c = Color.LerpUnclamped(isLeft ? Plugin.Config.LeftFaceGlowColor : Plugin.Config.RightFaceGlowColor, glowColor, isLeft ? Plugin.Config.LeftFaceGlowColorNoteSkew : Plugin.Config.RightFaceGlowColorNoteSkew);
-                            _c.a = Plugin.Config.GlowIntensity;
+                            _c.a = isLeft ? Plugin.Config.LeftGlowIntensity : Plugin.Config.RightGlowIntensity;
                             materialPropertyBlockController.materialPropertyBlock.SetColor(ColorNoteVisuals._colorId, _c);
                             materialPropertyBlockController.ApplyChanges();
-                            
-                            /*Color noteColor = colorNoteVisuals._noteColor;
-                            noteColor.a = Plugin.Config.GlowIntensity;
-                    
-                            materialPropertyBlockController.materialPropertyBlock.SetColor(ColorNoteVisuals._colorId, noteColor);
-                            materialPropertyBlockController.ApplyChanges();*/
                         }
                     } 
                 });

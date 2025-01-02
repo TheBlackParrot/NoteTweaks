@@ -241,12 +241,22 @@ namespace NoteTweaks.UI
             }
         }
 
-        protected float GlowIntensity
+        protected float LeftGlowIntensity
         {
-            get => _config.GlowIntensity;
+            get => _config.LeftGlowIntensity;
             set
             {
-                _config.GlowIntensity = value;
+                _config.LeftGlowIntensity = value;
+                NotePreviewViewController.UpdateColors();
+            }
+        }
+        
+        protected float RightGlowIntensity
+        {
+            get => _config.RightGlowIntensity;
+            set
+            {
+                _config.RightGlowIntensity = value;
                 NotePreviewViewController.UpdateColors();
             }
         }

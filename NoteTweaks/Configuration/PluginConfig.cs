@@ -29,7 +29,8 @@ namespace NoteTweaks.Configuration
         public virtual float ColorBoostLeft { get; set; } = 0.0f;
         public virtual float ColorBoostRight { get; set; } = 0.0f;
 
-        public virtual float GlowIntensity { get; set; } = 1.0f;
+        public virtual float LeftGlowIntensity { get; set; } = 1.0f;
+        public virtual float RightGlowIntensity { get; set; } = 1.0f;
         public virtual float ArrowGlowScale { get; set; } = 1.0f;
         public virtual float DotGlowScale { get; set; } = 1.0f;
         public virtual bool EnableChainDots { get; set; } = true;
