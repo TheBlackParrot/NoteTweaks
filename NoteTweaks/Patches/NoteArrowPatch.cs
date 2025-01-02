@@ -132,11 +132,30 @@ namespace NoteTweaks.Patches
                 {
                     if(glowTransform.gameObject.TryGetComponent(out MaterialPropertyBlockController materialPropertyBlockController) && __instance.gameObject.TryGetComponent(out ColorNoteVisuals colorNoteVisuals))
                     {
-                        Color noteColor = colorNoteVisuals._noteColor;
+                        ColorType colorType = __instance._noteData.colorType;
+                        bool isLeft = colorType == ColorType.ColorA;
+                        
+                        Color glowColor = colorNoteVisuals._noteColor;
+                            
+                        if (isLeft ? Plugin.Config.NormalizeLeftFaceGlowColor : Plugin.Config.NormalizeRightFaceGlowColor)
+                        {
+                            float colorScalar = colorNoteVisuals._noteColor.maxColorComponent;
+                            if (colorScalar != 0)
+                            {
+                                glowColor /= colorScalar;
+                            }
+                        }
+                        
+                        Color _c = Color.LerpUnclamped(isLeft ? Plugin.Config.LeftFaceGlowColor : Plugin.Config.RightFaceGlowColor, glowColor, isLeft ? Plugin.Config.LeftFaceGlowColorNoteSkew : Plugin.Config.RightFaceGlowColorNoteSkew);
+                        _c.a = Plugin.Config.GlowIntensity;
+                        materialPropertyBlockController.materialPropertyBlock.SetColor(ColorNoteVisuals._colorId, _c);
+                        materialPropertyBlockController.ApplyChanges();
+                        
+                        /*Color noteColor = colorNoteVisuals._noteColor;
                         noteColor.a = Plugin.Config.GlowIntensity;
                     
                         materialPropertyBlockController.materialPropertyBlock.SetColor(ColorNoteVisuals._colorId, noteColor);
-                        materialPropertyBlockController.ApplyChanges();   
+                        materialPropertyBlockController.ApplyChanges();*/   
                     }
                 } 
                 
@@ -236,11 +255,30 @@ namespace NoteTweaks.Patches
                     {
                         if(glowTransform.gameObject.TryGetComponent(out MaterialPropertyBlockController materialPropertyBlockController) && instance.gameObject.TryGetComponent(out ColorNoteVisuals colorNoteVisuals))
                         {
-                            Color noteColor = colorNoteVisuals._noteColor;
+                            ColorType colorType = instance._noteData.colorType;
+                            bool isLeft = colorType == ColorType.ColorA;
+                        
+                            Color glowColor = colorNoteVisuals._noteColor;
+                            
+                            if (isLeft ? Plugin.Config.NormalizeLeftFaceGlowColor : Plugin.Config.NormalizeRightFaceGlowColor)
+                            {
+                                float colorScalar = colorNoteVisuals._noteColor.maxColorComponent;
+                                if (colorScalar != 0)
+                                {
+                                    glowColor /= colorScalar;
+                                }
+                            }
+                        
+                            Color _c = Color.LerpUnclamped(isLeft ? Plugin.Config.LeftFaceGlowColor : Plugin.Config.RightFaceGlowColor, glowColor, isLeft ? Plugin.Config.LeftFaceGlowColorNoteSkew : Plugin.Config.RightFaceGlowColorNoteSkew);
+                            _c.a = Plugin.Config.GlowIntensity;
+                            materialPropertyBlockController.materialPropertyBlock.SetColor(ColorNoteVisuals._colorId, _c);
+                            materialPropertyBlockController.ApplyChanges();
+                            
+                            /*Color noteColor = colorNoteVisuals._noteColor;
                             noteColor.a = Plugin.Config.GlowIntensity;
                     
                             materialPropertyBlockController.materialPropertyBlock.SetColor(ColorNoteVisuals._colorId, noteColor);
-                            materialPropertyBlockController.ApplyChanges();   
+                            materialPropertyBlockController.ApplyChanges();*/
                         }
                     } 
                 });

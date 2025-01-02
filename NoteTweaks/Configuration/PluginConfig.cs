@@ -53,5 +53,12 @@ namespace NoteTweaks.Configuration
         
         public bool NormalizeLeftFaceColor { get; set; } = false;
         public bool NormalizeRightFaceColor { get; set; } = false;
+        
+        public virtual Color LeftFaceGlowColor { get; set; } = new Color(1f, 1f, 1f, 1f);
+        public virtual float LeftFaceGlowColorNoteSkew { get; set; } = 1.0f;
+        public virtual bool NormalizeLeftFaceGlowColor { get; set; } = false;
+        public virtual Color RightFaceGlowColor { get; set; } = new Color(1f, 1f, 1f, 1f);
+        public virtual float RightFaceGlowColorNoteSkew { get; set; } = 1.0f;
+        public virtual bool NormalizeRightFaceGlowColor { get; set; } = false;
     }
 }
