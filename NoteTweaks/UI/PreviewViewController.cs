@@ -183,19 +183,23 @@ namespace NoteTweaks.UI
                 Color noteColor = (i % 2 == 0) ? colors._saberAColor * leftScale : colors._saberBColor * rightScale;
                 Color faceColor = noteColor;
 
-                if (i % 2 == 0 ? Plugin.Config.NormalizeLeftFaceColor : Plugin.Config.NormalizeRightFaceColor)
+                float colorScalar = noteColor.maxColorComponent;
+
+                if (colorScalar != 0 && i % 2 == 0 ? Plugin.Config.NormalizeLeftFaceColor : Plugin.Config.NormalizeRightFaceColor)
                 {
-                    float colorScalar = noteColor.maxColorComponent;
-                    if (colorScalar != 0)
-                    {
-                        faceColor /= colorScalar;
-                    }
+                    faceColor /= colorScalar;
                 }
 
                 faceColor = Color.LerpUnclamped(i % 2 == 0 ? Plugin.Config.LeftFaceColor : Plugin.Config.RightFaceColor, faceColor, i % 2 == 0 ? Plugin.Config.LeftFaceColorNoteSkew : Plugin.Config.RightFaceColorNoteSkew);
                 faceColor.a = 0f;
                 
-                Color glowColor = noteColor;
+                Color glowColor = Color.LerpUnclamped(i % 2 == 0 ? Plugin.Config.LeftFaceGlowColor : Plugin.Config.RightFaceGlowColor, noteColor, i % 2 == 0 ? Plugin.Config.LeftFaceGlowColorNoteSkew : Plugin.Config.RightFaceGlowColorNoteSkew);
+                
+                if (colorScalar != 0 && i % 2 == 0 ? Plugin.Config.NormalizeLeftFaceGlowColor : Plugin.Config.NormalizeRightFaceGlowColor)
+                {
+                    glowColor /= colorScalar;
+                }
+                
                 glowColor.a = Plugin.Config.GlowIntensity;
                 
                 foreach (MaterialPropertyBlockController controller in noteCube.GetComponents<MaterialPropertyBlockController>())
