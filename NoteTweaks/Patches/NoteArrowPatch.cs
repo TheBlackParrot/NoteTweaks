@@ -2,9 +2,13 @@
 using System.Linq;
 using System.Reflection;
 using HarmonyLib;
+using Newtonsoft.Json;
 using NoteTweaks.Utils;
+using SongCore.Data;
 using UnityEngine;
 using Object = UnityEngine.Object;
+using static IPA.Loader.PluginManager;
+using static SongCore.Collections;
 
 namespace NoteTweaks.Patches
 {
@@ -72,8 +76,20 @@ namespace NoteTweaks.Patches
         private static readonly Texture2D ReplacementArrowGlowTexture = OriginalArrowGlowTexture.PrepareTexture();
         private static readonly Texture2D OriginalDotGlowTexture = Resources.FindObjectsOfTypeAll<Texture2D>().ToList().First(x => x.name == "NoteCircleBakedGlow");
         private static readonly Texture2D ReplacementDotGlowTexture = OriginalDotGlowTexture.PrepareTexture();
+
+        private static bool _autoDisable = false;
         
-        public static bool AutoDisable = false;
+        private static bool MapHasNoodle(BeatmapLevel beatmapLevel, BeatmapKey beatmapKey)
+        {
+            bool hasNoodle = false;
+            
+            ExtraSongData.DifficultyData diffData = RetrieveDifficultyData(beatmapLevel, beatmapKey);
+            if (diffData != null)
+            {
+                hasNoodle = diffData.additionalDifficultyData._requirements.Any(x => x == "Noodle Extensions");
+            }
+            return EnabledPlugins.Any(x => x.Name == "NoodleExtensions") && hasNoodle;
+        }
 
         // thanks BeatLeader
         [HarmonyPatch]
@@ -82,8 +98,10 @@ namespace NoteTweaks.Patches
             static MethodInfo TargetMethod() => AccessTools.FirstMethod(typeof(StandardLevelScenesTransitionSetupDataSO),
                 m => m.Name == nameof(StandardLevelScenesTransitionSetupDataSO.Init) &&
                      m.GetParameters().All(p => p.ParameterType != typeof(IBeatmapLevelData)));
-            internal static void Postfix(in GameplayModifiers gameplayModifiers)
+            internal static void Postfix(StandardLevelScenesTransitionSetupDataSO __instance, in GameplayModifiers gameplayModifiers)
             {
+                _autoDisable = MapHasNoodle(__instance.beatmapLevel, __instance.beatmapKey) && Plugin.Config.DisableIfNoodle;
+                
                 _gameplayModifiers = gameplayModifiers;
                 Plugin.ClampSettings();
 
@@ -122,7 +140,7 @@ namespace NoteTweaks.Patches
         {
             internal static void Postfix(ref BurstSliderGameNoteController __instance, ref BoxCuttableBySaber[] ____bigCuttableBySaberList, ref BoxCuttableBySaber[] ____smallCuttableBySaberList)
             {
-                if (!Plugin.Config.Enabled || !IsAllowedToScaleNotes || (AutoDisable && Plugin.Config.DisableIfNoodle))
+                if (!Plugin.Config.Enabled || !IsAllowedToScaleNotes || _autoDisable)
                 {
                     return;
                 }
@@ -175,7 +193,7 @@ namespace NoteTweaks.Patches
         {
             internal static void Postfix(ref GameNoteController __instance, ref BoxCuttableBySaber[] ____bigCuttableBySaberList, ref BoxCuttableBySaber[] ____smallCuttableBySaberList)
             {
-                if (!Plugin.Config.Enabled || (AutoDisable && Plugin.Config.DisableIfNoodle))
+                if (!Plugin.Config.Enabled || _autoDisable)
                 {
                     return;
                 }
@@ -307,7 +325,7 @@ namespace NoteTweaks.Patches
             
             internal static void Postfix(ColorNoteVisuals __instance, ref MeshRenderer[] ____arrowMeshRenderers, ref MeshRenderer[] ____circleMeshRenderers)
             {
-                if (!Plugin.Config.Enabled || (AutoDisable && Plugin.Config.DisableIfNoodle))
+                if (!Plugin.Config.Enabled || _autoDisable)
                 {
                     return;
                 }
@@ -597,7 +615,7 @@ namespace NoteTweaks.Patches
         {
             private static bool Prefix(SliderController __instance)
             {
-                if (!Plugin.Config.Enabled || (AutoDisable && Plugin.Config.DisableIfNoodle))
+                if (!Plugin.Config.Enabled || _autoDisable)
                 {
                     return true;
                 }
