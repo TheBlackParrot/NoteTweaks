@@ -393,5 +393,65 @@ namespace NoteTweaks.UI
                 NotePreviewViewController.UpdateColors();
             }
         }
+
+        protected Color LeftFaceGlowColor
+        {
+            get => _config.LeftFaceGlowColor;
+            set
+            {
+                _config.LeftFaceGlowColor = value;
+                NotePreviewViewController.UpdateColors();
+            }
+        }
+
+        protected float LeftFaceGlowColorNoteSkew
+        {
+            get => _config.LeftFaceGlowColorNoteSkew;
+            set
+            {
+                _config.LeftFaceGlowColorNoteSkew = value;
+                NotePreviewViewController.UpdateColors();
+            }
+        }
+
+        protected bool NormalizeLeftFaceGlowColor
+        {
+            get => _config.NormalizeLeftFaceGlowColor;
+            set
+            {
+                _config.NormalizeLeftFaceGlowColor = value;
+                NotePreviewViewController.UpdateColors();
+            }
+        }
+        
+        protected Color RightFaceGlowColor
+        {
+            get => _config.RightFaceGlowColor;
+            set
+            {
+                _config.RightFaceGlowColor = value;
+                NotePreviewViewController.UpdateColors();
+            }
+        }
+
+        protected float RightFaceGlowColorNoteSkew
+        {
+            get => _config.RightFaceGlowColorNoteSkew;
+            set
+            {
+                _config.RightFaceGlowColorNoteSkew = value;
+                NotePreviewViewController.UpdateColors();
+            }
+        }
+
+        protected bool NormalizeRightFaceGlowColor
+        {
+            get => _config.NormalizeRightFaceGlowColor;
+            set
+            {
+                _config.NormalizeRightFaceGlowColor = value;
+                NotePreviewViewController.UpdateColors();
+            }
+        }
     }
 }
