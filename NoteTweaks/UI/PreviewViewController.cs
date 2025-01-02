@@ -200,7 +200,7 @@ namespace NoteTweaks.UI
                     glowColor /= colorScalar;
                 }
                 
-                glowColor.a = Plugin.Config.GlowIntensity;
+                glowColor.a = i % 2 == 0 ? Plugin.Config.LeftGlowIntensity : Plugin.Config.RightGlowIntensity;
                 
                 foreach (MaterialPropertyBlockController controller in noteCube.GetComponents<MaterialPropertyBlockController>())
                 {
