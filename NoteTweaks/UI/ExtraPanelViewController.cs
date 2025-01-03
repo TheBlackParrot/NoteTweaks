@@ -2,7 +2,6 @@
 using BeatSaberMarkupLanguage.Attributes;
 using BeatSaberMarkupLanguage.ViewControllers;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using NoteTweaks.Configuration;
 using UnityEngine;
 using Zenject;
@@ -43,8 +42,6 @@ namespace NoteTweaks.UI
         {
             byte[] manifestData = SiraUtil.Extras.Utilities.GetResource(Assembly.GetExecutingAssembly(), "NoteTweaks.manifest.json");
             Manifest = JsonConvert.DeserializeObject<ManifestData>(System.Text.Encoding.UTF8.GetString(manifestData));
-            
-            Plugin.Log.Info(System.Text.Encoding.UTF8.GetString(manifestData));
 
             gameVersion = $"<alpha=#CC>(<alpha=#77><size=80%>for</size> <b><alpha=#FF>{Manifest.GameVersion}<alpha=#CC></b>)";
             author = $"<alpha=#77><size=80%>developed by</size> <b><alpha=#FF>{Manifest.Author}</b>";
