@@ -5,15 +5,18 @@
   <PropertyGroup>
     <AssemblyName>NoteTweaks</AssemblyName>
     <Authors>TheBlackParrot</Authors>
-    <Version>0.0.0</Version>
+    <Version>0.4.0</Version>
     <GameVersion>1.39.1</GameVersion>
     <Description>Change various aspects of the default note</Description>
-    <ProjectHome></ProjectHome>
-    <ProjectSource></ProjectSource>
+    <ProjectHome>https://github.com/TheBlackParrot/NoteTweaks</ProjectHome>
+    <ProjectSource>https://github.com/TheBlackParrot/NoteTweaks</ProjectSource>
     <Donate></Donate>
   </PropertyGroup>
   <ItemGroup>
     <Dependency Include="BSIPA" Version="^4.1.3" />
+    <Dependency Include="BeatSaberMarkupLanguage" Version="^1.12.3" />
+    <Dependency Include="SiraUtil" Version="^3.1.14" />
+    <Dependency Include="SongCore" Version="^3.14.15" />
   </ItemGroup>
   <!-- End Manifest -->
   <PropertyGroup Condition="'$(GITHUB_ACTIONS)' == 'true'">

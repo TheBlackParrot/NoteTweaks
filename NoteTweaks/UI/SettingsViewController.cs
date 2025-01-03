@@ -16,20 +16,11 @@ namespace NoteTweaks.UI
         public string PreciseFloatFormatter(float x) => x.ToString("F3");
         public string AccFormatter(int x) => (x + 100).ToString();
         public string DegreesFormatter(float x) => $"{x:0.#}\u00b0";
-        
-        readonly string version = $"<size=80%><smallcaps><alpha=#CC>NoteTweaks</smallcaps></size> <alpha=#FF><b>v{Assembly.GetExecutingAssembly().GetName().Version.ToString(3)}</b>";
-        readonly string gameVersion = $"<alpha=#CC>(<alpha=#77><size=80%>for</size> <b><alpha=#FF>{Plugin.Manifest.GameVersion}<alpha=#CC></b>)";
 
         [Inject]
         private void Construct(PluginConfig config)
         {
             _config = config;
-        }
-
-        protected bool Enabled
-        {
-            get => _config.Enabled;
-            set => _config.Enabled = value;
         }
         
         protected bool EnableFaceGlow
@@ -366,12 +357,6 @@ namespace NoteTweaks.UI
                 _config.RightFaceColorNoteSkew = value;
                 NotePreviewViewController.UpdateColors();
             }
-        }
-
-        protected bool DisableIfNoodle
-        {
-            get => _config.DisableIfNoodle;
-            set => _config.DisableIfNoodle = value;
         }
 
         protected float RotateDot

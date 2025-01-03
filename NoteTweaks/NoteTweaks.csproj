@@ -127,5 +127,6 @@
     <ItemGroup>
         <EmbeddedResource Include="UI/BSML/Settings.bsml"/>
         <EmbeddedResource Include="UI/BSML/Empty.bsml"/>
+        <EmbeddedResource Include="UI/BSML/ExtraPanel.bsml"/>
     </ItemGroup>
 </Project>

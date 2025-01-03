@@ -19,16 +19,9 @@ namespace NoteTweaks
     // ReSharper disable once ClassNeverInstantiated.Global
     internal class Plugin
     {
-        internal class ManifestData
-        {
-            [JsonProperty("gameVersion")]
-            public string GameVersion { get; private set; }
-        }
-        
         internal static IPALogger Log { get; private set; }
         internal static PluginConfig Config;
         private static Harmony _harmony;
-        internal static ManifestData Manifest;
 
         internal static void ClampSettings()
         {
@@ -50,9 +43,6 @@ namespace NoteTweaks
         {
             Log = logger;
             Config = config.Generated<PluginConfig>();
-            
-            byte[] manifestData = SiraUtil.Extras.Utilities.GetResource(Assembly.GetExecutingAssembly(), "NoteTweaks.manifest.json");
-            Manifest = JsonConvert.DeserializeObject<ManifestData>(System.Text.Encoding.UTF8.GetString(manifestData));
             
             zenjector.Install<AppInstaller>(Location.App, Config);
             zenjector.Install<MenuInstaller>(Location.Menu);
