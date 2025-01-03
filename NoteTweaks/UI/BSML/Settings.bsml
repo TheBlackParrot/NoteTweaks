@@ -48,56 +48,63 @@
 
     <tab tags="tabs" tab-name="Symbols">
         <vertical vertical-fit="PreferredSize" pref-height="70" pref-width="100" anchored-position-x="4">
-            <scroll-view spacing="0" pref-height="70" child-expand-width="true">
-                <toggle-setting apply-on-change="true" value="EnableFaceGlow" text="Enable Glowing Face Symbols"
+            <vertical spacing="2" vertical-fit="PreferredSize" pad-left="1" pad-right="1" pref-width="100" child-control-height="false">
+                <toggle-setting apply-on-change="true" value="EnableFaceGlow" text="Enable Glowing Face Symbols" bind-value="true"
                                 hover-hint="Show glow around symbols"/>
-                
-                <horizontal><text text="-----" font-size="4" color="#00000000"/></horizontal>
-                
-                <color-setting apply-on-change="true" value="LeftFaceColor" text="Left Face Symbol Color"
-                               hover-hint="Color of arrows and dots themselves"/>
-                <slider-setting apply-on-change="true" value="LeftFaceColorNoteSkew" text="Skew Towards Note Color"
-                                min="0.0" max="1.0" increment="0.01" show-buttons="true" formatter="PercentageFormatter"
-                                hover-hint="Skew symbol colors towards the note color"/>
-                <toggle-setting apply-on-change="true" value="NormalizeLeftFaceColor" text="Normalize Color Brightness"
-                                hover-hint="Normalizes the brightness of the face color by the highest RGB component"/>
-                
-                <horizontal><text text="-----" font-size="4" color="#00000000"/></horizontal>
+                <tab-selector tab-tag="symbolTabs" id="symbolTabSelector"/>
+            </vertical>
 
-                <color-setting apply-on-change="true" value="LeftFaceGlowColor" text="Left Glow Color"
-                               hover-hint="Color of the glow around face symbols"/>
-                <slider-setting apply-on-change="true" value="LeftFaceGlowColorNoteSkew" text="Skew Towards Note Color"
-                                min="0.0" max="1.0" increment="0.01" show-buttons="true" formatter="PercentageFormatter"
-                                hover-hint="Skew glow colors towards the note color"/>
-                <toggle-setting apply-on-change="true" value="NormalizeLeftFaceGlowColor" text="Normalize Color Brightness"
-                                hover-hint="Normalizes the brightness of the glow color by the highest RGB component"/>
-                <slider-setting apply-on-change="true" value="LeftGlowIntensity" text="Glow Intensity"
-                                min="0.01" max="3.0" increment="0.01" show-buttons="true" formatter="PercentageFormatter"
-                                hover-hint="Intensity of glow on face symbols"/>
+            <vertical vertical-fit="PreferredSize" pref-height="45" pref-width="100">
+                <tab tags="symbolTabs" tab-name="Left">
+                    <scroll-view spacing="0" pref-height="55" child-expand-width="true">
+                        <color-setting apply-on-change="true" value="LeftFaceColor" text="Left Face Symbol Color"
+                                       hover-hint="Color of arrows and dots themselves"/>
+                        <slider-setting apply-on-change="true" value="LeftFaceColorNoteSkew" text="Skew Towards Note Color"
+                                        min="0.0" max="1.0" increment="0.01" show-buttons="true" formatter="PercentageFormatter"
+                                        hover-hint="Skew symbol colors towards the note color"/>
+                        <toggle-setting apply-on-change="true" value="NormalizeLeftFaceColor" text="Normalize Color Brightness"
+                                        hover-hint="Normalizes the brightness of the face color by the highest RGB component"/>
 
-                <horizontal><text text="-----" font-size="4" color="#00000000"/></horizontal>
+                        <horizontal><text text="-----" font-size="4" color="#00000000" active="~EnableFaceGlow"/></horizontal>
+                        
+                        <color-setting apply-on-change="true" value="LeftFaceGlowColor" text="Left Glow Color" active="~EnableFaceGlow"
+                                       hover-hint="Color of the glow around face symbols"/>
+                        <slider-setting apply-on-change="true" value="LeftFaceGlowColorNoteSkew" text="Skew Towards Note Color" active="~EnableFaceGlow"
+                                        min="0.0" max="1.0" increment="0.01" show-buttons="true" formatter="PercentageFormatter"
+                                        hover-hint="Skew glow colors towards the note color"/>
+                        <toggle-setting apply-on-change="true" value="NormalizeLeftFaceGlowColor" text="Normalize Color Brightness" active="~EnableFaceGlow"
+                                        hover-hint="Normalizes the brightness of the glow color by the highest RGB component"/>
+                        <slider-setting apply-on-change="true" value="LeftGlowIntensity" text="Glow Intensity" active="~EnableFaceGlow"
+                                        min="0.01" max="3.0" increment="0.01" show-buttons="true" formatter="PercentageFormatter"
+                                        hover-hint="Intensity of glow on face symbols"/>
+                    </scroll-view>
+                </tab>
                 
-                <color-setting apply-on-change="true" value="RightFaceColor" text="Right Face Symbol Color"
-                               hover-hint="Color of arrows and dots themselves"/>
-                <slider-setting apply-on-change="true" value="RightFaceColorNoteSkew" text="Skew Towards Note Color"
-                                min="0.0" max="1.0" increment="0.01" show-buttons="true" formatter="PercentageFormatter"
-                                hover-hint="Skew symbol colors towards the note color"/>
-                <toggle-setting apply-on-change="true" value="NormalizeRightFaceColor" text="Normalize Color Brightness"
-                                hover-hint="Normalizes the brightness of the face color by the highest RGB component"/>
-    
-                <horizontal><text text="-----" font-size="4" color="#00000000"/></horizontal>
-
-                <color-setting apply-on-change="true" value="RightFaceGlowColor" text="Right Glow Color"
-                               hover-hint="Color of the glow around face symbols"/>
-                <slider-setting apply-on-change="true" value="RightFaceGlowColorNoteSkew" text="Skew Towards Note Color"
-                                min="0.0" max="1.0" increment="0.01" show-buttons="true" formatter="PercentageFormatter"
-                                hover-hint="Skew glow colors towards the note color"/>
-                <toggle-setting apply-on-change="true" value="NormalizeRightFaceGlowColor" text="Normalize Color Brightness"
-                                hover-hint="Normalizes the brightness of the glow color by the highest RGB component"/>
-                <slider-setting apply-on-change="true" value="RightGlowIntensity" text="Glow Intensity"
-                                min="0.01" max="3.0" increment="0.01" show-buttons="true" formatter="PercentageFormatter"
-                                hover-hint="Intensity of glow on face symbols"/>
-            </scroll-view>
+                <tab tags="symbolTabs" tab-name="Right">
+                    <scroll-view spacing="0" pref-height="50" child-expand-width="true">
+                        <color-setting apply-on-change="true" value="RightFaceColor" text="Right Face Symbol Color"
+                                       hover-hint="Color of arrows and dots themselves"/>
+                        <slider-setting apply-on-change="true" value="RightFaceColorNoteSkew" text="Skew Towards Note Color"
+                                        min="0.0" max="1.0" increment="0.01" show-buttons="true" formatter="PercentageFormatter"
+                                        hover-hint="Skew symbol colors towards the note color"/>
+                        <toggle-setting apply-on-change="true" value="NormalizeRightFaceColor" text="Normalize Color Brightness"
+                                        hover-hint="Normalizes the brightness of the face color by the highest RGB component"/>
+                        
+                        <horizontal><text text="-----" font-size="4" color="#00000000" active="~EnableFaceGlow"/></horizontal>
+            
+                        <color-setting apply-on-change="true" value="RightFaceGlowColor" text="Right Glow Color" active="~EnableFaceGlow"
+                                       hover-hint="Color of the glow around face symbols"/>
+                        <slider-setting apply-on-change="true" value="RightFaceGlowColorNoteSkew" text="Skew Towards Note Color" active="~EnableFaceGlow"
+                                        min="0.0" max="1.0" increment="0.01" show-buttons="true" formatter="PercentageFormatter"
+                                        hover-hint="Skew glow colors towards the note color"/>
+                        <toggle-setting apply-on-change="true" value="NormalizeRightFaceGlowColor" text="Normalize Color Brightness" active="~EnableFaceGlow"
+                                        hover-hint="Normalizes the brightness of the glow color by the highest RGB component"/>
+                        <slider-setting apply-on-change="true" value="RightGlowIntensity" text="Glow Intensity" active="~EnableFaceGlow"
+                                        min="0.01" max="3.0" increment="0.01" show-buttons="true" formatter="PercentageFormatter"
+                                        hover-hint="Intensity of glow on face symbols"/>
+                    </scroll-view>
+                </tab>
+            </vertical>
         </vertical>
     </tab>
 
