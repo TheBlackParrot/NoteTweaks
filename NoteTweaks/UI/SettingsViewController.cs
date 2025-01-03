@@ -1,5 +1,4 @@
-﻿using System.Reflection;
-using BeatSaberMarkupLanguage.Attributes;
+﻿using BeatSaberMarkupLanguage.Attributes;
 using BeatSaberMarkupLanguage.ViewControllers;
 using NoteTweaks.Configuration;
 using UnityEngine;

@@ -4,7 +4,6 @@ using HarmonyLib;
 using IPA;
 using IPA.Config;
 using IPA.Config.Stores;
-using Newtonsoft.Json;
 using NoteTweaks.Configuration;
 using NoteTweaks.Installers;
 using NoteTweaks.Utils;
