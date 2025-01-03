@@ -121,7 +121,7 @@ namespace NoteTweaks.Patches
             }
         }
 
-        private static bool IsAllowedToUseAccDots
+        private static bool IsUsingHiddenTypeModifier
         {
             get
             {
@@ -130,7 +130,7 @@ namespace NoteTweaks.Patches
                     return false;
                 }
 
-                return !(_gameplayModifiers.disappearingArrows || _gameplayModifiers.ghostNotes);
+                return _gameplayModifiers.disappearingArrows || _gameplayModifiers.ghostNotes;
             }
         }
 
@@ -197,7 +197,7 @@ namespace NoteTweaks.Patches
                     return;
                 }
 
-                if (Plugin.Config.EnableAccDot && __instance.gameplayType != NoteData.GameplayType.BurstSliderHead && IsAllowedToUseAccDots)
+                if (Plugin.Config.EnableAccDot && __instance.gameplayType != NoteData.GameplayType.BurstSliderHead && !IsUsingHiddenTypeModifier)
                 {
                     if (!_accDotObject)
                     {
@@ -324,7 +324,7 @@ namespace NoteTweaks.Patches
             
             internal static void Postfix(ColorNoteVisuals __instance, ref MeshRenderer[] ____arrowMeshRenderers, ref MeshRenderer[] ____circleMeshRenderers)
             {
-                if (!Plugin.Config.Enabled || _autoDisable)
+                if (!Plugin.Config.Enabled || _autoDisable || IsUsingHiddenTypeModifier)
                 {
                     return;
                 }
@@ -356,7 +356,7 @@ namespace NoteTweaks.Patches
                     isChainHead = c.gameplayType == NoteData.GameplayType.BurstSliderHead;   
                 }
                 
-                if (Plugin.Config.EnableAccDot && IsAllowedToUseAccDots)
+                if (Plugin.Config.EnableAccDot)
                 {
                     _replacementDotMaterial.renderQueue = Plugin.Config.RenderAccDotsAboveSymbols ? 1997 : 2000;
                     _dotGlowMaterial.renderQueue = Plugin.Config.RenderAccDotsAboveSymbols ? 1998 : 1999;
@@ -405,7 +405,7 @@ namespace NoteTweaks.Patches
                         materialPropertyBlockController.ApplyChanges();   
                     }
 
-                    if (Plugin.Config.EnableAccDot && IsAllowedToUseAccDots)
+                    if (Plugin.Config.EnableAccDot)
                     {
                         meshRenderer.sharedMaterial.renderQueue = Plugin.Config.RenderAccDotsAboveSymbols ? 1997 : 2000;
                     }
@@ -436,7 +436,7 @@ namespace NoteTweaks.Patches
                             }
                             else
                             {
-                                if (Plugin.Config.EnableAccDot && IsAllowedToUseAccDots)
+                                if (Plugin.Config.EnableAccDot)
                                 {
                                     arrowGlowMeshRenderer.material.renderQueue = Plugin.Config.RenderAccDotsAboveSymbols ? 1998 : 1999;
                                 }
