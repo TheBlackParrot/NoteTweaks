@@ -11,7 +11,7 @@ namespace NoteTweaks.UI
     [HotReload(RelativePathToLayout = "BSML.Settings.bsml")]
     internal class SettingsViewController : BSMLAutomaticViewController
     {
-        private PluginConfig _config;
+        private static PluginConfig _config;
         public string PercentageFormatter(float x) => x.ToString("0%");
         public string PreciseFloatFormatter(float x) => x.ToString("F3");
         public string AccFormatter(int x) => (x + 100).ToString();
@@ -23,6 +23,7 @@ namespace NoteTweaks.UI
             _config = config;
         }
         
+        [UIValue("EnableFaceGlow")]
         protected bool EnableFaceGlow
         {
             get => _config.EnableFaceGlow;
@@ -30,6 +31,8 @@ namespace NoteTweaks.UI
             {
                 _config.EnableFaceGlow = value;
                 NotePreviewViewController.UpdateVisibility();
+
+                NotifyPropertyChanged();
             }
         }
 
