@@ -1,27 +1,10 @@
-<vertical child-control-height="false">
+<vertical child-control-height="false"
+          xsi:noNamespaceSchemaLocation="https://monkeymanboy.github.io/BSML-Docs/BSMLSchema.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <tab-selector tab-tag="tabs" id="tabSelector"/>
-    
-    <tab tags="tabs" tab-name="General">
-        <modifier-container child-expand-width="true" horizontal-fit="PreferredSize" spacing="4">
-            <vertical background="round-rect-panel" bg-color="#FFFFFF" vertical-fit="PreferredSize" pref-height="20" pad-top="3" pad-bottom="3" pad-left="6" pad-right="6">
-                <horizontal child-align="MiddleCenter">
-                    <text text="~version" font-size="10" align="Center" font-color="#CBADFF" rich-text="true"/>
-                </horizontal>
-                <horizontal child-align="MiddleCenter">
-                    <text text="~gameVersion" font-size="5" align="Center" font-color="#FFFFFF" rich-text="true"/>
-                </horizontal>
-            </vertical>
-            
-            <toggle-setting apply-on-change="true" value="Enabled" text="Mod Enabled"
-                            hover-hint="Remember to drink water! Hydrate!"/>
-            <toggle-setting apply-on-change="true" value="DisableIfNoodle" text="Disable on Noodle Maps"
-                            hover-hint="Automatically disable the mod if the map being played requires Noodle Extensions"/>
-        </modifier-container>
-    </tab>
     
     <tab tags="tabs" tab-name="Notes">
         <vertical vertical-fit="PreferredSize" pref-height="70" pref-width="100" anchored-position-x="4">
-            <scroll-view spacing="0" pref-height="70" child-expand-width="true" horizontal-fit="PreferredSize">
+            <scroll-view spacing="0" pref-height="70" child-expand-width="true">
                 <slider-setting apply-on-change="true" value="NoteScaleX" text="Horizontal Note Scale"
                                 min="0.1" max="2.5" increment="0.01" show-buttons="true" formatter="PercentageFormatter"
                                 hover-hint="Horizontal scale (X-axis) of notes"/>
@@ -46,7 +29,7 @@
 
     <tab tags="tabs" tab-name="Acc Dots">
         <vertical vertical-fit="PreferredSize" pref-height="70" pref-width="100" anchored-position-x="4">
-            <scroll-view spacing="0" pref-height="70" child-expand-width="true" horizontal-fit="PreferredSize">
+            <scroll-view spacing="0" pref-height="70" child-expand-width="true">
                 <toggle-setting apply-on-change="true" value="EnableAccDot" text="Enable Acc Dots"
                                 hover-hint="Enable small dots in the center of notes to help show where to swing for accuracy"/>
     
@@ -65,7 +48,7 @@
 
     <tab tags="tabs" tab-name="Symbols">
         <vertical vertical-fit="PreferredSize" pref-height="70" pref-width="100" anchored-position-x="4">
-            <scroll-view spacing="0" pref-height="70" child-expand-width="true" horizontal-fit="PreferredSize">
+            <scroll-view spacing="0" pref-height="70" child-expand-width="true">
                 <toggle-setting apply-on-change="true" value="EnableFaceGlow" text="Enable Glowing Face Symbols"
                                 hover-hint="Show glow around symbols"/>
                 
@@ -120,7 +103,7 @@
 
     <tab tags="tabs" tab-name="Arrows">
         <vertical vertical-fit="PreferredSize" pref-height="70" pref-width="100" anchored-position-x="4">
-            <scroll-view spacing="0" pref-height="70" child-expand-width="true" horizontal-fit="PreferredSize">
+            <scroll-view spacing="0" pref-height="70" child-expand-width="true">
                 <slider-setting apply-on-change="true" value="ArrowScaleX" text="Horizontal Arrow Scale"
                                 min="0.05" max="2.0" increment="0.05" show-buttons="true" formatter="PercentageFormatter"
                                 hover-hint="Horizontal scale (X-axis) of note arrows"/>
@@ -148,7 +131,7 @@
 
     <tab tags="tabs" tab-name="Dots">
         <vertical vertical-fit="PreferredSize" pref-height="70" pref-width="100" anchored-position-x="4">
-            <scroll-view spacing="0" pref-height="70" child-expand-width="true" horizontal-fit="PreferredSize">
+            <scroll-view spacing="0" pref-height="70" child-expand-width="true">
                 <toggle-setting apply-on-change="true" value="EnableDots" text="Show Dots"
                                 hover-hint="Show dots"/>
     
@@ -190,7 +173,7 @@
 
     <tab tags="tabs" tab-name="Chains">
         <vertical vertical-fit="PreferredSize" pref-height="70" pref-width="100" anchored-position-x="4">
-            <scroll-view spacing="0" pref-height="70" child-expand-width="true" horizontal-fit="PreferredSize">
+            <scroll-view spacing="0" pref-height="70" child-expand-width="true">
                 <slider-setting apply-on-change="true" value="LinkScale" text="Chain Link Scale"
                                 min="0.1" max="2.5" increment="0.01" show-buttons="true" formatter="PercentageFormatter"
                                 hover-hint="Scale of chain links relative to note scale"/>
