@@ -192,9 +192,13 @@ namespace NoteTweaks.UI
         protected float LinkScale
         {
             get => _config.LinkScale;
-            set => _config.LinkScale = value;
+            set
+            {
+                _config.LinkScale = value;
+                NotePreviewViewController.UpdateNoteScale();
+            }
         }
-        
+
         protected float ColorBoostLeft
         {
             get => _config.ColorBoostLeft;
@@ -258,8 +262,13 @@ namespace NoteTweaks.UI
         protected bool EnableChainDots
         {
             get => _config.EnableChainDots;
-            set => _config.EnableChainDots = value;
+            set
+            {
+                _config.EnableChainDots = value;
+                NotePreviewViewController.UpdateVisibility();
+            }
         }
+
         protected float ChainDotScaleX
         {
             get => _config.ChainDotScale.x;
@@ -268,6 +277,8 @@ namespace NoteTweaks.UI
                 Vector3 scale = _config.ChainDotScale;
                 scale.x = value;
                 _config.ChainDotScale = scale;
+                
+                NotePreviewViewController.UpdateDotScale();
             }
         }
         
@@ -279,13 +290,19 @@ namespace NoteTweaks.UI
                 Vector3 scale = _config.ChainDotScale;
                 scale.y = value;
                 _config.ChainDotScale = scale;
+                
+                NotePreviewViewController.UpdateDotScale();
             }
         }
         
         protected bool EnableChainDotGlow
         {
             get => _config.EnableChainDotGlow;
-            set => _config.EnableChainDotGlow = value;
+            set
+            {
+                _config.EnableChainDotGlow = value;
+                NotePreviewViewController.UpdateVisibility();
+            }
         }
 
         protected Color LeftFaceColor

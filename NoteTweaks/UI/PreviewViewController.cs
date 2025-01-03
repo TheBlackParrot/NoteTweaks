@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using BeatSaberMarkupLanguage.Attributes;
 using BeatSaberMarkupLanguage.ViewControllers;
+using NoteTweaks.Utils;
 using UnityEngine;
 
 namespace NoteTweaks.UI
@@ -16,11 +17,12 @@ namespace NoteTweaks.UI
         internal static GameObject NoteContainer = new GameObject("_NoteTweaks_NoteContainer");
         
         private static readonly float NoteSize = 0.5f;
-        private static readonly Vector3 InitialPosition = new Vector3(-2.9f, 1.15f, 3.7f);
+        private static readonly Vector3 InitialPosition = new Vector3(-2.7f, 1.15f, 3.5f);
         
         internal static bool HasInitialized;
         private static Vector3 _initialArrowPosition = Vector3.one;
         private static Vector3 _initialDotPosition = Vector3.one;
+        private static Vector3 _initialChainDotPosition = Vector3.one;
 
         private static Material _replacementDotMaterial;
         private static Material _dotGlowMaterial;
@@ -33,7 +35,7 @@ namespace NoteTweaks.UI
         
         private static readonly int Color0 = Shader.PropertyToID("_Color");
         
-        private static readonly List<String> FaceNames = new List<String> { "NoteArrow", "NoteCircleGlow" };
+        private static readonly List<String> FaceNames = new List<String> { "NoteArrow", "NoteCircleGlow", "Circle" };
         private static readonly List<String> GlowNames = new List<String> { "NoteArrowGlow", "AddedNoteCircleGlow" };
 
         public static void UpdateDotMesh()
@@ -53,7 +55,15 @@ namespace NoteTweaks.UI
             for (int i = 0; i < NoteContainer.transform.childCount; i++)
             {
                 GameObject noteCube = NoteContainer.transform.GetChild(i).gameObject;
-                noteCube.transform.Find("NoteCircleGlow").GetComponent<MeshFilter>().mesh = _dotMesh;
+                Transform noteCircleGlowTransform = noteCube.transform.Find("NoteCircleGlow");
+                if (noteCircleGlowTransform != null)
+                {
+                    noteCircleGlowTransform.GetComponent<MeshFilter>().mesh = _dotMesh;
+                }
+                else
+                {
+                    noteCube.transform.Find("Circle").GetComponent<MeshFilter>().mesh = _dotMesh;
+                }
             }
         }
 
@@ -62,18 +72,33 @@ namespace NoteTweaks.UI
             for (int i = 0; i < NoteContainer.transform.childCount; i++)
             {
                 GameObject noteCube = NoteContainer.transform.GetChild(i).gameObject;
-                
-                if (noteCube.transform.Find("NoteArrow").gameObject.activeSelf)
+                Transform noteArrowTransform = noteCube.transform.Find("NoteArrow");
+
+                if (noteArrowTransform != null)
                 {
-                    // is not a dot note
-                    noteCube.transform.Find("NoteArrowGlow").gameObject.SetActive(Plugin.Config.EnableFaceGlow);
+                    if (noteCube.transform.Find("NoteArrow").gameObject.activeSelf)
+                    {
+                        // is not a dot note
+                        noteCube.transform.Find("NoteArrowGlow").gameObject.SetActive(Plugin.Config.EnableFaceGlow);
+                    }
+                    else
+                    {
+                        // is a dot note
+                        Transform noteCircleGlowTransform = noteCube.transform.Find("NoteCircleGlow");
+                        if (noteCircleGlowTransform != null)
+                        {
+                            GameObject dotObject = noteCircleGlowTransform.gameObject;
+                            dotObject.SetActive(Plugin.Config.EnableDots);
+                            noteCube.transform.Find("AddedNoteCircleGlow").gameObject.SetActive(Plugin.Config.EnableFaceGlow && Plugin.Config.EnableDots);
+                        }
+                    }
                 }
                 else
                 {
-                    // is a dot note
-                    GameObject dotObject = noteCube.transform.Find("NoteCircleGlow").gameObject;
-                    dotObject.SetActive(Plugin.Config.EnableDots);
-                    noteCube.transform.Find("AddedNoteCircleGlow").gameObject.SetActive(Plugin.Config.EnableFaceGlow && Plugin.Config.EnableDots);
+                    // is a chain link
+                    GameObject dotObject = noteCube.transform.Find("Circle").gameObject;
+                    dotObject.SetActive(Plugin.Config.EnableChainDots);
+                    noteCube.transform.Find("AddedNoteCircleGlow").gameObject.SetActive(Plugin.Config.EnableChainDotGlow && Plugin.Config.EnableChainDots);
                 }
             }
         }
@@ -85,14 +110,18 @@ namespace NoteTweaks.UI
                 _initialDotPosition = NoteContainer.transform.GetChild(0).Find("NoteCircleGlow").localPosition;
             }
             
-            Vector3 position = new Vector3(_initialDotPosition.x + Plugin.Config.DotPosition.x, _initialDotPosition.y + Plugin.Config.DotPosition.y, _initialDotPosition.z);
-            Vector3 glowPosition = new Vector3(_initialDotPosition.x + Plugin.Config.DotPosition.x, _initialDotPosition.y + Plugin.Config.DotPosition.y, _initialDotPosition.z + 0.001f);
+            Vector3 dotPosition = new Vector3(_initialDotPosition.x + Plugin.Config.DotPosition.x, _initialDotPosition.y + Plugin.Config.DotPosition.y, _initialDotPosition.z);
+            Vector3 dotGlowPosition = new Vector3(_initialDotPosition.x + Plugin.Config.DotPosition.x, _initialDotPosition.y + Plugin.Config.DotPosition.y, _initialDotPosition.z + 0.001f);
             
             for (int i = 0; i < NoteContainer.transform.childCount; i++)
             {
                 GameObject noteCube = NoteContainer.transform.GetChild(i).gameObject;
-                noteCube.transform.Find("NoteCircleGlow").localPosition = position;
-                noteCube.transform.Find("AddedNoteCircleGlow").localPosition = glowPosition;
+                Transform noteCircleGlowTransform = noteCube.transform.Find("NoteCircleGlow");
+                if (noteCircleGlowTransform != null)
+                {
+                    noteCircleGlowTransform.localPosition = dotPosition;
+                    noteCube.transform.Find("AddedNoteCircleGlow").localPosition = dotGlowPosition;
+                }
             }
         }
 
@@ -100,12 +129,23 @@ namespace NoteTweaks.UI
         {
             Vector3 scale = new Vector3(Plugin.Config.DotScale.x / 5f, Plugin.Config.DotScale.y / 5f, 1.0f);
             Vector3 glowScale = new Vector3((Plugin.Config.DotScale.x / 1.5f) * Plugin.Config.DotGlowScale, (Plugin.Config.DotScale.y / 1.5f) * Plugin.Config.DotGlowScale, 1.0f);
+            Vector3 chainLinkDotScale = new Vector3(Plugin.Config.ChainDotScale.x / 18f, Plugin.Config.ChainDotScale.y / 18f, 1.0f);
+            Vector3 chainLinkGlowScale = new Vector3((Plugin.Config.ChainDotScale.x / 5.4f) * Plugin.Config.DotGlowScale, (Plugin.Config.ChainDotScale.y / 5.4f) * Plugin.Config.DotGlowScale, 1.0f);
             
             for (int i = 0; i < NoteContainer.transform.childCount; i++)
             {
                 GameObject noteCube = NoteContainer.transform.GetChild(i).gameObject;
-                noteCube.transform.Find("NoteCircleGlow").localScale = scale;
-                noteCube.transform.Find("AddedNoteCircleGlow").localScale = glowScale;
+                Transform noteCircleGlowTransform = noteCube.transform.Find("NoteCircleGlow");
+                if (noteCircleGlowTransform != null)
+                {
+                    noteCircleGlowTransform.localScale = scale;
+                    noteCube.transform.Find("AddedNoteCircleGlow").localScale = glowScale;   
+                }
+                else
+                {
+                    noteCube.transform.Find("Circle").localScale = chainLinkDotScale;  
+                    noteCube.transform.Find("AddedNoteCircleGlow").localScale = chainLinkGlowScale;  
+                }
             }
         }
 
@@ -115,11 +155,23 @@ namespace NoteTweaks.UI
             {
                 GameObject noteCube = NoteContainer.transform.GetChild(i).gameObject;
                 
-                noteCube.transform.Find("NoteCircleGlow").localRotation = Quaternion.identity;
-                noteCube.transform.Find("AddedNoteCircleGlow").localRotation = Quaternion.identity;
+                Transform circleTransform = noteCube.transform.Find("Circle");
+                Transform noteCircleGlowTransform = noteCube.transform.Find("NoteCircleGlow");
+                Transform addedNoteCircleGlowTransform = noteCube.transform.Find("AddedNoteCircleGlow");
+
+                if (noteCircleGlowTransform != null)
+                {
+                    noteCircleGlowTransform.localRotation = Quaternion.identity;
+                    noteCircleGlowTransform.Rotate(0f, 0f, Plugin.Config.RotateDot);
+                }
+                else
+                {
+                    circleTransform.localRotation = Quaternion.identity;
+                    circleTransform.Rotate(0f, 0f, Plugin.Config.RotateDot);
+                }
                 
-                noteCube.transform.Find("NoteCircleGlow").Rotate(0f, 0f, Plugin.Config.RotateDot);
-                noteCube.transform.Find("AddedNoteCircleGlow").Rotate(0f, 0f, Plugin.Config.RotateDot);
+                addedNoteCircleGlowTransform.localRotation = Quaternion.identity;
+                addedNoteCircleGlowTransform.Rotate(0f, 0f, Plugin.Config.RotateDot);
             }            
         }
         
@@ -135,6 +187,13 @@ namespace NoteTweaks.UI
             for (int i = 0; i < NoteContainer.transform.childCount; i++)
             {
                 GameObject noteCube = NoteContainer.transform.GetChild(i).gameObject;
+                
+                if (noteCube.name.Contains("_Chain_"))
+                {
+                    // chain link, move on
+                    continue;
+                }
+                
                 noteCube.transform.Find("NoteArrow").localPosition = position;
                 noteCube.transform.Find("NoteArrowGlow").localPosition = position;
             }
@@ -148,6 +207,13 @@ namespace NoteTweaks.UI
             for (int i = 0; i < NoteContainer.transform.childCount; i++)
             {
                 GameObject noteCube = NoteContainer.transform.GetChild(i).gameObject;
+                
+                if (noteCube.name.Contains("_Chain_"))
+                {
+                    // chain link, move on
+                    continue;
+                }
+                
                 noteCube.transform.Find("NoteArrow").localScale = scale;
                 noteCube.transform.Find("NoteArrowGlow").localScale = glowScale;
             }
@@ -158,7 +224,14 @@ namespace NoteTweaks.UI
             for (int i = 0; i < NoteContainer.transform.childCount; i++)
             {
                 GameObject noteCube = NoteContainer.transform.GetChild(i).gameObject;
-                noteCube.transform.localScale = Plugin.Config.NoteScale;
+                if (noteCube.name.Contains("_Chain_"))
+                {
+                    noteCube.transform.localScale = Vectors.Max(Plugin.Config.NoteScale * Plugin.Config.LinkScale, 0.1f);
+                }
+                else
+                {
+                    noteCube.transform.localScale = Plugin.Config.NoteScale;   
+                }
             }
         }
 
@@ -234,6 +307,61 @@ namespace NoteTweaks.UI
                     });
                 }
             }
+        }
+
+        private static void CreateChainNote(BurstSliderGameNoteController chainPrefab, string extraName, int cell, int linkNum)
+        {
+            GameObject chainNote = Instantiate(chainPrefab.transform.GetChild(0).gameObject, NoteContainer.transform);
+            chainNote.gameObject.SetActive(false);
+            
+            chainNote.name = "_NoteTweaks_PreviewNote_" + extraName + $"_{linkNum}";
+            DestroyImmediate(chainNote.transform.Find("BigCuttable").gameObject);
+            DestroyImmediate(chainNote.transform.Find("SmallCuttable").gameObject);
+            
+            Vector3 position = new Vector3((cell - 2.25f) * NoteSize, (linkNum / 6.667f) - 0.375f, 0);
+            chainNote.transform.localPosition = position;
+            chainNote.transform.Rotate(90f, 0f, 0f);
+            
+            Transform originalDot = chainNote.transform.Find("Circle");
+            if (originalDot)
+            {
+                Transform originalDotTransform = originalDot.transform;
+                        
+                if (_initialChainDotPosition == Vector3.one)
+                {
+                    _initialChainDotPosition = originalDotTransform.localPosition;
+                }
+                    
+                Vector3 dotPosition = new Vector3(_initialChainDotPosition.x, _initialChainDotPosition.y, _initialChainDotPosition.z - 0.002f);
+                Vector3 glowPosition = new Vector3(_initialChainDotPosition.x, _initialChainDotPosition.y, _initialChainDotPosition.z - 0.001f);
+                Vector3 dotScale = new Vector3(Plugin.Config.ChainDotScale.x / 18f, Plugin.Config.ChainDotScale.y / 18f, 1.0f);
+                Vector3 glowScale = new Vector3((Plugin.Config.ChainDotScale.x / 5.4f) * Plugin.Config.DotGlowScale, (Plugin.Config.ChainDotScale.y / 5.4f) * Plugin.Config.DotGlowScale, 1.0f);
+
+                originalDotTransform.localScale = dotScale;
+                originalDotTransform.localPosition = dotPosition;
+                    
+                MeshRenderer meshRenderer = originalDot.GetComponent<MeshRenderer>();
+                    
+                meshRenderer.GetComponent<MeshFilter>().mesh = _dotMesh;
+                        
+                meshRenderer.material = _replacementDotMaterial;
+                meshRenderer.sharedMaterial = _replacementDotMaterial;
+                    
+                GameObject newGlowObject = Instantiate(originalDot.gameObject, originalDot.parent);
+                newGlowObject.name = "AddedNoteCircleGlow";
+                        
+                newGlowObject.GetComponent<MeshFilter>().mesh = _dotGlowMesh;
+                newGlowObject.transform.localPosition = glowPosition;
+                newGlowObject.transform.localScale = glowScale;
+
+                if (newGlowObject.TryGetComponent(out MeshRenderer newGlowMeshRenderer))
+                {
+                    newGlowMeshRenderer.material = _dotGlowMaterial;
+                    newGlowMeshRenderer.sharedMaterial = _dotGlowMaterial;
+                }
+            }
+            
+            chainNote.gameObject.SetActive(true);
         }
 
         private static void CreateNote(GameNoteController notePrefab, string extraName, int cell)
@@ -450,7 +578,7 @@ namespace NoteTweaks.UI
             }
             
             NoteContainer.transform.position = InitialPosition;
-            NoteContainer.transform.localRotation = Quaternion.Euler(0, 330, 0);
+            NoteContainer.transform.localRotation = Quaternion.Euler(0, 320, 0);
             
             MenuTransitionsHelper menuTransitionsHelper = Resources.FindObjectsOfTypeAll<MenuTransitionsHelper>().FirstOrDefault();
             StandardLevelScenesTransitionSetupDataSO standardLevelScenesTransitionSetupData = menuTransitionsHelper._standardLevelScenesTransitionSetupData;
@@ -464,12 +592,24 @@ namespace NoteTweaks.UI
                         operation2 =>
                         {
                             BeatmapObjectsInstaller beatmapObjectsInstaller = Resources.FindObjectsOfTypeAll<BeatmapObjectsInstaller>().FirstOrDefault();
+                            
                             GameNoteController notePrefab = beatmapObjectsInstaller._normalBasicNotePrefab;
+                            BurstSliderGameNoteController chainPrefab = beatmapObjectsInstaller._burstSliderNotePrefab;
                             
                             List<String> noteNames = new List<string> { "L_Arrow", "R_Arrow", "L_Dot", "R_Dot" };
                             for (int i = 0; i < noteNames.Count; i++)
                             {
                                 CreateNote(notePrefab, noteNames[i], i);
+                            }
+                            
+                            List<String> chainNames = new List<string> { "L_Chain", "R_Chain" };
+                            int chainLinkCount = 6;
+                            for (int j = 0; j < chainLinkCount; j++)
+                            {
+                                for (int i = 0; i < chainNames.Count; i++)
+                                {
+                                    CreateChainNote(chainPrefab, chainNames[i], i, j); 
+                                }
                             }
                             
                             UpdateColors();
