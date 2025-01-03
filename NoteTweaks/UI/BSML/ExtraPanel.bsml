@@ -1,0 +1,38 @@
+﻿<vertical child-control-height="false"
+          xsi:noNamespaceSchemaLocation="https://monkeymanboy.github.io/BSML-Docs/BSMLSchema.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <tab-selector tab-tag="tabs" id="tabSelector"/>
+
+    <tab tags="tabs" tab-name="General">
+        <vertical vertical-fit="PreferredSize" pref-height="70" pref-width="100" anchored-position-x="4">
+            <scroll-view spacing="0" pref-height="70" child-expand-width="true">
+                <toggle-setting apply-on-change="true" value="Enabled" text="Mod Enabled"
+                                hover-hint="Remember to drink water! Hydrate!"/>
+                <toggle-setting apply-on-change="true" value="DisableIfNoodle" text="Disable on Noodle Maps"
+                                hover-hint="Automatically disable the mod if the map being played requires Noodle Extensions"/>
+            </scroll-view>
+        </vertical>
+    </tab>
+
+    <tab tags="tabs" tab-name="About">
+        <modifier-container child-expand-width="true" horizontal-fit="PreferredSize" spacing="3">
+            <vertical background="round-rect-panel" bg-color="#FFFFFF" vertical-fit="PreferredSize" pref-height="24" pad-top="3" pad-bottom="3" pad-left="6" pad-right="6">
+                <horizontal child-align="MiddleCenter">
+                    <text text="~version" font-size="12" align="Center" font-color="#CBADFF" rich-text="true"/>
+                </horizontal>
+                <horizontal child-align="MiddleCenter">
+                    <text text="~gameVersion" font-size="6" align="Center" font-color="#FFFFFF" rich-text="true"/>
+                </horizontal>
+            </vertical>
+            
+            <vertical background="round-rect-panel" bg-color="#FFFFFF" vertical-fit="PreferredSize" pref-height="16" pad-top="3" pad-bottom="3" pad-left="6" pad-right="6">
+                <horizontal child-align="MiddleCenter">
+                    <text text="~author" font-size="6" align="Center" font-color="#CBADFF" rich-text="true"/>
+                </horizontal>
+                <horizontal child-align="MiddleCenter">
+                    <clickable-text text="~projectHome" font-size="3" align="Center" font-color="#FFFFFF" rich-text="true" on-click="openProjectHome"/>
+                </horizontal>
+            </vertical>
+        </modifier-container>
+    </tab>
+    
+</vertical>

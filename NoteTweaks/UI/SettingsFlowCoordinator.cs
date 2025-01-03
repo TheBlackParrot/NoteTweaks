@@ -9,13 +9,19 @@ namespace NoteTweaks.UI
         private MainFlowCoordinator _mainFlowCoordinator;
         private SettingsViewController _settingsViewController;
         private NotePreviewViewController _notePreviewViewController;
+        private ExtraPanelViewController _extraPanelViewController;
         
         [Inject]
-        private void Construct(MainFlowCoordinator mainFlowCoordinator, SettingsViewController settingsViewController, NotePreviewViewController notePreviewViewController)
+        private void Construct(
+            MainFlowCoordinator mainFlowCoordinator,
+            SettingsViewController settingsViewController,
+            NotePreviewViewController notePreviewViewController,
+            ExtraPanelViewController extraPanelViewController)
         {
             _mainFlowCoordinator = mainFlowCoordinator;
             _settingsViewController = settingsViewController;
             _notePreviewViewController = notePreviewViewController;
+            _extraPanelViewController = extraPanelViewController;
         }
 
         protected override void DidActivate(bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling)
@@ -24,7 +30,7 @@ namespace NoteTweaks.UI
             {
                 SetTitle(nameof(NoteTweaks));
                 showBackButton = true;
-                ProvideInitialViewControllers(_settingsViewController, _notePreviewViewController);
+                ProvideInitialViewControllers(_settingsViewController, _notePreviewViewController, _extraPanelViewController);
             }
 
             if (NotePreviewViewController.NoteContainer == null && NotePreviewViewController.HasInitialized)
