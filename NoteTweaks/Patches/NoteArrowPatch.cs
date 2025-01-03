@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Reflection;
 using HarmonyLib;
-using Newtonsoft.Json;
 using NoteTweaks.Utils;
 using SongCore.Data;
 using UnityEngine;
