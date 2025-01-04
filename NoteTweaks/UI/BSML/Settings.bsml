@@ -3,7 +3,7 @@
     <tab-selector tab-tag="tabs" id="tabSelector"/>
     
     <tab tags="tabs" tab-name="Notes">
-        <vertical vertical-fit="PreferredSize" pref-height="70" pref-width="100" anchored-position-x="4">
+        <vertical vertical-fit="PreferredSize" pref-height="70" pref-width="110" anchored-position-x="4">
             <scroll-view spacing="0" pref-height="70" child-expand-width="true">
                 <slider-setting apply-on-change="true" value="NoteScaleX" text="Horizontal Note Scale"
                                 min="0.1" max="2.5" increment="0.01" show-buttons="true" formatter="PercentageFormatter"
@@ -28,7 +28,7 @@
     </tab>
 
     <tab tags="tabs" tab-name="Acc Dots">
-        <vertical vertical-fit="PreferredSize" pref-height="70" pref-width="100" anchored-position-x="4">
+        <vertical vertical-fit="PreferredSize" pref-height="70" pref-width="110" anchored-position-x="4">
             <scroll-view spacing="0" pref-height="70" child-expand-width="true">
                 <toggle-setting apply-on-change="true" value="EnableAccDot" text="Enable Acc Dots"
                                 hover-hint="Enable small dots in the center of notes to help show where to swing for accuracy"/>
@@ -47,14 +47,14 @@
     </tab>
 
     <tab tags="tabs" tab-name="Symbols">
-        <vertical vertical-fit="PreferredSize" pref-height="70" pref-width="100" anchored-position-x="4">
-            <vertical spacing="2" vertical-fit="PreferredSize" pad-left="1" pad-right="1" pref-width="100" child-control-height="false">
+        <vertical vertical-fit="PreferredSize" pref-height="70" pref-width="110" anchored-position-x="4">
+            <vertical spacing="2" vertical-fit="PreferredSize" pad-left="1" pad-right="1" pad-top="3" pref-width="92" child-control-height="false">
                 <toggle-setting apply-on-change="true" value="EnableFaceGlow" text="Enable Glowing Face Symbols" bind-value="true"
                                 hover-hint="Show glow around symbols"/>
                 <tab-selector tab-tag="symbolTabs" id="symbolTabSelector"/>
             </vertical>
 
-            <vertical vertical-fit="PreferredSize" pref-height="45" pref-width="100">
+            <vertical vertical-fit="PreferredSize" pref-height="70" pref-width="130">
                 <tab tags="symbolTabs" tab-name="Left">
                     <scroll-view spacing="0" pref-height="55" child-expand-width="true">
                         <color-setting apply-on-change="true" value="LeftFaceColor" text="Left Face Symbol Color"
@@ -109,7 +109,7 @@
     </tab>
 
     <tab tags="tabs" tab-name="Arrows">
-        <vertical vertical-fit="PreferredSize" pref-height="70" pref-width="100" anchored-position-x="4">
+        <vertical vertical-fit="PreferredSize" pref-height="70" pref-width="110" anchored-position-x="4">
             <scroll-view spacing="0" pref-height="70" child-expand-width="true">
                 <slider-setting apply-on-change="true" value="ArrowScaleX" text="Horizontal Arrow Scale"
                                 min="0.05" max="2.0" increment="0.05" show-buttons="true" formatter="PercentageFormatter"
@@ -137,7 +137,7 @@
     </tab>
 
     <tab tags="tabs" tab-name="Dots">
-        <vertical vertical-fit="PreferredSize" pref-height="70" pref-width="100" anchored-position-x="4">
+        <vertical vertical-fit="PreferredSize" pref-height="70" pref-width="110" anchored-position-x="4">
             <scroll-view spacing="0" pref-height="70" child-expand-width="true">
                 <toggle-setting apply-on-change="true" value="EnableDots" text="Show Dots"
                                 hover-hint="Show dots"/>
@@ -179,7 +179,7 @@
     </tab>
 
     <tab tags="tabs" tab-name="Chains">
-        <vertical vertical-fit="PreferredSize" pref-height="70" pref-width="100" anchored-position-x="4">
+        <vertical vertical-fit="PreferredSize" pref-height="70" pref-width="110" anchored-position-x="4">
             <scroll-view spacing="0" pref-height="70" child-expand-width="true">
                 <slider-setting apply-on-change="true" value="LinkScale" text="Chain Link Scale"
                                 min="0.1" max="2.5" increment="0.01" show-buttons="true" formatter="PercentageFormatter"

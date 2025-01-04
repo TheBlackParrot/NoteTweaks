@@ -77,11 +77,11 @@ namespace NoteTweaks.Patches
 
         private static bool _autoDisable = false;
         
-        private static bool MapHasNoodle(BeatmapLevel beatmapLevel, BeatmapKey beatmapKey)
+        private static bool MapHasNoodle(IDifficultyBeatmap beatmapLevel)
         {
             bool hasNoodle = false;
             
-            ExtraSongData.DifficultyData diffData = RetrieveDifficultyData(beatmapLevel, beatmapKey);
+            ExtraSongData.DifficultyData diffData = RetrieveDifficultyData(beatmapLevel);
             if (diffData != null)
             {
                 hasNoodle = diffData.additionalDifficultyData._requirements.Any(x => x == "Noodle Extensions");
@@ -98,7 +98,7 @@ namespace NoteTweaks.Patches
                      m.GetParameters().All(p => p.ParameterType != typeof(IBeatmapLevelData)));
             internal static void Postfix(StandardLevelScenesTransitionSetupDataSO __instance, in GameplayModifiers gameplayModifiers)
             {
-                _autoDisable = MapHasNoodle(__instance.beatmapLevel, __instance.beatmapKey) && Plugin.Config.DisableIfNoodle;
+                _autoDisable = MapHasNoodle(__instance.difficultyBeatmap) && Plugin.Config.DisableIfNoodle;
                 
                 _gameplayModifiers = gameplayModifiers;
                 Plugin.ClampSettings();
