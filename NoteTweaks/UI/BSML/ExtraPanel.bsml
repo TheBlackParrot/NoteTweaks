@@ -3,7 +3,7 @@
     <tab-selector tab-tag="tabs" id="tabSelector"/>
 
     <tab tags="tabs" tab-name="General">
-        <vertical vertical-fit="PreferredSize" pref-height="70" pref-width="100" anchored-position-x="4">
+        <vertical vertical-fit="PreferredSize" pref-height="70" pref-width="110" anchored-position-x="4">
             <scroll-view spacing="0" pref-height="70" child-expand-width="true">
                 <toggle-setting apply-on-change="true" value="Enabled" text="Mod Enabled"
                                 hover-hint="Remember to drink water! Hydrate!"/>

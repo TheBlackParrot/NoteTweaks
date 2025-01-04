@@ -1,4 +1,6 @@
-﻿using HarmonyLib;
+﻿using System.Linq;
+using System.Reflection;
+using HarmonyLib;
 using IPA.Utilities;
 using UnityEngine;
 
@@ -31,7 +33,7 @@ namespace NoteTweaks.Patches
             return scheme;
         }
         
-        [HarmonyPatch(typeof(StandardLevelScenesTransitionSetupDataSO), "InitColorInfo")]
+        [HarmonyPatch(typeof(StandardLevelScenesTransitionSetupDataSO), "Init")]
         [HarmonyPostfix]
         private static void InitColorInfoPatch(StandardLevelScenesTransitionSetupDataSO __instance)
         {
