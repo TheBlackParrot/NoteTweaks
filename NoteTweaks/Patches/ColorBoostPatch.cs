@@ -34,6 +34,7 @@ namespace NoteTweaks.Patches
         }
 
         // i honestly did not think this would touch save data. but it does! what the shit
+        internal static bool DidApplySaveFix = false;
         [HarmonyPatch(typeof(PlayerDataModel), "Save")]
         [HarmonyPatch(typeof(PlayerDataModel), "SaveAsync")]
         [HarmonyPrefix]
@@ -53,7 +54,9 @@ namespace NoteTweaks.Patches
             {
                 if (selectedScheme.colorSchemeId.Contains("User") && settings.overrideDefaultColors)
                 {
+                    DidApplySaveFix = true;
                     Plugin.Log.Info("Applied color scheme save data fix");
+                    
                     selectedScheme._saberAColor = OriginalLeftColor;
                     selectedScheme._saberBColor = OriginalRightColor;
                     settings.SetColorSchemeForId(selectedScheme);
@@ -75,9 +78,13 @@ namespace NoteTweaks.Patches
             
             ColorSchemesSettings settings = __instance.playerData.colorSchemesSettings;
             ColorScheme selectedScheme = settings.GetSelectedColorScheme();
-            settings.SetColorSchemeForId(PatchColors(selectedScheme));
             
-            Plugin.Log.Info("Undid color scheme save data fix, data has been saved");
+            if (DidApplySaveFix)
+            {
+                DidApplySaveFix = false;
+                settings.SetColorSchemeForId(PatchColors(selectedScheme));
+                Plugin.Log.Info("Undid color scheme save data fix, data has been saved");
+            }
         }
         
         [HarmonyPatch(typeof(StandardLevelScenesTransitionSetupDataSO), "InitColorInfo")]
