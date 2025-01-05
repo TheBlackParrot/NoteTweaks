@@ -3,6 +3,7 @@ using System.Reflection;
 using HarmonyLib;
 using IPA.Utilities;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace NoteTweaks.Patches
 {
@@ -31,11 +32,41 @@ namespace NoteTweaks.Patches
 
             return scheme;
         }
+
+        [HarmonyPatch(typeof(PlayerDataModel), "Save")]
+        [HarmonyPatch(typeof(PlayerDataModel), "SaveAsync")]
+        [HarmonyPrefix]
+        private static bool SaveFix(PlayerDataModel __instance)
+        {
+            if (SceneManager.GetActiveScene().name != "GameCore")
+            {
+                return true;
+            }
+            
+            ColorSchemesSettings settings = __instance.playerData.colorSchemesSettings;
+            ColorScheme selectedScheme = settings.GetSelectedColorScheme();
+            float leftScale = 1.0f + Plugin.Config.ColorBoostLeft;
+            float rightScale = 1.0f + Plugin.Config.ColorBoostRight;
+            
+            if (selectedScheme._saberAColor == OriginalLeftColor * leftScale && selectedScheme._saberBColor == OriginalRightColor * rightScale)
+            {
+                if (selectedScheme.colorSchemeId.Contains("User"))
+                {
+                    Plugin.Log.Info("Applied color scheme save data fix");
+                    selectedScheme._saberAColor = OriginalLeftColor;
+                    selectedScheme._saberBColor = OriginalRightColor;
+                    settings.SetColorSchemeForId(selectedScheme);
+                }
+            }
+
+            return true;
+        }
         
         [HarmonyPatch(typeof(StandardLevelScenesTransitionSetupDataSO), "InitColorInfo")]
         [HarmonyPostfix]
         private static void InitColorInfoPatch(StandardLevelScenesTransitionSetupDataSO __instance)
         {
+            
             if (!Plugin.Config.Enabled)
             {
                 return;

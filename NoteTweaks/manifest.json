@@ -3,7 +3,7 @@
   "id": "NoteTweaks",
   "name": "NoteTweaks",
   "author": "TheBlackParrot",
-  "version": "0.4.0+1.37.1",
+  "version": "0.4.1+1.37.1",
   "description": "Change various aspects of the default note",
   "gameVersion": "1.37.1",
   "dependsOn": {
