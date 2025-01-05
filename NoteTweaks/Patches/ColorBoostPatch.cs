@@ -34,10 +34,10 @@ namespace NoteTweaks.Patches
             return scheme;
         }
 
-        // i honestly did not think this would touch save data. but it does! what the shit
+        // leaving this here In Case:tm:, but it should never trigger in game versions older than 1.34.2
+        // newer game versions need this fix
         internal static bool DidApplySaveFix = false;
         [HarmonyPatch(typeof(PlayerDataModel), "Save")]
-        [HarmonyPatch(typeof(PlayerDataModel), "SaveAsync")]
         [HarmonyPrefix]
         private static bool SaveFix(PlayerDataModel __instance)
         {
@@ -68,7 +68,6 @@ namespace NoteTweaks.Patches
         }
 
         [HarmonyPatch(typeof(PlayerDataModel), "Save")]
-        [HarmonyPatch(typeof(PlayerDataModel), "SaveAsync")]
         [HarmonyPostfix]
         private static void SaveFixUndo(PlayerDataModel __instance)
         {
