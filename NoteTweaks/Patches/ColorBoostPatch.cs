@@ -33,12 +33,13 @@ namespace NoteTweaks.Patches
             return scheme;
         }
 
+        // i honestly did not think this would touch save data. but it does! what the shit
         [HarmonyPatch(typeof(PlayerDataModel), "Save")]
         [HarmonyPatch(typeof(PlayerDataModel), "SaveAsync")]
         [HarmonyPrefix]
         private static bool SaveFix(PlayerDataModel __instance)
         {
-            if (SceneManager.GetActiveScene().name != "GameCore")
+            if (SceneManager.GetActiveScene().name != "GameCore" || !Plugin.Config.Enabled)
             {
                 return true;
             }
@@ -50,7 +51,7 @@ namespace NoteTweaks.Patches
             
             if (selectedScheme._saberAColor == OriginalLeftColor * leftScale && selectedScheme._saberBColor == OriginalRightColor * rightScale)
             {
-                if (selectedScheme.colorSchemeId.Contains("User"))
+                if (selectedScheme.colorSchemeId.Contains("User") && settings.overrideDefaultColors)
                 {
                     Plugin.Log.Info("Applied color scheme save data fix");
                     selectedScheme._saberAColor = OriginalLeftColor;
@@ -60,6 +61,23 @@ namespace NoteTweaks.Patches
             }
 
             return true;
+        }
+
+        [HarmonyPatch(typeof(PlayerDataModel), "Save")]
+        [HarmonyPatch(typeof(PlayerDataModel), "SaveAsync")]
+        [HarmonyPostfix]
+        private static void SaveFixUndo(PlayerDataModel __instance)
+        {
+            if (SceneManager.GetActiveScene().name != "GameCore" || !Plugin.Config.Enabled)
+            {
+                return;
+            }
+            
+            ColorSchemesSettings settings = __instance.playerData.colorSchemesSettings;
+            ColorScheme selectedScheme = settings.GetSelectedColorScheme();
+            settings.SetColorSchemeForId(PatchColors(selectedScheme));
+            
+            Plugin.Log.Info("Undid color scheme save data fix, data has been saved");
         }
         
         [HarmonyPatch(typeof(StandardLevelScenesTransitionSetupDataSO), "InitColorInfo")]
