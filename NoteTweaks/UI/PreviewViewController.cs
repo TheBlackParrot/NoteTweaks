@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using BeatSaberMarkupLanguage.Attributes;
 using BeatSaberMarkupLanguage.ViewControllers;
+using NoteTweaks.Managers;
 using NoteTweaks.Utils;
 using UnityEngine;
 
@@ -15,6 +16,7 @@ namespace NoteTweaks.UI
     internal class NotePreviewViewController : BSMLAutomaticViewController
     {
         internal static GameObject NoteContainer = new GameObject("_NoteTweaks_NoteContainer");
+        internal static Managers.Materials Materials;
         
         private static readonly float NoteSize = 0.5f;
         private static readonly Vector3 InitialPosition = new Vector3(-2.7f, 1.15f, 3.5f);
@@ -24,14 +26,8 @@ namespace NoteTweaks.UI
         private static Vector3 _initialDotPosition = Vector3.one;
         private static Vector3 _initialChainDotPosition = Vector3.one;
 
-        private static Material _replacementDotMaterial;
-        private static Material _dotGlowMaterial;
         private static Mesh _dotMesh;
         private static Mesh _dotGlowMesh;
-        private static readonly Texture2D OriginalArrowGlowTexture = Resources.FindObjectsOfTypeAll<Texture2D>().ToList().First(x => x.name == "ArrowGlow");
-        private static readonly Texture2D ReplacementArrowGlowTexture = OriginalArrowGlowTexture.PrepareTexture();
-        private static readonly Texture2D OriginalDotGlowTexture = Resources.FindObjectsOfTypeAll<Texture2D>().ToList().First(x => x.name == "NoteCircleBakedGlow");
-        private static readonly Texture2D ReplacementDotGlowTexture = OriginalDotGlowTexture.PrepareTexture();
         
         private static readonly int Color0 = Shader.PropertyToID("_Color");
         
@@ -336,9 +332,8 @@ namespace NoteTweaks.UI
                 MeshRenderer meshRenderer = originalDot.GetComponent<MeshRenderer>();
                     
                 meshRenderer.GetComponent<MeshFilter>().mesh = _dotMesh;
-                        
-                meshRenderer.material = _replacementDotMaterial;
-                meshRenderer.sharedMaterial = _replacementDotMaterial;
+                
+                meshRenderer.sharedMaterial = Materials._replacementDotMaterial;
                     
                 GameObject newGlowObject = Instantiate(originalDot.gameObject, originalDot.parent);
                 newGlowObject.name = "AddedNoteCircleGlow";
@@ -349,8 +344,7 @@ namespace NoteTweaks.UI
 
                 if (newGlowObject.TryGetComponent(out MeshRenderer newGlowMeshRenderer))
                 {
-                    newGlowMeshRenderer.material = _dotGlowMaterial;
-                    newGlowMeshRenderer.sharedMaterial = _dotGlowMaterial;
+                    newGlowMeshRenderer.sharedMaterial = Materials._dotGlowMaterial;
                 }
             }
             
@@ -413,8 +407,8 @@ namespace NoteTweaks.UI
                     
                 meshRenderer.GetComponent<MeshFilter>().mesh = _dotMesh;
                         
-                meshRenderer.material = _replacementDotMaterial;
-                meshRenderer.sharedMaterial = _replacementDotMaterial;
+                meshRenderer.material = Materials._replacementDotMaterial;
+                meshRenderer.sharedMaterial = Materials._replacementDotMaterial;
                     
                 GameObject newGlowObject = Instantiate(originalDot.gameObject, originalDot.parent);
                 newGlowObject.name = "AddedNoteCircleGlow";
@@ -425,12 +419,12 @@ namespace NoteTweaks.UI
 
                 if (newGlowObject.TryGetComponent(out MeshRenderer newGlowMeshRenderer))
                 {
-                    newGlowMeshRenderer.material = _dotGlowMaterial;
-                    newGlowMeshRenderer.sharedMaterial = _dotGlowMaterial;
+                    newGlowMeshRenderer.material = Materials._dotGlowMaterial;
+                    newGlowMeshRenderer.sharedMaterial = Materials._dotGlowMaterial;
                 }
             }
             
-            noteCube.transform.Find("NoteArrowGlow").GetComponent<MeshRenderer>().material.mainTexture = ReplacementArrowGlowTexture;
+            noteCube.transform.Find("NoteArrowGlow").GetComponent<MeshRenderer>().sharedMaterial = Materials._arrowGlowMaterial;
             
             if (cell >= 2)
             {
@@ -551,25 +545,6 @@ namespace NoteTweaks.UI
                 return;
             }
             
-            if (_replacementDotMaterial == null)
-            {
-                Plugin.Log.Info("Creating replacement dot material");
-                Material arrowMat = Resources.FindObjectsOfTypeAll<Material>().ToList().Find(x => x.name == "NoteArrowHD");
-                _replacementDotMaterial = new Material(arrowMat)
-                {
-                    color = Color.white,
-                    shaderKeywords = arrowMat.shaderKeywords.Where(x => x != "_ENABLE_COLOR_INSTANCING").ToArray()
-                };
-            }
-            if(_dotGlowMaterial == null) {
-                Plugin.Log.Info("Creating new dot glow material");
-                Material arrowGlowMat = Resources.FindObjectsOfTypeAll<Material>().ToList().Find(x => x.name == "NoteArrowGlow");
-                _dotGlowMaterial = new Material(arrowGlowMat)
-                {
-                    mainTexture = ReplacementDotGlowTexture
-                };
-            }
-            
             NoteContainer.transform.position = InitialPosition;
             NoteContainer.transform.localRotation = Quaternion.Euler(0, 320, 0);
             
@@ -584,6 +559,8 @@ namespace NoteTweaks.UI
                     UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(standardGameplaySceneInfo.sceneName, UnityEngine.SceneManagement.LoadSceneMode.Additive).completed +=
                         operation2 =>
                         {
+                            Materials.UpdateAll();
+                            
                             BeatmapObjectsInstaller beatmapObjectsInstaller = Resources.FindObjectsOfTypeAll<BeatmapObjectsInstaller>().FirstOrDefault();
                             
                             GameNoteController notePrefab = beatmapObjectsInstaller._normalBasicNotePrefab;
