@@ -6,7 +6,10 @@ using IPA.Utilities;
 using ModestTree;
 using NoteTweaks.UI;
 using NoteTweaks.Utils;
+using Unity.Collections;
 using UnityEngine;
+using UnityEngine.Experimental.Rendering;
+using UnityEngine.Rendering;
 
 namespace NoteTweaks.Managers
 {
@@ -51,32 +54,20 @@ namespace NoteTweaks.Managers
 
         private static void OnNoteImageLoaded(Texture2D tempTex)
         {
-            Plugin.Log.Info("Loaded texture");
-
-            Color[] pixels = tempTex.GetPixels();
-            NoteTexture.SetPixels(pixels, CubemapFace.PositiveX);
-            NoteTexture.SetPixels(pixels, CubemapFace.NegativeX);
-            NoteTexture.SetPixels(pixels, CubemapFace.PositiveY);
-            NoteTexture.SetPixels(pixels, CubemapFace.NegativeY);
-            NoteTexture.SetPixels(pixels, CubemapFace.PositiveZ);
-            NoteTexture.SetPixels(pixels, CubemapFace.NegativeZ);
+            NoteTexture = new Cubemap(tempTex.width, tempTex.format, 0);
+            NoteTexture.SetPixels(tempTex.GetPixels(), CubemapFace.PositiveX);
+            NoteTexture.SetPixels(tempTex.GetPixels(), CubemapFace.PositiveY);
+            NoteTexture.SetPixels(tempTex.GetPixels(), CubemapFace.PositiveZ);
+            NoteTexture.SetPixels(tempTex.GetPixels(), CubemapFace.NegativeX);
+            NoteTexture.SetPixels(tempTex.GetPixels(), CubemapFace.NegativeY);
+            NoteTexture.SetPixels(tempTex.GetPixels(), CubemapFace.NegativeZ);
+            NoteTexture.Apply();
 
             Managers.Materials.NoteMaterial.mainTexture = NoteTexture;
             Managers.Materials.NoteMaterial.SetTexture(NoteCubeMapID, NoteTexture);
-            
-            Transform noteContainer = NotePreviewViewController.NoteContainer.transform;
-            for (int i = 0; i < noteContainer.childCount; i++)
-            {
-                GameObject noteCube = noteContainer.GetChild(i).gameObject;
-                foreach (MaterialPropertyBlockController controller in noteCube.GetComponents<MaterialPropertyBlockController>())
-                {
-                    controller.materialPropertyBlock.SetTexture(NoteCubeMapID, NoteTexture);
-                    controller.ApplyChanges();
-                }
-            }
         }
 
-        internal static void LoadNoteTexture(string filename)
+        internal static async Task LoadNoteTexture(string filename)
         {
             if (filename == "Default" || !File.Exists(Path.Combine(ImagePath, filename)))
             {
@@ -88,10 +79,9 @@ namespace NoteTweaks.Managers
             {
                 Plugin.Log.Info($"Loading texture {filename}...");
 
-                Utilities.LoadImageAsync(Path.Combine(ImagePath, filename), true, false).ContinueWith(task =>
-                {
-                    OnNoteImageLoaded(task.Result);
-                });
+                Texture2D loadedImage = await Utilities.LoadImageAsync(Path.Combine(ImagePath, filename), true, false);
+                Plugin.Log.Info("Texture loaded");
+                OnNoteImageLoaded(loadedImage);
             }
         }
     }
