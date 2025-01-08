@@ -20,15 +20,15 @@ namespace NoteTweaks.Managers
 
         internal static void UpdateAll()
         {
-            //_EnvironmentReflectionCube
-            //Plugin.Log.Info($"_EnvironmentReflectionCube -- {Resources.FindObjectsOfTypeAll<Material>().First(x => x.name == "NoteHD").GetTexture(Shader.PropertyToID("_EnvironmentReflectionCube")).name}");
-            
             UpdateNoteMaterial();
             UpdateReplacementDotMaterial();
             UpdateReplacementArrowMaterial();
             UpdateDotGlowMaterial();
             UpdateArrowGlowMaterial();
             UpdateAccDotMaterial();
+            
+            #pragma warning disable CS4014
+            Managers.Textures.LoadNoteTexture(Plugin.Config.NoteTexture);
             
             UpdateRenderQueues();
         }

@@ -119,6 +119,11 @@ namespace NoteTweaks.Patches
                     return;
                 }
                 
+                if (__instance.transform.GetChild(0).TryGetComponent(out MeshRenderer cubeRenderer))
+                {
+                    cubeRenderer.sharedMaterial = Materials.NoteMaterial;
+                }
+                
                 Transform glowTransform = __instance.transform.GetChild(0).Find("AddedNoteCircleGlow");
                 if (glowTransform != null)
                 {
@@ -213,6 +218,11 @@ namespace NoteTweaks.Patches
                             }
                         }
                     }
+                }
+                
+                if (__instance.transform.GetChild(0).TryGetComponent(out MeshRenderer cubeRenderer))
+                {
+                    cubeRenderer.sharedMaterial = Materials.NoteMaterial;
                 }
                 
                 List<string> objs = new List<string> { "NoteArrowGlow", "AddedNoteCircleGlow" };
