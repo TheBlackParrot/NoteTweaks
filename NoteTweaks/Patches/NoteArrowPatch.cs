@@ -28,9 +28,9 @@ namespace NoteTweaks.Patches
             {
                 Color _c = Plugin.Config.AccDotColor;
                 _c.a = 0f;
-                Materials._accDotMaterial.color = _c;
+                Materials.AccDotMaterial.color = _c;
                 
-                meshRenderer.sharedMaterial = Materials._accDotMaterial;
+                meshRenderer.sharedMaterial = Materials.AccDotMaterial;
             }
             if (obj.TryGetComponent(out SphereCollider sphereCollider))
             {
@@ -311,7 +311,7 @@ namespace NoteTweaks.Patches
                     arrowTransform.localScale = scale;
                     arrowTransform.localPosition = position;
                     
-                    meshRenderer.sharedMaterial = Materials._replacementArrowMaterial;
+                    meshRenderer.sharedMaterial = Materials.ReplacementArrowMaterial;
                     
                     if (meshRenderer.TryGetComponent(out MaterialPropertyBlockController materialPropertyBlockController))
                     {
@@ -348,7 +348,7 @@ namespace NoteTweaks.Patches
                         arrowGlowTransform.localScale = glowScale;
                         arrowGlowTransform.localPosition = glowPosition;
                         
-                        arrowGlowObject.GetComponent<MeshRenderer>().sharedMaterial = Materials._arrowGlowMaterial;
+                        arrowGlowObject.GetComponent<MeshRenderer>().sharedMaterial = Materials.ArrowGlowMaterial;
                     }
                 }
 
@@ -427,7 +427,7 @@ namespace NoteTweaks.Patches
                         }
                         meshRenderer.GetComponent<MeshFilter>().mesh = _dotMesh;
                         
-                        meshRenderer.sharedMaterial = Materials._replacementDotMaterial;
+                        meshRenderer.sharedMaterial = Materials.ReplacementDotMaterial;
                         
                         if (meshRenderer.TryGetComponent(out MaterialPropertyBlockController materialPropertyBlockController))
                         {
@@ -496,7 +496,7 @@ namespace NoteTweaks.Patches
 
                         if (newGlowObject.TryGetComponent(out MeshRenderer newGlowMeshRenderer))
                         {
-                            newGlowMeshRenderer.sharedMaterial = Materials._dotGlowMaterial;
+                            newGlowMeshRenderer.sharedMaterial = Materials.DotGlowMaterial;
                         }
                     }
                 }
