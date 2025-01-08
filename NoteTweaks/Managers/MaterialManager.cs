@@ -1,35 +1,29 @@
 ﻿using System.Linq;
-using NoteTweaks.Utils;
 using UnityEngine;
 
 namespace NoteTweaks.Managers
 {
     internal abstract class Materials
     {
-        private static readonly Texture2D OriginalArrowGlowTexture = Resources.FindObjectsOfTypeAll<Texture2D>().ToList().First(x => x.name == "ArrowGlow");
-        private static readonly Texture2D ReplacementArrowGlowTexture = OriginalArrowGlowTexture.PrepareTexture();
-        private static readonly Texture2D OriginalDotGlowTexture = Resources.FindObjectsOfTypeAll<Texture2D>().ToList().First(x => x.name == "NoteCircleBakedGlow");
-        private static readonly Texture2D ReplacementDotGlowTexture = OriginalDotGlowTexture.PrepareTexture();
-        
         internal static Material ReplacementDotMaterial;
         internal static Material ReplacementArrowMaterial;
         internal static Material DotGlowMaterial;
         internal static Material ArrowGlowMaterial;
+        internal static Material NoteMaterial;
         
         internal static readonly Material AccDotDepthMaterial = new Material(Resources.FindObjectsOfTypeAll<Shader>().First(x => x.name == "Custom/ClearDepth"))
         {
             name = "AccDotMaterialDepthClear",
-            renderQueue = 1996,
             enableInstancing = true
         };
         internal static Material AccDotMaterial;
 
         internal static void UpdateAll()
         {
-            Resources.FindObjectsOfTypeAll<Material>().First(x => x.name == "NoteHD").renderQueue = 1995;
-            Resources.FindObjectsOfTypeAll<Material>().First(x => x.name == "BurstSliderNoteHD").renderQueue = 1995;
-            Resources.FindObjectsOfTypeAll<Material>().First(x => x.name == "BurstSliderHeadNoteHD").renderQueue = 1995;
+            //_EnvironmentReflectionCube
+            //Plugin.Log.Info($"_EnvironmentReflectionCube -- {Resources.FindObjectsOfTypeAll<Material>().First(x => x.name == "NoteHD").GetTexture(Shader.PropertyToID("_EnvironmentReflectionCube")).name}");
             
+            UpdateNoteMaterial();
             UpdateReplacementDotMaterial();
             UpdateReplacementArrowMaterial();
             UpdateDotGlowMaterial();
@@ -50,9 +44,9 @@ namespace NoteTweaks.Managers
             Material arrowMat = Resources.FindObjectsOfTypeAll<Material>().ToList().Find(x => x.name == "NoteArrowHD");
             ReplacementDotMaterial = new Material(arrowMat)
             {
+                name = "NoteTweaks_ReplacementDotMaterial",
                 color = Color.white,
-                shaderKeywords = arrowMat.shaderKeywords.Where(x => x != "_ENABLE_COLOR_INSTANCING").ToArray(),
-                renderQueue = 2000
+                shaderKeywords = arrowMat.shaderKeywords.Where(x => x != "_ENABLE_COLOR_INSTANCING").ToArray()
             };
         }
 
@@ -67,9 +61,9 @@ namespace NoteTweaks.Managers
             Material arrowMat = Resources.FindObjectsOfTypeAll<Material>().ToList().Find(x => x.name == "NoteArrowHD");
             ReplacementArrowMaterial = new Material(arrowMat)
             {
+                name = "NoteTweaks_ReplacementArrowMaterial",
                 color = Color.white,
-                shaderKeywords = arrowMat.shaderKeywords.Where(x => x != "_ENABLE_COLOR_INSTANCING").ToArray(),
-                renderQueue = 2000
+                shaderKeywords = arrowMat.shaderKeywords.Where(x => x != "_ENABLE_COLOR_INSTANCING").ToArray()
             };
         }
 
@@ -83,8 +77,8 @@ namespace NoteTweaks.Managers
             Material arrowGlowMat = Resources.FindObjectsOfTypeAll<Material>().ToList().Find(x => x.name == "NoteArrowGlow");
             DotGlowMaterial = new Material(arrowGlowMat)
             {
-                mainTexture = ReplacementDotGlowTexture,
-                renderQueue = 1999
+                name = "NoteTweaks_DotGlowMaterial",
+                mainTexture = Textures.ReplacementDotGlowTexture
             };
         }
 
@@ -98,8 +92,8 @@ namespace NoteTweaks.Managers
             Material arrowGlowMat = Resources.FindObjectsOfTypeAll<Material>().ToList().Find(x => x.name == "NoteArrowGlow");
             ArrowGlowMaterial = new Material(arrowGlowMat)
             {
-                mainTexture = ReplacementArrowGlowTexture,
-                renderQueue = 1999
+                name = "NoteTweaks_ArrowGlowMaterial",
+                mainTexture = Textures.ReplacementArrowGlowTexture,
             };
         }
 
@@ -114,18 +108,32 @@ namespace NoteTweaks.Managers
             Material arrowMat = Resources.FindObjectsOfTypeAll<Material>().ToList().Find(x => x.name == "NoteArrowHD");
             AccDotMaterial = new Material(arrowMat)
             {
-                name = "AccDotMaterial",
-                renderQueue = 1997,
+                name = "NoteTweaks_AccDotMaterial",
                 globalIlluminationFlags = MaterialGlobalIlluminationFlags.RealtimeEmissive,
                 enableInstancing = true,
                 shaderKeywords = arrowMat.shaderKeywords.Where(x => x != "_ENABLE_COLOR_INSTANCING").ToArray()
             };
-            Color _c = Plugin.Config.AccDotColor;
-            _c.a = 0f;
-            AccDotMaterial.color = _c;
+            Color c = Plugin.Config.AccDotColor;
+            c.a = 0f;
+            AccDotMaterial.color = c;
                 
             // uncomment later maybe
             // Utils.Materials.RepairShader(AccDotDepthMaterial);
+        }
+        
+        private static void UpdateNoteMaterial()
+        {
+            if (NoteMaterial != null)
+            {
+                return;
+            }
+            Plugin.Log.Info("Creating new note material");
+            Material noteMat = Resources.FindObjectsOfTypeAll<Material>().ToList().Find(x => x.name == "NoteHD");
+            NoteMaterial = new Material(noteMat)
+            {
+                name = "NoteTweaks_NoteMaterial",
+                renderQueue = 1995
+            };
         }
 
         private static void UpdateRenderQueues()
