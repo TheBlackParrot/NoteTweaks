@@ -475,6 +475,7 @@ namespace NoteTweaks.UI
             set
             {
                 _config.NoteTexture = value;
+                #pragma warning disable CS4014
                 Managers.Textures.LoadNoteTexture(value);
             }
         }
