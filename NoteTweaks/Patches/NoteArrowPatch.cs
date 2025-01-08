@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Reflection;
 using HarmonyLib;
+using NoteTweaks.Managers;
 using NoteTweaks.Utils;
 using SongCore.Data;
 using UnityEngine;
@@ -15,47 +16,21 @@ namespace NoteTweaks.Patches
     internal class NotePhysicalTweaks
     {
         private static GameplayModifiers _gameplayModifiers;
-        
-        private static Material _replacementDotMaterial;
-        private static Material _dotGlowMaterial;
+
         private static Mesh _dotMesh;
         private static Mesh _dotGlowMesh;
         
-        private static readonly Material AccDotDepthMaterial = new Material(Resources.FindObjectsOfTypeAll<Shader>().First(x => x.name == "Custom/ClearDepth"))
-        {
-            name = "AccDotMaterialDepthClear",
-            renderQueue = 1996,
-            enableInstancing = true
-        };
-        private static Material _accDotMaterial;
         private static GameObject CreateAccDotObject()
         {
-            Material arrowMat = Resources.FindObjectsOfTypeAll<Material>().ToList().Find(x => x.name == "NoteArrowHD");
-            if (_accDotMaterial == null)
-            {
-                _accDotMaterial = new Material(arrowMat)
-                {
-                    name = "AccDotMaterial",
-                    renderQueue = 1997,
-                    color = Plugin.Config.AccDotColor,
-                    globalIlluminationFlags = MaterialGlobalIlluminationFlags.RealtimeEmissive,
-                    enableInstancing = true,
-                    shaderKeywords = arrowMat.shaderKeywords.Where(x => x != "_ENABLE_COLOR_INSTANCING").ToArray()
-                };
-                
-                // uncomment later maybe
-                // Utils.Materials.RepairShader(AccDotDepthMaterial);
-            }
-
             GameObject obj = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+            Resources.FindObjectsOfTypeAll<Material>().First(x => x.name == "NoteHD").renderQueue = 1995;
             if (obj.TryGetComponent(out MeshRenderer meshRenderer))
             {
                 Color _c = Plugin.Config.AccDotColor;
                 _c.a = 0f;
-                _accDotMaterial.color = _c;
+                Materials._accDotMaterial.color = _c;
                 
-                meshRenderer.sharedMaterial = _accDotMaterial;
-                meshRenderer.material = _accDotMaterial;   
+                meshRenderer.sharedMaterial = Materials._accDotMaterial;
             }
             if (obj.TryGetComponent(out SphereCollider sphereCollider))
             {
@@ -69,11 +44,6 @@ namespace NoteTweaks.Patches
 
         private static GameObject _accDotObject = CreateAccDotObject();
         private static readonly float AccDotSizeStep = ScoreModel.kMaxDistanceForDistanceToCenterScore / ScoreModel.kMaxCenterDistanceCutScore;
-
-        private static readonly Texture2D OriginalArrowGlowTexture = Resources.FindObjectsOfTypeAll<Texture2D>().ToList().First(x => x.name == "ArrowGlow");
-        private static readonly Texture2D ReplacementArrowGlowTexture = Utils.Textures.PrepareTexture(OriginalArrowGlowTexture);
-        private static Texture2D OriginalDotGlowTexture;
-        private static Texture2D ReplacementDotGlowTexture;
 
         private static bool _autoDisable = false;
         
@@ -104,6 +74,12 @@ namespace NoteTweaks.Patches
                 Plugin.ClampSettings();
 
                 _dotMesh = Meshes.GenerateFaceMesh(Plugin.Config.DotMeshSides);
+            }
+
+            internal static bool Prefix(StandardLevelScenesTransitionSetupDataSO __instance)
+            {
+                Materials.UpdateAll();
+                return true;
             }
         }
 
@@ -204,21 +180,6 @@ namespace NoteTweaks.Patches
                     }
                     
                     _accDotObject.transform.localScale = Vector3.one * (AccDotSizeStep * (Mathf.Abs(Plugin.Config.AccDotSize - 15) + 1));
-
-                    if (Plugin.Config.RenderAccDotsAboveSymbols)
-                    {
-                        _accDotMaterial.renderQueue = 1999;
-                        AccDotDepthMaterial.renderQueue = 1998;
-                    }
-                    else
-                    {
-                        _accDotMaterial.renderQueue = 1997;
-                        AccDotDepthMaterial.renderQueue = 1996;
-                    }
-                    
-                    Color _c = Plugin.Config.AccDotColor;
-                    _c.a = 0f;
-                    _accDotMaterial.color = _c;
                     
                     foreach (BoxCuttableBySaber saberBox in ____bigCuttableBySaberList)
                     {
@@ -229,7 +190,7 @@ namespace NoteTweaks.Patches
                             originalAccDotClearDepthObject.name = "AccDotObjectDepthClear";
                             if (originalAccDotClearDepthObject.TryGetComponent(out MeshRenderer originalAccDotClearDepthMeshRenderer))
                             {
-                                originalAccDotClearDepthMeshRenderer.material = AccDotDepthMaterial;
+                                originalAccDotClearDepthMeshRenderer.material = Materials.AccDotDepthMaterial;
                                 originalAccDotClearDepthMeshRenderer.allowOcclusionWhenDynamic = false;
                                 originalAccDotClearDepthMeshRenderer.renderingLayerMask = saberBoxMeshRenderer.renderingLayerMask;
                             }
@@ -327,50 +288,11 @@ namespace NoteTweaks.Patches
                 {
                     return;
                 }
-                
-                if (OriginalDotGlowTexture == null)
-                {
-                    OriginalDotGlowTexture = Resources.FindObjectsOfTypeAll<Texture2D>().ToList().First(x => x.name == "NoteCircleBakedGlow");
-                    ReplacementDotGlowTexture = Utils.Textures.PrepareTexture(OriginalDotGlowTexture);
-                }
-
-                if (_replacementDotMaterial == null)
-                {
-                    Plugin.Log.Info("Creating replacement dot material");
-                    Material arrowMat = Resources.FindObjectsOfTypeAll<Material>().ToList().Find(x => x.name == "NoteArrowHD");
-                    _replacementDotMaterial = new Material(arrowMat)
-                    {
-                        color = Color.white,
-                        shaderKeywords = arrowMat.shaderKeywords.Where(x => x != "_ENABLE_COLOR_INSTANCING").ToArray(),
-                        renderQueue = 2000
-                    };
-                }
-                if(_dotGlowMaterial == null) {
-                    Plugin.Log.Info("Creating new dot glow material");
-                    Material arrowGlowMat = Resources.FindObjectsOfTypeAll<Material>().ToList().Find(x => x.name == "NoteArrowGlow");
-                    _dotGlowMaterial = new Material(arrowGlowMat)
-                    {
-                        mainTexture = ReplacementDotGlowTexture,
-                        renderQueue = 1999
-                    };
-                }
 
                 bool isChainHead = false;
                 if (__instance.gameObject.TryGetComponent(out GameNoteController c))
                 {
                     isChainHead = c.gameplayType == NoteData.GameplayType.BurstSliderHead;   
-                }
-                
-                if (Plugin.Config.EnableAccDot)
-                {
-                    Resources.FindObjectsOfTypeAll<Material>().First(x => x.name == "NoteHD").renderQueue = 1995;
-                    _replacementDotMaterial.renderQueue = Plugin.Config.RenderAccDotsAboveSymbols ? 1997 : 2000;
-                    _dotGlowMaterial.renderQueue = Plugin.Config.RenderAccDotsAboveSymbols ? 1998 : 1999;
-                }
-                else
-                {
-                    _replacementDotMaterial.renderQueue = 2000;
-                    _dotGlowMaterial.renderQueue = 2091;
                 }
                 
                 foreach (MeshRenderer meshRenderer in ____arrowMeshRenderers)
@@ -388,6 +310,8 @@ namespace NoteTweaks.Patches
                     
                     arrowTransform.localScale = scale;
                     arrowTransform.localPosition = position;
+                    
+                    meshRenderer.sharedMaterial = Materials._replacementArrowMaterial;
                     
                     if (meshRenderer.TryGetComponent(out MaterialPropertyBlockController materialPropertyBlockController))
                     {
@@ -411,15 +335,6 @@ namespace NoteTweaks.Patches
                         materialPropertyBlockController.ApplyChanges();   
                     }
 
-                    if (Plugin.Config.EnableAccDot)
-                    {
-                        meshRenderer.sharedMaterial.renderQueue = Plugin.Config.RenderAccDotsAboveSymbols ? 1997 : 2000;
-                    }
-                    else
-                    {
-                        meshRenderer.sharedMaterial.renderQueue = 2000;
-                    }
-
                     Transform arrowGlowObject = meshRenderer.transform.parent.Find("NoteArrowGlow");
                     if (arrowGlowObject)
                     {
@@ -432,26 +347,8 @@ namespace NoteTweaks.Patches
                         
                         arrowGlowTransform.localScale = glowScale;
                         arrowGlowTransform.localPosition = glowPosition;
-
-                        if (arrowGlowObject.TryGetComponent(out MeshRenderer arrowGlowMeshRenderer))
-                        {
-                            arrowGlowMeshRenderer.material.mainTexture = ReplacementArrowGlowTexture;
-                            if (isChainHead)
-                            {
-                                arrowGlowMeshRenderer.material.renderQueue = 2092;
-                            }
-                            else
-                            {
-                                if (Plugin.Config.EnableAccDot)
-                                {
-                                    arrowGlowMeshRenderer.material.renderQueue = Plugin.Config.RenderAccDotsAboveSymbols ? 1998 : 1999;
-                                }
-                                else
-                                {
-                                    arrowGlowMeshRenderer.material.renderQueue = 2092;
-                                }
-                            }
-                        }
+                        
+                        arrowGlowObject.GetComponent<MeshRenderer>().sharedMaterial = Materials._arrowGlowMaterial;
                     }
                 }
 
@@ -530,8 +427,7 @@ namespace NoteTweaks.Patches
                         }
                         meshRenderer.GetComponent<MeshFilter>().mesh = _dotMesh;
                         
-                        meshRenderer.material = _replacementDotMaterial;
-                        meshRenderer.sharedMaterial = _replacementDotMaterial;
+                        meshRenderer.sharedMaterial = Materials._replacementDotMaterial;
                         
                         if (meshRenderer.TryGetComponent(out MaterialPropertyBlockController materialPropertyBlockController))
                         {
@@ -600,15 +496,7 @@ namespace NoteTweaks.Patches
 
                         if (newGlowObject.TryGetComponent(out MeshRenderer newGlowMeshRenderer))
                         {
-                            newGlowMeshRenderer.material = _dotGlowMaterial;
-                            newGlowMeshRenderer.sharedMaterial = _dotGlowMaterial;
-
-                            if (isChainLink)
-                            {
-                                // :|
-                                newGlowMeshRenderer.sharedMaterial.renderQueue = 2092;
-                                newGlowMeshRenderer.material.renderQueue = 2092;
-                            }
+                            newGlowMeshRenderer.sharedMaterial = Materials._dotGlowMaterial;
                         }
                     }
                 }
