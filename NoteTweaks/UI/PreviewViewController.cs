@@ -333,7 +333,7 @@ namespace NoteTweaks.UI
                     
                 meshRenderer.GetComponent<MeshFilter>().mesh = _dotMesh;
                 
-                meshRenderer.sharedMaterial = Materials._replacementDotMaterial;
+                meshRenderer.sharedMaterial = Materials.ReplacementDotMaterial;
                     
                 GameObject newGlowObject = Instantiate(originalDot.gameObject, originalDot.parent);
                 newGlowObject.name = "AddedNoteCircleGlow";
@@ -344,7 +344,7 @@ namespace NoteTweaks.UI
 
                 if (newGlowObject.TryGetComponent(out MeshRenderer newGlowMeshRenderer))
                 {
-                    newGlowMeshRenderer.sharedMaterial = Materials._dotGlowMaterial;
+                    newGlowMeshRenderer.sharedMaterial = Materials.DotGlowMaterial;
                 }
             }
             
@@ -407,8 +407,8 @@ namespace NoteTweaks.UI
                     
                 meshRenderer.GetComponent<MeshFilter>().mesh = _dotMesh;
                         
-                meshRenderer.material = Materials._replacementDotMaterial;
-                meshRenderer.sharedMaterial = Materials._replacementDotMaterial;
+                meshRenderer.material = Materials.ReplacementDotMaterial;
+                meshRenderer.sharedMaterial = Materials.ReplacementDotMaterial;
                     
                 GameObject newGlowObject = Instantiate(originalDot.gameObject, originalDot.parent);
                 newGlowObject.name = "AddedNoteCircleGlow";
@@ -419,12 +419,12 @@ namespace NoteTweaks.UI
 
                 if (newGlowObject.TryGetComponent(out MeshRenderer newGlowMeshRenderer))
                 {
-                    newGlowMeshRenderer.material = Materials._dotGlowMaterial;
-                    newGlowMeshRenderer.sharedMaterial = Materials._dotGlowMaterial;
+                    newGlowMeshRenderer.material = Materials.DotGlowMaterial;
+                    newGlowMeshRenderer.sharedMaterial = Materials.DotGlowMaterial;
                 }
             }
             
-            noteCube.transform.Find("NoteArrowGlow").GetComponent<MeshRenderer>().sharedMaterial = Materials._arrowGlowMaterial;
+            noteCube.transform.Find("NoteArrowGlow").GetComponent<MeshRenderer>().sharedMaterial = Materials.ArrowGlowMaterial;
             
             if (cell >= 2)
             {

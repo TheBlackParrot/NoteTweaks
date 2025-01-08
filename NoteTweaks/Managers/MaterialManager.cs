@@ -4,25 +4,25 @@ using UnityEngine;
 
 namespace NoteTweaks.Managers
 {
-    internal class Materials
+    internal abstract class Materials
     {
-        internal static readonly Texture2D OriginalArrowGlowTexture = Resources.FindObjectsOfTypeAll<Texture2D>().ToList().First(x => x.name == "ArrowGlow");
-        internal static readonly Texture2D ReplacementArrowGlowTexture = OriginalArrowGlowTexture.PrepareTexture();
-        internal static readonly Texture2D OriginalDotGlowTexture = Resources.FindObjectsOfTypeAll<Texture2D>().ToList().First(x => x.name == "NoteCircleBakedGlow");
-        internal static readonly Texture2D ReplacementDotGlowTexture = OriginalDotGlowTexture.PrepareTexture();
+        private static readonly Texture2D OriginalArrowGlowTexture = Resources.FindObjectsOfTypeAll<Texture2D>().ToList().First(x => x.name == "ArrowGlow");
+        private static readonly Texture2D ReplacementArrowGlowTexture = OriginalArrowGlowTexture.PrepareTexture();
+        private static readonly Texture2D OriginalDotGlowTexture = Resources.FindObjectsOfTypeAll<Texture2D>().ToList().First(x => x.name == "NoteCircleBakedGlow");
+        private static readonly Texture2D ReplacementDotGlowTexture = OriginalDotGlowTexture.PrepareTexture();
         
-        internal static Material _replacementDotMaterial;
-        internal static Material _replacementArrowMaterial;
-        internal static Material _dotGlowMaterial;
-        internal static Material _arrowGlowMaterial;
+        internal static Material ReplacementDotMaterial;
+        internal static Material ReplacementArrowMaterial;
+        internal static Material DotGlowMaterial;
+        internal static Material ArrowGlowMaterial;
         
-        internal static Material AccDotDepthMaterial = new Material(Resources.FindObjectsOfTypeAll<Shader>().First(x => x.name == "Custom/ClearDepth"))
+        internal static readonly Material AccDotDepthMaterial = new Material(Resources.FindObjectsOfTypeAll<Shader>().First(x => x.name == "Custom/ClearDepth"))
         {
             name = "AccDotMaterialDepthClear",
             renderQueue = 1996,
             enableInstancing = true
         };
-        internal static Material _accDotMaterial;
+        internal static Material AccDotMaterial;
 
         internal static void UpdateAll()
         {
@@ -39,33 +39,33 @@ namespace NoteTweaks.Managers
             UpdateRenderQueues();
         }
 
-        internal static void UpdateReplacementDotMaterial()
+        private static void UpdateReplacementDotMaterial()
         {
-            if (_replacementDotMaterial != null)
+            if (ReplacementDotMaterial != null)
             {
                 return;
             }
 
             Plugin.Log.Info("Creating replacement dot material");
             Material arrowMat = Resources.FindObjectsOfTypeAll<Material>().ToList().Find(x => x.name == "NoteArrowHD");
-            _replacementDotMaterial = new Material(arrowMat)
+            ReplacementDotMaterial = new Material(arrowMat)
             {
                 color = Color.white,
                 shaderKeywords = arrowMat.shaderKeywords.Where(x => x != "_ENABLE_COLOR_INSTANCING").ToArray(),
                 renderQueue = 2000
             };
         }
-        
-        internal static void UpdateReplacementArrowMaterial()
+
+        private static void UpdateReplacementArrowMaterial()
         {
-            if (_replacementArrowMaterial != null)
+            if (ReplacementArrowMaterial != null)
             {
                 return;
             }
 
             Plugin.Log.Info("Creating replacement arrow material");
             Material arrowMat = Resources.FindObjectsOfTypeAll<Material>().ToList().Find(x => x.name == "NoteArrowHD");
-            _replacementArrowMaterial = new Material(arrowMat)
+            ReplacementArrowMaterial = new Material(arrowMat)
             {
                 color = Color.white,
                 shaderKeywords = arrowMat.shaderKeywords.Where(x => x != "_ENABLE_COLOR_INSTANCING").ToArray(),
@@ -73,46 +73,46 @@ namespace NoteTweaks.Managers
             };
         }
 
-        internal static void UpdateDotGlowMaterial()
+        private static void UpdateDotGlowMaterial()
         {
-            if (_dotGlowMaterial != null)
+            if (DotGlowMaterial != null)
             {
                 return;
             }
             Plugin.Log.Info("Creating new dot glow material");
             Material arrowGlowMat = Resources.FindObjectsOfTypeAll<Material>().ToList().Find(x => x.name == "NoteArrowGlow");
-            _dotGlowMaterial = new Material(arrowGlowMat)
+            DotGlowMaterial = new Material(arrowGlowMat)
             {
                 mainTexture = ReplacementDotGlowTexture,
                 renderQueue = 1999
             };
         }
 
-        internal static void UpdateArrowGlowMaterial()
+        private static void UpdateArrowGlowMaterial()
         {
-            if (_arrowGlowMaterial != null)
+            if (ArrowGlowMaterial != null)
             {
                 return;
             }
             Plugin.Log.Info("Creating new arrow glow material");
             Material arrowGlowMat = Resources.FindObjectsOfTypeAll<Material>().ToList().Find(x => x.name == "NoteArrowGlow");
-            _arrowGlowMaterial = new Material(arrowGlowMat)
+            ArrowGlowMaterial = new Material(arrowGlowMat)
             {
                 mainTexture = ReplacementArrowGlowTexture,
                 renderQueue = 1999
             };
         }
 
-        internal static void UpdateAccDotMaterial()
+        private static void UpdateAccDotMaterial()
         {
-            if (_accDotMaterial != null)
+            if (AccDotMaterial != null)
             {
                 return;
             }
 
             Plugin.Log.Info("Creating acc dot material");
             Material arrowMat = Resources.FindObjectsOfTypeAll<Material>().ToList().Find(x => x.name == "NoteArrowHD");
-            _accDotMaterial = new Material(arrowMat)
+            AccDotMaterial = new Material(arrowMat)
             {
                 name = "AccDotMaterial",
                 renderQueue = 1997,
@@ -122,37 +122,37 @@ namespace NoteTweaks.Managers
             };
             Color _c = Plugin.Config.AccDotColor;
             _c.a = 0f;
-            _accDotMaterial.color = _c;
+            AccDotMaterial.color = _c;
                 
             // uncomment later maybe
             // Utils.Materials.RepairShader(AccDotDepthMaterial);
         }
 
-        internal static void UpdateRenderQueues()
+        private static void UpdateRenderQueues()
         {
             if (Plugin.Config.EnableAccDot)
             {
-                _replacementArrowMaterial.renderQueue = Plugin.Config.RenderAccDotsAboveSymbols ? 1997 : 2000;
-                _replacementDotMaterial.renderQueue = Plugin.Config.RenderAccDotsAboveSymbols ? 1997 : 2000;
-                _dotGlowMaterial.renderQueue = Plugin.Config.RenderAccDotsAboveSymbols ? 1998 : 1999;
-                _arrowGlowMaterial.renderQueue = Plugin.Config.RenderAccDotsAboveSymbols ? 1998 : 1999;
+                ReplacementArrowMaterial.renderQueue = Plugin.Config.RenderAccDotsAboveSymbols ? 1997 : 2000;
+                ReplacementDotMaterial.renderQueue = Plugin.Config.RenderAccDotsAboveSymbols ? 1997 : 2000;
+                DotGlowMaterial.renderQueue = Plugin.Config.RenderAccDotsAboveSymbols ? 1998 : 1999;
+                ArrowGlowMaterial.renderQueue = Plugin.Config.RenderAccDotsAboveSymbols ? 1998 : 1999;
             }
             else
             {
-                _replacementArrowMaterial.renderQueue = 2000;
-                _replacementDotMaterial.renderQueue = 2000;
-                _dotGlowMaterial.renderQueue = 1999;
-                _arrowGlowMaterial.renderQueue = 1999;
+                ReplacementArrowMaterial.renderQueue = 2000;
+                ReplacementDotMaterial.renderQueue = 2000;
+                DotGlowMaterial.renderQueue = 1999;
+                ArrowGlowMaterial.renderQueue = 1999;
             }
             
             if (Plugin.Config.RenderAccDotsAboveSymbols)
             {
-                _accDotMaterial.renderQueue = 1999;
+                AccDotMaterial.renderQueue = 1999;
                 AccDotDepthMaterial.renderQueue = 1998;
             }
             else
             {
-                _accDotMaterial.renderQueue = 1997;
+                AccDotMaterial.renderQueue = 1997;
                 AccDotDepthMaterial.renderQueue = 1996;
             }
         }
