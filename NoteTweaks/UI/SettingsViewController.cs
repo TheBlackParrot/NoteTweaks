@@ -1,4 +1,5 @@
-﻿using BeatSaberMarkupLanguage.Attributes;
+﻿using System.Collections.Generic;
+using BeatSaberMarkupLanguage.Attributes;
 using BeatSaberMarkupLanguage.ViewControllers;
 using NoteTweaks.Configuration;
 using UnityEngine;
@@ -467,5 +468,18 @@ namespace NoteTweaks.UI
                 NotePreviewViewController.UpdateColors();
             }
         }
+
+        protected string NoteTexture
+        {
+            get => _config.NoteTexture;
+            set
+            {
+                _config.NoteTexture = value;
+                Managers.Textures.LoadNoteTexture(value);
+            }
+        }
+
+        [UIValue("noteTextureChoices")]
+        internal static List<object> NoteTextureChoices = new List<object>();
     }
 }

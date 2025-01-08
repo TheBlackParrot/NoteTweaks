@@ -311,6 +311,9 @@ namespace NoteTweaks.UI
             chainNote.transform.localPosition = position;
             chainNote.transform.Rotate(90f, 0f, 0f);
             
+            MeshRenderer noteMeshRenderer = chainNote.gameObject.GetComponent<MeshRenderer>();
+            noteMeshRenderer.sharedMaterial = Materials.NoteMaterial;
+            
             Transform originalDot = chainNote.transform.Find("Circle");
             if (originalDot)
             {
@@ -363,6 +366,9 @@ namespace NoteTweaks.UI
             Vector3 position = new Vector3((cell % 2) * NoteSize, (-(int)Math.Floor((float)cell / 2) + 0.5f) * NoteSize, 0);
             noteCube.transform.localPosition = position;
             noteCube.transform.Rotate(90f, 0f, 0f);
+            
+            MeshRenderer noteMeshRenderer = noteCube.gameObject.GetComponent<MeshRenderer>();
+            noteMeshRenderer.sharedMaterial = Materials.NoteMaterial;
 
             /*Animation animationComponent = noteCube.AddComponent<Animation>();
             AnimationClip animationClip = Resources.FindObjectsOfTypeAll<AnimationClip>().First(x => x.name.Contains("LevitatingCube"));
@@ -539,6 +545,8 @@ namespace NoteTweaks.UI
         
         protected void OnEnable()
         {
+            Managers.Textures.LoadTextureChoices();
+            
             if (HasInitialized)
             {
                 CutoutFadeIn();
