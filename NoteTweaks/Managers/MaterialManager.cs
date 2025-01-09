@@ -10,6 +10,7 @@ namespace NoteTweaks.Managers
         internal static Material DotGlowMaterial;
         internal static Material ArrowGlowMaterial;
         internal static Material NoteMaterial;
+        internal static Material DebrisMaterial;
         
         internal static readonly Material AccDotDepthMaterial = new Material(Resources.FindObjectsOfTypeAll<Shader>().First(x => x.name == "Custom/ClearDepth"))
         {
@@ -21,6 +22,7 @@ namespace NoteTweaks.Managers
         internal static void UpdateAll()
         {
             UpdateNoteMaterial();
+            UpdateDebrisMaterial();
             UpdateReplacementDotMaterial();
             UpdateReplacementArrowMaterial();
             UpdateDotGlowMaterial();
@@ -132,6 +134,21 @@ namespace NoteTweaks.Managers
             NoteMaterial = new Material(noteMat)
             {
                 name = "NoteTweaks_NoteMaterial",
+                renderQueue = 1995
+            };
+        }
+        
+        private static void UpdateDebrisMaterial()
+        {
+            if (DebrisMaterial != null)
+            {
+                return;
+            }
+            Plugin.Log.Info("Creating new debris material");
+            Material debrisMat = Resources.FindObjectsOfTypeAll<Material>().ToList().Find(x => x.name == "NoteDebrisHD");
+            DebrisMaterial = new Material(debrisMat)
+            {
+                name = "NoteTweaks_DebrisMaterial",
                 renderQueue = 1995
             };
         }
