@@ -479,6 +479,37 @@ namespace NoteTweaks.UI
                 Managers.Textures.LoadNoteTexture(value);
             }
         }
+        
+        protected Color BombColor
+        {
+            get => _config.BombColor;
+            set
+            {
+                _config.BombColor = value;
+                NotePreviewViewController.UpdateBombColors();
+            }
+        }
+
+        protected float BombColorBoost
+        {
+            get => _config.BombColorBoost;
+            set
+            {
+                _config.BombColorBoost = value;
+                NotePreviewViewController.UpdateBombColors();
+            }
+        }
+        
+        protected string BombTexture
+        {
+            get => _config.BombTexture;
+            set
+            {
+                _config.BombTexture = value;
+                #pragma warning disable CS4014
+                Managers.Textures.LoadNoteTexture(value, true);
+            }
+        }
 
         [UIValue("noteTextureChoices")]
         internal static List<object> NoteTextureChoices = new List<object>();

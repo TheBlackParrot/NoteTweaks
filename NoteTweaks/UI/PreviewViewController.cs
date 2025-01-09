@@ -30,6 +30,7 @@ namespace NoteTweaks.UI
         private static Mesh _dotGlowMesh;
         
         private static readonly int Color0 = Shader.PropertyToID("_Color");
+        private static readonly int Color1 = Shader.PropertyToID("_SimpleColor");
         
         private static readonly List<String> FaceNames = new List<String> { "NoteArrow", "NoteCircleGlow", "Circle" };
         private static readonly List<String> GlowNames = new List<String> { "NoteArrowGlow", "AddedNoteCircleGlow" };
@@ -51,6 +52,11 @@ namespace NoteTweaks.UI
             for (int i = 0; i < NoteContainer.transform.childCount; i++)
             {
                 GameObject noteCube = NoteContainer.transform.GetChild(i).gameObject;
+                if (noteCube.name.Contains("_Bomb_"))
+                {
+                    continue;
+                }
+                
                 Transform noteCircleGlowTransform = noteCube.transform.Find("NoteCircleGlow");
                 if (noteCircleGlowTransform != null)
                 {
@@ -68,6 +74,11 @@ namespace NoteTweaks.UI
             for (int i = 0; i < NoteContainer.transform.childCount; i++)
             {
                 GameObject noteCube = NoteContainer.transform.GetChild(i).gameObject;
+                if (noteCube.name.Contains("_Bomb_"))
+                {
+                    continue;
+                }
+                
                 Transform noteArrowTransform = noteCube.transform.Find("NoteArrow");
 
                 if (noteArrowTransform != null)
@@ -112,6 +123,11 @@ namespace NoteTweaks.UI
             for (int i = 0; i < NoteContainer.transform.childCount; i++)
             {
                 GameObject noteCube = NoteContainer.transform.GetChild(i).gameObject;
+                if (noteCube.name.Contains("_Bomb_"))
+                {
+                    continue;
+                }
+                
                 Transform noteCircleGlowTransform = noteCube.transform.Find("NoteCircleGlow");
                 if (noteCircleGlowTransform != null)
                 {
@@ -131,6 +147,11 @@ namespace NoteTweaks.UI
             for (int i = 0; i < NoteContainer.transform.childCount; i++)
             {
                 GameObject noteCube = NoteContainer.transform.GetChild(i).gameObject;
+                if (noteCube.name.Contains("_Bomb_"))
+                {
+                    continue;
+                }
+                
                 Transform noteCircleGlowTransform = noteCube.transform.Find("NoteCircleGlow");
                 if (noteCircleGlowTransform != null)
                 {
@@ -150,6 +171,10 @@ namespace NoteTweaks.UI
             for (int i = 0; i < NoteContainer.transform.childCount; i++)
             {
                 GameObject noteCube = NoteContainer.transform.GetChild(i).gameObject;
+                if (noteCube.name.Contains("_Bomb_"))
+                {
+                    continue;
+                }
                 
                 Transform noteCircleGlowTransform = noteCube.transform.Find("NoteCircleGlow");
                 Transform addedNoteCircleGlowTransform = noteCube.transform.Find("AddedNoteCircleGlow");
@@ -176,10 +201,9 @@ namespace NoteTweaks.UI
             for (int i = 0; i < NoteContainer.transform.childCount; i++)
             {
                 GameObject noteCube = NoteContainer.transform.GetChild(i).gameObject;
-                
-                if (noteCube.name.Contains("_Chain_"))
+                if (noteCube.name.Contains("_Chain_") || noteCube.name.Contains("_Bomb_"))
                 {
-                    // chain link, move on
+                    // not an arrow note, move on
                     continue;
                 }
                 
@@ -196,10 +220,9 @@ namespace NoteTweaks.UI
             for (int i = 0; i < NoteContainer.transform.childCount; i++)
             {
                 GameObject noteCube = NoteContainer.transform.GetChild(i).gameObject;
-                
-                if (noteCube.name.Contains("_Chain_"))
+                if (noteCube.name.Contains("_Chain_") || noteCube.name.Contains("_Bomb_"))
                 {
-                    // chain link, move on
+                    // not an arrow note, move on
                     continue;
                 }
                 
@@ -213,6 +236,12 @@ namespace NoteTweaks.UI
             for (int i = 0; i < NoteContainer.transform.childCount; i++)
             {
                 GameObject noteCube = NoteContainer.transform.GetChild(i).gameObject;
+                if (noteCube.name.Contains("_Bomb_"))
+                {
+                    // bombs are not notes
+                    continue;
+                }
+
                 noteCube.transform.localScale = noteCube.name.Contains("_Chain_") ? Vectors.Max(Plugin.Config.NoteScale * Plugin.Config.LinkScale, 0.1f) : Plugin.Config.NoteScale;
             }
         }
@@ -233,6 +262,11 @@ namespace NoteTweaks.UI
             for (int i = 0; i < NoteContainer.transform.childCount; i++)
             {
                 GameObject noteCube = NoteContainer.transform.GetChild(i).gameObject;
+                if (noteCube.name.Contains("_Bomb_"))
+                {
+                    // bombs are separate
+                    continue;
+                }
 
                 // scaling is intentionally done here
                 Color noteColor = (i % 2 == 0) ? colors._saberAColor * leftScale : colors._saberBColor * rightScale;
@@ -287,6 +321,28 @@ namespace NoteTweaks.UI
                             }   
                         }
                     });
+                }
+            }
+        }
+        
+        public static void UpdateBombColors()
+        {
+            float scale = 1.0f + Plugin.Config.BombColorBoost;
+
+            for (int i = 0; i < NoteContainer.transform.childCount; i++)
+            {
+                GameObject bombObj = NoteContainer.transform.GetChild(i).gameObject;
+                if (!bombObj.name.Contains("_Bomb_"))
+                {
+                    continue;
+                }
+                
+                Color bombColor = Plugin.Config.BombColor * scale;
+                
+                foreach (MaterialPropertyBlockController controller in bombObj.GetComponents<MaterialPropertyBlockController>())
+                {
+                    controller.materialPropertyBlock.SetColor(Color1, bombColor);
+                    controller.ApplyChanges();
                 }
             }
         }
@@ -442,6 +498,34 @@ namespace NoteTweaks.UI
             noteCube.gameObject.SetActive(true);
         }
 
+        private static void CreateBomb(BombNoteController bombPrefab, string extraName, int cell)
+        {
+            GameObject bombContainer = Instantiate(bombPrefab.gameObject, NoteContainer.transform);
+            bombContainer.gameObject.SetActive(false);
+            
+            DestroyImmediate(bombContainer.GetComponent<BombNoteController>());
+            DestroyImmediate(bombContainer.GetComponent<BaseNoteVisuals>());
+            DestroyImmediate(bombContainer.GetComponent<NoteMovement>());
+            DestroyImmediate(bombContainer.GetComponent<NoteFloorMovement>());
+            DestroyImmediate(bombContainer.GetComponent<NoteJump>());
+            
+            bombContainer.name = "_NoteTweaks_Bomb_" + extraName;
+            
+            Vector3 position = new Vector3((NoteSize * (cell * 1.25f)) - 1.0f, 1.0f, 0);
+            bombContainer.transform.localPosition = position;
+            bombContainer.transform.Rotate(90f, 0f, 0f);
+            
+            GameObject bombObject = bombContainer.transform.GetChild(0).gameObject;
+            
+            DestroyImmediate(bombObject.GetComponent<SphereCollider>());
+            DestroyImmediate(bombObject.GetComponent<SphereCuttableBySaber>());
+            
+            MeshRenderer bombMeshRenderer = bombObject.gameObject.GetComponent<MeshRenderer>();
+            bombMeshRenderer.sharedMaterial = Materials.BombMaterial;
+            
+            bombContainer.gameObject.SetActive(true);
+        }
+
         private static CancellationTokenSource _currentTokenSource;
         public static async void CutoutFadeOut()
         {
@@ -565,6 +649,7 @@ namespace NoteTweaks.UI
                             BeatmapObjectsInstaller beatmapObjectsInstaller = Resources.FindObjectsOfTypeAll<BeatmapObjectsInstaller>().FirstOrDefault();
                             
                             GameNoteController notePrefab = beatmapObjectsInstaller._normalBasicNotePrefab;
+                            BombNoteController bombPrefab = beatmapObjectsInstaller._bombNotePrefab;
                             BurstSliderGameNoteController chainPrefab = beatmapObjectsInstaller._burstSliderNotePrefab;
                             
                             List<String> noteNames = new List<string> { "L_Arrow", "R_Arrow", "L_Dot", "R_Dot" };
@@ -582,8 +667,14 @@ namespace NoteTweaks.UI
                                     CreateChainNote(chainPrefab, chainNames[i], i, j); 
                                 }
                             }
+
+                            for (int i = 0; i < 3; i++)
+                            {
+                                CreateBomb(bombPrefab, i.ToString(), i);
+                            }
                             
                             UpdateColors();
+                            UpdateBombColors();
                             UpdateArrowPosition();
                             UpdateArrowScale();
                             UpdateDotPosition();
