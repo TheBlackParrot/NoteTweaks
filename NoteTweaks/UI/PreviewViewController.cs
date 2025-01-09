@@ -151,7 +151,6 @@ namespace NoteTweaks.UI
             {
                 GameObject noteCube = NoteContainer.transform.GetChild(i).gameObject;
                 
-                Transform circleTransform = noteCube.transform.Find("Circle");
                 Transform noteCircleGlowTransform = noteCube.transform.Find("NoteCircleGlow");
                 Transform addedNoteCircleGlowTransform = noteCube.transform.Find("AddedNoteCircleGlow");
 
@@ -159,15 +158,9 @@ namespace NoteTweaks.UI
                 {
                     noteCircleGlowTransform.localRotation = Quaternion.identity;
                     noteCircleGlowTransform.Rotate(0f, 0f, Plugin.Config.RotateDot);
+                    addedNoteCircleGlowTransform.localRotation = Quaternion.identity;
+                    addedNoteCircleGlowTransform.Rotate(0f, 0f, Plugin.Config.RotateDot);
                 }
-                else
-                {
-                    circleTransform.localRotation = Quaternion.identity;
-                    circleTransform.Rotate(0f, 0f, Plugin.Config.RotateDot);
-                }
-                
-                addedNoteCircleGlowTransform.localRotation = Quaternion.identity;
-                addedNoteCircleGlowTransform.Rotate(0f, 0f, Plugin.Config.RotateDot);
             }            
         }
         
