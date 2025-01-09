@@ -81,6 +81,8 @@ namespace NoteTweaks.Managers
 
             Managers.Materials.NoteMaterial.mainTexture = NoteTexture;
             Managers.Materials.NoteMaterial.SetTexture(NoteCubeMapID, NoteTexture);
+            Managers.Materials.DebrisMaterial.mainTexture = NoteTexture;
+            Managers.Materials.DebrisMaterial.SetTexture(NoteCubeMapID, NoteTexture);
         }
 
         internal static async Task LoadNoteTexture(string dirname)
@@ -90,6 +92,7 @@ namespace NoteTweaks.Managers
                 Plugin.Log.Info("Using default note texture...");
                 NoteTexture = OriginalNoteTexture;
                 Managers.Materials.NoteMaterial.SetTexture(NoteCubeMapID, NoteTexture);
+                Managers.Materials.DebrisMaterial.SetTexture(NoteCubeMapID, NoteTexture);
             }
             else
             {

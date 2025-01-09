@@ -279,7 +279,24 @@ namespace NoteTweaks.Patches
                 }
             }
         }
-        
+
+        [HarmonyPatch(typeof(NoteDebris), "Init")]
+        internal class DebrisPatch
+        {
+            internal static void Postfix(NoteDebris __instance)
+            {
+                if (!Plugin.Config.Enabled || _autoDisable)
+                {
+                    return;
+                }
+                
+                if (__instance.transform.GetChild(0).TryGetComponent(out MeshRenderer debrisRenderer))
+                {
+                    debrisRenderer.sharedMaterial = Materials.DebrisMaterial;
+                }
+            }
+        }
+
         [HarmonyPatch(typeof(ColorNoteVisuals), "HandleNoteControllerDidInit")]
         [HarmonyAfter("aeroluna.Chroma")]
         [HarmonyPriority(int.MinValue)]
