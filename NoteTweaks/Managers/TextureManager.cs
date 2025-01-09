@@ -31,6 +31,15 @@ namespace NoteTweaks.Managers
         private static Cubemap NoteTexture = OriginalNoteTexture;
         private static Cubemap BombTexture = OriginalNoteTexture;
 
+        public static string GetLoadedNoteTexture()
+        {
+            return NoteTexture.name.Split("_"[0]).Last();
+        }
+        public static string GetLoadedBombTexture()
+        {
+            return BombTexture.name.Split("_"[0]).Last();
+        }
+
         internal static void LoadTextureChoices()
         {
             Plugin.Log.Info("Setting texture filenames for dropdown...");
@@ -72,6 +81,7 @@ namespace NoteTweaks.Managers
         private static void OnNoteImageLoaded(List<KeyValuePair<string, Texture2D>> textures)
         {
             NoteTexture = new Cubemap(512, textures.First().Value.format, 0);
+            NoteTexture.name = $"NoteTweaks_NoteCubemap_{Plugin.Config.NoteTexture}";
             NoteTexture.SetPixels(textures.Find(x => x.Key == "px").Value.GetPixels().Reverse().ToArray(), CubemapFace.PositiveX);
             NoteTexture.SetPixels(textures.Find(x => x.Key == "py").Value.GetPixels().Reverse().ToArray(), CubemapFace.PositiveY);
             NoteTexture.SetPixels(textures.Find(x => x.Key == "nz").Value.GetPixels().Reverse().ToArray(), CubemapFace.PositiveZ);
@@ -89,6 +99,7 @@ namespace NoteTweaks.Managers
         private static void OnBombImageLoaded(List<KeyValuePair<string, Texture2D>> textures)
         {
             BombTexture = new Cubemap(512, textures.First().Value.format, 0);
+            BombTexture.name = $"NoteTweaks_BombCubemap_{Plugin.Config.BombTexture}";
             BombTexture.SetPixels(textures.Find(x => x.Key == "px").Value.GetPixels().Reverse().ToArray(), CubemapFace.PositiveX);
             BombTexture.SetPixels(textures.Find(x => x.Key == "py").Value.GetPixels().Reverse().ToArray(), CubemapFace.PositiveY);
             BombTexture.SetPixels(textures.Find(x => x.Key == "nz").Value.GetPixels().Reverse().ToArray(), CubemapFace.PositiveZ);
