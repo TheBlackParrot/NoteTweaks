@@ -32,9 +32,21 @@ namespace NoteTweaks.Managers
             UpdateAccDotMaterial();
             
             #pragma warning disable CS4014
-            Managers.Textures.LoadNoteTexture(Plugin.Config.NoteTexture);
-            Managers.Textures.LoadNoteTexture(Plugin.Config.BombTexture, true);
             
+            Plugin.Log.Info(Managers.Textures.GetLoadedNoteTexture());
+            Plugin.Log.Info(Managers.Textures.GetLoadedBombTexture());
+            if (Managers.Textures.GetLoadedNoteTexture() != Plugin.Config.NoteTexture)
+            {
+                Managers.Textures.LoadNoteTexture(Plugin.Config.NoteTexture);
+            }
+
+            if (Managers.Textures.GetLoadedBombTexture() != Plugin.Config.BombTexture)
+            {
+                Managers.Textures.LoadNoteTexture(Plugin.Config.BombTexture, true);
+            }
+            
+            #pragma warning restore CS4014
+
             UpdateRenderQueues();
         }
 
