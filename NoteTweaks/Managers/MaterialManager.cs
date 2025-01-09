@@ -33,8 +33,6 @@ namespace NoteTweaks.Managers
             
             #pragma warning disable CS4014
             
-            Plugin.Log.Info(Managers.Textures.GetLoadedNoteTexture());
-            Plugin.Log.Info(Managers.Textures.GetLoadedBombTexture());
             if (Managers.Textures.GetLoadedNoteTexture() != Plugin.Config.NoteTexture)
             {
                 Managers.Textures.LoadNoteTexture(Plugin.Config.NoteTexture);
