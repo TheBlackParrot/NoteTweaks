@@ -45,7 +45,7 @@ namespace NoteTweaks.Patches
         private static GameObject _accDotObject = CreateAccDotObject();
         private static readonly float AccDotSizeStep = ScoreModel.kMaxDistanceForDistanceToCenterScore / ScoreModel.kMaxCenterDistanceCutScore;
 
-        private static bool _autoDisable = false;
+        internal static bool _autoDisable = false;
         
         private static bool MapHasNoodle(BeatmapLevel beatmapLevel, BeatmapKey beatmapKey)
         {

@@ -11,6 +11,7 @@ namespace NoteTweaks.Managers
         internal static Material ArrowGlowMaterial;
         internal static Material NoteMaterial;
         internal static Material DebrisMaterial;
+        internal static Material BombMaterial;
         
         internal static readonly Material AccDotDepthMaterial = new Material(Resources.FindObjectsOfTypeAll<Shader>().First(x => x.name == "Custom/ClearDepth"))
         {
@@ -23,6 +24,7 @@ namespace NoteTweaks.Managers
         {
             UpdateNoteMaterial();
             UpdateDebrisMaterial();
+            UpdateBombMaterial();
             UpdateReplacementDotMaterial();
             UpdateReplacementArrowMaterial();
             UpdateDotGlowMaterial();
@@ -31,6 +33,7 @@ namespace NoteTweaks.Managers
             
             #pragma warning disable CS4014
             Managers.Textures.LoadNoteTexture(Plugin.Config.NoteTexture);
+            Managers.Textures.LoadNoteTexture(Plugin.Config.BombTexture, true);
             
             UpdateRenderQueues();
         }
@@ -150,6 +153,20 @@ namespace NoteTweaks.Managers
             {
                 name = "NoteTweaks_DebrisMaterial",
                 renderQueue = 1995
+            };
+        }
+        
+        private static void UpdateBombMaterial()
+        {
+            if (BombMaterial != null)
+            {
+                return;
+            }
+            Plugin.Log.Info("Creating new bomb material");
+            Material bombMat = Resources.FindObjectsOfTypeAll<Material>().ToList().Find(x => x.name == "BombNoteHD");
+            BombMaterial = new Material(bombMat)
+            {
+                name = "NoteTweaks_BombMaterial"
             };
         }
 
