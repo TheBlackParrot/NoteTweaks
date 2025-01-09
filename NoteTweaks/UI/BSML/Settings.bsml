@@ -18,7 +18,7 @@
                 <horizontal><text text="-----" font-size="4" color="#00000000"/></horizontal>
 
                 <dropdown-list-setting apply-on-change="true" value="NoteTexture" text="Note Texture" choices="noteTextureChoices"
-                                       hover-hint="Images (.jpg, .png, .tga) in UserData/NoteTweaks/Textures/Notes"/>
+                                       hover-hint="Cubemap images in UserData/NoteTweaks/Textures/Notes"/>
                 <slider-setting apply-on-change="true" value="ColorBoostLeft" text="Left Color Boost"
                                 min="-0.95" max="3.0" increment="0.05" show-buttons="true" formatter="PercentageFormatter"
                                 hover-hint="Boost left note colors beyond the normal clamping levels"/>
@@ -202,6 +202,23 @@
                 <slider-setting apply-on-change="true" value="ChainDotScaleY" text="Vertical Chain Dot Scale"
                                 min="0.05" max="2.0" increment="0.05" show-buttons="true" formatter="PercentageFormatter"
                                 hover-hint="Vertical scale (Y-axis) of chain link dots"/>
+            </scroll-view>
+        </vertical>
+    </tab>
+
+    <tab tags="tabs" tab-name="Bombs">
+        <vertical vertical-fit="PreferredSize" pref-height="70" pref-width="100" anchored-position-x="4">
+            <scroll-view spacing="0" pref-height="70" child-expand-width="true">
+                <color-setting apply-on-change="true" value="BombColor" text="Bomb Color"
+                               hover-hint="Color of bombs"/>
+                <slider-setting apply-on-change="true" value="BombColorBoost" text="Bomb Color Boost"
+                                min="-0.95" max="3.0" increment="0.05" show-buttons="true" formatter="PercentageFormatter"
+                                hover-hint="Boost bomb colors beyond the normal clamping levels"/>
+
+                <horizontal><text text="-----" font-size="4" color="#00000000"/></horizontal>
+
+                <dropdown-list-setting apply-on-change="true" value="BombTexture" text="Bomb Texture" choices="noteTextureChoices"
+                                       hover-hint="Cubemap images in UserData/NoteTweaks/Textures/Notes"/>
             </scroll-view>
         </vertical>
     </tab>
