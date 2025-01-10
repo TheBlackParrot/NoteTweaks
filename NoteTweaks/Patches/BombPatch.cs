@@ -5,6 +5,7 @@ using UnityEngine;
 namespace NoteTweaks.Patches
 {
     [HarmonyPatch(typeof(BombNoteController), "Init")]
+    [HarmonyAfter("aeroluna.Chroma")]
     internal class BombPatch
     {
         private static readonly int Color0 = Shader.PropertyToID("_SimpleColor");
@@ -16,8 +17,8 @@ namespace NoteTweaks.Patches
                 return;
             }
             
-            float scale = 1.0f + Plugin.Config.BombColorBoost;
-            Color bombColor = Plugin.Config.BombColor * scale;
+            float colorScale = 1.0f + Plugin.Config.BombColorBoost;
+            Color bombColor = Plugin.Config.BombColor * colorScale;
             
             if (__instance.transform.GetChild(0).TryGetComponent(out Renderer bombRenderer))
             {
@@ -30,6 +31,16 @@ namespace NoteTweaks.Patches
                 materialPropertyBlockController.materialPropertyBlock.SetColor(Color0, bombColor);
                 materialPropertyBlockController.ApplyChanges();   
             }
+
+            if (!NotePhysicalTweaks.IsAllowedToScaleNotes)
+            {
+                return;
+            }
+
+            Vector3 scale = Vector3.one * Plugin.Config.BombScale;
+            
+            __instance.transform.localScale = scale;
+            __instance._cuttableBySaber.GetComponent<SphereCollider>().radius = 0.18f * (1.0f / Plugin.Config.BombScale);
         }
     }
 }

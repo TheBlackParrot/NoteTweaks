@@ -245,6 +245,20 @@ namespace NoteTweaks.UI
                 noteCube.transform.localScale = noteCube.name.Contains("_Chain_") ? Vectors.Max(Plugin.Config.NoteScale * Plugin.Config.LinkScale, 0.1f) : Plugin.Config.NoteScale;
             }
         }
+        
+        public static void UpdateBombScale()
+        {
+            for (int i = 0; i < NoteContainer.transform.childCount; i++)
+            {
+                GameObject bombObject = NoteContainer.transform.GetChild(i).gameObject;
+                if (!bombObject.name.Contains("_Bomb_"))
+                {
+                    continue;
+                }
+
+                bombObject.transform.localScale = Vector3.one * Plugin.Config.BombScale;
+            }
+        }
 
         public static void UpdateColors()
         {
