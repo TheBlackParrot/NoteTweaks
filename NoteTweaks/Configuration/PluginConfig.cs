@@ -63,10 +63,12 @@ namespace NoteTweaks.Configuration
         public virtual bool NormalizeRightFaceGlowColor { get; set; } = false;
         
         public virtual string NoteTexture { get; set; } = "Default";
+        public virtual bool InvertNoteTexture { get; set; } = false;
         
         public virtual Color BombColor { get; set; } = new Color(0.251f, 0.251f, 0.251f, 1.0f);
         public virtual float BombColorBoost { get; set; } = 0.0f;
         public virtual string BombTexture { get; set; } = "Default";
         public virtual float BombScale { get; set; } = 1.0f;
+        public virtual bool InvertBombTexture { get; set; } = false;
     }
 }
