@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using BeatSaberMarkupLanguage;
+using HarmonyLib;
 using IPA.Utilities;
 using ModestTree;
 using NoteTweaks.UI;
@@ -14,6 +15,21 @@ using UnityEngine.Rendering;
 
 namespace NoteTweaks.Managers
 {
+    internal static class ColorExtensions
+    {
+        public static Color CheckForInversion(ref this Color color, bool isBomb = false)
+        {
+            if (isBomb && Plugin.Config.InvertBombTexture || Plugin.Config.InvertNoteTexture)
+            {
+                color.r = Mathf.Abs(color.r - 1f);
+                color.g = Mathf.Abs(color.g - 1f);
+                color.b = Mathf.Abs(color.b - 1f);
+            }
+
+            return color;
+        }
+    }
+    
     internal abstract class Textures
     {
         private static readonly string[] FileExtensions = { ".png", ".jpg", ".tga" };
@@ -80,14 +96,29 @@ namespace NoteTweaks.Managers
 
         private static void OnNoteImageLoaded(List<KeyValuePair<string, Texture2D>> textures)
         {
-            NoteTexture = new Cubemap(512, textures.First().Value.format, 0);
-            NoteTexture.name = $"NoteTweaks_NoteCubemap_{Plugin.Config.NoteTexture}";
-            NoteTexture.SetPixels(textures.Find(x => x.Key == "px").Value.GetPixels().Reverse().ToArray(), CubemapFace.PositiveX);
-            NoteTexture.SetPixels(textures.Find(x => x.Key == "py").Value.GetPixels().Reverse().ToArray(), CubemapFace.PositiveY);
-            NoteTexture.SetPixels(textures.Find(x => x.Key == "nz").Value.GetPixels().Reverse().ToArray(), CubemapFace.PositiveZ);
-            NoteTexture.SetPixels(textures.Find(x => x.Key == "nx").Value.GetPixels().Reverse().ToArray(), CubemapFace.NegativeX);
-            NoteTexture.SetPixels(textures.Find(x => x.Key == "ny").Value.GetPixels().Reverse().ToArray(), CubemapFace.NegativeY);
-            NoteTexture.SetPixels(textures.Find(x => x.Key == "pz").Value.GetPixels().Reverse().ToArray(), CubemapFace.NegativeZ);
+            Color[] px = textures.Find(x => x.Key == "px").Value.GetPixels();
+            px = px.Select(color => color.CheckForInversion()).Reverse().ToArray();
+            Color[] py = textures.Find(x => x.Key == "py").Value.GetPixels();
+            py = py.Select(color => color.CheckForInversion()).Reverse().ToArray();
+            Color[] pz = textures.Find(x => x.Key == "pz").Value.GetPixels();
+            pz = pz.Select(color => color.CheckForInversion()).Reverse().ToArray();
+            Color[] nx = textures.Find(x => x.Key == "nx").Value.GetPixels();
+            nx = nx.Select(color => color.CheckForInversion()).Reverse().ToArray();
+            Color[] ny = textures.Find(x => x.Key == "ny").Value.GetPixels();
+            ny = ny.Select(color => color.CheckForInversion()).Reverse().ToArray();
+            Color[] nz = textures.Find(x => x.Key == "nz").Value.GetPixels();
+            nz = nz.Select(color => color.CheckForInversion()).Reverse().ToArray();
+            
+            NoteTexture = new Cubemap(512, textures.First().Value.format, 0)
+            {
+                name = $"NoteTweaks_NoteCubemap_{Plugin.Config.NoteTexture}"
+            };
+            NoteTexture.SetPixels(px, CubemapFace.PositiveX);
+            NoteTexture.SetPixels(py, CubemapFace.PositiveY);
+            NoteTexture.SetPixels(nz, CubemapFace.PositiveZ);
+            NoteTexture.SetPixels(nx, CubemapFace.NegativeX);
+            NoteTexture.SetPixels(ny, CubemapFace.NegativeY);
+            NoteTexture.SetPixels(pz, CubemapFace.NegativeZ);
             NoteTexture.Apply();
 
             Managers.Materials.NoteMaterial.mainTexture = NoteTexture;
@@ -98,14 +129,29 @@ namespace NoteTweaks.Managers
         
         private static void OnBombImageLoaded(List<KeyValuePair<string, Texture2D>> textures)
         {
-            BombTexture = new Cubemap(512, textures.First().Value.format, 0);
-            BombTexture.name = $"NoteTweaks_BombCubemap_{Plugin.Config.BombTexture}";
-            BombTexture.SetPixels(textures.Find(x => x.Key == "px").Value.GetPixels().Reverse().ToArray(), CubemapFace.PositiveX);
-            BombTexture.SetPixels(textures.Find(x => x.Key == "py").Value.GetPixels().Reverse().ToArray(), CubemapFace.PositiveY);
-            BombTexture.SetPixels(textures.Find(x => x.Key == "nz").Value.GetPixels().Reverse().ToArray(), CubemapFace.PositiveZ);
-            BombTexture.SetPixels(textures.Find(x => x.Key == "nx").Value.GetPixels().Reverse().ToArray(), CubemapFace.NegativeX);
-            BombTexture.SetPixels(textures.Find(x => x.Key == "ny").Value.GetPixels().Reverse().ToArray(), CubemapFace.NegativeY);
-            BombTexture.SetPixels(textures.Find(x => x.Key == "pz").Value.GetPixels().Reverse().ToArray(), CubemapFace.NegativeZ);
+            Color[] px = textures.Find(x => x.Key == "px").Value.GetPixels().Reverse().ToArray();
+            px.Do(color => color.CheckForInversion(true));
+            Color[] py = textures.Find(x => x.Key == "py").Value.GetPixels().Reverse().ToArray();
+            py.Do(color => color.CheckForInversion(true));
+            Color[] pz = textures.Find(x => x.Key == "pz").Value.GetPixels().Reverse().ToArray();
+            pz.Do(color => color.CheckForInversion(true));
+            Color[] nx = textures.Find(x => x.Key == "nx").Value.GetPixels().Reverse().ToArray();
+            nx.Do(color => color.CheckForInversion(true));
+            Color[] ny = textures.Find(x => x.Key == "ny").Value.GetPixels().Reverse().ToArray();
+            ny.Do(color => color.CheckForInversion(true));
+            Color[] nz = textures.Find(x => x.Key == "nz").Value.GetPixels().Reverse().ToArray();
+            nz.Do(color => color.CheckForInversion(true));
+            
+            BombTexture = new Cubemap(512, textures.First().Value.format, 0)
+            {
+                name = $"NoteTweaks_BombCubemap_{Plugin.Config.BombTexture}"
+            };
+            BombTexture.SetPixels(px, CubemapFace.PositiveX);
+            BombTexture.SetPixels(py, CubemapFace.PositiveY);
+            BombTexture.SetPixels(nz, CubemapFace.PositiveZ);
+            BombTexture.SetPixels(nx, CubemapFace.NegativeX);
+            BombTexture.SetPixels(ny, CubemapFace.NegativeY);
+            BombTexture.SetPixels(pz, CubemapFace.NegativeZ);
             BombTexture.Apply();
 
             Managers.Materials.BombMaterial.mainTexture = BombTexture;

@@ -520,6 +520,26 @@ namespace NoteTweaks.UI
                 NotePreviewViewController.UpdateBombScale();
             }
         }
+        
+        protected bool InvertBombTexture
+        {
+            get => _config.InvertBombTexture;
+            set
+            {
+                _config.InvertBombTexture = value;
+                Managers.Textures.LoadNoteTexture(Plugin.Config.BombTexture, true);
+            }
+        }
+        
+        protected bool InvertNoteTexture
+        {
+            get => _config.InvertNoteTexture;
+            set
+            {
+                _config.InvertNoteTexture = value;
+                Managers.Textures.LoadNoteTexture(Plugin.Config.NoteTexture);
+            }
+        }
 
         [UIValue("noteTextureChoices")]
         internal static List<object> NoteTextureChoices = new List<object>();
