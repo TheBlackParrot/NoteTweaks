@@ -689,6 +689,7 @@ namespace NoteTweaks.UI
                             
                             UpdateColors();
                             UpdateBombColors();
+                            UpdateBombScale();
                             UpdateArrowPosition();
                             UpdateArrowScale();
                             UpdateDotPosition();
