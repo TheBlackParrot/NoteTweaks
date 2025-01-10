@@ -24,17 +24,22 @@ namespace NoteTweaks
 
         internal static void ClampSettings()
         {
-            Config.NoteScale = Vectors.Max(Config.NoteScale, 0.1f);
-            
-            Config.LinkScale = Mathf.Max(Config.LinkScale, 0.1f);
+            Config.NoteScale = Vectors.Max(Vectors.Min(Config.NoteScale, 2.0f), 0.1f);
+            Config.BombScale = Mathf.Max(Mathf.Min(Config.BombScale, 2.0f), 0.1f);
+            Config.LinkScale = Mathf.Max(Mathf.Min(Config.LinkScale, 2.0f), 0.1f);
             
             Config.ColorBoostLeft = Mathf.Max(Config.ColorBoostLeft, -0.95f);
             Config.ColorBoostRight = Mathf.Max(Config.ColorBoostRight, -0.95f);
+            Config.BombColorBoost = Mathf.Max(Config.BombColorBoost, -0.95f);
             
-            Config.DotMeshSides = Math.Max(Config.DotMeshSides, 4);
+            Config.DotMeshSides = Math.Max(Math.Min(Config.DotMeshSides, 48), 4);
             
-            Config.LeftFaceColorNoteSkew = Mathf.Max(0, Mathf.Min(Config.LeftFaceColorNoteSkew, 1.0f));
-            Config.RightFaceColorNoteSkew = Mathf.Max(0, Mathf.Min(Config.RightFaceColorNoteSkew, 1.0f));
+            Config.LeftFaceColorNoteSkew = Mathf.Max(0f, Mathf.Min(Config.LeftFaceColorNoteSkew, 1.0f));
+            Config.RightFaceColorNoteSkew = Mathf.Max(0f, Mathf.Min(Config.RightFaceColorNoteSkew, 1.0f));
+            Config.LeftFaceGlowColorNoteSkew = Mathf.Max(0f, Mathf.Min(Config.LeftFaceGlowColorNoteSkew, 1.0f));
+            Config.RightFaceGlowColorNoteSkew = Mathf.Max(0f, Mathf.Min(Config.RightFaceGlowColorNoteSkew, 1.0f));
+            
+            Config.AccDotSize = Math.Max(Math.Min(Config.AccDotSize, 15), 5);
         }
 
         [Init]

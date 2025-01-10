@@ -129,18 +129,18 @@ namespace NoteTweaks.Managers
         
         private static void OnBombImageLoaded(List<KeyValuePair<string, Texture2D>> textures)
         {
-            Color[] px = textures.Find(x => x.Key == "px").Value.GetPixels().Reverse().ToArray();
-            px.Do(color => color.CheckForInversion(true));
-            Color[] py = textures.Find(x => x.Key == "py").Value.GetPixels().Reverse().ToArray();
-            py.Do(color => color.CheckForInversion(true));
-            Color[] pz = textures.Find(x => x.Key == "pz").Value.GetPixels().Reverse().ToArray();
-            pz.Do(color => color.CheckForInversion(true));
-            Color[] nx = textures.Find(x => x.Key == "nx").Value.GetPixels().Reverse().ToArray();
-            nx.Do(color => color.CheckForInversion(true));
-            Color[] ny = textures.Find(x => x.Key == "ny").Value.GetPixels().Reverse().ToArray();
-            ny.Do(color => color.CheckForInversion(true));
-            Color[] nz = textures.Find(x => x.Key == "nz").Value.GetPixels().Reverse().ToArray();
-            nz.Do(color => color.CheckForInversion(true));
+            Color[] px = textures.Find(x => x.Key == "px").Value.GetPixels();
+            px = px.Select(color => color.CheckForInversion(true)).Reverse().ToArray();
+            Color[] py = textures.Find(x => x.Key == "py").Value.GetPixels();
+            py = py.Select(color => color.CheckForInversion(true)).Reverse().ToArray();
+            Color[] pz = textures.Find(x => x.Key == "pz").Value.GetPixels();
+            pz = pz.Select(color => color.CheckForInversion(true)).Reverse().ToArray();
+            Color[] nx = textures.Find(x => x.Key == "nx").Value.GetPixels();
+            nx = nx.Select(color => color.CheckForInversion(true)).Reverse().ToArray();
+            Color[] ny = textures.Find(x => x.Key == "ny").Value.GetPixels();
+            ny = ny.Select(color => color.CheckForInversion(true)).Reverse().ToArray();
+            Color[] nz = textures.Find(x => x.Key == "nz").Value.GetPixels();
+            nz = nz.Select(color => color.CheckForInversion(true)).Reverse().ToArray();
             
             BombTexture = new Cubemap(512, textures.First().Value.format, 0)
             {
