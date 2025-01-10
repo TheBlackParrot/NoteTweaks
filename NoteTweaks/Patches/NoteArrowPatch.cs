@@ -83,7 +83,7 @@ namespace NoteTweaks.Patches
             }
         }
 
-        private static bool IsAllowedToScaleNotes
+        internal static bool IsAllowedToScaleNotes
         {
             get
             {

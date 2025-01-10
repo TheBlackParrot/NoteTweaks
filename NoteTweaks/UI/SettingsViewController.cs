@@ -510,6 +510,16 @@ namespace NoteTweaks.UI
                 Managers.Textures.LoadNoteTexture(value, true);
             }
         }
+        
+        protected float BombScale
+        {
+            get => _config.BombScale;
+            set
+            {
+                _config.BombScale = value;
+                NotePreviewViewController.UpdateBombScale();
+            }
+        }
 
         [UIValue("noteTextureChoices")]
         internal static List<object> NoteTextureChoices = new List<object>();

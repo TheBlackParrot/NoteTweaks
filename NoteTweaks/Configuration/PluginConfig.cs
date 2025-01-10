@@ -67,5 +67,6 @@ namespace NoteTweaks.Configuration
         public virtual Color BombColor { get; set; } = new Color(0.251f, 0.251f, 0.251f, 1.0f);
         public virtual float BombColorBoost { get; set; } = 0.0f;
         public virtual string BombTexture { get; set; } = "Default";
+        public virtual float BombScale { get; set; } = 1.0f;
     }
 }
