@@ -19,6 +19,11 @@
 
                 <dropdown-list-setting apply-on-change="true" value="NoteTexture" text="Note Texture" choices="noteTextureChoices"
                                        hover-hint="Cubemap images in UserData/NoteTweaks/Textures/Notes"/>
+                <toggle-setting apply-on-change="true" value="InvertNoteTexture" text="Invert Note Texture"
+                                hover-hint="Invert the colors of the cubemap texture"/>
+
+                <horizontal><text text="-----" font-size="4" color="#00000000"/></horizontal>
+                
                 <slider-setting apply-on-change="true" value="ColorBoostLeft" text="Left Color Boost"
                                 min="-0.95" max="3.0" increment="0.05" show-buttons="true" formatter="PercentageFormatter"
                                 hover-hint="Boost left note colors beyond the normal clamping levels"/>
@@ -225,6 +230,8 @@
 
                 <dropdown-list-setting apply-on-change="true" value="BombTexture" text="Bomb Texture" choices="noteTextureChoices"
                                        hover-hint="Cubemap images in UserData/NoteTweaks/Textures/Notes"/>
+                <toggle-setting apply-on-change="true" value="InvertBombTexture" text="Invert Bomb Texture"
+                                hover-hint="Invert the colors of the cubemap texture"/>
             </scroll-view>
         </vertical>
     </tab>
