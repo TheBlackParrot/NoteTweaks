@@ -19,7 +19,7 @@ namespace NoteTweaks.Managers
     {
         public static Color CheckForInversion(ref this Color color, bool isBomb = false)
         {
-            if (isBomb && Plugin.Config.InvertBombTexture || Plugin.Config.InvertNoteTexture)
+            if (isBomb ? Plugin.Config.InvertBombTexture : Plugin.Config.InvertNoteTexture)
             {
                 color.r = Mathf.Abs(color.r - 1f);
                 color.g = Mathf.Abs(color.g - 1f);
