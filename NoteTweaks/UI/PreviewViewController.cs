@@ -656,15 +656,15 @@ namespace NoteTweaks.UI
                 operation1 =>
                 {
                     UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(standardGameplaySceneInfo.sceneName, UnityEngine.SceneManagement.LoadSceneMode.Additive).completed +=
-                        operation2 =>
+                        async operation2 =>
                         {
-                            Materials.UpdateAll();
-                            
                             BeatmapObjectsInstaller beatmapObjectsInstaller = Resources.FindObjectsOfTypeAll<BeatmapObjectsInstaller>().FirstOrDefault();
                             
                             GameNoteController notePrefab = beatmapObjectsInstaller._normalBasicNotePrefab;
                             BombNoteController bombPrefab = beatmapObjectsInstaller._bombNotePrefab;
                             BurstSliderGameNoteController chainPrefab = beatmapObjectsInstaller._burstSliderNotePrefab;
+                            
+                            await Materials.UpdateAll();
                             
                             List<String> noteNames = new List<string> { "L_Arrow", "R_Arrow", "L_Dot", "R_Dot" };
                             for (int i = 0; i < noteNames.Count; i++)
