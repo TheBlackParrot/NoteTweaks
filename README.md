@@ -1,12 +1,22 @@
 # NoteTweaks
-This is a Beat Saber mod that lets you tweak various aspects of notes, including size, size of face symbols, colors of face symbols, glow intensities, and more!
+This is a Beat Saber mod that lets you tweak various aspects of notes, including:
+- Object size
+- Face symbol size
+- Colors of face symbols
+- Glow intensities
+- Cubemap reflection textures
+- and more!
 
-**This is currently actively maintained for Beat Saber versions 1.29.1, 1.34.2, 1.37.1, and 1.39.1.**
+**This is currently actively maintained for Beat Saber versions 1.29.1, 1.34.2, 1.37.1, 1.39.1, and 1.40.0.**
 
 ## Notes
 - It is recommended to disable other mods that change aspects of the default note if you want to use this mod, as conflicts *could* happen.
-  - The Custom Notes mod does not appear to conflict, should be fine.
-- Note Scaling is forcibly turned off if the Pro Mode, Strict Angles, or Small Notes modifiers are enabled
+  - The Custom Notes mod does not appear to cause any conflicts, should be fine.
+  - Some users have reported that NalulunaNoteDecor causes some conflicts, although I haven't seen any issues crop up with it. ~~(ymmv)~~
+- Note Scaling is forcibly turned off if the Pro Mode, Strict Angles, or Small Notes modifiers are enabled.
+- Face symbol modification is forcibly turned off if the Ghost Notes or Disappearing Arrows modifiers are enabled.
+- Chroma causes issues with bomb color settings currently, still working on trying to fix that (sorry).
+  - *(accepting PR's if anyone wants to take a stab at it)*
 
 ## Configuration
 Configuration is done in-game via a Menu button in the left panel of the Main Menu, or by editing `UserData/NoteTweaks.json`
@@ -75,7 +85,35 @@ Configuration is done in-game via a Menu button in the left panel of the Main Me
   "DisableIfNoodle": false,
   "RotateDot": 0.0,
   "NormalizeLeftFaceColor": false,
-  "NormalizeRightFaceColor": false
+  "NormalizeRightFaceColor": false,
+  "LeftFaceGlowColor": {
+    "r": 1.0,
+    "g": 1.0,
+    "b": 1.0,
+    "a": 1.0
+  },
+  "LeftFaceGlowColorNoteSkew": 1.0,
+  "NormalizeLeftFaceGlowColor": false,
+  "RightFaceGlowColor": {
+    "r": 1.0,
+    "g": 1.0,
+    "b": 1.0,
+    "a": 1.0
+  },
+  "RightFaceGlowColorNoteSkew": 1.0,
+  "NormalizeRightFaceGlowColor": false,
+  "NoteTexture": "Default",
+  "InvertNoteTexture": false,
+  "BombColor": {
+    "r": 0.251,
+    "g": 0.251,
+    "b": 0.251,
+    "a": 1.0
+  },
+  "BombColorBoost": 0.0,
+  "BombTexture": "Default",
+  "BombScale": 1.0,
+  "InvertBombTexture": false
 }
 ```
 `bool` **Enabled**
@@ -106,10 +144,10 @@ Configuration is done in-game via a Menu button in the left panel of the Main Me
 > Scale of chain links relative to note scaling
 
 `float` **ColorBoostLeft**
-> Multiplies left note colors by a defined factor, even to numbers outside clamping ranges
+> Multiplies left note colors by `(value + 1.0f)`, even to numbers outside clamping ranges
 
 `float` **ColorBoostRight**
-> Multiplies right note colors by a defined factor, even to numbers outside clamping ranges
+> Multiplies right note colors by `(value + 1.0f)`, even to numbers outside clamping ranges
 
 `float` **GlowIntensity**
 > Intensity of glow around face symbols
@@ -130,10 +168,10 @@ Configuration is done in-game via a Menu button in the left panel of the Main Me
 > Make the dots on chain links glow or not glow
 
 `Color` **LeftFaceColor**
-> Set the color of face symbols on left hand notes *(does not affect glow colors)*
+> Set the color of face symbols on left hand notes
 
 `Color` **RightFaceColor**
-> Set the color of face symbols on right hand notes *(does not affect glow colors)*
+> Set the color of face symbols on right hand notes
 
 `bool` **EnableAccDot**
 > Renders a dot in the center of each standard note for visual assistance with swing accuracy
@@ -151,10 +189,10 @@ Configuration is done in-game via a Menu button in the left panel of the Main Me
 > Change the amount of sides on the dot face mesh
 
 `float` **LeftFaceColorNoteSkew**
-> Skew the desired color of face symbols on left hand notes towards the note's actual color by a set percentage
+> Skew the desired color of face symbols on left hand notes towards the note's actual color by a set amount 0-1
 
 `float` **RightFaceColorNoteSkew**
-> Skew the desired color of face symbols on right hand notes towards the note's actual color by a set percentage
+> Skew the desired color of face symbols on right hand notes towards the note's actual color by a set amount 0-1
 
 `bool` **DisableIfNoodle**
 > Disables the mod if the map being played requires Noodle Extensions
@@ -163,10 +201,64 @@ Configuration is done in-game via a Menu button in the left panel of the Main Me
 > Rotates the Z-axis of dot face meshes on dot notes
 
 `bool` **NormalizeLeftFaceColor**
-> Normalize the brightness of the face color on left hand notes by the highest RGB component of the note color
+> Normalize the brightness of the face color on left hand notes by the highest RGB component
 
 `bool` **NormalizeLeftFaceColor**
-> Normalize the brightness of the face color on right hand notes by the highest RGB component of the note color
+> Normalize the brightness of the face color on right hand notes by the highest RGB component
+
+`Color` **LeftFaceGlowColor**
+> Set the face symbol glow color on left hand notes
+
+`float` **LeftFaceGlowColorNoteSkew**
+> Skew the desired glow color of face symbols on left hand notes towards the note's actual color by a set amount 0-1
+
+`bool` **NormalizeLeftFaceGlowColor**
+> Normalize the brightness of the face symbol glow color on left hand notes by the highest RGB component
+
+`Color` **RightFaceGlowColor**
+> Set the face symbol glow color on right hand notes
+
+`float` **RightFaceGlowColorNoteSkew**
+> Skew the desired glow color of face symbols on right hand notes towards the note's actual color by a set amount 0-1
+
+`bool` **NormalizeRightFaceGlowColor**
+> Normalize the brightness of the face symbol glow color on right hand notes by the highest RGB component
+
+`string` **NoteTexture**
+> The folder that contains cubemap face textures (`px`, `py`, `pz`, `nx`, `ny`, `nz`; `.jpg`, `.png`, `.tga`) to use on notes
+
+`bool` **InvertNoteTexture**
+> Invert the cubemap texture for notes
+
+`Color` **BombColor**
+> Set the bomb color
+
+`float` **BombColorBoost**
+> Multiplies bomb colors by `(value + 1.0f)`, even to numbers outside clamping ranges
+
+`string` **BombTexture**
+> The folder that contains cubemap face textures (`px`, `py`, `pz`, `nx`, `ny`, `nz`; `.jpg`, `.png`, `.tga`) to use on bombs
+
+`float` **BombScale**
+> Scale of bombs
+
+`bool` **InvertBombTexture**
+> Invert the cubemap texture for bombs
+
+## Custom Cubemap textures
+Cubemap textures can be changed on notes and bombs; NoteTweaks will pull individual face textures from folders in `UserData/NoteTweaks/Textures/Notes`.
+
+Each folder should have a **512x512** image **(in `.jpg`, `.png`, or `.tga`)** for each side of a cube:
+- `nx` *(left)*
+- `ny` *(bottom)*
+- `nz` *(back)*
+- `px` *(right)*
+- `py` *(top)*
+- `pz` *(front)*
+
+If any images are missing, or if an image is not any of the expected filetypes, the folder will not be selectable in-game.
+
+I've provided [25 cubemap textures](https://github.com/TheBlackParrot/NoteTweaks/releases/download/0.5.0/Note.Cubemap.Textures.zip) that you can use with the mod, ready-to-go. If you want to convert a panoramic image, [Kyle Nguyen's Optifine Sky Generator](https://skybox-generator.vercel.app) is an easy online tool to split the image into 6 cube faces. *(use a 2048x1024 image to get 512x512 face textures, no post-resizing needed)*
 
 ## Dependencies
 - BSIPA
