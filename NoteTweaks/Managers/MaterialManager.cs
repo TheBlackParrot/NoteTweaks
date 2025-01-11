@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Threading.Tasks;
 using UnityEngine;
 
 namespace NoteTweaks.Managers
@@ -20,7 +21,7 @@ namespace NoteTweaks.Managers
         };
         internal static Material AccDotMaterial;
 
-        internal static void UpdateAll()
+        internal static async Task UpdateAll()
         {
             UpdateNoteMaterial();
             UpdateDebrisMaterial();
@@ -31,20 +32,16 @@ namespace NoteTweaks.Managers
             UpdateArrowGlowMaterial();
             UpdateAccDotMaterial();
             
-            #pragma warning disable CS4014
-            
             if (Managers.Textures.GetLoadedNoteTexture() != Plugin.Config.NoteTexture)
             {
-                Managers.Textures.LoadNoteTexture(Plugin.Config.NoteTexture);
+                await Managers.Textures.LoadNoteTexture(Plugin.Config.NoteTexture);
             }
 
             if (Managers.Textures.GetLoadedBombTexture() != Plugin.Config.BombTexture)
             {
-                Managers.Textures.LoadNoteTexture(Plugin.Config.BombTexture, true);
+                await Managers.Textures.LoadNoteTexture(Plugin.Config.BombTexture, true);
             }
             
-            #pragma warning restore CS4014
-
             UpdateRenderQueues();
         }
 
