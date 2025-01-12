@@ -46,29 +46,17 @@ namespace NoteTweaks.Patches
         private static readonly float AccDotSizeStep = ScoreModel.kMaxDistanceForDistanceToCenterScore / ScoreModel.kMaxCenterDistanceCutScore;
 
         internal static bool _autoDisable = false;
-        
-        private static bool MapHasNoodle(IDifficultyBeatmap beatmapLevel)
+
+        private static bool MapHasRequirement(BeatmapLevel beatmapLevel, BeatmapKey beatmapKey, string requirement)
         {
-            bool hasNoodle = false;
-            
-            ExtraSongData.DifficultyData diffData = RetrieveDifficultyData(beatmapLevel);
-            if (diffData != null)
-            {
-                hasNoodle = diffData.additionalDifficultyData._requirements.Any(x => x == "Noodle Extensions");
-            }
-            return EnabledPlugins.Any(x => x.Name == "NoodleExtensions") && hasNoodle;
-        }
-        
-        private static bool MapHasVivify(BeatmapLevel beatmapLevel, BeatmapKey beatmapKey)
-        {
-            bool hasVivify = false;
+            bool hasRequirement = false;
             
             ExtraSongData.DifficultyData diffData = RetrieveDifficultyData(beatmapLevel, beatmapKey);
             if (diffData != null)
             {
-                hasVivify = diffData.additionalDifficultyData._requirements.Any(x => x == "Vivify");
+                hasRequirement = diffData.additionalDifficultyData._requirements.Any(x => x == requirement);
             }
-            return hasVivify;
+            return hasRequirement;
         }
 
         // thanks BeatLeader
@@ -80,7 +68,10 @@ namespace NoteTweaks.Patches
                      m.GetParameters().All(p => p.ParameterType != typeof(IBeatmapLevelData)));
             internal static void Postfix(StandardLevelScenesTransitionSetupDataSO __instance, in GameplayModifiers gameplayModifiers)
             {
-                _autoDisable = (MapHasNoodle(__instance.difficultyBeatmap) && Plugin.Config.DisableIfNoodle) || MapHasVivify(__instance.difficultyBeatmap);
+                _autoDisable =
+                    (MapHasRequirement(__instance.beatmapLevel, __instance.beatmapKey, "Noodle Extensions") &&
+                     Plugin.Config.DisableIfNoodle) ||
+                    MapHasRequirement(__instance.beatmapLevel, __instance.beatmapKey, "Vivify");
                 
                 _gameplayModifiers = gameplayModifiers;
                 Plugin.ClampSettings();
