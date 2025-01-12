@@ -33,7 +33,6 @@ namespace NoteTweaks.Managers
     internal abstract class Textures
     {
         private static readonly string[] FileExtensions = { ".png", ".jpg", ".tga" };
-        private static readonly string[] CubemapFaceFilenames = { "px", "py", "pz", "nx", "ny", "nz" };
         private static readonly string ImagePath = Path.Combine(UnityGame.UserDataPath, "NoteTweaks", "Textures", "Notes");
         
         private static readonly Texture2D OriginalArrowGlowTexture = Resources.FindObjectsOfTypeAll<Texture2D>().ToList().First(x => x.name == "ArrowGlow");
@@ -46,6 +45,16 @@ namespace NoteTweaks.Managers
         private static readonly Cubemap OriginalNoteTexture = Resources.FindObjectsOfTypeAll<Cubemap>().ToList().First(x => x.name == "NotesReflection");
         private static Cubemap NoteTexture = OriginalNoteTexture;
         private static Cubemap BombTexture = OriginalNoteTexture;
+        
+        private static readonly List<KeyValuePair<string, CubemapFace>> FaceNames = new List<KeyValuePair<string, CubemapFace>>
+        {
+            new KeyValuePair<string, CubemapFace>("px", CubemapFace.PositiveX),
+            new KeyValuePair<string, CubemapFace>("py", CubemapFace.PositiveY),
+            new KeyValuePair<string, CubemapFace>("nz", CubemapFace.PositiveZ),
+            new KeyValuePair<string, CubemapFace>("nx", CubemapFace.NegativeX),
+            new KeyValuePair<string, CubemapFace>("ny", CubemapFace.NegativeY),
+            new KeyValuePair<string, CubemapFace>("pz", CubemapFace.NegativeZ),
+        };
 
         public static string GetLoadedNoteTexture()
         {
@@ -60,7 +69,6 @@ namespace NoteTweaks.Managers
         {
             Plugin.Log.Info("Setting texture filenames for dropdown...");
             SettingsViewController.NoteTextureChoices.Clear();
-            SettingsViewController.NoteTextureChoices.Add("Default");
 
             if (!Directory.Exists(ImagePath))
             {
@@ -72,53 +80,64 @@ namespace NoteTweaks.Managers
             {
                 int count = 0;
                 
-                foreach (string wantedFilename in CubemapFaceFilenames)
+                FaceNames.ForEach(pair =>
                 {
                     foreach (string extension in FileExtensions)
                     {
-                        string path = $"{dir}/{wantedFilename}{extension}";
+                        string path = $"{dir}/{pair.Key}{extension}";
                         if (File.Exists(path))
                         {
                             count++;
                             break;
                         }
                     }
-                }
+                });
 
                 if (count == 6)
                 {
                     SettingsViewController.NoteTextureChoices.Add(dir.Split('\\').Last());
                 }
             }
+            
+            string[] files = Directory.GetFiles(ImagePath);
+            foreach (string file in files)
+            {
+                if (FileExtensions.Contains(Path.GetExtension(file).ToLower()))
+                {
+                    SettingsViewController.NoteTextureChoices.Add(Path.GetFileNameWithoutExtension(file));
+                }
+            }
+            
+            SettingsViewController.NoteTextureChoices.Sort();
+            SettingsViewController.NoteTextureChoices = SettingsViewController.NoteTextureChoices.Prepend("Default").ToList();
 
             Plugin.Log.Info("Set texture filenames");
         }
-
+        
         private static void OnNoteImageLoaded(List<KeyValuePair<string, Texture2D>> textures)
         {
-            Color[] px = textures.Find(x => x.Key == "px").Value.GetPixels();
-            px = px.Select(color => color.CheckForInversion()).Reverse().ToArray();
-            Color[] py = textures.Find(x => x.Key == "py").Value.GetPixels();
-            py = py.Select(color => color.CheckForInversion()).Reverse().ToArray();
-            Color[] pz = textures.Find(x => x.Key == "pz").Value.GetPixels();
-            pz = pz.Select(color => color.CheckForInversion()).Reverse().ToArray();
-            Color[] nx = textures.Find(x => x.Key == "nx").Value.GetPixels();
-            nx = nx.Select(color => color.CheckForInversion()).Reverse().ToArray();
-            Color[] ny = textures.Find(x => x.Key == "ny").Value.GetPixels();
-            ny = ny.Select(color => color.CheckForInversion()).Reverse().ToArray();
-            Color[] nz = textures.Find(x => x.Key == "nz").Value.GetPixels();
-            nz = nz.Select(color => color.CheckForInversion()).Reverse().ToArray();
-            
             NoteTexture = new Cubemap(512, textures.First().Value.format, 0)
             {
                 name = $"NoteTweaks_NoteCubemap_{Plugin.Config.NoteTexture}"
             };
-            NoteTexture.SetPixels(px, CubemapFace.PositiveX);
-            NoteTexture.SetPixels(py, CubemapFace.PositiveY);
-            NoteTexture.SetPixels(nz, CubemapFace.PositiveZ);
-            NoteTexture.SetPixels(nx, CubemapFace.NegativeX);
-            NoteTexture.SetPixels(ny, CubemapFace.NegativeY);
-            NoteTexture.SetPixels(pz, CubemapFace.NegativeZ);
+            
+            if (textures.Any(x => x.Key == "all"))
+            {
+                Color[] texture = textures.Find(x => x.Key == "all").Value.GetPixels();
+                texture = texture.Select(color => color.CheckForInversion()).Reverse().ToArray();
+                
+                FaceNames.Do(pair => NoteTexture.SetPixels(texture, pair.Value));
+            }
+            else
+            {
+                FaceNames.Do(pair =>
+                {
+                    Color[] texture = textures.Find(x => x.Key == pair.Key).Value.GetPixels();
+                    texture = texture.Select(color => color.CheckForInversion()).Reverse().ToArray();
+
+                    NoteTexture.SetPixels(texture, pair.Value);
+                });
+            }
             NoteTexture.Apply();
 
             Managers.Materials.NoteMaterial.mainTexture = NoteTexture;
@@ -129,82 +148,107 @@ namespace NoteTweaks.Managers
         
         private static void OnBombImageLoaded(List<KeyValuePair<string, Texture2D>> textures)
         {
-            Color[] px = textures.Find(x => x.Key == "px").Value.GetPixels();
-            px = px.Select(color => color.CheckForInversion(true)).Reverse().ToArray();
-            Color[] py = textures.Find(x => x.Key == "py").Value.GetPixels();
-            py = py.Select(color => color.CheckForInversion(true)).Reverse().ToArray();
-            Color[] pz = textures.Find(x => x.Key == "pz").Value.GetPixels();
-            pz = pz.Select(color => color.CheckForInversion(true)).Reverse().ToArray();
-            Color[] nx = textures.Find(x => x.Key == "nx").Value.GetPixels();
-            nx = nx.Select(color => color.CheckForInversion(true)).Reverse().ToArray();
-            Color[] ny = textures.Find(x => x.Key == "ny").Value.GetPixels();
-            ny = ny.Select(color => color.CheckForInversion(true)).Reverse().ToArray();
-            Color[] nz = textures.Find(x => x.Key == "nz").Value.GetPixels();
-            nz = nz.Select(color => color.CheckForInversion(true)).Reverse().ToArray();
-            
             BombTexture = new Cubemap(512, textures.First().Value.format, 0)
             {
                 name = $"NoteTweaks_BombCubemap_{Plugin.Config.BombTexture}"
             };
-            BombTexture.SetPixels(px, CubemapFace.PositiveX);
-            BombTexture.SetPixels(py, CubemapFace.PositiveY);
-            BombTexture.SetPixels(nz, CubemapFace.PositiveZ);
-            BombTexture.SetPixels(nx, CubemapFace.NegativeX);
-            BombTexture.SetPixels(ny, CubemapFace.NegativeY);
-            BombTexture.SetPixels(pz, CubemapFace.NegativeZ);
+            
+            if (textures.Any(x => x.Key == "all"))
+            {
+                Color[] texture = textures.Find(x => x.Key == "all").Value.GetPixels();
+                texture = texture.Select(color => color.CheckForInversion(true)).Reverse().ToArray();
+                
+                FaceNames.Do(pair => BombTexture.SetPixels(texture, pair.Value));
+            }
+            else
+            {
+                FaceNames.Do(pair =>
+                {
+                    Color[] texture = textures.Find(x => x.Key == pair.Key).Value.GetPixels();
+                    texture = texture.Select(color => color.CheckForInversion(true)).Reverse().ToArray();
+
+                    BombTexture.SetPixels(texture, pair.Value);
+                });
+            }
             BombTexture.Apply();
 
             Managers.Materials.BombMaterial.mainTexture = BombTexture;
             Managers.Materials.BombMaterial.SetTexture(NoteCubeMapID, BombTexture);
         }
 
-        internal static async Task LoadNoteTexture(string dirname, bool isBomb = false)
+        private static void LoadDefaultNoteTexture(bool isBomb = false)
         {
-            if (dirname == "Default" || !Directory.Exists(Path.Combine(ImagePath, dirname)))
+            if (isBomb)
             {
-                Plugin.Log.Info("Using default note texture...");
-                if (isBomb)
-                {
-                    BombTexture = OriginalNoteTexture;
-                    Managers.Materials.BombMaterial.SetTexture(NoteCubeMapID, BombTexture);
-                }
-                else
-                {
-                    NoteTexture = OriginalNoteTexture;
-                    Managers.Materials.NoteMaterial.SetTexture(NoteCubeMapID, NoteTexture);
-                    Managers.Materials.DebrisMaterial.SetTexture(NoteCubeMapID, NoteTexture);
-                }
+                BombTexture = OriginalNoteTexture;
+                Managers.Materials.BombMaterial.SetTexture(NoteCubeMapID, BombTexture);
             }
             else
             {
-                Plugin.Log.Info($"Loading textures in directory {dirname}...");
+                NoteTexture = OriginalNoteTexture;
+                Managers.Materials.NoteMaterial.SetTexture(NoteCubeMapID, NoteTexture);
+                Managers.Materials.DebrisMaterial.SetTexture(NoteCubeMapID, NoteTexture);
+            }
+        }
+
+        internal static async Task LoadNoteTexture(string dirname, bool isBomb = false)
+        {
+            if (dirname == "Default")
+            {
+                Plugin.Log.Info("Using default note texture...");
+                LoadDefaultNoteTexture(isBomb);
+            }
+            else
+            {
+                Plugin.Log.Info($"Loading texture {dirname}...");
 
                 List<KeyValuePair<string, Texture2D>> textures = new List<KeyValuePair<string, Texture2D>>();
-                foreach (string faceFilename in CubemapFaceFilenames)
-                {
-                    string path = null;
-                    bool foundImage = false;
-                    foreach (string extension in FileExtensions)
-                    {
-                        path = Path.Combine(ImagePath, dirname, faceFilename + extension);
-                        if (File.Exists(path))
-                        {
-                            foundImage = true;
-                            break;
-                        }
-                    }
 
-                    if (!foundImage)
+                string singleFileFilename = null;
+                foreach (string extension in FileExtensions)
+                {
+                    string path = Path.Combine(ImagePath, dirname + extension);
+                    if (File.Exists(path))
                     {
-                        Plugin.Log.Info($"{dirname} does not have all required images (px, py, pz, nx, ny, nz)");
+                        singleFileFilename = path;
                         break;
                     }
+                }
+                
+                if (singleFileFilename != null)
+                {
+                    Texture2D loadedImage = await Utilities.LoadImageAsync(singleFileFilename, true, false);
+                    textures.Add(new KeyValuePair<string, Texture2D>("all", loadedImage));
+                }
+                else
+                {
+                    foreach (string faceFilename in FaceNames.Select(pair => pair.Key))
+                    {
+                        string path = null;
+                        bool foundImage = false;
+                        foreach (string extension in FileExtensions)
+                        {
+                            path = Path.Combine(ImagePath, dirname, faceFilename + extension);
+                            if (File.Exists(path))
+                            {
+                                foundImage = true;
+                                break;
+                            }
+                        }
+
+                        if (!foundImage)
+                        {
+                            Plugin.Log.Info($"{dirname} does not have all required images (px, py, pz, nx, ny, nz)");
+                            LoadDefaultNoteTexture(isBomb);
+                            return;
+                        }
                     
-                    //Plugin.Log.Info($"Loading texture {path}...");
-                    Texture2D loadedImage = await Utilities.LoadImageAsync(path, true, false);
-                    //Plugin.Log.Info($"Loaded texture {path}");
+                        //Plugin.Log.Info($"Loading texture {path}...");
+                        Texture2D loadedImage = await Utilities.LoadImageAsync(path, true, false);
+                        //Plugin.Log.Info($"Loaded texture {path}");
                     
-                    textures.Add(new KeyValuePair<string, Texture2D>(Path.GetFileNameWithoutExtension(path), loadedImage));
+                        textures.Add(new KeyValuePair<string, Texture2D>(Path.GetFileNameWithoutExtension(path), loadedImage));
+                    }   
                 }
                 
                 Plugin.Log.Info("Textures loaded");
