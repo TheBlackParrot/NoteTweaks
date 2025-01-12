@@ -58,6 +58,18 @@ namespace NoteTweaks.Patches
             }
             return EnabledPlugins.Any(x => x.Name == "NoodleExtensions") && hasNoodle;
         }
+        
+        private static bool MapHasVivify(BeatmapLevel beatmapLevel, BeatmapKey beatmapKey)
+        {
+            bool hasVivify = false;
+            
+            ExtraSongData.DifficultyData diffData = RetrieveDifficultyData(beatmapLevel, beatmapKey);
+            if (diffData != null)
+            {
+                hasVivify = diffData.additionalDifficultyData._requirements.Any(x => x == "Vivify");
+            }
+            return hasVivify;
+        }
 
         // thanks BeatLeader
         [HarmonyPatch]
@@ -68,7 +80,7 @@ namespace NoteTweaks.Patches
                      m.GetParameters().All(p => p.ParameterType != typeof(IBeatmapLevelData)));
             internal static void Postfix(StandardLevelScenesTransitionSetupDataSO __instance, in GameplayModifiers gameplayModifiers)
             {
-                _autoDisable = MapHasNoodle(__instance.beatmapLevel, __instance.beatmapKey) && Plugin.Config.DisableIfNoodle;
+                _autoDisable = (MapHasNoodle(__instance.beatmapLevel, __instance.beatmapKey) && Plugin.Config.DisableIfNoodle) || MapHasVivify(__instance.beatmapLevel, __instance.beatmapKey);
                 
                 _gameplayModifiers = gameplayModifiers;
                 Plugin.ClampSettings();
