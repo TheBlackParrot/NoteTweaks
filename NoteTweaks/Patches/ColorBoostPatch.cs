@@ -2,6 +2,7 @@
 using System.Reflection;
 using HarmonyLib;
 using IPA.Utilities;
+using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -13,7 +14,6 @@ namespace NoteTweaks.Patches
         internal static Color OriginalLeftColor;
         internal static Color OriginalRightColor;
         
-        [HarmonyPatch(typeof(StandardLevelScenesTransitionSetupDataSO), "Init")]
         private static ColorScheme PatchColors(ColorScheme scheme)
         {
             float leftScale = 1.0f + Plugin.Config.ColorBoostLeft;
@@ -36,9 +36,10 @@ namespace NoteTweaks.Patches
 
         // leaving this here In Case:tm:, but it should never trigger in game versions older than 1.34.2
         // newer game versions need this fix
-        internal static bool DidApplySaveFix = false;
+        private static bool _didApplySaveFix;
         [HarmonyPatch(typeof(PlayerDataModel), "Save")]
         [HarmonyPrefix]
+        // ReSharper disable once InconsistentNaming
         private static bool SaveFix(PlayerDataModel __instance)
         {
             if (SceneManager.GetActiveScene().name != "GameCore" || !Plugin.Config.Enabled)
@@ -55,7 +56,7 @@ namespace NoteTweaks.Patches
             {
                 if (selectedScheme.colorSchemeId.Contains("User") && settings.overrideDefaultColors)
                 {
-                    DidApplySaveFix = true;
+                    _didApplySaveFix = true;
                     Plugin.Log.Info("Applied color scheme save data fix");
                     
                     selectedScheme._saberAColor = OriginalLeftColor;
@@ -69,6 +70,7 @@ namespace NoteTweaks.Patches
 
         [HarmonyPatch(typeof(PlayerDataModel), "Save")]
         [HarmonyPostfix]
+        // ReSharper disable once InconsistentNaming
         private static void SaveFixUndo(PlayerDataModel __instance)
         {
             if (SceneManager.GetActiveScene().name != "GameCore" || !Plugin.Config.Enabled)
@@ -79,9 +81,9 @@ namespace NoteTweaks.Patches
             ColorSchemesSettings settings = __instance.playerData.colorSchemesSettings;
             ColorScheme selectedScheme = settings.GetSelectedColorScheme();
             
-            if (DidApplySaveFix)
+            if (_didApplySaveFix)
             {
-                DidApplySaveFix = false;
+                _didApplySaveFix = false;
                 settings.SetColorSchemeForId(PatchColors(selectedScheme));
                 Plugin.Log.Info("Undid color scheme save data fix, data has been saved");
             }
@@ -89,6 +91,7 @@ namespace NoteTweaks.Patches
         
         [HarmonyPatch(typeof(StandardLevelScenesTransitionSetupDataSO), "Init")]
         [HarmonyPostfix]
+        // ReSharper disable once InconsistentNaming
         private static void InitColorInfoPatch(StandardLevelScenesTransitionSetupDataSO __instance)
         {
             
@@ -103,9 +106,12 @@ namespace NoteTweaks.Patches
         [HarmonyPatch]
         internal class MissionInitPatch
         {
+            [UsedImplicitly]
             static MethodInfo TargetMethod() => AccessTools.FirstMethod(typeof(MissionLevelScenesTransitionSetupDataSO),
                 m => m.Name == nameof(MissionLevelScenesTransitionSetupDataSO.Init) &&
                      m.GetParameters().All(p => p.ParameterType != typeof(IBeatmapLevelData)));
+            
+            // ReSharper disable once InconsistentNaming
             internal static void Postfix(MissionLevelScenesTransitionSetupDataSO __instance)
             {
                 if (!Plugin.Config.Enabled)
@@ -119,6 +125,7 @@ namespace NoteTweaks.Patches
 
         [HarmonyPatch(typeof(StandardLevelRestartController), "RestartLevel")]
         [HarmonyPostfix]
+        // ReSharper disable once InconsistentNaming
         private static void StandardLevelRestartControllerPatch(StandardLevelRestartController __instance)
         {
             if (!Plugin.Config.Enabled)
@@ -134,6 +141,7 @@ namespace NoteTweaks.Patches
         
         [HarmonyPatch(typeof(MissionLevelRestartController), "RestartLevel")]
         [HarmonyPostfix]
+        // ReSharper disable once InconsistentNaming
         private static void MissionLevelRestartControllerPatch(MissionLevelRestartController __instance)
         {
             if (!Plugin.Config.Enabled)
@@ -149,6 +157,7 @@ namespace NoteTweaks.Patches
         
         [HarmonyPatch(typeof(StandardLevelScenesTransitionSetupDataSO), "Finish")]
         [HarmonyPostfix]
+        // ReSharper disable once InconsistentNaming
         private static void FinishPatch(StandardLevelScenesTransitionSetupDataSO __instance)
         {
             if (!Plugin.Config.Enabled)
@@ -165,6 +174,7 @@ namespace NoteTweaks.Patches
         
         [HarmonyPatch(typeof(MissionLevelScenesTransitionSetupDataSO), "Finish")]
         [HarmonyPostfix]
+        // ReSharper disable once InconsistentNaming
         private static void FinishMissionPatch(MissionLevelScenesTransitionSetupDataSO __instance)
         {
             if (!Plugin.Config.Enabled)
