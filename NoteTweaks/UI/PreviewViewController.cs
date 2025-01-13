@@ -35,6 +35,11 @@ namespace NoteTweaks.UI
         private static readonly List<string> FaceNames = new List<string> { "NoteArrow", "NoteCircleGlow", "Circle" };
         private static readonly List<string> GlowNames = new List<string> { "NoteArrowGlow", "AddedNoteCircleGlow" };
 
+        public NotePreviewViewController()
+        {
+            DontDestroyOnLoad(NoteContainer);
+        }
+
         public static void UpdateDotMesh()
         {
             if (_dotGlowMesh == null)
@@ -636,6 +641,11 @@ namespace NoteTweaks.UI
         
         protected void OnEnable()
         {
+            if (NoteContainer == null)
+            {
+                NoteContainer = new GameObject("_NoteTweaks_NoteContainer");
+                DontDestroyOnLoad(NoteContainer);
+            }
             Textures.LoadTextureChoices();
             
             if (HasInitialized)
