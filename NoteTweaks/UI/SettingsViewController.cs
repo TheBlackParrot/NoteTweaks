@@ -1,8 +1,12 @@
 ﻿using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using BeatSaberMarkupLanguage.Attributes;
+using BeatSaberMarkupLanguage.Components.Settings;
 using BeatSaberMarkupLanguage.ViewControllers;
 using JetBrains.Annotations;
 using NoteTweaks.Configuration;
+using NoteTweaks.Managers;
 using UnityEngine;
 using Zenject;
 
@@ -481,7 +485,7 @@ namespace NoteTweaks.UI
                 _config.NoteTexture = value;
                 if (LoadTextures)
                 {
-                    Managers.Textures.LoadNoteTexture(value);
+                    Textures.LoadNoteTexture(value);
                 }
             }
         }
@@ -514,7 +518,7 @@ namespace NoteTweaks.UI
                 _config.BombTexture = value;
                 if (LoadTextures)
                 {
-                    Managers.Textures.LoadNoteTexture(value, true);
+                    Textures.LoadNoteTexture(value, true);
                 }
             }
         }
@@ -537,7 +541,7 @@ namespace NoteTweaks.UI
                 _config.InvertBombTexture = value;
                 if (LoadTextures)
                 {
-                    Managers.Textures.LoadNoteTexture(Plugin.Config.BombTexture, true);
+                    Textures.LoadNoteTexture(Plugin.Config.BombTexture, true);
                 }
             }
         }
@@ -550,13 +554,83 @@ namespace NoteTweaks.UI
                 _config.InvertNoteTexture = value;
                 if (LoadTextures)
                 {
-                    Managers.Textures.LoadNoteTexture(Plugin.Config.NoteTexture);
+                    Textures.LoadNoteTexture(Plugin.Config.NoteTexture);
                 }
             }
         }
+        
+        [UIComponent("selectedNoteTexture")]
+        public DropDownListSetting noteTextureDropDown;
 
         [UIValue("noteTextureChoices")]
-        // ReSharper disable once CollectionNeverQueried.Global
-        internal static List<object> NoteTextureChoices = new List<object>();
+        private List<object> NoteTextureChoices => LoadTextureChoices();
+        
+        [UIAction("#post-parse")]
+        public void UpdateTextureList()
+        {
+            UpdateTextureChoices();
+        }
+
+        private void UpdateTextureChoices()
+        {
+            if (noteTextureDropDown == null)
+            {
+                return;
+            }
+            
+            noteTextureDropDown.Values = NoteTextureChoices;
+            noteTextureDropDown.UpdateChoices();
+        }
+
+        private List<object> LoadTextureChoices()
+        {
+            Plugin.Log.Info("Setting texture filenames for dropdown...");
+            List<object> choices = new List<object>();
+
+            if (!Directory.Exists(Textures.ImagePath))
+            {
+                Directory.CreateDirectory(Textures.ImagePath);
+            }
+            
+            string[] dirs = Directory.GetDirectories(Textures.ImagePath);
+            foreach (string dir in dirs)
+            {
+                int count = 0;
+                
+                Textures.FaceNames.ForEach(pair =>
+                {
+                    foreach (string extension in Textures.FileExtensions)
+                    {
+                        string path = $"{dir}/{pair.Key}{extension}";
+                        if (File.Exists(path))
+                        {
+                            count++;
+                            break;
+                        }
+                    }
+                });
+
+                if (count == 6)
+                {
+                    choices.Add(dir.Split('\\').Last());
+                }
+            }
+            
+            string[] files = Directory.GetFiles(Textures.ImagePath);
+            foreach (string file in files)
+            {
+                if (Textures.FileExtensions.Contains(Path.GetExtension(file).ToLower()))
+                {
+                    choices.Add(Path.GetFileNameWithoutExtension(file));
+                }
+            }
+            
+            choices.Sort();
+            choices = choices.Prepend("Default").ToList();
+
+            Plugin.Log.Info("Set texture filenames");
+
+            return choices;
+        }
     }
 }
