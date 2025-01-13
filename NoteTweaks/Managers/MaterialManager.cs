@@ -23,24 +23,15 @@ namespace NoteTweaks.Managers
 
         internal static async Task UpdateAll()
         {
-            UpdateNoteMaterial();
             UpdateDebrisMaterial();
-            UpdateBombMaterial();
             UpdateReplacementDotMaterial();
             UpdateReplacementArrowMaterial();
             UpdateDotGlowMaterial();
             UpdateArrowGlowMaterial();
             UpdateAccDotMaterial();
             
-            if (Managers.Textures.GetLoadedNoteTexture() != Plugin.Config.NoteTexture)
-            {
-                await Managers.Textures.LoadNoteTexture(Plugin.Config.NoteTexture);
-            }
-
-            if (Managers.Textures.GetLoadedBombTexture() != Plugin.Config.BombTexture)
-            {
-                await Managers.Textures.LoadNoteTexture(Plugin.Config.BombTexture, true);
-            }
+            await UpdateNoteMaterial();
+            await UpdateBombMaterial();
             
             UpdateRenderQueues();
         }
@@ -133,7 +124,7 @@ namespace NoteTweaks.Managers
             // Utils.Materials.RepairShader(AccDotDepthMaterial);
         }
         
-        private static void UpdateNoteMaterial()
+        private static async Task UpdateNoteMaterial()
         {
             if (NoteMaterial != null)
             {
@@ -146,6 +137,11 @@ namespace NoteTweaks.Managers
                 name = "NoteTweaks_NoteMaterial",
                 renderQueue = 1995
             };
+            
+            if (Managers.Textures.GetLoadedNoteTexture() != Plugin.Config.NoteTexture)
+            {
+                await Managers.Textures.LoadNoteTexture(Plugin.Config.NoteTexture);
+            }
         }
         
         private static void UpdateDebrisMaterial()
@@ -163,7 +159,7 @@ namespace NoteTweaks.Managers
             };
         }
         
-        private static void UpdateBombMaterial()
+        private static async Task UpdateBombMaterial()
         {
             if (BombMaterial != null)
             {
@@ -175,6 +171,11 @@ namespace NoteTweaks.Managers
             {
                 name = "NoteTweaks_BombMaterial"
             };
+            
+            if (Managers.Textures.GetLoadedBombTexture() != Plugin.Config.BombTexture)
+            {
+                await Managers.Textures.LoadNoteTexture(Plugin.Config.BombTexture, true);
+            }
         }
 
         private static void UpdateRenderQueues()
