@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using BeatSaberMarkupLanguage;
 using HarmonyLib;
 using IPA.Utilities;
-using NoteTweaks.UI;
 using NoteTweaks.Utils;
 using UnityEngine;
 
