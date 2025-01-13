@@ -30,17 +30,17 @@ namespace NoteTweaks.Managers
     {
         private static readonly string[] FileExtensions = { ".png", ".jpg", ".tga" };
         private static readonly string ImagePath = Path.Combine(UnityGame.UserDataPath, "NoteTweaks", "Textures", "Notes");
-        
-        private static readonly Texture2D OriginalArrowGlowTexture = Resources.FindObjectsOfTypeAll<Texture2D>().ToList().First(x => x.name == "ArrowGlow");
-        internal static readonly Texture2D ReplacementArrowGlowTexture = OriginalArrowGlowTexture.PrepareTexture();
-        
-        private static readonly Texture2D OriginalDotGlowTexture = Resources.FindObjectsOfTypeAll<Texture2D>().ToList().First(x => x.name == "NoteCircleBakedGlow");
-        internal static readonly Texture2D ReplacementDotGlowTexture = OriginalDotGlowTexture.PrepareTexture();
+
+        private static Texture2D OriginalArrowGlowTexture;
+        internal static Texture2D ReplacementArrowGlowTexture;
+
+        private static Texture2D OriginalDotGlowTexture;
+        internal static Texture2D ReplacementDotGlowTexture;
 
         private static readonly int NoteCubeMapID = Shader.PropertyToID("_EnvironmentReflectionCube");
-        private static readonly Cubemap OriginalNoteTexture = Resources.FindObjectsOfTypeAll<Cubemap>().ToList().First(x => x.name == "NotesReflection");
-        private static Cubemap _noteTexture = OriginalNoteTexture;
-        private static Cubemap _bombTexture = OriginalNoteTexture;
+        private static Cubemap OriginalNoteTexture;
+        private static Cubemap _noteTexture;
+        private static Cubemap _bombTexture;
         
         private static readonly List<KeyValuePair<string, CubemapFace>> FaceNames = new List<KeyValuePair<string, CubemapFace>>
         {
@@ -61,10 +61,24 @@ namespace NoteTweaks.Managers
             return _bombTexture.name.Split("_"[0]).Last();
         }
 
+        internal static void SetDefaultTextures()
+        {
+            OriginalArrowGlowTexture = Resources.FindObjectsOfTypeAll<Texture2D>().ToList().First(x => x.name == "ArrowGlow");
+            ReplacementArrowGlowTexture = OriginalArrowGlowTexture.PrepareTexture();
+            
+            OriginalDotGlowTexture = Resources.FindObjectsOfTypeAll<Texture2D>().ToList().First(x => x.name == "NoteCircleBakedGlow");
+            ReplacementDotGlowTexture = OriginalDotGlowTexture.PrepareTexture();
+            
+            OriginalNoteTexture = Resources.FindObjectsOfTypeAll<Cubemap>().ToList().First(x => x.name == "NotesReflection");
+            _noteTexture = OriginalNoteTexture;
+            _bombTexture = OriginalNoteTexture;
+        }
+
         internal static void LoadTextureChoices()
         {
             Plugin.Log.Info("Setting texture filenames for dropdown...");
             SettingsViewController.NoteTextureChoices.Clear();
+            List<object> choices = new List<object>();
 
             if (!Directory.Exists(ImagePath))
             {
@@ -91,7 +105,7 @@ namespace NoteTweaks.Managers
 
                 if (count == 6)
                 {
-                    SettingsViewController.NoteTextureChoices.Add(dir.Split('\\').Last());
+                    choices.Add(dir.Split('\\').Last());
                 }
             }
             
@@ -100,12 +114,12 @@ namespace NoteTweaks.Managers
             {
                 if (FileExtensions.Contains(Path.GetExtension(file).ToLower()))
                 {
-                    SettingsViewController.NoteTextureChoices.Add(Path.GetFileNameWithoutExtension(file));
+                    choices.Add(Path.GetFileNameWithoutExtension(file));
                 }
             }
             
-            SettingsViewController.NoteTextureChoices.Sort();
-            SettingsViewController.NoteTextureChoices = SettingsViewController.NoteTextureChoices.Prepend("Default").ToList();
+            choices.Sort();
+            SettingsViewController.NoteTextureChoices = choices.Prepend("Default").ToList();
 
             Plugin.Log.Info("Set texture filenames");
         }

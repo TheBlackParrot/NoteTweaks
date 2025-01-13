@@ -8,6 +8,7 @@ using BeatSaberMarkupLanguage.ViewControllers;
 using NoteTweaks.Managers;
 using NoteTweaks.Utils;
 using UnityEngine;
+using Textures = NoteTweaks.Managers.Textures;
 
 namespace NoteTweaks.UI
 {
@@ -635,7 +636,7 @@ namespace NoteTweaks.UI
         
         protected void OnEnable()
         {
-            Managers.Textures.LoadTextureChoices();
+            Textures.LoadTextureChoices();
             
             if (HasInitialized)
             {
@@ -666,6 +667,7 @@ namespace NoteTweaks.UI
                             // ReSharper restore PossibleNullReferenceException
                             
                             SettingsViewController.LoadTextures = true;
+                            Textures.SetDefaultTextures();
                             await Materials.UpdateAll();
                             
                             List<String> noteNames = new List<string> { "L_Arrow", "R_Arrow", "L_Dot", "R_Dot" };
