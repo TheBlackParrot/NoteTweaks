@@ -246,7 +246,7 @@ Configuration is done in-game via a Menu button in the left panel of the Main Me
 > Invert the cubemap texture for bombs
 
 ## Custom Cubemap textures
-Cubemap textures can be changed on notes and bombs; NoteTweaks will pull individual face textures from folders in `UserData/NoteTweaks/Textures/Notes`.
+Cubemap textures can be changed on notes and bombs; NoteTweaks will pull individual face textures from folders in `UserData/NoteTweaks/Textures/Notes`, and can dynamically generate a cubemap from a single texture as well.
 
 Each folder should have a **512x512** image **(in `.jpg`, `.png`, or `.tga`)** for each side of a cube:
 - `nx` *(left)*
@@ -257,6 +257,8 @@ Each folder should have a **512x512** image **(in `.jpg`, `.png`, or `.tga`)** f
 - `pz` *(front)*
 
 If any images are missing, or if an image is not any of the expected filetypes, the folder will not be selectable in-game.
+
+Individual images outside of folders can also be selected.
 
 I've provided [36 cubemap textures](https://github.com/TheBlackParrot/NoteTweaks/releases/download/0.5.0/Note.Cubemap.Textures.zip) that you can use with the mod, ready-to-go. If you want to convert a panoramic image, [Kyle Nguyen's Optifine Sky Generator](https://skybox-generator.vercel.app) is an easy online tool to split the image into 6 cube faces. *(use a 2048x1024 image to get 512x512 face textures, no post-resizing needed)*
 

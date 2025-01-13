@@ -17,6 +17,8 @@ namespace NoteTweaks.UI
         public string AccFormatter(int x) => (x + 100).ToString();
         public string DegreesFormatter(float x) => $"{x:0.#}\u00b0";
 
+        internal static bool LoadTextures = false;
+
         [Inject]
         private void Construct(PluginConfig config)
         {
@@ -475,8 +477,10 @@ namespace NoteTweaks.UI
             set
             {
                 _config.NoteTexture = value;
-                #pragma warning disable CS4014
-                Managers.Textures.LoadNoteTexture(value);
+                if (LoadTextures)
+                {
+                    Managers.Textures.LoadNoteTexture(value);
+                }
             }
         }
         
@@ -506,8 +510,10 @@ namespace NoteTweaks.UI
             set
             {
                 _config.BombTexture = value;
-                #pragma warning disable CS4014
-                Managers.Textures.LoadNoteTexture(value, true);
+                if (LoadTextures)
+                {
+                    Managers.Textures.LoadNoteTexture(value, true);
+                }
             }
         }
         
@@ -527,7 +533,10 @@ namespace NoteTweaks.UI
             set
             {
                 _config.InvertBombTexture = value;
-                Managers.Textures.LoadNoteTexture(Plugin.Config.BombTexture, true);
+                if (LoadTextures)
+                {
+                    Managers.Textures.LoadNoteTexture(Plugin.Config.BombTexture, true);
+                }
             }
         }
         
@@ -537,7 +546,10 @@ namespace NoteTweaks.UI
             set
             {
                 _config.InvertNoteTexture = value;
-                Managers.Textures.LoadNoteTexture(Plugin.Config.NoteTexture);
+                if (LoadTextures)
+                {
+                    Managers.Textures.LoadNoteTexture(Plugin.Config.NoteTexture);
+                }
             }
         }
 

@@ -664,6 +664,7 @@ namespace NoteTweaks.UI
                             BombNoteController bombPrefab = beatmapObjectsInstaller._bombNotePrefab;
                             BurstSliderGameNoteController chainPrefab = beatmapObjectsInstaller._burstSliderNotePrefab;
                             
+                            SettingsViewController.LoadTextures = true;
                             await Materials.UpdateAll();
                             
                             List<String> noteNames = new List<string> { "L_Arrow", "R_Arrow", "L_Dot", "R_Dot" };
