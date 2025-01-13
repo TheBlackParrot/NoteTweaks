@@ -1,4 +1,5 @@
 ﻿using HMUI;
+using JetBrains.Annotations;
 using UnityEngine;
 using Zenject;
 
@@ -12,6 +13,7 @@ namespace NoteTweaks.UI
         private ExtraPanelViewController _extraPanelViewController;
         
         [Inject]
+        [UsedImplicitly]
         private void Construct(
             MainFlowCoordinator mainFlowCoordinator,
             SettingsViewController settingsViewController,
@@ -42,6 +44,7 @@ namespace NoteTweaks.UI
             NotePreviewViewController.NoteContainer.SetActive(true);
         }
 
+        // ReSharper disable once ParameterHidesMember
         protected override void BackButtonWasPressed(ViewController topViewController)
         {
             _mainFlowCoordinator.DismissFlowCoordinator(this);

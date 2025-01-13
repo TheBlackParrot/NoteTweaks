@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using BeatSaberMarkupLanguage.Attributes;
 using BeatSaberMarkupLanguage.ViewControllers;
+using JetBrains.Annotations;
 using NoteTweaks.Configuration;
 using UnityEngine;
 using Zenject;
@@ -20,6 +21,7 @@ namespace NoteTweaks.UI
         internal static bool LoadTextures = false;
 
         [Inject]
+        [UsedImplicitly]
         private void Construct(PluginConfig config)
         {
             _config = config;
@@ -479,7 +481,7 @@ namespace NoteTweaks.UI
                 _config.NoteTexture = value;
                 if (LoadTextures)
                 {
-                    Managers.Textures.LoadNoteTexture(value);
+                    _ = Managers.Textures.LoadNoteTexture(value);
                 }
             }
         }
@@ -512,7 +514,7 @@ namespace NoteTweaks.UI
                 _config.BombTexture = value;
                 if (LoadTextures)
                 {
-                    Managers.Textures.LoadNoteTexture(value, true);
+                    _ = Managers.Textures.LoadNoteTexture(value, true);
                 }
             }
         }
@@ -535,7 +537,7 @@ namespace NoteTweaks.UI
                 _config.InvertBombTexture = value;
                 if (LoadTextures)
                 {
-                    Managers.Textures.LoadNoteTexture(Plugin.Config.BombTexture, true);
+                    _ = Managers.Textures.LoadNoteTexture(Plugin.Config.BombTexture, true);
                 }
             }
         }
@@ -548,7 +550,7 @@ namespace NoteTweaks.UI
                 _config.InvertNoteTexture = value;
                 if (LoadTextures)
                 {
-                    Managers.Textures.LoadNoteTexture(Plugin.Config.NoteTexture);
+                    _ = Managers.Textures.LoadNoteTexture(Plugin.Config.NoteTexture);
                 }
             }
         }

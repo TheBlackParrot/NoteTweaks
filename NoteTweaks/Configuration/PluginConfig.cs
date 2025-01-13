@@ -1,6 +1,7 @@
 ﻿using System.Runtime.CompilerServices;
 using IPA.Config.Stores;
 using UnityEngine;
+// ReSharper disable RedundantDefaultMemberInitializer
 
 [assembly: InternalsVisibleTo(GeneratedStore.AssemblyVisibilityTarget)]
 

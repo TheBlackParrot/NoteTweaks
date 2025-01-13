@@ -1,13 +1,14 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
 using HarmonyLib;
+using JetBrains.Annotations;
 using NoteTweaks.Managers;
 using NoteTweaks.Utils;
 using SongCore.Data;
 using UnityEngine;
 using Object = UnityEngine.Object;
-using static IPA.Loader.PluginManager;
 using static SongCore.Collections;
 
 namespace NoteTweaks.Patches
@@ -26,9 +27,9 @@ namespace NoteTweaks.Patches
             Resources.FindObjectsOfTypeAll<Material>().First(x => x.name == "NoteHD").renderQueue = 1995;
             if (obj.TryGetComponent(out MeshRenderer meshRenderer))
             {
-                Color _c = Plugin.Config.AccDotColor;
-                _c.a = 0f;
-                Materials.AccDotMaterial.color = _c;
+                Color c = Plugin.Config.AccDotColor;
+                c.a = 0f;
+                Materials.AccDotMaterial.color = c;
                 
                 meshRenderer.sharedMaterial = Materials.AccDotMaterial;
             }
@@ -43,9 +44,9 @@ namespace NoteTweaks.Patches
         }
 
         private static GameObject _accDotObject = CreateAccDotObject();
-        private static readonly float AccDotSizeStep = ScoreModel.kMaxDistanceForDistanceToCenterScore / ScoreModel.kMaxCenterDistanceCutScore;
+        private const float AccDotSizeStep = ScoreModel.kMaxDistanceForDistanceToCenterScore / ScoreModel.kMaxCenterDistanceCutScore;
 
-        internal static bool _autoDisable = false;
+        internal static bool AutoDisable;
 
         private static bool MapHasRequirement(BeatmapLevel beatmapLevel, BeatmapKey beatmapKey, string requirement)
         {
@@ -63,12 +64,15 @@ namespace NoteTweaks.Patches
         [HarmonyPatch]
         internal class StandardLevelScenesTransitionSetupDataPatch
         {
+            [UsedImplicitly]
             static MethodInfo TargetMethod() => AccessTools.FirstMethod(typeof(StandardLevelScenesTransitionSetupDataSO),
                 m => m.Name == nameof(StandardLevelScenesTransitionSetupDataSO.Init) &&
                      m.GetParameters().All(p => p.ParameterType != typeof(IBeatmapLevelData)));
+            
+            // ReSharper disable once InconsistentNaming
             internal static void Postfix(StandardLevelScenesTransitionSetupDataSO __instance, in GameplayModifiers gameplayModifiers)
             {
-                _autoDisable =
+                AutoDisable =
                     (MapHasRequirement(__instance.beatmapLevel, __instance.beatmapKey, "Noodle Extensions") &&
                      Plugin.Config.DisableIfNoodle) ||
                     MapHasRequirement(__instance.beatmapLevel, __instance.beatmapKey, "Vivify");
@@ -79,6 +83,7 @@ namespace NoteTweaks.Patches
                 _dotMesh = Meshes.GenerateFaceMesh(Plugin.Config.DotMeshSides);
             }
 
+            // ReSharper disable once InconsistentNaming
             internal static bool Prefix(StandardLevelScenesTransitionSetupDataSO __instance)
             {
                 #pragma warning disable CS4014
@@ -117,9 +122,10 @@ namespace NoteTweaks.Patches
         [HarmonyPatch(typeof(BurstSliderGameNoteController), "Init")]
         internal class BurstSliderPatch
         {
+            [SuppressMessage("ReSharper", "InconsistentNaming")]
             internal static void Postfix(ref BurstSliderGameNoteController __instance, ref BoxCuttableBySaber[] ____bigCuttableBySaberList, ref BoxCuttableBySaber[] ____smallCuttableBySaberList)
             {
-                if (!Plugin.Config.Enabled || !IsAllowedToScaleNotes || _autoDisable)
+                if (!Plugin.Config.Enabled || !IsAllowedToScaleNotes || AutoDisable)
                 {
                     return;
                 }
@@ -148,9 +154,9 @@ namespace NoteTweaks.Patches
                             }
                         }
                         
-                        Color _c = Color.LerpUnclamped(isLeft ? Plugin.Config.LeftFaceGlowColor : Plugin.Config.RightFaceGlowColor, glowColor, isLeft ? Plugin.Config.LeftFaceGlowColorNoteSkew : Plugin.Config.RightFaceGlowColorNoteSkew);
-                        _c.a = isLeft ? Plugin.Config.LeftGlowIntensity : Plugin.Config.RightGlowIntensity;
-                        materialPropertyBlockController.materialPropertyBlock.SetColor(ColorNoteVisuals._colorId, _c);
+                        Color c = Color.LerpUnclamped(isLeft ? Plugin.Config.LeftFaceGlowColor : Plugin.Config.RightFaceGlowColor, glowColor, isLeft ? Plugin.Config.LeftFaceGlowColorNoteSkew : Plugin.Config.RightFaceGlowColorNoteSkew);
+                        c.a = isLeft ? Plugin.Config.LeftGlowIntensity : Plugin.Config.RightGlowIntensity;
+                        materialPropertyBlockController.materialPropertyBlock.SetColor(ColorNoteVisuals._colorId, c);
                         materialPropertyBlockController.ApplyChanges();
                     }
                 } 
@@ -175,9 +181,10 @@ namespace NoteTweaks.Patches
         [HarmonyPatch(typeof(GameNoteController), "Init")]
         internal class NotePatch
         {
+            [SuppressMessage("ReSharper", "InconsistentNaming")]
             internal static void Postfix(ref GameNoteController __instance, ref BoxCuttableBySaber[] ____bigCuttableBySaberList, ref BoxCuttableBySaber[] ____smallCuttableBySaberList)
             {
-                if (!Plugin.Config.Enabled || _autoDisable)
+                if (!Plugin.Config.Enabled || AutoDisable)
                 {
                     return;
                 }
@@ -255,9 +262,9 @@ namespace NoteTweaks.Patches
                                 }
                             }
                         
-                            Color _c = Color.LerpUnclamped(isLeft ? Plugin.Config.LeftFaceGlowColor : Plugin.Config.RightFaceGlowColor, glowColor, isLeft ? Plugin.Config.LeftFaceGlowColorNoteSkew : Plugin.Config.RightFaceGlowColorNoteSkew);
-                            _c.a = isLeft ? Plugin.Config.LeftGlowIntensity : Plugin.Config.RightGlowIntensity;
-                            materialPropertyBlockController.materialPropertyBlock.SetColor(ColorNoteVisuals._colorId, _c);
+                            Color c = Color.LerpUnclamped(isLeft ? Plugin.Config.LeftFaceGlowColor : Plugin.Config.RightFaceGlowColor, glowColor, isLeft ? Plugin.Config.LeftFaceGlowColorNoteSkew : Plugin.Config.RightFaceGlowColorNoteSkew);
+                            c.a = isLeft ? Plugin.Config.LeftGlowIntensity : Plugin.Config.RightGlowIntensity;
+                            materialPropertyBlockController.materialPropertyBlock.SetColor(ColorNoteVisuals._colorId, c);
                             materialPropertyBlockController.ApplyChanges();
                         }
                     } 
@@ -288,9 +295,10 @@ namespace NoteTweaks.Patches
         [HarmonyPatch(typeof(NoteDebris), "Init")]
         internal class DebrisPatch
         {
+            // ReSharper disable once InconsistentNaming
             internal static void Postfix(NoteDebris __instance)
             {
-                if (!Plugin.Config.Enabled || _autoDisable)
+                if (!Plugin.Config.Enabled || AutoDisable)
                 {
                     return;
                 }
@@ -307,24 +315,19 @@ namespace NoteTweaks.Patches
         [HarmonyPriority(int.MinValue)]
         internal class NoteArrowPatch
         {
-            private static bool _initialPositionDidSet = false;
+            private static bool _initialPositionDidSet;
             private static Vector3 _initialPosition = Vector3.zero;
-            private static bool _initialDotPositionDidSet = false;
+            private static bool _initialDotPositionDidSet;
             private static Vector3 _initialDotPosition = Vector3.zero;
-            private static bool _initialChainDotPositionDidSet = false;
+            private static bool _initialChainDotPositionDidSet;
             private static Vector3 _initialChainDotPosition = Vector3.zero;
             
+            [SuppressMessage("ReSharper", "InconsistentNaming")]
             internal static void Postfix(ColorNoteVisuals __instance, ref MeshRenderer[] ____arrowMeshRenderers, ref MeshRenderer[] ____circleMeshRenderers)
             {
-                if (!Plugin.Config.Enabled || _autoDisable || IsUsingHiddenTypeModifier)
+                if (!Plugin.Config.Enabled || AutoDisable || IsUsingHiddenTypeModifier)
                 {
                     return;
-                }
-
-                bool isChainHead = false;
-                if (__instance.gameObject.TryGetComponent(out GameNoteController c))
-                {
-                    isChainHead = c.gameplayType == NoteData.GameplayType.BurstSliderHead;   
                 }
                 
                 foreach (MeshRenderer meshRenderer in ____arrowMeshRenderers)
@@ -361,9 +364,9 @@ namespace NoteTweaks.Patches
                             }
                         }
                         
-                        Color _c = Color.LerpUnclamped(isLeft ? Plugin.Config.LeftFaceColor : Plugin.Config.RightFaceColor, faceColor, isLeft ? Plugin.Config.LeftFaceColorNoteSkew : Plugin.Config.RightFaceColorNoteSkew);
-                        _c.a = 0f;
-                        materialPropertyBlockController.materialPropertyBlock.SetColor(ColorNoteVisuals._colorId, _c);
+                        Color c = Color.LerpUnclamped(isLeft ? Plugin.Config.LeftFaceColor : Plugin.Config.RightFaceColor, faceColor, isLeft ? Plugin.Config.LeftFaceColorNoteSkew : Plugin.Config.RightFaceColorNoteSkew);
+                        c.a = 0f;
+                        materialPropertyBlockController.materialPropertyBlock.SetColor(ColorNoteVisuals._colorId, c);
                         materialPropertyBlockController.ApplyChanges();   
                     }
 
@@ -480,9 +483,9 @@ namespace NoteTweaks.Patches
                                 }
                             }
                         
-                            Color _c = Color.LerpUnclamped(isLeft ? Plugin.Config.LeftFaceColor : Plugin.Config.RightFaceColor, faceColor, isLeft ? Plugin.Config.LeftFaceColorNoteSkew : Plugin.Config.RightFaceColorNoteSkew);
-                            _c.a = 0f;
-                            materialPropertyBlockController.materialPropertyBlock.SetColor(ColorNoteVisuals._colorId, _c);
+                            Color c = Color.LerpUnclamped(isLeft ? Plugin.Config.LeftFaceColor : Plugin.Config.RightFaceColor, faceColor, isLeft ? Plugin.Config.LeftFaceColorNoteSkew : Plugin.Config.RightFaceColorNoteSkew);
+                            c.a = 0f;
+                            materialPropertyBlockController.materialPropertyBlock.SetColor(ColorNoteVisuals._colorId, c);
                             materialPropertyBlockController.ApplyChanges();   
                         }
 
@@ -544,9 +547,11 @@ namespace NoteTweaks.Patches
         [HarmonyPatch(typeof(SliderController), "Hide")]
         public static class SliderControllerPatch
         {
+            // ReSharper disable once InconsistentNaming
+            [UsedImplicitly]
             private static bool Prefix(SliderController __instance)
             {
-                if (!Plugin.Config.Enabled || _autoDisable)
+                if (!Plugin.Config.Enabled || AutoDisable)
                 {
                     return true;
                 }

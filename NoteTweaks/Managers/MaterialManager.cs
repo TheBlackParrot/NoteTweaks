@@ -138,9 +138,9 @@ namespace NoteTweaks.Managers
                 renderQueue = 1995
             };
             
-            if (Managers.Textures.GetLoadedNoteTexture() != Plugin.Config.NoteTexture)
+            if (Textures.GetLoadedNoteTexture() != Plugin.Config.NoteTexture)
             {
-                await Managers.Textures.LoadNoteTexture(Plugin.Config.NoteTexture);
+                await Textures.LoadNoteTexture(Plugin.Config.NoteTexture);
             }
         }
         
@@ -172,9 +172,9 @@ namespace NoteTweaks.Managers
                 name = "NoteTweaks_BombMaterial"
             };
             
-            if (Managers.Textures.GetLoadedBombTexture() != Plugin.Config.BombTexture)
+            if (Textures.GetLoadedBombTexture() != Plugin.Config.BombTexture)
             {
-                await Managers.Textures.LoadNoteTexture(Plugin.Config.BombTexture, true);
+                await Textures.LoadNoteTexture(Plugin.Config.BombTexture, true);
             }
         }
 
