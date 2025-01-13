@@ -5,13 +5,9 @@ using System.Threading.Tasks;
 using BeatSaberMarkupLanguage;
 using HarmonyLib;
 using IPA.Utilities;
-using ModestTree;
 using NoteTweaks.UI;
 using NoteTweaks.Utils;
-using Unity.Collections;
 using UnityEngine;
-using UnityEngine.Experimental.Rendering;
-using UnityEngine.Rendering;
 
 namespace NoteTweaks.Managers
 {
@@ -43,8 +39,8 @@ namespace NoteTweaks.Managers
 
         private static readonly int NoteCubeMapID = Shader.PropertyToID("_EnvironmentReflectionCube");
         private static readonly Cubemap OriginalNoteTexture = Resources.FindObjectsOfTypeAll<Cubemap>().ToList().First(x => x.name == "NotesReflection");
-        private static Cubemap NoteTexture = OriginalNoteTexture;
-        private static Cubemap BombTexture = OriginalNoteTexture;
+        private static Cubemap _noteTexture = OriginalNoteTexture;
+        private static Cubemap _bombTexture = OriginalNoteTexture;
         
         private static readonly List<KeyValuePair<string, CubemapFace>> FaceNames = new List<KeyValuePair<string, CubemapFace>>
         {
@@ -58,11 +54,11 @@ namespace NoteTweaks.Managers
 
         public static string GetLoadedNoteTexture()
         {
-            return NoteTexture.name.Split("_"[0]).Last();
+            return _noteTexture.name.Split("_"[0]).Last();
         }
         public static string GetLoadedBombTexture()
         {
-            return BombTexture.name.Split("_"[0]).Last();
+            return _bombTexture.name.Split("_"[0]).Last();
         }
 
         internal static void LoadTextureChoices()
@@ -116,7 +112,7 @@ namespace NoteTweaks.Managers
         
         private static void OnNoteImageLoaded(List<KeyValuePair<string, Texture2D>> textures)
         {
-            NoteTexture = new Cubemap(512, textures.First().Value.format, 0)
+            _noteTexture = new Cubemap(512, textures.First().Value.format, 0)
             {
                 name = $"NoteTweaks_NoteCubemap_{Plugin.Config.NoteTexture}"
             };
@@ -126,7 +122,7 @@ namespace NoteTweaks.Managers
                 Color[] texture = textures.Find(x => x.Key == "all").Value.GetPixels();
                 texture = texture.Select(color => color.CheckForInversion()).Reverse().ToArray();
                 
-                FaceNames.Do(pair => NoteTexture.SetPixels(texture, pair.Value));
+                FaceNames.Do(pair => _noteTexture.SetPixels(texture, pair.Value));
             }
             else
             {
@@ -135,20 +131,20 @@ namespace NoteTweaks.Managers
                     Color[] texture = textures.Find(x => x.Key == pair.Key).Value.GetPixels();
                     texture = texture.Select(color => color.CheckForInversion()).Reverse().ToArray();
 
-                    NoteTexture.SetPixels(texture, pair.Value);
+                    _noteTexture.SetPixels(texture, pair.Value);
                 });
             }
-            NoteTexture.Apply();
+            _noteTexture.Apply();
 
-            Managers.Materials.NoteMaterial.mainTexture = NoteTexture;
-            Managers.Materials.NoteMaterial.SetTexture(NoteCubeMapID, NoteTexture);
-            Managers.Materials.DebrisMaterial.mainTexture = NoteTexture;
-            Managers.Materials.DebrisMaterial.SetTexture(NoteCubeMapID, NoteTexture);
+            Materials.NoteMaterial.mainTexture = _noteTexture;
+            Materials.NoteMaterial.SetTexture(NoteCubeMapID, _noteTexture);
+            Materials.DebrisMaterial.mainTexture = _noteTexture;
+            Materials.DebrisMaterial.SetTexture(NoteCubeMapID, _noteTexture);
         }
         
         private static void OnBombImageLoaded(List<KeyValuePair<string, Texture2D>> textures)
         {
-            BombTexture = new Cubemap(512, textures.First().Value.format, 0)
+            _bombTexture = new Cubemap(512, textures.First().Value.format, 0)
             {
                 name = $"NoteTweaks_BombCubemap_{Plugin.Config.BombTexture}"
             };
@@ -158,7 +154,7 @@ namespace NoteTweaks.Managers
                 Color[] texture = textures.Find(x => x.Key == "all").Value.GetPixels();
                 texture = texture.Select(color => color.CheckForInversion(true)).Reverse().ToArray();
                 
-                FaceNames.Do(pair => BombTexture.SetPixels(texture, pair.Value));
+                FaceNames.Do(pair => _bombTexture.SetPixels(texture, pair.Value));
             }
             else
             {
@@ -167,27 +163,27 @@ namespace NoteTweaks.Managers
                     Color[] texture = textures.Find(x => x.Key == pair.Key).Value.GetPixels();
                     texture = texture.Select(color => color.CheckForInversion(true)).Reverse().ToArray();
 
-                    BombTexture.SetPixels(texture, pair.Value);
+                    _bombTexture.SetPixels(texture, pair.Value);
                 });
             }
-            BombTexture.Apply();
+            _bombTexture.Apply();
 
-            Managers.Materials.BombMaterial.mainTexture = BombTexture;
-            Managers.Materials.BombMaterial.SetTexture(NoteCubeMapID, BombTexture);
+            Materials.BombMaterial.mainTexture = _bombTexture;
+            Materials.BombMaterial.SetTexture(NoteCubeMapID, _bombTexture);
         }
 
         private static void LoadDefaultNoteTexture(bool isBomb = false)
         {
             if (isBomb)
             {
-                BombTexture = OriginalNoteTexture;
-                Managers.Materials.BombMaterial.SetTexture(NoteCubeMapID, BombTexture);
+                _bombTexture = OriginalNoteTexture;
+                Materials.BombMaterial.SetTexture(NoteCubeMapID, _bombTexture);
             }
             else
             {
-                NoteTexture = OriginalNoteTexture;
-                Managers.Materials.NoteMaterial.SetTexture(NoteCubeMapID, NoteTexture);
-                Managers.Materials.DebrisMaterial.SetTexture(NoteCubeMapID, NoteTexture);
+                _noteTexture = OriginalNoteTexture;
+                Materials.NoteMaterial.SetTexture(NoteCubeMapID, _noteTexture);
+                Materials.DebrisMaterial.SetTexture(NoteCubeMapID, _noteTexture);
             }
         }
 

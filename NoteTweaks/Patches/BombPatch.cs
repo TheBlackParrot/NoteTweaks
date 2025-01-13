@@ -10,9 +10,10 @@ namespace NoteTweaks.Patches
         private static readonly int Color0 = Shader.PropertyToID("_SimpleColor");
         
         [HarmonyPriority(int.MaxValue)]
+        // ReSharper disable once InconsistentNaming
         internal static void Postfix(BombNoteController __instance)
         {
-            if (!Plugin.Config.Enabled || NotePhysicalTweaks._autoDisable)
+            if (!Plugin.Config.Enabled || NotePhysicalTweaks.AutoDisable)
             {
                 return;
             }
