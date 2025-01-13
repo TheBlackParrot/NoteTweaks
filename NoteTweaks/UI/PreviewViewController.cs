@@ -16,7 +16,6 @@ namespace NoteTweaks.UI
     internal class NotePreviewViewController : BSMLAutomaticViewController
     {
         internal static GameObject NoteContainer = new GameObject("_NoteTweaks_NoteContainer");
-        internal static Managers.Materials Materials;
         
         private static readonly float NoteSize = 0.5f;
         private static readonly Vector3 InitialPosition = new Vector3(-2.7f, 1.15f, 3.5f);
@@ -32,8 +31,8 @@ namespace NoteTweaks.UI
         private static readonly int Color0 = Shader.PropertyToID("_Color");
         private static readonly int Color1 = Shader.PropertyToID("_SimpleColor");
         
-        private static readonly List<String> FaceNames = new List<String> { "NoteArrow", "NoteCircleGlow", "Circle" };
-        private static readonly List<String> GlowNames = new List<String> { "NoteArrowGlow", "AddedNoteCircleGlow" };
+        private static readonly List<string> FaceNames = new List<string> { "NoteArrow", "NoteCircleGlow", "Circle" };
+        private static readonly List<string> GlowNames = new List<string> { "NoteArrowGlow", "AddedNoteCircleGlow" };
 
         public static void UpdateDotMesh()
         {
@@ -47,7 +46,7 @@ namespace NoteTweaks.UI
                 _dotMesh.Clear();
             }
 
-            _dotMesh = Utils.Meshes.GenerateFaceMesh(Plugin.Config.DotMeshSides);
+            _dotMesh = Meshes.GenerateFaceMesh(Plugin.Config.DotMeshSides);
 
             for (int i = 0; i < NoteContainer.transform.childCount; i++)
             {
@@ -647,11 +646,12 @@ namespace NoteTweaks.UI
             NoteContainer.transform.position = InitialPosition;
             NoteContainer.transform.localRotation = Quaternion.Euler(0, 320, 0);
             
+            // ReSharper disable PossibleNullReferenceException
             MenuTransitionsHelper menuTransitionsHelper = Resources.FindObjectsOfTypeAll<MenuTransitionsHelper>().FirstOrDefault();
             StandardLevelScenesTransitionSetupDataSO standardLevelScenesTransitionSetupData = menuTransitionsHelper._standardLevelScenesTransitionSetupData;
             SceneInfo gameCoreSceneInfo = standardLevelScenesTransitionSetupData._gameCoreSceneInfo;
             SceneInfo standardGameplaySceneInfo = standardLevelScenesTransitionSetupData._standardGameplaySceneInfo;
-
+            
             UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(gameCoreSceneInfo.sceneName, UnityEngine.SceneManagement.LoadSceneMode.Additive).completed +=
                 operation1 =>
                 {
@@ -663,6 +663,7 @@ namespace NoteTweaks.UI
                             GameNoteController notePrefab = beatmapObjectsInstaller._normalBasicNotePrefab;
                             BombNoteController bombPrefab = beatmapObjectsInstaller._bombNotePrefab;
                             BurstSliderGameNoteController chainPrefab = beatmapObjectsInstaller._burstSliderNotePrefab;
+                            // ReSharper restore PossibleNullReferenceException
                             
                             SettingsViewController.LoadTextures = true;
                             await Materials.UpdateAll();

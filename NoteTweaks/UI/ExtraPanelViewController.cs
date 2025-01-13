@@ -1,6 +1,8 @@
-﻿using System.Reflection;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Reflection;
 using BeatSaberMarkupLanguage.Attributes;
 using BeatSaberMarkupLanguage.ViewControllers;
+using JetBrains.Annotations;
 using Newtonsoft.Json;
 using NoteTweaks.Configuration;
 using UnityEngine;
@@ -10,6 +12,8 @@ namespace NoteTweaks.UI
 {
     [ViewDefinition("NoteTweaks.UI.BSML.ExtraPanel.bsml")]
     [HotReload(RelativePathToLayout = "BSML.ExtraPanel.bsml")]
+    [SuppressMessage("ReSharper", "UnusedMember.Local")]
+    [SuppressMessage("ReSharper", "InconsistentNaming")]
     internal class ExtraPanelViewController : BSMLAutomaticViewController
     {
         private PluginConfig _config;
@@ -32,26 +36,26 @@ namespace NoteTweaks.UI
             public LinksData Links { get; private set; }
         }
 
-        private static ManifestData Manifest;
-        readonly string version = $"<size=80%><smallcaps><alpha=#CC>NoteTweaks</smallcaps></size> <alpha=#FF><b>v{Assembly.GetExecutingAssembly().GetName().Version.ToString(3)}</b>";
-        readonly string gameVersion;
-        readonly string author;
-        readonly string projectHome;
+        private static ManifestData _manifest;
+        private readonly string version = $"<size=80%><smallcaps><alpha=#CC>NoteTweaks</smallcaps></size> <alpha=#FF><b>v{Assembly.GetExecutingAssembly().GetName().Version.ToString(3)}</b>";
+        [UsedImplicitly] private readonly string gameVersion;
+        [UsedImplicitly] private readonly string author;
+        [UsedImplicitly] private readonly string projectHome;
 
         public ExtraPanelViewController()
         {
             byte[] manifestData = SiraUtil.Extras.Utilities.GetResource(Assembly.GetExecutingAssembly(), "NoteTweaks.manifest.json");
-            Manifest = JsonConvert.DeserializeObject<ManifestData>(System.Text.Encoding.UTF8.GetString(manifestData));
+            _manifest = JsonConvert.DeserializeObject<ManifestData>(System.Text.Encoding.UTF8.GetString(manifestData));
 
-            gameVersion = $"<alpha=#CC>(<alpha=#77><size=80%>for</size> <b><alpha=#FF>{Manifest.GameVersion}<alpha=#CC></b>)";
-            author = $"<alpha=#77><size=80%>developed by</size> <b><alpha=#FF>{Manifest.Author}</b>";
-            projectHome = Manifest.Links.ProjectHome;
+            gameVersion = $"<alpha=#CC>(<alpha=#77><size=80%>for</size> <b><alpha=#FF>{_manifest.GameVersion}<alpha=#CC></b>)";
+            author = $"<alpha=#77><size=80%>developed by</size> <b><alpha=#FF>{_manifest.Author}</b>";
+            projectHome = _manifest.Links.ProjectHome;
         }
 
         [UIAction("openProjectHome")]
         private void OpenProjectHomeURL()
         {
-            Application.OpenURL(Manifest.Links.ProjectHome);
+            Application.OpenURL(_manifest.Links.ProjectHome);
         }
         
         [Inject]
