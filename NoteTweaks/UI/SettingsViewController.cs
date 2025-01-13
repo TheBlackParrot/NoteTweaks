@@ -578,7 +578,7 @@ namespace NoteTweaks.UI
                 return;
             }
             
-            noteTextureDropDown.Values = NoteTextureChoices;
+            noteTextureDropDown.values = NoteTextureChoices;
             noteTextureDropDown.UpdateChoices();
         }
 
