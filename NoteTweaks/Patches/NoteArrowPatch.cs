@@ -48,11 +48,11 @@ namespace NoteTweaks.Patches
 
         internal static bool AutoDisable;
 
-        private static bool MapHasRequirement(BeatmapLevel beatmapLevel, BeatmapKey beatmapKey, string requirement)
+        private static bool MapHasRequirement(IDifficultyBeatmap beatmapLevel, string requirement)
         {
             bool hasRequirement = false;
             
-            ExtraSongData.DifficultyData diffData = RetrieveDifficultyData(beatmapLevel, beatmapKey);
+            ExtraSongData.DifficultyData diffData = RetrieveDifficultyData(beatmapLevel);
             if (diffData != null)
             {
                 hasRequirement = diffData.additionalDifficultyData._requirements.Any(x => x == requirement);
@@ -73,9 +73,9 @@ namespace NoteTweaks.Patches
             internal static void Postfix(StandardLevelScenesTransitionSetupDataSO __instance, in GameplayModifiers gameplayModifiers)
             {
                 AutoDisable =
-                    (MapHasRequirement(__instance.beatmapLevel, __instance.beatmapKey, "Noodle Extensions") &&
+                    (MapHasRequirement(__instance.difficultyBeatmap, "Noodle Extensions") &&
                      Plugin.Config.DisableIfNoodle) ||
-                    MapHasRequirement(__instance.beatmapLevel, __instance.beatmapKey, "Vivify");
+                    MapHasRequirement(__instance.difficultyBeatmap, "Vivify");
                 
                 _gameplayModifiers = gameplayModifiers;
                 Plugin.ClampSettings();
