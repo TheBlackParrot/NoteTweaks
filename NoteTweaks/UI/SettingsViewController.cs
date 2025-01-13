@@ -481,7 +481,7 @@ namespace NoteTweaks.UI
                 _config.NoteTexture = value;
                 if (LoadTextures)
                 {
-                    _ = Managers.Textures.LoadNoteTexture(value);
+                    Managers.Textures.LoadNoteTexture(value);
                 }
             }
         }
@@ -514,7 +514,7 @@ namespace NoteTweaks.UI
                 _config.BombTexture = value;
                 if (LoadTextures)
                 {
-                    _ = Managers.Textures.LoadNoteTexture(value, true);
+                    Managers.Textures.LoadNoteTexture(value, true);
                 }
             }
         }
@@ -537,7 +537,7 @@ namespace NoteTweaks.UI
                 _config.InvertBombTexture = value;
                 if (LoadTextures)
                 {
-                    _ = Managers.Textures.LoadNoteTexture(Plugin.Config.BombTexture, true);
+                    Managers.Textures.LoadNoteTexture(Plugin.Config.BombTexture, true);
                 }
             }
         }
@@ -550,12 +550,13 @@ namespace NoteTweaks.UI
                 _config.InvertNoteTexture = value;
                 if (LoadTextures)
                 {
-                    _ = Managers.Textures.LoadNoteTexture(Plugin.Config.NoteTexture);
+                    Managers.Textures.LoadNoteTexture(Plugin.Config.NoteTexture);
                 }
             }
         }
 
         [UIValue("noteTextureChoices")]
+        // ReSharper disable once CollectionNeverQueried.Global
         internal static List<object> NoteTextureChoices = new List<object>();
     }
 }

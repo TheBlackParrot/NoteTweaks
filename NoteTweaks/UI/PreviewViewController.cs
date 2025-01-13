@@ -657,7 +657,7 @@ namespace NoteTweaks.UI
                 operation1 =>
                 {
                     UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(standardGameplaySceneInfo.sceneName, UnityEngine.SceneManagement.LoadSceneMode.Additive).completed +=
-                        async operation2 =>
+                        operation2 =>
                         {
                             BeatmapObjectsInstaller beatmapObjectsInstaller = Resources.FindObjectsOfTypeAll<BeatmapObjectsInstaller>().FirstOrDefault();
                             
@@ -668,7 +668,7 @@ namespace NoteTweaks.UI
                             
                             SettingsViewController.LoadTextures = true;
                             Textures.SetDefaultTextures();
-                            await Materials.UpdateAll();
+                            Materials.UpdateAll();
                             
                             List<String> noteNames = new List<string> { "L_Arrow", "R_Arrow", "L_Dot", "R_Dot" };
                             for (int i = 0; i < noteNames.Count; i++)

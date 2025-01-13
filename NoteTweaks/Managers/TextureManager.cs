@@ -78,7 +78,7 @@ namespace NoteTweaks.Managers
         {
             Plugin.Log.Info("Setting texture filenames for dropdown...");
             SettingsViewController.NoteTextureChoices.Clear();
-            List<object> choices = new List<object>();
+            List<object> choices = new List<object>{ "Default" };
 
             if (!Directory.Exists(ImagePath))
             {
@@ -119,7 +119,7 @@ namespace NoteTweaks.Managers
             }
             
             choices.Sort();
-            SettingsViewController.NoteTextureChoices = choices.Prepend("Default").ToList();
+            SettingsViewController.NoteTextureChoices = choices;
 
             Plugin.Log.Info("Set texture filenames");
         }
@@ -201,7 +201,7 @@ namespace NoteTweaks.Managers
             }
         }
 
-        internal static async Task LoadNoteTexture(string dirname, bool isBomb = false)
+        internal static void LoadNoteTexture(string dirname, bool isBomb = false)
         {
             if (dirname == "Default")
             {
@@ -227,7 +227,7 @@ namespace NoteTweaks.Managers
                 
                 if (singleFileFilename != null)
                 {
-                    Texture2D loadedImage = await Utilities.LoadImageAsync(singleFileFilename, true, false);
+                    Texture2D loadedImage = Utilities.LoadTextureRaw(File.ReadAllBytes(singleFileFilename));
                     textures.Add(new KeyValuePair<string, Texture2D>("all", loadedImage));
                 }
                 else
@@ -254,7 +254,7 @@ namespace NoteTweaks.Managers
                         }
                     
                         //Plugin.Log.Info($"Loading texture {path}...");
-                        Texture2D loadedImage = await Utilities.LoadImageAsync(path, true, false);
+                        Texture2D loadedImage = Utilities.LoadTextureRaw(File.ReadAllBytes(path));
                         //Plugin.Log.Info($"Loaded texture {path}");
                     
                         textures.Add(new KeyValuePair<string, Texture2D>(Path.GetFileNameWithoutExtension(path), loadedImage));

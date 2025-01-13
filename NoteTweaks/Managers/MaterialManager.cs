@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-using System.Threading.Tasks;
 using UnityEngine;
 
 namespace NoteTweaks.Managers
@@ -21,7 +20,7 @@ namespace NoteTweaks.Managers
         };
         internal static Material AccDotMaterial;
 
-        internal static async Task UpdateAll()
+        internal static void UpdateAll()
         {
             UpdateDebrisMaterial();
             UpdateReplacementDotMaterial();
@@ -30,8 +29,8 @@ namespace NoteTweaks.Managers
             UpdateArrowGlowMaterial();
             UpdateAccDotMaterial();
             
-            await UpdateNoteMaterial();
-            await UpdateBombMaterial();
+            UpdateNoteMaterial();
+            UpdateBombMaterial();
             
             UpdateRenderQueues();
         }
@@ -124,7 +123,7 @@ namespace NoteTweaks.Managers
             // Utils.Materials.RepairShader(AccDotDepthMaterial);
         }
         
-        private static async Task UpdateNoteMaterial()
+        private static void UpdateNoteMaterial()
         {
             if (NoteMaterial != null)
             {
@@ -140,7 +139,7 @@ namespace NoteTweaks.Managers
             
             if (Textures.GetLoadedNoteTexture() != Plugin.Config.NoteTexture)
             {
-                await Textures.LoadNoteTexture(Plugin.Config.NoteTexture);
+                Textures.LoadNoteTexture(Plugin.Config.NoteTexture);
             }
         }
         
@@ -159,7 +158,7 @@ namespace NoteTweaks.Managers
             };
         }
         
-        private static async Task UpdateBombMaterial()
+        private static void UpdateBombMaterial()
         {
             if (BombMaterial != null)
             {
@@ -174,7 +173,7 @@ namespace NoteTweaks.Managers
             
             if (Textures.GetLoadedBombTexture() != Plugin.Config.BombTexture)
             {
-                await Textures.LoadNoteTexture(Plugin.Config.BombTexture, true);
+                Textures.LoadNoteTexture(Plugin.Config.BombTexture, true);
             }
         }
 
