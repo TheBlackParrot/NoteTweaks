@@ -212,7 +212,7 @@
     </tab>
 
     <tab tags="tabs" tab-name="Bombs">
-        <vertical vertical-fit="PreferredSize" pref-height="70" pref-width="100" anchored-position-x="4">
+        <vertical vertical-fit="PreferredSize" pref-height="70" pref-width="110" anchored-position-x="4">
             <scroll-view spacing="0" pref-height="70" child-expand-width="true">
                 <slider-setting apply-on-change="true" value="BombScale" text="Bomb Scale"
                                 min="0.05" max="2.0" increment="0.05" show-buttons="true" formatter="PercentageFormatter"
