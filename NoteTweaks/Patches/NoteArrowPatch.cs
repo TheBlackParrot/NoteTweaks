@@ -86,6 +86,8 @@ namespace NoteTweaks.Patches
             // ReSharper disable once InconsistentNaming
             internal static bool Prefix(StandardLevelScenesTransitionSetupDataSO __instance)
             {
+                Managers.Textures.SetDefaultTextures();
+                
                 #pragma warning disable CS4014
                 Materials.UpdateAll();
                 #pragma warning restore CS4014
