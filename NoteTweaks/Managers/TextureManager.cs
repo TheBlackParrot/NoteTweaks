@@ -28,8 +28,8 @@ namespace NoteTweaks.Managers
     
     internal abstract class Textures
     {
-        private static readonly string[] FileExtensions = { ".png", ".jpg", ".tga" };
-        private static readonly string ImagePath = Path.Combine(UnityGame.UserDataPath, "NoteTweaks", "Textures", "Notes");
+        internal static readonly string[] FileExtensions = { ".png", ".jpg", ".tga" };
+        internal static readonly string ImagePath = Path.Combine(UnityGame.UserDataPath, "NoteTweaks", "Textures", "Notes");
         
         private static readonly Texture2D OriginalArrowGlowTexture = Resources.FindObjectsOfTypeAll<Texture2D>().ToList().First(x => x.name == "ArrowGlow");
         internal static readonly Texture2D ReplacementArrowGlowTexture = OriginalArrowGlowTexture.PrepareTexture();
@@ -41,8 +41,8 @@ namespace NoteTweaks.Managers
         private static readonly Cubemap OriginalNoteTexture = Resources.FindObjectsOfTypeAll<Cubemap>().ToList().First(x => x.name == "NotesReflection");
         private static Cubemap _noteTexture = OriginalNoteTexture;
         private static Cubemap _bombTexture = OriginalNoteTexture;
-        
-        private static readonly List<KeyValuePair<string, CubemapFace>> FaceNames = new List<KeyValuePair<string, CubemapFace>>
+
+        internal static readonly List<KeyValuePair<string, CubemapFace>> FaceNames = new List<KeyValuePair<string, CubemapFace>>
         {
             new KeyValuePair<string, CubemapFace>("px", CubemapFace.PositiveX),
             new KeyValuePair<string, CubemapFace>("py", CubemapFace.PositiveY),
@@ -59,55 +59,6 @@ namespace NoteTweaks.Managers
         public static string GetLoadedBombTexture()
         {
             return _bombTexture.name.Split("_"[0]).Last();
-        }
-
-        internal static void LoadTextureChoices()
-        {
-            Plugin.Log.Info("Setting texture filenames for dropdown...");
-            SettingsViewController.NoteTextureChoices.Clear();
-
-            if (!Directory.Exists(ImagePath))
-            {
-                Directory.CreateDirectory(ImagePath);
-            }
-            
-            string[] dirs = Directory.GetDirectories(ImagePath);
-            foreach (string dir in dirs)
-            {
-                int count = 0;
-                
-                FaceNames.ForEach(pair =>
-                {
-                    foreach (string extension in FileExtensions)
-                    {
-                        string path = $"{dir}/{pair.Key}{extension}";
-                        if (File.Exists(path))
-                        {
-                            count++;
-                            break;
-                        }
-                    }
-                });
-
-                if (count == 6)
-                {
-                    SettingsViewController.NoteTextureChoices.Add(dir.Split('\\').Last());
-                }
-            }
-            
-            string[] files = Directory.GetFiles(ImagePath);
-            foreach (string file in files)
-            {
-                if (FileExtensions.Contains(Path.GetExtension(file).ToLower()))
-                {
-                    SettingsViewController.NoteTextureChoices.Add(Path.GetFileNameWithoutExtension(file));
-                }
-            }
-            
-            SettingsViewController.NoteTextureChoices.Sort();
-            SettingsViewController.NoteTextureChoices = SettingsViewController.NoteTextureChoices.Prepend("Default").ToList();
-
-            Plugin.Log.Info("Set texture filenames");
         }
         
         private static void OnNoteImageLoaded(List<KeyValuePair<string, Texture2D>> textures)

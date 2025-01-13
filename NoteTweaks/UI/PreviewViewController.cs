@@ -31,7 +31,7 @@ namespace NoteTweaks.UI
         private static readonly int Color0 = Shader.PropertyToID("_Color");
         private static readonly int Color1 = Shader.PropertyToID("_SimpleColor");
         
-        private static readonly List<string> FaceNames = new List<string> { "NoteArrow", "NoteCircleGlow", "Circle" };
+        internal static readonly List<string> FaceNames = new List<string> { "NoteArrow", "NoteCircleGlow", "Circle" };
         private static readonly List<string> GlowNames = new List<string> { "NoteArrowGlow", "AddedNoteCircleGlow" };
 
         public NotePreviewViewController()
@@ -645,7 +645,6 @@ namespace NoteTweaks.UI
                 NoteContainer = new GameObject("_NoteTweaks_NoteContainer");
                 DontDestroyOnLoad(NoteContainer);
             }
-            Managers.Textures.LoadTextureChoices();
             
             if (HasInitialized)
             {
