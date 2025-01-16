@@ -52,6 +52,11 @@ namespace NoteTweaks.Patches
         [HarmonyPriority(int.MaxValue)]
         [HarmonyPostfix]
         internal static void BeatmapObjectsInstallerInitPatch(BombNoteController ____bombNotePrefab) {
+            if (!Plugin.Config.Enabled || NotePhysicalTweaks.AutoDisable)
+            {
+                return;
+            }
+            
             float colorScale = 1.0f + Plugin.Config.BombColorBoost;
             Color bombColor = Plugin.Config.BombColor * colorScale;
 
