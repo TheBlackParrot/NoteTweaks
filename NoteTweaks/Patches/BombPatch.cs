@@ -1,17 +1,21 @@
 ﻿using HarmonyLib;
+using IPA.Utilities;
 using NoteTweaks.Managers;
 using UnityEngine;
+#pragma warning disable CS0612
 
 namespace NoteTweaks.Patches
 {
-    [HarmonyPatch(typeof(BombNoteController), "Init")]
+    [HarmonyPatch]
     internal class BombPatch
     {
         private static readonly int Color0 = Shader.PropertyToID("_SimpleColor");
         
+        [HarmonyPatch(typeof(BombNoteController), "Init")]
         [HarmonyPriority(int.MaxValue)]
+        [HarmonyPostfix]
         // ReSharper disable once InconsistentNaming
-        internal static void Postfix(BombNoteController __instance)
+        internal static void BombNoteControllerInitPatch(BombNoteController __instance)
         {
             if (!Plugin.Config.Enabled || NotePhysicalTweaks.AutoDisable)
             {
@@ -20,32 +24,6 @@ namespace NoteTweaks.Patches
             
             float colorScale = 1.0f + Plugin.Config.BombColorBoost;
             Color bombColor = Plugin.Config.BombColor * colorScale;
-            
-            // i'll figure this out one day :clueless:
-            /*Type objectColorizeType = AccessTools.TypeByName("Chroma.Colorizer.BombColorizerManager");
-            if (objectColorizeType == null)
-            {
-                if (__instance.transform.GetChild(0).TryGetComponent(out Renderer bombRenderer))
-                {
-                    bombRenderer.sharedMaterial = Materials.BombMaterial;
-                    bombRenderer.sharedMaterial.SetColor(Color0, bombColor);
-                }
-
-                if (__instance.gameObject.TryGetComponent(out MaterialPropertyBlockController materialPropertyBlockController))
-                {
-                    materialPropertyBlockController.materialPropertyBlock.SetColor(Color0, bombColor);
-                    materialPropertyBlockController.ApplyChanges();   
-                }
-            }
-            else
-            {
-                MethodInfo colorizeMethod = AccessTools.Method(objectColorizeType, "Colorize");
-                if (colorizeMethod != null)
-                {
-                    object colorizerObject = AccessTools.CreateInstance(objectColorizeType);
-                    colorizeMethod.Invoke(colorizerObject, new object[] { __instance, bombColor } );
-                }
-            }*/
             
             if (__instance.transform.GetChild(0).TryGetComponent(out Renderer bombRenderer))
             {
@@ -68,6 +46,20 @@ namespace NoteTweaks.Patches
             
             __instance.transform.localScale = scale;
             __instance._cuttableBySaber.GetComponent<SphereCollider>().radius = 0.18f * (1.0f / Plugin.Config.BombScale);
+        }
+        
+        [HarmonyPatch(typeof(BeatmapObjectsInstaller), "InstallBindings")]
+        [HarmonyPriority(int.MaxValue)]
+        [HarmonyPostfix]
+        internal static void BeatmapObjectsInstallerInitPatch(BombNoteController ____bombNotePrefab) {
+            float colorScale = 1.0f + Plugin.Config.BombColorBoost;
+            Color bombColor = Plugin.Config.BombColor * colorScale;
+
+            if (____bombNotePrefab.TryGetComponent(out ConditionalMaterialSwitcher switcher))
+            {
+                switcher._material0.SetColor(Color0, bombColor);
+                switcher._material1.SetColor(Color0, bombColor);
+            }
         }
     }
 }
