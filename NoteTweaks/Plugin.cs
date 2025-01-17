@@ -40,6 +40,10 @@ namespace NoteTweaks
             Config.RightFaceGlowColorNoteSkew = Mathf.Max(0f, Mathf.Min(Config.RightFaceGlowColorNoteSkew, 1.0f));
             
             Config.AccDotSize = Math.Max(Math.Min(Config.AccDotSize, 15), 5);
+
+            Config.RainbowBombTimeScale = Mathf.Max(0.1f, Config.RainbowBombTimeScale);
+            Config.RainbowBombSaturation = Mathf.Max(0f, Config.RainbowBombSaturation);
+            Config.RainbowBombValue = Mathf.Max(0f, Config.RainbowBombValue);
         }
 
         [Init]
