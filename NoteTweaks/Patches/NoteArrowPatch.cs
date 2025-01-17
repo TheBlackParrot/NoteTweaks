@@ -10,6 +10,7 @@ using SongCore.Data;
 using UnityEngine;
 using Object = UnityEngine.Object;
 using static SongCore.Collections;
+#pragma warning disable CS0612 // Type or member is obsolete
 
 namespace NoteTweaks.Patches
 {
@@ -368,6 +369,18 @@ namespace NoteTweaks.Patches
                         c.a = 0f;
                         materialPropertyBlockController.materialPropertyBlock.SetColor(ColorNoteVisuals._colorId, c);
                         materialPropertyBlockController.ApplyChanges();   
+                    }
+
+                    if (meshRenderer.gameObject.TryGetComponent(out ConditionalMaterialSwitcher switcher))
+                    {
+                        if (switcher._material0.name == "NoteArrowHD")
+                        {
+                            switcher._material0 = Materials.ReplacementArrowMaterial;
+                        }
+                        else if (switcher._material1.name == "NoteArrowHD")
+                        {
+                            switcher._material1 = Materials.ReplacementArrowMaterial;
+                        }
                     }
 
                     Transform arrowGlowObject = meshRenderer.transform.parent.Find("NoteArrowGlow");

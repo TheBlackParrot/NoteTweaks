@@ -10,6 +10,7 @@ namespace NoteTweaks.Patches
     internal class BombPatch
     {
         private static readonly int Color0 = Shader.PropertyToID("_SimpleColor");
+        private static readonly Color DefaultColor = new Color(0.251f, 0.251f, 0.251f, 1.0f);
         
         [HarmonyPatch(typeof(BombNoteController), "Init")]
         [HarmonyPriority(int.MaxValue)]
@@ -21,9 +22,8 @@ namespace NoteTweaks.Patches
             {
                 return;
             }
-            
-            float colorScale = 1.0f + Plugin.Config.BombColorBoost;
-            Color bombColor = Plugin.Config.BombColor * colorScale;
+
+            Color bombColor = Plugin.Config.EnableRainbowBombs ? RainbowGradient.Color : Plugin.Config.BombColor * (1.0f + Plugin.Config.BombColorBoost);
             
             if (__instance.transform.GetChild(0).TryGetComponent(out Renderer bombRenderer))
             {
@@ -57,13 +57,19 @@ namespace NoteTweaks.Patches
                 return;
             }
             
-            float colorScale = 1.0f + Plugin.Config.BombColorBoost;
-            Color bombColor = Plugin.Config.BombColor * colorScale;
+            Color bombColor = Plugin.Config.EnableRainbowBombs ? RainbowGradient.Color : Plugin.Config.BombColor * (1.0f + Plugin.Config.BombColorBoost);
 
             if (____bombNotePrefab.TryGetComponent(out ConditionalMaterialSwitcher switcher))
             {
-                switcher._material0.SetColor(Color0, bombColor);
-                switcher._material1.SetColor(Color0, bombColor);
+                if (switcher._material0.GetColor(Color0) == DefaultColor)
+                {
+                    switcher._material0.SetColor(Color0, bombColor);
+                }
+                
+                if (switcher._material1.GetColor(Color0) == DefaultColor)
+                {
+                    switcher._material1.SetColor(Color0, bombColor);
+                }
             }
         }
     }

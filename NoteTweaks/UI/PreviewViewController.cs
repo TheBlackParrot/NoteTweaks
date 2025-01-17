@@ -355,7 +355,7 @@ namespace NoteTweaks.UI
                     continue;
                 }
                 
-                Color bombColor = Plugin.Config.BombColor * scale;
+                Color bombColor = Plugin.Config.EnableRainbowBombs ? RainbowGradient.Color : Plugin.Config.BombColor * scale;
                 
                 foreach (MaterialPropertyBlockController controller in bombObj.GetComponents<MaterialPropertyBlockController>())
                 {
