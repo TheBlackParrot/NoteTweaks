@@ -1,5 +1,4 @@
 ﻿using HarmonyLib;
-using IPA.Utilities;
 using NoteTweaks.Managers;
 using UnityEngine;
 #pragma warning disable CS0612
