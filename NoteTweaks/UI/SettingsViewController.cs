@@ -559,6 +559,49 @@ namespace NoteTweaks.UI
             }
         }
         
+        [UIValue("EnableRainbowBombs")]
+        protected bool EnableRainbowBombs
+        {
+            get => _config.EnableRainbowBombs;
+            set
+            {
+                _config.EnableRainbowBombs = value;
+                NotePreviewViewController.UpdateBombColors();
+
+                NotifyPropertyChanged();
+            }
+        }
+        
+        protected float RainbowBombTimeScale
+        {
+            get => _config.RainbowBombTimeScale;
+            set
+            {
+                _config.RainbowBombTimeScale = value;
+                NotePreviewViewController.UpdateBombColors();
+            }
+        }
+
+        protected float RainbowBombSaturation
+        {
+            get => _config.RainbowBombSaturation;
+            set
+            {
+                _config.RainbowBombSaturation = value;
+                NotePreviewViewController.UpdateBombColors();
+            }
+        }
+
+        protected float RainbowBombValue
+        {
+            get => _config.RainbowBombValue;
+            set
+            {
+                _config.RainbowBombValue = value;
+                NotePreviewViewController.UpdateBombColors();
+            }
+        }
+
         [UIComponent("selectedNoteTexture")]
         public DropDownListSetting noteTextureDropDown;
 

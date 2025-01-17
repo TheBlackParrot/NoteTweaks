@@ -71,5 +71,10 @@ namespace NoteTweaks.Configuration
         public virtual string BombTexture { get; set; } = "Default";
         public virtual float BombScale { get; set; } = 1.0f;
         public virtual bool InvertBombTexture { get; set; } = false;
+        
+        public virtual bool EnableRainbowBombs { get; set; } = false;
+        public virtual float RainbowBombTimeScale { get; set; } = 8.0f;
+        public virtual float RainbowBombSaturation { get; set; } = 0.9f;
+        public virtual float RainbowBombValue { get; set; } = 1.0f;
     }
 }
