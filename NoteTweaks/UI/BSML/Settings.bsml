@@ -219,6 +219,18 @@
                                 hover-hint="Scale of bombs"/>
                 
                 <horizontal><text text="-----" font-size="4" color="#00000000"/></horizontal>
+
+                <toggle-setting apply-on-change="true" value="EnableRainbowBombs" text="Enable Rainbow Bombs" bind-value="true"
+                                hover-hint="love wins!!!!"/>
+                <slider-setting apply-on-change="true" value="RainbowBombTimeScale" text="Time Scale"
+                                min="0.5" max="64.0" increment="0.5" show-buttons="true" active="~EnableRainbowBombs"
+                                hover-hint="Time scale of color gradients"/>
+                <slider-setting apply-on-change="true" value="RainbowBombSaturation" text="Gradient Saturation"
+                                min="0.0" max="1.0" increment="0.01" show-buttons="true" formatter="PercentageFormatter" active="~EnableRainbowBombs"
+                                hover-hint="Saturation of color gradients"/>
+                <slider-setting apply-on-change="true" value="RainbowBombValue" text="Gradient Brightness"
+                                min="0.0" max="1.0" increment="0.01" show-buttons="true" formatter="PercentageFormatter" active="~EnableRainbowBombs"
+                                hover-hint="Brightness/value of color gradients"/>
                 
                 <color-setting apply-on-change="true" value="BombColor" text="Bomb Color"
                                hover-hint="Color of bombs"/>
