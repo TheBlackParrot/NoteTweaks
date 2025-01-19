@@ -20,6 +20,7 @@ namespace NoteTweaks.Managers
             enableInstancing = true
         };
         internal static Material AccDotMaterial;
+        private static readonly int Color0 = Shader.PropertyToID("_Color");
 
         internal static async Task UpdateAll()
         {
@@ -104,6 +105,7 @@ namespace NoteTweaks.Managers
         {
             if (AccDotMaterial != null)
             {
+                AccDotMaterial.SetColor(Color0, Plugin.Config.AccDotColor.ColorWithAlpha(0f));
                 return;
             }
 
@@ -116,10 +118,8 @@ namespace NoteTweaks.Managers
                 enableInstancing = true,
                 shaderKeywords = arrowMat.shaderKeywords.Where(x => x != "_ENABLE_COLOR_INSTANCING").ToArray()
             };
-            Color c = Plugin.Config.AccDotColor;
-            c.a = 0f;
-            AccDotMaterial.color = c;
-                
+            AccDotMaterial.SetColor(Color0, Plugin.Config.AccDotColor.ColorWithAlpha(0f));
+
             // uncomment later maybe
             // Utils.Materials.RepairShader(AccDotDepthMaterial);
         }

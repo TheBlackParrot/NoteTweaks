@@ -3,6 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
 using HarmonyLib;
+using IPA.Utilities.Async;
 using JetBrains.Annotations;
 using NoteTweaks.Managers;
 using NoteTweaks.Utils;
@@ -28,10 +29,6 @@ namespace NoteTweaks.Patches
             Resources.FindObjectsOfTypeAll<Material>().First(x => x.name == "NoteHD").renderQueue = 1995;
             if (obj.TryGetComponent(out MeshRenderer meshRenderer))
             {
-                Color c = Plugin.Config.AccDotColor;
-                c.a = 0f;
-                Materials.AccDotMaterial.color = c;
-                
                 meshRenderer.sharedMaterial = Materials.AccDotMaterial;
             }
             if (obj.TryGetComponent(out SphereCollider sphereCollider))
@@ -48,6 +45,7 @@ namespace NoteTweaks.Patches
         private const float AccDotSizeStep = ScoreModel.kMaxDistanceForDistanceToCenterScore / ScoreModel.kMaxCenterDistanceCutScore;
 
         internal static bool AutoDisable;
+        private static readonly int Color0 = Shader.PropertyToID("_Color");
 
         private static bool MapHasRequirement(BeatmapLevel beatmapLevel, BeatmapKey beatmapKey, string requirement)
         {
@@ -87,9 +85,7 @@ namespace NoteTweaks.Patches
             // ReSharper disable once InconsistentNaming
             internal static bool Prefix(StandardLevelScenesTransitionSetupDataSO __instance)
             {
-                #pragma warning disable CS4014
-                Materials.UpdateAll();
-                #pragma warning restore CS4014
+                UnityMainThreadTaskScheduler.Factory.StartNew(async () => await Materials.UpdateAll());
                 return true;
             }
         }
@@ -220,6 +216,8 @@ namespace NoteTweaks.Patches
                             {
                                 originalAccDotMeshRenderer.allowOcclusionWhenDynamic = false;
                                 originalAccDotMeshRenderer.renderingLayerMask = saberBoxMeshRenderer.renderingLayerMask;
+                                
+                                originalAccDotMeshRenderer.sharedMaterial = Materials.AccDotMaterial;
                             }
                             originalAccDotObject.SetActive(true);
                             
