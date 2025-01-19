@@ -316,12 +316,8 @@ namespace NoteTweaks.Patches
         [HarmonyPriority(int.MinValue)]
         internal class NoteArrowPatch
         {
-            private static bool _initialPositionDidSet;
-            private static Vector3 _initialPosition = Vector3.zero;
-            private static bool _initialDotPositionDidSet;
-            private static Vector3 _initialDotPosition = Vector3.zero;
-            private static bool _initialChainDotPositionDidSet;
-            private static Vector3 _initialChainDotPosition = Vector3.zero;
+            private static readonly Vector3 InitialPosition = new Vector3(0.0f, 0.11f, -0.25f);
+            private static readonly Vector3 InitialDotPosition = new Vector3(0.0f, 0.0f, -0.25f);
             
             [SuppressMessage("ReSharper", "InconsistentNaming")]
             internal static void Postfix(ColorNoteVisuals __instance, ref MeshRenderer[] ____arrowMeshRenderers, ref MeshRenderer[] ____circleMeshRenderers)
@@ -334,15 +330,9 @@ namespace NoteTweaks.Patches
                 foreach (MeshRenderer meshRenderer in ____arrowMeshRenderers)
                 {
                     Transform arrowTransform = meshRenderer.gameObject.transform;
-
-                    if (!_initialPositionDidSet)
-                    {
-                        _initialPositionDidSet = true;
-                        _initialPosition = arrowTransform.localPosition;
-                    }
                     
                     Vector3 scale = new Vector3(Plugin.Config.ArrowScale.x, Plugin.Config.ArrowScale.y, 1.0f);
-                    Vector3 position = new Vector3(Plugin.Config.ArrowPosition.x, _initialPosition.y + Plugin.Config.ArrowPosition.y, _initialPosition.z);
+                    Vector3 position = new Vector3(Plugin.Config.ArrowPosition.x, InitialPosition.y + Plugin.Config.ArrowPosition.y, InitialPosition.z);
                     
                     arrowTransform.localScale = scale;
                     arrowTransform.localPosition = position;
@@ -391,7 +381,7 @@ namespace NoteTweaks.Patches
                         Transform arrowGlowTransform = arrowGlowObject.transform;
                         
                         Vector3 glowScale = new Vector3(scale.x * Plugin.Config.ArrowGlowScale * 0.633f, scale.y * Plugin.Config.ArrowGlowScale * 0.3f, 0.6f);
-                        Vector3 glowPosition = new Vector3(_initialPosition.x + Plugin.Config.ArrowPosition.x, _initialPosition.y + Plugin.Config.ArrowPosition.y, _initialPosition.z);
+                        Vector3 glowPosition = new Vector3(InitialPosition.x + Plugin.Config.ArrowPosition.x, InitialPosition.y + Plugin.Config.ArrowPosition.y, InitialPosition.z);
                         
                         arrowGlowTransform.localScale = glowScale;
                         arrowGlowTransform.localPosition = glowPosition;
@@ -415,15 +405,15 @@ namespace NoteTweaks.Patches
                     Vector3 glowScale;
                     if (isChainLink)
                     {
-                        dotPosition = new Vector3(_initialChainDotPosition.x, _initialChainDotPosition.y, _initialChainDotPosition.z);
-                        glowPosition = new Vector3(_initialChainDotPosition.x, _initialChainDotPosition.y, _initialChainDotPosition.z + 0.001f);
+                        dotPosition = InitialDotPosition;
+                        glowPosition = new Vector3(InitialDotPosition.x, InitialDotPosition.y, InitialDotPosition.z + 0.001f);
                         dotScale = new Vector3(Plugin.Config.ChainDotScale.x / 18f, Plugin.Config.ChainDotScale.y / 18f, 1.0f);
                         glowScale = new Vector3((Plugin.Config.ChainDotScale.x / 5.4f) * Plugin.Config.DotGlowScale, (Plugin.Config.ChainDotScale.y / 5.4f) * Plugin.Config.DotGlowScale, 1.0f);
                     }
                     else
                     {
-                        dotPosition = new Vector3(_initialDotPosition.x + Plugin.Config.DotPosition.x, _initialDotPosition.y + Plugin.Config.DotPosition.y, _initialDotPosition.z);
-                        glowPosition = new Vector3(_initialDotPosition.x + Plugin.Config.DotPosition.x, _initialDotPosition.y + Plugin.Config.DotPosition.y, _initialDotPosition.z + 0.001f);
+                        dotPosition = new Vector3(InitialDotPosition.x + Plugin.Config.DotPosition.x, InitialDotPosition.y + Plugin.Config.DotPosition.y, InitialDotPosition.z);
+                        glowPosition = new Vector3(InitialDotPosition.x + Plugin.Config.DotPosition.x, InitialDotPosition.y + Plugin.Config.DotPosition.y, InitialDotPosition.z + 0.001f);
                         dotScale = new Vector3(Plugin.Config.DotScale.x / 5f, Plugin.Config.DotScale.y / 5f, 1.0f);
                         glowScale = new Vector3((Plugin.Config.DotScale.x / 1.5f) * Plugin.Config.DotGlowScale, (Plugin.Config.DotScale.y / 1.5f) * Plugin.Config.DotGlowScale, 1.0f);
                     }
@@ -452,17 +442,6 @@ namespace NoteTweaks.Patches
                         }
                         
                         Transform originalDotTransform = originalDot.transform;
-                        
-                        if (!_initialDotPositionDidSet)
-                        {
-                            _initialDotPositionDidSet = true;
-                            _initialDotPosition = originalDotTransform.localPosition;
-                        }
-                        if (!_initialChainDotPositionDidSet)
-                        {
-                            _initialChainDotPositionDidSet = true;
-                            _initialChainDotPosition = originalDotTransform.localPosition;
-                        }
                         
                         originalDotTransform.localScale = dotScale;
                         originalDotTransform.localPosition = dotPosition;
