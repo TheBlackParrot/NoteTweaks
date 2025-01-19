@@ -41,11 +41,10 @@ namespace NoteTweaks.Patches
             return obj;
         }
 
-        private static GameObject _accDotObject = CreateAccDotObject();
+        private static GameObject _accDotObject;
         private const float AccDotSizeStep = ScoreModel.kMaxDistanceForDistanceToCenterScore / ScoreModel.kMaxCenterDistanceCutScore;
 
         internal static bool AutoDisable;
-        private static readonly int Color0 = Shader.PropertyToID("_Color");
 
         private static bool MapHasRequirement(IDifficultyBeatmap beatmapLevel, string requirement)
         {
@@ -81,13 +80,15 @@ namespace NoteTweaks.Patches
 
                 _dotMesh = Meshes.GenerateFaceMesh(Plugin.Config.DotMeshSides);
             }
+        }
 
-            // ReSharper disable once InconsistentNaming
-            internal static bool Prefix(StandardLevelScenesTransitionSetupDataSO __instance)
+        [HarmonyPatch(typeof(EnvironmentSceneSetup), "InstallBindings")]
+        internal class EnvironmentSceneSetupPatch
+        {
+            internal static void Postfix()
             {
                 Managers.Textures.SetDefaultTextures();
                 UnityMainThreadTaskScheduler.Factory.StartNew(async () => await Materials.UpdateAll());
-                return true;
             }
         }
 
@@ -366,10 +367,6 @@ namespace NoteTweaks.Patches
                         {
                             switcher._material0 = Materials.ReplacementArrowMaterial;
                         }
-                        else if (switcher._material1.name == "NoteArrowHD")
-                        {
-                            switcher._material1 = Materials.ReplacementArrowMaterial;
-                        }
                     }
 
                     Transform arrowGlowObject = meshRenderer.transform.parent.Find("NoteArrowGlow");
@@ -558,3 +555,6 @@ namespace NoteTweaks.Patches
         }
     }
 }
+
+//Managers.Textures.SetDefaultTextures();
+//UnityMainThreadTaskScheduler.Factory.StartNew(async () => await Materials.UpdateAll());
