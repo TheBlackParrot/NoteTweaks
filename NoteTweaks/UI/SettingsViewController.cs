@@ -602,6 +602,19 @@ namespace NoteTweaks.UI
             }
         }
 
+        protected string GlowTexture
+        {
+            get => _config.GlowTexture;
+            set
+            {
+                _config.GlowTexture = value;
+                _ = TextureResources.UpdateTextures();
+            }
+        }
+        
+        [UIValue("glowTextureChoices")]
+        private List<object> GlowTextureChoices = new List<object> { "Glow", "Solid" };
+
         [UIComponent("selectedNoteTexture")]
         public DropDownListSetting noteTextureDropDown;
 
