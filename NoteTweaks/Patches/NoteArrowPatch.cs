@@ -3,7 +3,6 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
 using HarmonyLib;
-using IPA.Utilities.Async;
 using JetBrains.Annotations;
 using NoteTweaks.Managers;
 using NoteTweaks.Utils;
@@ -88,7 +87,7 @@ namespace NoteTweaks.Patches
             internal static void Postfix()
             {
                 Managers.Textures.SetDefaultTextures();
-                UnityMainThreadTaskScheduler.Factory.StartNew(async () => await Materials.UpdateAll());
+                Materials.UpdateAll();
             }
         }
 
