@@ -219,7 +219,7 @@ namespace NoteTweaks.UI
         public static void UpdateArrowScale()
         {
             Vector3 scale = new Vector3(Plugin.Config.ArrowScale.x, Plugin.Config.ArrowScale.y, 1.0f);
-            Vector3 glowScale = new Vector3(scale.x * Plugin.Config.ArrowGlowScale * 0.633f, scale.y * Plugin.Config.ArrowGlowScale * 0.3f, 0.6f);
+            Vector3 glowScale = new Vector3(scale.x * Plugin.Config.ArrowGlowScale * 0.6f, scale.y * Plugin.Config.ArrowGlowScale * 0.3f, 0.6f);
             
             for (int i = 0; i < NoteContainer.transform.childCount; i++)
             {

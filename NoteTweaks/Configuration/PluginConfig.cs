@@ -76,5 +76,7 @@ namespace NoteTweaks.Configuration
         public virtual float RainbowBombTimeScale { get; set; } = 6.0f;
         public virtual float RainbowBombSaturation { get; set; } = 0.67f;
         public virtual float RainbowBombValue { get; set; } = 0.9f;
+        
+        public virtual string GlowTexture { get; set; } = "Glow";
     }
 }
