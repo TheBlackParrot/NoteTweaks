@@ -613,7 +613,7 @@ namespace NoteTweaks.UI
         }
         
         [UIValue("glowTextureChoices")]
-        private List<object> GlowTextureChoices = new List<object> { "Glow", "Solid" };
+        private List<object> GlowTextureChoices = new List<object> { "Glow", "GlowInterlaced", "Solid" };
 
         [UIComponent("selectedNoteTexture")]
         public DropDownListSetting noteTextureDropDown;
