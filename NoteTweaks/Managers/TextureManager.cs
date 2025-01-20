@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using BeatSaberMarkupLanguage;
 using HarmonyLib;
 using IPA.Utilities;
+using IPA.Utilities.Async;
 using NoteTweaks.Utils;
 using UnityEngine;
 
@@ -24,17 +25,42 @@ namespace NoteTweaks.Managers
             return color;
         }
     }
+
+    internal abstract class TextureResources
+    {
+        internal static Texture2D ReplacementArrowGlowTexture;
+        internal static Texture2D ReplacementDotGlowTexture;
+
+        protected TextureResources()
+        {
+            UnityMainThreadTaskScheduler.Factory.StartNew(async () =>
+            {
+                await LoadTextures();
+            });
+        }
+
+        internal static async Task LoadTextures()
+        {
+            Plugin.Log.Info("Loading textures...");
+            ReplacementArrowGlowTexture = await Utilities.LoadTextureFromAssemblyAsync("NoteTweaks.Resources.Textures.ArrowGlow.png");
+            ReplacementArrowGlowTexture.PrepareTexture();
+            Plugin.Log.Info("Loaded replacement arrow glow texture");
+            ReplacementDotGlowTexture = await Utilities.LoadTextureFromAssemblyAsync("NoteTweaks.Resources.Textures.CircleGlow.png");
+            ReplacementDotGlowTexture.PrepareTexture();
+            Plugin.Log.Info("Loaded replacement dot glow texture");
+        }
+    }
     
-    internal abstract class Textures
+    internal abstract class Textures : TextureResources
     {
         internal static readonly string[] FileExtensions = { ".png", ".jpg", ".tga" };
         internal static readonly string ImagePath = Path.Combine(UnityGame.UserDataPath, "NoteTweaks", "Textures", "Notes");
         
-        private static readonly Texture2D OriginalArrowGlowTexture = Resources.FindObjectsOfTypeAll<Texture2D>().ToList().First(x => x.name == "ArrowGlow");
+        /*private static readonly Texture2D OriginalArrowGlowTexture = Resources.FindObjectsOfTypeAll<Texture2D>().ToList().First(x => x.name == "ArrowGlow");
         internal static readonly Texture2D ReplacementArrowGlowTexture = OriginalArrowGlowTexture.PrepareTexture();
         
         private static readonly Texture2D OriginalDotGlowTexture = Resources.FindObjectsOfTypeAll<Texture2D>().ToList().First(x => x.name == "NoteCircleBakedGlow");
-        internal static readonly Texture2D ReplacementDotGlowTexture = OriginalDotGlowTexture.PrepareTexture();
+        internal static readonly Texture2D ReplacementDotGlowTexture = OriginalDotGlowTexture.PrepareTexture();*/
 
         private static readonly int NoteCubeMapID = Shader.PropertyToID("_EnvironmentReflectionCube");
         private static readonly Cubemap OriginalNoteTexture = Resources.FindObjectsOfTypeAll<Cubemap>().ToList().First(x => x.name == "NotesReflection");

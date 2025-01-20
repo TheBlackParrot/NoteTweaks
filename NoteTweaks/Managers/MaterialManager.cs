@@ -27,9 +27,10 @@ namespace NoteTweaks.Managers
             UpdateDebrisMaterial();
             UpdateReplacementDotMaterial();
             UpdateReplacementArrowMaterial();
-            UpdateDotGlowMaterial();
-            UpdateArrowGlowMaterial();
             UpdateAccDotMaterial();
+            
+            await UpdateDotGlowMaterial();
+            await UpdateArrowGlowMaterial();
             
             await UpdateNoteMaterial();
             await UpdateBombMaterial();
@@ -71,33 +72,43 @@ namespace NoteTweaks.Managers
             };
         }
 
-        private static void UpdateDotGlowMaterial()
+        private static async Task UpdateDotGlowMaterial()
         {
             if (DotGlowMaterial != null)
             {
                 return;
+            }
+            
+            if (TextureResources.ReplacementDotGlowTexture == null)
+            {
+                await TextureResources.LoadTextures();
             }
             Plugin.Log.Info("Creating new dot glow material");
             Material arrowGlowMat = Resources.FindObjectsOfTypeAll<Material>().ToList().Find(x => x.name == "NoteArrowGlow");
             DotGlowMaterial = new Material(arrowGlowMat)
             {
                 name = "NoteTweaks_DotGlowMaterial",
-                mainTexture = Textures.ReplacementDotGlowTexture
+                mainTexture = TextureResources.ReplacementDotGlowTexture
             };
         }
 
-        private static void UpdateArrowGlowMaterial()
+        private static async Task UpdateArrowGlowMaterial()
         {
             if (ArrowGlowMaterial != null)
             {
                 return;
+            }
+
+            if (TextureResources.ReplacementArrowGlowTexture == null)
+            {
+                await TextureResources.LoadTextures();
             }
             Plugin.Log.Info("Creating new arrow glow material");
             Material arrowGlowMat = Resources.FindObjectsOfTypeAll<Material>().ToList().Find(x => x.name == "NoteArrowGlow");
             ArrowGlowMaterial = new Material(arrowGlowMat)
             {
                 name = "NoteTweaks_ArrowGlowMaterial",
-                mainTexture = Textures.ReplacementArrowGlowTexture,
+                mainTexture = TextureResources.ReplacementArrowGlowTexture,
             };
         }
 

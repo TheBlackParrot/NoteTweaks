@@ -129,4 +129,9 @@
         <EmbeddedResource Include="UI/BSML/Empty.bsml"/>
         <EmbeddedResource Include="UI/BSML/ExtraPanel.bsml"/>
     </ItemGroup>
+    <ItemGroup>
+        <Folder Include="Resources/Textures/" />
+        <EmbeddedResource Include="Resources/Textures/ArrowGlow.png"/>
+        <EmbeddedResource Include="Resources/Textures/CircleGlow.png"/>
+    </ItemGroup>
 </Project>
