@@ -55,13 +55,18 @@
 
     <tab tags="tabs" tab-name="Symbols">
         <vertical vertical-fit="PreferredSize" pref-height="70" pref-width="100" anchored-position-x="4">
-            <vertical spacing="2" vertical-fit="PreferredSize" pad-left="1" pad-right="1" pref-width="100" child-control-height="false">
+            <vertical vertical-fit="PreferredSize" pad-left="1" pad-right="1" pref-width="100" child-control-height="false">
                 <toggle-setting apply-on-change="true" value="EnableFaceGlow" text="Enable Glowing Face Symbols" bind-value="true"
                                 hover-hint="Show glow around symbols"/>
+                <dropdown-list-setting apply-on-change="true" value="GlowTexture" text="Glow Texture" choices="glowTextureChoices"
+                                       hover-hint="Change the glow texture for symbols"/>
+                
+                <horizontal><text text="-----" font-size="2" color="#00000000"/></horizontal>
+                
                 <tab-selector tab-tag="symbolTabs" id="symbolTabSelector"/>
             </vertical>
 
-            <vertical vertical-fit="PreferredSize" pref-height="45" pref-width="100">
+            <vertical vertical-fit="PreferredSize" pref-height="37" pref-width="100">
                 <tab tags="symbolTabs" tab-name="Left">
                     <scroll-view spacing="0" pref-height="55" child-expand-width="true">
                         <color-setting apply-on-change="true" value="LeftFaceColor" text="Left Face Symbol Color"
