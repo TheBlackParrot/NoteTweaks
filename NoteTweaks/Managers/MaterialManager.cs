@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Threading.Tasks;
 using UnityEngine;
 
 namespace NoteTweaks.Managers
@@ -70,33 +71,43 @@ namespace NoteTweaks.Managers
             };
         }
 
-        private static void UpdateDotGlowMaterial()
+        private static async Task UpdateDotGlowMaterial()
         {
             if (DotGlowMaterial != null)
             {
                 return;
+            }
+            
+            if (TextureResources.ReplacementDotGlowTexture == null)
+            {
+                await TextureResources.LoadTextures();
             }
             Plugin.Log.Info("Creating new dot glow material");
             Material arrowGlowMat = Resources.FindObjectsOfTypeAll<Material>().ToList().Find(x => x.name == "NoteArrowGlow");
             DotGlowMaterial = new Material(arrowGlowMat)
             {
                 name = "NoteTweaks_DotGlowMaterial",
-                mainTexture = Textures.ReplacementDotGlowTexture
+                mainTexture = TextureResources.ReplacementDotGlowTexture
             };
         }
 
-        private static void UpdateArrowGlowMaterial()
+        private static async Task UpdateArrowGlowMaterial()
         {
             if (ArrowGlowMaterial != null)
             {
                 return;
+            }
+
+            if (TextureResources.ReplacementArrowGlowTexture == null)
+            {
+                await TextureResources.LoadTextures();
             }
             Plugin.Log.Info("Creating new arrow glow material");
             Material arrowGlowMat = Resources.FindObjectsOfTypeAll<Material>().ToList().Find(x => x.name == "NoteArrowGlow");
             ArrowGlowMaterial = new Material(arrowGlowMat)
             {
                 name = "NoteTweaks_ArrowGlowMaterial",
-                mainTexture = Textures.ReplacementArrowGlowTexture,
+                mainTexture = TextureResources.ReplacementArrowGlowTexture,
             };
         }
 
@@ -123,7 +134,7 @@ namespace NoteTweaks.Managers
             // Utils.Materials.RepairShader(AccDotDepthMaterial);
         }
         
-        private static void UpdateNoteMaterial()
+        private static async Task UpdateNoteMaterial()
         {
             if (NoteMaterial != null)
             {
@@ -139,7 +150,7 @@ namespace NoteTweaks.Managers
             
             if (Textures.GetLoadedNoteTexture() != Plugin.Config.NoteTexture)
             {
-                Textures.LoadNoteTexture(Plugin.Config.NoteTexture);
+                await Textures.LoadNoteTexture(Plugin.Config.NoteTexture);
             }
         }
         
@@ -158,7 +169,7 @@ namespace NoteTweaks.Managers
             };
         }
         
-        private static void UpdateBombMaterial()
+        private static async Task UpdateBombMaterial()
         {
             if (BombMaterial != null)
             {
@@ -173,7 +184,7 @@ namespace NoteTweaks.Managers
             
             if (Textures.GetLoadedBombTexture() != Plugin.Config.BombTexture)
             {
-                Textures.LoadNoteTexture(Plugin.Config.BombTexture, true);
+                await Textures.LoadNoteTexture(Plugin.Config.BombTexture, true);
             }
         }
 
