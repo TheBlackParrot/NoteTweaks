@@ -45,7 +45,6 @@ namespace NoteTweaks.Patches
         private const float AccDotSizeStep = ScoreModel.kMaxDistanceForDistanceToCenterScore / ScoreModel.kMaxCenterDistanceCutScore;
 
         internal static bool AutoDisable;
-        private static readonly int Color0 = Shader.PropertyToID("_Color");
 
         private static bool MapHasRequirement(BeatmapLevel beatmapLevel, BeatmapKey beatmapKey, string requirement)
         {

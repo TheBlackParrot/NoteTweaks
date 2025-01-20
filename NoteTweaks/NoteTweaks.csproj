@@ -133,6 +133,8 @@
         <Folder Include="Resources/Textures/" />
         <EmbeddedResource Include="Resources/Textures/ArrowGlow.png"/>
         <EmbeddedResource Include="Resources/Textures/CircleGlow.png"/>
+        <EmbeddedResource Include="Resources/Textures/ArrowGlowInterlaced.png"/>
+        <EmbeddedResource Include="Resources/Textures/CircleGlowInterlaced.png"/>
         <EmbeddedResource Include="Resources/Textures/ArrowSolid.png"/>
         <EmbeddedResource Include="Resources/Textures/CircleSolid.png"/>
     </ItemGroup>
