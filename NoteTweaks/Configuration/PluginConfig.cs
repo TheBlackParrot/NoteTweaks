@@ -78,5 +78,7 @@ namespace NoteTweaks.Configuration
         public virtual float RainbowBombValue { get; set; } = 0.9f;
         
         public virtual string GlowTexture { get; set; } = "Glow";
+        
+        public virtual string ArrowMesh { get; set; } = "Default";
     }
 }
