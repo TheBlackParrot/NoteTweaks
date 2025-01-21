@@ -123,6 +123,11 @@
     <tab tags="tabs" tab-name="Arrows">
         <vertical vertical-fit="PreferredSize" pref-height="70" pref-width="100" anchored-position-x="4">
             <scroll-view spacing="0" pref-height="70" child-expand-width="true">
+                <dropdown-list-setting apply-on-change="true" value="ArrowMesh" text="Arrow Mesh" choices="arrowMeshChoices"
+                                       hover-hint="Change the mesh used for arrows"/>
+                
+                <horizontal><text text="-----" font-size="4" color="#00000000"/></horizontal>
+                
                 <slider-setting apply-on-change="true" value="ArrowScaleX" text="Horizontal Arrow Scale"
                                 min="0.05" max="2.0" increment="0.05" show-buttons="true" formatter="PercentageFormatter"
                                 hover-hint="Horizontal scale (X-axis) of note arrows"/>

@@ -74,15 +74,17 @@ namespace NoteTweaks.Managers
 
         private static async Task UpdateDotGlowMaterial()
         {
-            if (DotGlowMaterial != null)
-            {
-                return;
-            }
-            
             if (TextureResources.ReplacementDotGlowTexture == null)
             {
                 await TextureResources.LoadTextures();
             }
+            
+            if (DotGlowMaterial != null)
+            {
+                DotGlowMaterial.mainTexture = TextureResources.ReplacementDotGlowTexture;
+                return;
+            }
+            
             Plugin.Log.Info("Creating new dot glow material");
             Material arrowGlowMat = Resources.FindObjectsOfTypeAll<Material>().ToList().Find(x => x.name == "NoteArrowGlow");
             DotGlowMaterial = new Material(arrowGlowMat)
@@ -94,21 +96,23 @@ namespace NoteTweaks.Managers
 
         private static async Task UpdateArrowGlowMaterial()
         {
-            if (ArrowGlowMaterial != null)
-            {
-                return;
-            }
-
             if (TextureResources.ReplacementArrowGlowTexture == null)
             {
                 await TextureResources.LoadTextures();
             }
+            
+            if (ArrowGlowMaterial != null)
+            {
+                ArrowGlowMaterial.mainTexture = TextureResources.ReplacementArrowGlowTexture;
+                return;
+            }
+            
             Plugin.Log.Info("Creating new arrow glow material");
             Material arrowGlowMat = Resources.FindObjectsOfTypeAll<Material>().ToList().Find(x => x.name == "NoteArrowGlow");
             ArrowGlowMaterial = new Material(arrowGlowMat)
             {
                 name = "NoteTweaks_ArrowGlowMaterial",
-                mainTexture = TextureResources.ReplacementArrowGlowTexture,
+                mainTexture = TextureResources.ReplacementArrowGlowTexture
             };
         }
 
