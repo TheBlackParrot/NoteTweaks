@@ -78,6 +78,36 @@ namespace NoteTweaks.Utils
             
             return mesh;
         }
+
+        public static Mesh GenerateBasicTriangleMesh()
+        {
+            Mesh mesh = new Mesh
+            {
+                vertices = new [] { new Vector3(-0.15f, 0.0433f, 0f), new Vector3(0f, -0.05f, 0f), new Vector3(0.15f, 0.0433f, 0f) },
+                triangles = new [] { 2, 1, 0 }
+            };
+            mesh.Optimize();
+            
+            return mesh;
+        }
+
+        public static Mesh GenerateBasicLineMesh()
+        {
+            Mesh mesh = new Mesh
+            {
+                vertices = new[]
+                {
+                    new Vector3(-0.15f, 0.0433f, 0f),
+                    new Vector3(0.15f, 0.0433f, 0f),
+                    new Vector3(-0.15f, -0.05f, 0f),
+                    new Vector3(0.15f, -0.05f, 0f)
+                },
+                triangles = new[] { 1, 3, 2, 0, 1, 2 }
+            };
+            mesh.Optimize();
+            
+            return mesh;
+        }
     }
 
     internal static class Vectors

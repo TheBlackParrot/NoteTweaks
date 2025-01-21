@@ -24,8 +24,7 @@ namespace NoteTweaks.UI
         private static Vector3 _initialArrowPosition = Vector3.one;
         private static Vector3 _initialDotPosition = Vector3.one;
         private static Vector3 _initialChainDotPosition = Vector3.one;
-
-        private static Mesh _dotMesh;
+        
         private static Mesh _dotGlowMesh;
         
         private static readonly int Color0 = Shader.PropertyToID("_Color");
@@ -45,13 +44,8 @@ namespace NoteTweaks.UI
             {
                 _dotGlowMesh = NoteContainer.transform.GetChild(0).Find("NoteCircleGlow").GetComponent<MeshFilter>().mesh;
             }
-            
-            if (_dotMesh != null)
-            {
-                _dotMesh.Clear();
-            }
 
-            _dotMesh = Meshes.GenerateFaceMesh(Plugin.Config.DotMeshSides);
+            Managers.Meshes.DotMesh = Utils.Meshes.GenerateFaceMesh(Plugin.Config.DotMeshSides);
 
             for (int i = 0; i < NoteContainer.transform.childCount; i++)
             {
@@ -64,11 +58,11 @@ namespace NoteTweaks.UI
                 Transform noteCircleGlowTransform = noteCube.transform.Find("NoteCircleGlow");
                 if (noteCircleGlowTransform != null)
                 {
-                    noteCircleGlowTransform.GetComponent<MeshFilter>().mesh = _dotMesh;
+                    noteCircleGlowTransform.GetComponent<MeshFilter>().mesh = Managers.Meshes.DotMesh;
                 }
                 else
                 {
-                    noteCube.transform.Find("Circle").GetComponent<MeshFilter>().mesh = _dotMesh;
+                    noteCube.transform.Find("Circle").GetComponent<MeshFilter>().mesh = Managers.Meshes.DotMesh;
                 }
             }
         }
@@ -365,6 +359,28 @@ namespace NoteTweaks.UI
             }
         }
 
+        public static void UpdateArrowMeshes()
+        {
+            for (int i = 0; i < NoteContainer.transform.childCount; i++)
+            {
+                GameObject noteCube = NoteContainer.transform.GetChild(i).gameObject;
+                if (noteCube.name.Contains("_Chain_") || noteCube.name.Contains("_Bomb_"))
+                {
+                    continue;
+                }
+                
+                Transform originalArrow = noteCube.transform.Find("NoteArrow");
+                if (originalArrow)
+                {
+                    if (originalArrow.gameObject.TryGetComponent(out MeshFilter originalArrowMeshFilter))
+                    {
+                        Managers.Meshes.UpdateDefaultArrowMesh(originalArrowMeshFilter.mesh);
+                        originalArrowMeshFilter.mesh = Managers.Meshes.CurrentArrowMesh;
+                    }
+                }
+            }
+        }
+
         private static void CreateChainNote(BurstSliderGameNoteController chainPrefab, string extraName, int cell, int linkNum)
         {
             GameObject chainNote = Instantiate(chainPrefab.transform.GetChild(0).gameObject, NoteContainer.transform);
@@ -401,7 +417,7 @@ namespace NoteTweaks.UI
                     
                 MeshRenderer meshRenderer = originalDot.GetComponent<MeshRenderer>();
                     
-                meshRenderer.GetComponent<MeshFilter>().mesh = _dotMesh;
+                meshRenderer.GetComponent<MeshFilter>().mesh = Managers.Meshes.DotMesh;
                 
                 meshRenderer.sharedMaterial = Materials.ReplacementDotMaterial;
                     
@@ -447,12 +463,7 @@ namespace NoteTweaks.UI
             }
             animationComponent.Play("LevitatingCube", PlayMode.StopAll);
             animationComponent["LevitatingCube"].wrapMode = WrapMode.Loop;*/
-
-            if (_dotMesh == null)
-            {
-                UpdateDotMesh();
-            }
-
+            
             if (_dotGlowMesh == null)
             {
                 _dotGlowMesh = noteCube.transform.Find("NoteCircleGlow").GetComponent<MeshFilter>().mesh;
@@ -478,7 +489,7 @@ namespace NoteTweaks.UI
                     
                 MeshRenderer meshRenderer = originalDot.GetComponent<MeshRenderer>();
                     
-                meshRenderer.GetComponent<MeshFilter>().mesh = _dotMesh;
+                meshRenderer.GetComponent<MeshFilter>().mesh = Managers.Meshes.DotMesh;
                         
                 meshRenderer.material = Materials.ReplacementDotMaterial;
                 meshRenderer.sharedMaterial = Materials.ReplacementDotMaterial;
@@ -701,6 +712,7 @@ namespace NoteTweaks.UI
                             UpdateColors();
                             UpdateBombColors();
                             UpdateBombScale();
+                            UpdateArrowMeshes();
                             UpdateArrowPosition();
                             UpdateArrowScale();
                             UpdateDotPosition();

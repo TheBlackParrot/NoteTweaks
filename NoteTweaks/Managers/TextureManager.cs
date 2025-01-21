@@ -43,12 +43,20 @@ namespace NoteTweaks.Managers
         {
             Plugin.Log.Info("Loading glow textures...");
             
-            ReplacementArrowGlowTexture = await Utilities.LoadTextureFromAssemblyAsync($"NoteTweaks.Resources.Textures.Arrow{Plugin.Config.GlowTexture}.png");
+            ReplacementArrowGlowTexture = await Utilities.LoadTextureFromAssemblyAsync($"NoteTweaks.Resources.Textures.Arrow{Plugin.Config.ArrowMesh}{Plugin.Config.GlowTexture}.png");
             ReplacementArrowGlowTexture.PrepareTexture();
+            if (Materials.ArrowGlowMaterial != null)
+            {
+                Materials.ArrowGlowMaterial.mainTexture = ReplacementArrowGlowTexture;
+            }
             Plugin.Log.Info("Loaded replacement arrow glow texture");
             
             ReplacementDotGlowTexture = await Utilities.LoadTextureFromAssemblyAsync($"NoteTweaks.Resources.Textures.Circle{Plugin.Config.GlowTexture}.png");
             ReplacementDotGlowTexture.PrepareTexture();
+            if (Materials.DotGlowMaterial != null)
+            {
+                Materials.DotGlowMaterial.mainTexture = ReplacementDotGlowTexture;
+            }
             Plugin.Log.Info("Loaded replacement dot glow texture");
         }
 

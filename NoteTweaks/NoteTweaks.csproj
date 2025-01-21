@@ -131,11 +131,17 @@
     </ItemGroup>
     <ItemGroup>
         <Folder Include="Resources/Textures/" />
-        <EmbeddedResource Include="Resources/Textures/ArrowGlow.png"/>
+        <EmbeddedResource Include="Resources/Textures/ArrowDefaultGlow.png"/>
+        <EmbeddedResource Include="Resources/Textures/ArrowDefaultGlowInterlaced.png"/>
+        <EmbeddedResource Include="Resources/Textures/ArrowDefaultSolid.png"/>
+        <EmbeddedResource Include="Resources/Textures/ArrowLineGlow.png"/>
+        <EmbeddedResource Include="Resources/Textures/ArrowLineGlowInterlaced.png"/>
+        <EmbeddedResource Include="Resources/Textures/ArrowLineSolid.png"/>
+        <EmbeddedResource Include="Resources/Textures/ArrowTriangleGlow.png"/>
+        <EmbeddedResource Include="Resources/Textures/ArrowTriangleGlowInterlaced.png"/>
+        <EmbeddedResource Include="Resources/Textures/ArrowTriangleSolid.png"/>
         <EmbeddedResource Include="Resources/Textures/CircleGlow.png"/>
-        <EmbeddedResource Include="Resources/Textures/ArrowGlowInterlaced.png"/>
         <EmbeddedResource Include="Resources/Textures/CircleGlowInterlaced.png"/>
-        <EmbeddedResource Include="Resources/Textures/ArrowSolid.png"/>
         <EmbeddedResource Include="Resources/Textures/CircleSolid.png"/>
     </ItemGroup>
 </Project>

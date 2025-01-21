@@ -19,8 +19,7 @@ namespace NoteTweaks.Patches
     internal class NotePhysicalTweaks
     {
         private static GameplayModifiers _gameplayModifiers;
-
-        private static Mesh _dotMesh;
+        
         private static Mesh _dotGlowMesh;
         
         private static GameObject CreateAccDotObject()
@@ -77,8 +76,6 @@ namespace NoteTweaks.Patches
                 
                 _gameplayModifiers = gameplayModifiers;
                 Plugin.ClampSettings();
-
-                _dotMesh = Meshes.GenerateFaceMesh(Plugin.Config.DotMeshSides);
             }
 
             // ReSharper disable once InconsistentNaming
@@ -335,7 +332,15 @@ namespace NoteTweaks.Patches
                     arrowTransform.localPosition = position;
                     
                     meshRenderer.sharedMaterial = Materials.ReplacementArrowMaterial;
-                    
+
+                    if (meshRenderer.gameObject.name != "NoteArrowGlow")
+                    {
+                        if (meshRenderer.TryGetComponent(out MeshFilter arrowMeshFilter))
+                        {
+                            arrowMeshFilter.mesh = Managers.Meshes.CurrentArrowMesh;
+                        }
+                    }
+
                     if (meshRenderer.TryGetComponent(out MaterialPropertyBlockController materialPropertyBlockController))
                     {
                         ColorType colorType = __instance._noteController.noteData.colorType;
@@ -447,12 +452,8 @@ namespace NoteTweaks.Patches
                             originalDotTransform.localRotation = Quaternion.identity;
                             originalDotTransform.Rotate(0f, 0f, Plugin.Config.RotateDot);
                         }
-
-                        if (_dotMesh == null)
-                        {
-                            _dotMesh = Meshes.GenerateFaceMesh(Plugin.Config.DotMeshSides);
-                        }
-                        meshRenderer.GetComponent<MeshFilter>().mesh = _dotMesh;
+                        
+                        meshRenderer.GetComponent<MeshFilter>().mesh = Managers.Meshes.DotMesh;
                         
                         meshRenderer.sharedMaterial = Materials.ReplacementDotMaterial;
                         

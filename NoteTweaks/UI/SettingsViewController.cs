@@ -611,9 +611,27 @@ namespace NoteTweaks.UI
                 _ = TextureResources.UpdateTextures();
             }
         }
+
+        protected string ArrowMesh
+        {
+            get => _config.ArrowMesh;
+            set
+            {
+                _config.ArrowMesh = value;
+                NotePreviewViewController.UpdateArrowMeshes();
+                _ = TextureResources.UpdateTextures();
+            }
+        }
         
         [UIValue("glowTextureChoices")]
+        [UsedImplicitly]
+        // ReSharper disable once InconsistentNaming
         private List<object> GlowTextureChoices = new List<object> { "Glow", "GlowInterlaced", "Solid" };
+        
+        [UIValue("arrowMeshChoices")]
+        [UsedImplicitly]
+        // ReSharper disable once InconsistentNaming
+        private List<object> ArrowMeshChoices = new List<object> { "Default", "Line", "Triangle" };
 
         [UIComponent("selectedNoteTexture")]
         public DropDownListSetting noteTextureDropDown;
