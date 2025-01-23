@@ -622,6 +622,46 @@ namespace NoteTweaks.UI
                 _ = TextureResources.UpdateTextures();
             }
         }
+
+        protected float LeftMinBrightness
+        {
+            get => _config.LeftMinBrightness;
+            set
+            {
+                _config.LeftMinBrightness = Mathf.Clamp(value, 0.0f, 1.0f);
+                NotePreviewViewController.UpdateColors();
+            }
+        }
+        
+        protected float LeftMaxBrightness
+        {
+            get => _config.LeftMaxBrightness;
+            set
+            {
+                _config.LeftMaxBrightness = Mathf.Clamp(value, 0.0f, 1.0f);
+                NotePreviewViewController.UpdateColors();
+            }
+        }
+        
+        protected float RightMinBrightness
+        {
+            get => _config.RightMinBrightness;
+            set
+            {
+                _config.RightMinBrightness = Mathf.Clamp(value, 0.0f, 1.0f);
+                NotePreviewViewController.UpdateColors();
+            }
+        }
+        
+        protected float RightMaxBrightness
+        {
+            get => _config.RightMaxBrightness;
+            set
+            {
+                _config.RightMaxBrightness = Mathf.Clamp(value, 0.0f, 1.0f);
+                NotePreviewViewController.UpdateColors();
+            }
+        }
         
         [UIValue("glowTextureChoices")]
         [UsedImplicitly]
