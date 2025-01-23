@@ -50,7 +50,7 @@ namespace NoteTweaks.Managers
             {
                 name = "NoteTweaks_ReplacementDotMaterial",
                 color = Color.white,
-                shaderKeywords = arrowMat.shaderKeywords.Where(x => x != "_ENABLE_COLOR_INSTANCING").ToArray()
+                shaderKeywords = arrowMat.shaderKeywords.Where(x => x != "_ENABLE_COLOR_INSTANCING" || x != "_CUTOUT_NONE").ToArray()
             };
         }
 
@@ -67,7 +67,7 @@ namespace NoteTweaks.Managers
             {
                 name = "NoteTweaks_ReplacementArrowMaterial",
                 color = Color.white,
-                shaderKeywords = arrowMat.shaderKeywords.Where(x => x != "_ENABLE_COLOR_INSTANCING").ToArray()
+                shaderKeywords = arrowMat.shaderKeywords.Where(x => x != "_ENABLE_COLOR_INSTANCING" || x != "_CUTOUT_NONE").ToArray()
             };
         }
 
