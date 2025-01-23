@@ -82,5 +82,10 @@ namespace NoteTweaks.Configuration
         public virtual string ArrowMesh { get; set; } = "Default";
         
         public virtual bool FixDotsIfNoodle { get; set; } = false;
+
+        public virtual float LeftMinBrightness { get; set; } = 0.0f;
+        public virtual float LeftMaxBrightness { get; set; } = 1.0f;
+        public virtual float RightMinBrightness { get; set; } = 0.0f;
+        public virtual float RightMaxBrightness { get; set; } = 1.0f;
     }
 }

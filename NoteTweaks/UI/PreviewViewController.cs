@@ -267,6 +267,29 @@ namespace NoteTweaks.UI
             {
                 colors = playerData.colorSchemesSettings.GetColorSchemeForId("TheFirst");
             }
+
+            Color leftColor = colors._saberAColor;
+            float leftBrightness = leftColor.Brightness();
+            Color rightColor = colors._saberBColor;
+            float rightBrightness = rightColor.Brightness();
+            
+            if (leftBrightness > Plugin.Config.LeftMaxBrightness)
+            {
+                leftColor = leftColor.LerpRGBUnclamped(Color.black, Mathf.InverseLerp(leftBrightness, 0.0f, Plugin.Config.LeftMaxBrightness));
+            }
+            else if (leftBrightness < Plugin.Config.LeftMinBrightness)
+            {
+                leftColor = leftColor.LerpRGBUnclamped(Color.white, Mathf.InverseLerp(leftBrightness, 1.0f, Plugin.Config.LeftMinBrightness));
+            }
+            
+            if (rightBrightness > Plugin.Config.RightMaxBrightness)
+            {
+                rightColor = rightColor.LerpRGBUnclamped(Color.black, Mathf.InverseLerp(rightBrightness, 0.0f, Plugin.Config.RightMaxBrightness));
+            }
+            else if (rightBrightness < Plugin.Config.RightMinBrightness)
+            {
+                rightColor = rightColor.LerpRGBUnclamped(Color.white, Mathf.InverseLerp(rightBrightness, 1.0f, Plugin.Config.RightMinBrightness));
+            }
             
             float leftScale = 1.0f + Plugin.Config.ColorBoostLeft;
             float rightScale = 1.0f + Plugin.Config.ColorBoostRight;
@@ -281,7 +304,7 @@ namespace NoteTweaks.UI
                 }
 
                 // scaling is intentionally done here
-                Color noteColor = (i % 2 == 0) ? colors._saberAColor * leftScale : colors._saberBColor * rightScale;
+                Color noteColor = (i % 2 == 0) ? leftColor * leftScale : rightColor * rightScale;
                 Color faceColor = noteColor;
 
                 float colorScalar = noteColor.maxColorComponent;

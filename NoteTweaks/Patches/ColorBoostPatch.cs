@@ -3,6 +3,7 @@ using System.Reflection;
 using HarmonyLib;
 using IPA.Utilities;
 using JetBrains.Annotations;
+using NoteTweaks.Utils;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -28,8 +29,31 @@ namespace NoteTweaks.Patches
                 OriginalRightColor = scheme._saberBColor;
             }
             
-            scheme._saberAColor = OriginalLeftColor * leftScale;
-            scheme._saberBColor = OriginalRightColor * rightScale;
+            Color leftColor = OriginalLeftColor;
+            float leftBrightness = leftColor.Brightness();
+            Color rightColor = OriginalRightColor;
+            float rightBrightness = rightColor.Brightness();
+
+            if (leftBrightness > Plugin.Config.LeftMaxBrightness)
+            {
+                leftColor = leftColor.LerpRGBUnclamped(Color.black, Mathf.InverseLerp(leftBrightness, 0.0f, Plugin.Config.LeftMaxBrightness));
+            }
+            else if (leftBrightness < Plugin.Config.LeftMinBrightness)
+            {
+                leftColor = leftColor.LerpRGBUnclamped(Color.white, Mathf.InverseLerp(leftBrightness, 1.0f, Plugin.Config.LeftMinBrightness));
+            }
+            
+            if (rightBrightness > Plugin.Config.RightMaxBrightness)
+            {
+                rightColor = rightColor.LerpRGBUnclamped(Color.black, Mathf.InverseLerp(rightBrightness, 0.0f, Plugin.Config.RightMaxBrightness));
+            }
+            else if (rightBrightness < Plugin.Config.RightMinBrightness)
+            {
+                rightColor = rightColor.LerpRGBUnclamped(Color.white, Mathf.InverseLerp(rightBrightness, 1.0f, Plugin.Config.RightMinBrightness));
+            }
+            
+            scheme._saberAColor = leftColor * leftScale;
+            scheme._saberBColor = rightColor * rightScale;
 
             return scheme;
         }

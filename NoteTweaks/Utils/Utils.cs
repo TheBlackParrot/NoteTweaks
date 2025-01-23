@@ -130,4 +130,9 @@ namespace NoteTweaks.Utils
             return vector;
         }
     }
+    
+    internal static class ColorBrightnessHelper
+    {
+        public static float Brightness(this Color source) => (source.r * 0.299f) + (source.g * 0.587f) + (source.b * 0.114f);
+    }
 }
