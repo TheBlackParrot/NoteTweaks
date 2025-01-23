@@ -80,5 +80,7 @@ namespace NoteTweaks.Configuration
         public virtual string GlowTexture { get; set; } = "Glow";
         
         public virtual string ArrowMesh { get; set; } = "Default";
+        
+        public virtual bool FixDotsIfNoodle { get; set; } = false;
     }
 }
