@@ -75,5 +75,11 @@ namespace NoteTweaks.UI
             get => _config.DisableIfNoodle;
             set => _config.DisableIfNoodle = value;
         }
+        
+        protected bool FixDotsIfNoodle
+        {
+            get => _config.FixDotsIfNoodle;
+            set => _config.FixDotsIfNoodle = value;
+        }
     }
 }

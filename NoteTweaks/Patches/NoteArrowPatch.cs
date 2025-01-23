@@ -43,6 +43,7 @@ namespace NoteTweaks.Patches
         private const float AccDotSizeStep = ScoreModel.kMaxDistanceForDistanceToCenterScore / ScoreModel.kMaxCenterDistanceCutScore;
 
         internal static bool AutoDisable;
+        internal static bool FixDots = true;
 
         private static bool MapHasRequirement(IDifficultyBeatmap beatmapLevel, string requirement)
         {
@@ -72,6 +73,12 @@ namespace NoteTweaks.Patches
                     (MapHasRequirement(__instance.difficultyBeatmap, "Noodle Extensions") &&
                      Plugin.Config.DisableIfNoodle) ||
                     MapHasRequirement(__instance.difficultyBeatmap, "Vivify");
+
+                FixDots = true;
+                if (MapHasRequirement(__instance.difficultyBeatmap, "Noodle Extensions"))
+                {
+                    FixDots = Plugin.Config.FixDotsIfNoodle;
+                }
                 
                 _gameplayModifiers = gameplayModifiers;
                 Plugin.ClampSettings();
@@ -407,14 +414,14 @@ namespace NoteTweaks.Patches
                     {
                         dotPosition = InitialDotPosition;
                         glowPosition = new Vector3(InitialDotPosition.x, InitialDotPosition.y, InitialDotPosition.z + 0.001f);
-                        dotScale = new Vector3(Plugin.Config.ChainDotScale.x / 18f, Plugin.Config.ChainDotScale.y / 18f, 1.0f);
+                        dotScale = new Vector3(Plugin.Config.ChainDotScale.x / (FixDots ? 18f : 10f), Plugin.Config.ChainDotScale.y / (FixDots ? 18f : 10f), 1.0f);
                         glowScale = new Vector3((Plugin.Config.ChainDotScale.x / 5.4f) * Plugin.Config.DotGlowScale, (Plugin.Config.ChainDotScale.y / 5.4f) * Plugin.Config.DotGlowScale, 1.0f);
                     }
                     else
                     {
                         dotPosition = new Vector3(InitialDotPosition.x + Plugin.Config.DotPosition.x, InitialDotPosition.y + Plugin.Config.DotPosition.y, InitialDotPosition.z);
                         glowPosition = new Vector3(InitialDotPosition.x + Plugin.Config.DotPosition.x, InitialDotPosition.y + Plugin.Config.DotPosition.y, InitialDotPosition.z + 0.001f);
-                        dotScale = new Vector3(Plugin.Config.DotScale.x / 5f, Plugin.Config.DotScale.y / 5f, 1.0f);
+                        dotScale = new Vector3(Plugin.Config.DotScale.x / (FixDots ? 5f : 2f), Plugin.Config.DotScale.y / (FixDots ? 5f : 2f), 1.0f);
                         glowScale = new Vector3((Plugin.Config.DotScale.x / 1.5f) * Plugin.Config.DotGlowScale, (Plugin.Config.DotScale.y / 1.5f) * Plugin.Config.DotGlowScale, 1.0f);
                     }
                     
@@ -450,10 +457,12 @@ namespace NoteTweaks.Patches
                             originalDotTransform.localRotation = Quaternion.identity;
                             originalDotTransform.Rotate(0f, 0f, Plugin.Config.RotateDot);
                         }
-                        
-                        meshRenderer.GetComponent<MeshFilter>().mesh = Managers.Meshes.DotMesh;
-                        
-                        meshRenderer.sharedMaterial = Materials.ReplacementDotMaterial;
+
+                        if (FixDots)
+                        {
+                            meshRenderer.GetComponent<MeshFilter>().mesh = Managers.Meshes.DotMesh;
+                            meshRenderer.sharedMaterial = Materials.ReplacementDotMaterial;
+                        }
                         
                         if (meshRenderer.TryGetComponent(out MaterialPropertyBlockController materialPropertyBlockController))
                         {
@@ -472,7 +481,7 @@ namespace NoteTweaks.Patches
                             }
                         
                             Color c = Color.LerpUnclamped(isLeft ? Plugin.Config.LeftFaceColor : Plugin.Config.RightFaceColor, faceColor, isLeft ? Plugin.Config.LeftFaceColorNoteSkew : Plugin.Config.RightFaceColorNoteSkew);
-                            c.a = 0f;
+                            c.a = FixDots ? 0f : materialPropertyBlockController.materialPropertyBlock.GetColor(ColorNoteVisuals._colorId).a;
                             materialPropertyBlockController.materialPropertyBlock.SetColor(ColorNoteVisuals._colorId, c);
                             materialPropertyBlockController.ApplyChanges();   
                         }
@@ -490,6 +499,11 @@ namespace NoteTweaks.Patches
                             {
                                 continue;
                             }   
+                        }
+
+                        if (!FixDots)
+                        {
+                            continue;
                         }
 
                         GameObject newGlowObject;
