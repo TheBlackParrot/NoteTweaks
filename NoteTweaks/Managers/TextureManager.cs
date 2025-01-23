@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using BeatSaberMarkupLanguage;
 using HarmonyLib;
@@ -77,6 +78,7 @@ namespace NoteTweaks.Managers
     {
         internal static readonly string[] FileExtensions = { ".png", ".jpg", ".tga" };
         internal static readonly string ImagePath = Path.Combine(UnityGame.UserDataPath, "NoteTweaks", "Textures", "Notes");
+        internal static readonly string[] IncludedCubemaps = { "Flat", "Radials A", "Radials B" };
         
         /*private static readonly Texture2D OriginalArrowGlowTexture = Resources.FindObjectsOfTypeAll<Texture2D>().ToList().First(x => x.name == "ArrowGlow");
         internal static readonly Texture2D ReplacementArrowGlowTexture = OriginalArrowGlowTexture.PrepareTexture();
@@ -197,6 +199,15 @@ namespace NoteTweaks.Managers
                 Plugin.Log.Info($"Loading texture {dirname}...");
 
                 List<KeyValuePair<string, Texture2D>> textures = new List<KeyValuePair<string, Texture2D>>();
+                
+                if (IncludedCubemaps.Contains(dirname))
+                {
+                    // LoadTextureFromAssemblyAsync doesn't have a flag to allow this to continue to be readable, so we have to load it this way instead
+                    Texture2D loadedImage = await Utilities.LoadImageAsync(Utilities.GetResourceAsync(Assembly.GetExecutingAssembly(), $"NoteTweaks.Resources.Textures.CubemapSingles.{dirname}.png").Result, false, false);
+                    textures.Add(new KeyValuePair<string, Texture2D>("all", loadedImage));
+
+                    goto done;
+                }
 
                 string singleFileFilename = null;
                 foreach (string extension in FileExtensions)
@@ -213,48 +224,49 @@ namespace NoteTweaks.Managers
                 {
                     Texture2D loadedImage = await Utilities.LoadImageAsync(singleFileFilename, true, false);
                     textures.Add(new KeyValuePair<string, Texture2D>("all", loadedImage));
-                }
-                else
-                {
-                    foreach (string faceFilename in FaceNames.Select(pair => pair.Key))
-                    {
-                        string path = null;
-                        bool foundImage = false;
-                        foreach (string extension in FileExtensions)
-                        {
-                            path = Path.Combine(ImagePath, dirname, faceFilename + extension);
-                            if (File.Exists(path))
-                            {
-                                foundImage = true;
-                                break;
-                            }
-                        }
 
-                        if (!foundImage)
+                    goto done;
+                }
+                    
+                foreach (string faceFilename in FaceNames.Select(pair => pair.Key))
+                {
+                    string path = null;
+                    bool foundImage = false;
+                    foreach (string extension in FileExtensions)
+                    {
+                        path = Path.Combine(ImagePath, dirname, faceFilename + extension);
+                        if (File.Exists(path))
                         {
-                            Plugin.Log.Info($"{dirname} does not have all required images (px, py, pz, nx, ny, nz)");
-                            LoadDefaultNoteTexture(isBomb);
-                            return;
+                            foundImage = true;
+                            break;
                         }
+                    }
+
+                    if (!foundImage)
+                    {
+                        Plugin.Log.Info($"{dirname} does not have all required images (px, py, pz, nx, ny, nz)");
+                        LoadDefaultNoteTexture(isBomb);
+                        return;
+                    }
                     
-                        //Plugin.Log.Info($"Loading texture {path}...");
-                        Texture2D loadedImage = await Utilities.LoadImageAsync(path, true, false);
-                        //Plugin.Log.Info($"Loaded texture {path}");
+                    //Plugin.Log.Info($"Loading texture {path}...");
+                    Texture2D loadedImage = await Utilities.LoadImageAsync(path, true, false);
+                    //Plugin.Log.Info($"Loaded texture {path}");
                     
-                        textures.Add(new KeyValuePair<string, Texture2D>(Path.GetFileNameWithoutExtension(path), loadedImage));
-                    }   
-                }
+                    textures.Add(new KeyValuePair<string, Texture2D>(Path.GetFileNameWithoutExtension(path), loadedImage));
+                }   
                 
-                Plugin.Log.Info("Textures loaded");
-                
-                if (isBomb)
-                {
-                    OnBombImageLoaded(textures);
-                }
-                else
-                {
-                    OnNoteImageLoaded(textures);
-                }
+                done:
+                    Plugin.Log.Info("Textures loaded");
+
+                    if (isBomb)
+                    {
+                        OnBombImageLoaded(textures);
+                    }
+                    else
+                    {
+                        OnNoteImageLoaded(textures);
+                    }
             }
         }
     }
