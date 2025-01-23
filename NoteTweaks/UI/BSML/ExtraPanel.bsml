@@ -9,6 +9,11 @@
                                 hover-hint="Remember to drink water! Hydrate!"/>
                 <toggle-setting apply-on-change="true" value="DisableIfNoodle" text="Disable on Noodle Maps"
                                 hover-hint="Automatically disable the mod if the map being played requires Noodle Extensions"/>
+
+                <horizontal><text text="-----" font-size="4" color="#00000000"/></horizontal>
+
+                <toggle-setting apply-on-change="true" value="FixDotsIfNoodle" text="Fix Dots on Noodle Maps"
+                                hover-hint="(TODO: Disable score submission) Leaves dots as just a glow texture if the map being played requires Noodle Extensions"/>
             </scroll-view>
         </vertical>
     </tab>

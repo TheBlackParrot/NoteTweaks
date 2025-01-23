@@ -257,4 +257,36 @@
             </scroll-view>
         </vertical>
     </tab>
+
+    <tab tags="tabs" tab-name="Notes">
+        <vertical vertical-fit="PreferredSize" pref-height="70" pref-width="100" anchored-position-x="4">
+            <scroll-view spacing="0" pref-height="70" child-expand-width="true">
+                <slider-setting apply-on-change="true" value="NoteScaleX" text="Horizontal Note Scale"
+                                min="0.1" max="2.0" increment="0.01" show-buttons="true" formatter="PercentageFormatter"
+                                hover-hint="Horizontal scale (X-axis) of notes"/>
+                <slider-setting apply-on-change="true" value="NoteScaleY" text="Vertical Note Scale"
+                                min="0.1" max="2.0" increment="0.01" show-buttons="true" formatter="PercentageFormatter"
+                                hover-hint="Vertical scale (Y-axis) of notes"/>
+                <slider-setting apply-on-change="true" value="NoteScaleZ" text="Length Note Scale"
+                                min="0.1" max="2.0" increment="0.01" show-buttons="true" formatter="PercentageFormatter"
+                                hover-hint="Length scale (Z-axis) of notes"/>
+
+                <horizontal><text text="-----" font-size="4" color="#00000000"/></horizontal>
+
+                <dropdown-list-setting apply-on-change="true" value="NoteTexture" text="Note Texture" choices="noteTextureChoices"
+                                       hover-hint="Cubemap images in UserData/NoteTweaks/Textures/Notes"/>
+                <toggle-setting apply-on-change="true" value="InvertNoteTexture" text="Invert Note Texture"
+                                hover-hint="Invert the colors of the cubemap texture"/>
+
+                <horizontal><text text="-----" font-size="4" color="#00000000"/></horizontal>
+
+                <slider-setting apply-on-change="true" value="ColorBoostLeft" text="Left Color Boost"
+                                min="-0.95" max="3.0" increment="0.05" show-buttons="true" formatter="PercentageFormatter"
+                                hover-hint="Boost left note colors beyond the normal clamping levels"/>
+                <slider-setting apply-on-change="true" value="ColorBoostRight" text="Right Color Boost"
+                                min="-0.95" max="3.0" increment="0.05" show-buttons="true" formatter="PercentageFormatter"
+                                hover-hint="Boost right note colors beyond the normal clamping levels"/>
+            </scroll-view>
+        </vertical>
+    </tab>
 </vertical>
