@@ -669,6 +669,12 @@ namespace NoteTweaks.UI
             string[] dirs = Directory.GetDirectories(Textures.ImagePath);
             foreach (string dir in dirs)
             {
+                if (Textures.IncludedCubemaps.Contains(Path.GetDirectoryName(dir)))
+                {
+                    Plugin.Log.Info($"{dir} shares a name with an included cubemap, skipping");
+                    continue;
+                }
+                
                 int count = 0;
                 
                 Textures.FaceNames.ForEach(pair =>
@@ -695,10 +701,17 @@ namespace NoteTweaks.UI
             {
                 if (Textures.FileExtensions.Contains(Path.GetExtension(file).ToLower()))
                 {
+                    if (Textures.IncludedCubemaps.Contains(Path.GetFileNameWithoutExtension(file)))
+                    {
+                        Plugin.Log.Info($"{file} shares a name with an included cubemap, skipping");
+                        continue;
+                    }
+                    
                     choices.Add(Path.GetFileNameWithoutExtension(file));
                 }
             }
             
+            choices.AddRange(Textures.IncludedCubemaps);
             choices.Sort();
             choices = choices.Prepend("Default").ToList();
 
