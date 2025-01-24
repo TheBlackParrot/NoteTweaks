@@ -18,7 +18,7 @@ namespace NoteTweaks.UI
         internal static GameObject NoteContainer = new GameObject("_NoteTweaks_NoteContainer");
         
         private static readonly float NoteSize = 0.5f;
-        private static readonly Vector3 InitialPosition = new Vector3(0.275f, 1.0f, 4.5f);
+        private static readonly Vector3 InitialPosition = new Vector3(0f, 0.67f, 4.5f);
         
         internal static bool HasInitialized;
         private static Vector3 _initialArrowPosition = Vector3.one;
@@ -413,7 +413,7 @@ namespace NoteTweaks.UI
             DestroyImmediate(chainNote.transform.Find("BigCuttable").gameObject);
             DestroyImmediate(chainNote.transform.Find("SmallCuttable").gameObject);
             
-            Vector3 position = new Vector3((cell - 2.25f) * NoteSize, (linkNum / 6.667f) - 0.375f, 0);
+            Vector3 position = new Vector3(((-NoteSize / 2) + (cell - (NoteSize * 2)) * NoteSize) - 0.1f, linkNum / 6.667f, linkNum * -0.05f);
             chainNote.transform.localPosition = position;
             chainNote.transform.Rotate(90f, 0f, 0f);
             
@@ -469,23 +469,12 @@ namespace NoteTweaks.UI
             DestroyImmediate(noteCube.transform.Find("BigCuttable").gameObject);
             DestroyImmediate(noteCube.transform.Find("SmallCuttable").gameObject);
             
-            Vector3 position = new Vector3((cell % 2) * NoteSize, (-(int)Math.Floor((float)cell / 2) + 0.5f) * NoteSize, 0);
+            Vector3 position = new Vector3(((NoteSize / 2) + (cell % 2) * NoteSize) + 0.1f, (-(int)Math.Floor((float)cell / 2) * NoteSize) + NoteSize + 0.15f, 0);
             noteCube.transform.localPosition = position;
             noteCube.transform.Rotate(90f, 0f, 0f);
             
             MeshRenderer noteMeshRenderer = noteCube.gameObject.GetComponent<MeshRenderer>();
             noteMeshRenderer.sharedMaterial = Materials.NoteMaterial;
-
-            /*Animation animationComponent = noteCube.AddComponent<Animation>();
-            AnimationClip animationClip = Resources.FindObjectsOfTypeAll<AnimationClip>().First(x => x.name.Contains("LevitatingCube"));
-            animationComponent.AddClip(animationClip, "LevitatingCube");
-            animationComponent.clip = animationClip;
-            foreach (var animationEvent in animationComponent.clip.events)
-            {
-                animationEvent.objectReferenceParameter = noteCube;
-            }
-            animationComponent.Play("LevitatingCube", PlayMode.StopAll);
-            animationComponent["LevitatingCube"].wrapMode = WrapMode.Loop;*/
             
             if (_dotGlowMesh == null)
             {
@@ -563,7 +552,7 @@ namespace NoteTweaks.UI
             
             bombContainer.name = "_NoteTweaks_Bomb_" + extraName;
             
-            Vector3 position = new Vector3((NoteSize * (cell * 1.25f)) - 1.0f, 1.0f, 0);
+            Vector3 position = new Vector3(-NoteSize + ((NoteSize * 1.25f) * cell) - 0.1f, 1.333f, 0);
             bombContainer.transform.localPosition = position;
             bombContainer.transform.Rotate(90f, 0f, 0f);
             
@@ -581,6 +570,8 @@ namespace NoteTweaks.UI
         private static CancellationTokenSource _currentTokenSource;
         public static async void CutoutFadeOut()
         {
+            _floatTokenSource.Cancel();
+            
             _currentTokenSource?.Cancel();
             _currentTokenSource?.Dispose();
 
@@ -591,7 +582,7 @@ namespace NoteTweaks.UI
                 NoteContainer.transform.localScale = (Vector3.one * (Mathf.Abs(time - 1f) / 2)) + new Vector3(0.5f, 0.5f, 0.5f);
                 
                 Vector3 pos = InitialPosition;
-                pos.y = (InitialPosition.y * (Mathf.Abs(time - 1f) * 1.5f) - 0.5f);
+                pos.y = InitialPosition.y * (Mathf.Abs(time - 1f) * 2f) - InitialPosition.y;
                 NoteContainer.transform.localPosition = pos;
                 
                 for (int i = 0; i < NoteContainer.transform.childCount; i++)
@@ -624,13 +615,15 @@ namespace NoteTweaks.UI
             _currentTokenSource?.Dispose();
 
             _currentTokenSource = new CancellationTokenSource();
+            
+            NoteContainer.transform.localRotation = Quaternion.AngleAxis(0f, new Vector3(0f, 1f, 0f));
 
             await Animate(time =>
             {
                 NoteContainer.transform.localScale = (Vector3.one * (time / 2)) + new Vector3(0.5f, 0.5f, 0.5f);
                 
                 Vector3 pos = InitialPosition;
-                pos.y = (InitialPosition.y * (time * 1.5f) - 0.5f);
+                pos.y = InitialPosition.y * (time * 2f) - InitialPosition.y;
                 NoteContainer.transform.localPosition = pos;
                 
                 for (int i = 0; i < NoteContainer.transform.childCount; i++)
@@ -651,6 +644,8 @@ namespace NoteTweaks.UI
                     }
                 }
             }, _currentTokenSource.Token, 0.8f);
+            
+            _ = MakeNotesFloat();
         }
 
         private static async Task Animate(Action<float> transition, CancellationToken cancellationToken, float duration)
@@ -670,6 +665,46 @@ namespace NoteTweaks.UI
             }
 
             transition?.Invoke(1f);
+        }
+
+        private static CancellationTokenSource _floatTokenSource;
+        private static async Task MakeNotesFloat()
+        {
+            _floatTokenSource?.Cancel();
+            _floatTokenSource?.Dispose();
+
+            _floatTokenSource = new CancellationTokenSource();
+
+            float maxRotate = 10f;
+            float maxBob = 0.08f;
+            float rotateTimeScale = 2.666f;
+            float bobTimeScale = 1.333f;
+            
+            Vector3 rotateAngle = new Vector3(0f, 1f, 0f);
+
+            await AnimateForever(time => {
+                Vector3 pos = InitialPosition;
+                pos.y = InitialPosition.y + (Mathf.Sin(time / bobTimeScale) * maxBob);
+                
+                NoteContainer.transform.localRotation = Quaternion.AngleAxis((Mathf.Sin(time / rotateTimeScale) * maxRotate), rotateAngle);
+                NoteContainer.transform.localPosition = pos;
+            }, _floatTokenSource.Token);
+        }
+
+        private static async Task AnimateForever(Action<float> animation, CancellationToken cancellationToken)
+        {
+            float startTime = Time.time;
+            
+            while (true)
+            {
+                if (cancellationToken.IsCancellationRequested)
+                {
+                    return;
+                }
+                
+                animation?.Invoke(Time.time - startTime);
+                await Task.Yield();
+            }
         }
         
         protected void OnEnable()
