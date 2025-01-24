@@ -28,11 +28,13 @@ namespace NoteTweaks.UI
 
         protected override void DidActivate(bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling)
         {
+            SetTitle(nameof(NoteTweaks), ViewController.AnimationType.None);
+            GameObject.Find("TitleViewController").GetComponent<RectTransform>().anchoredPosition = new Vector2(-137.5f, 0f);
+            
             if (firstActivation)
             {
-                SetTitle(nameof(NoteTweaks));
                 showBackButton = true;
-                ProvideInitialViewControllers(_settingsViewController, _notePreviewViewController, _extraPanelViewController);
+                ProvideInitialViewControllers(_notePreviewViewController, _settingsViewController, _extraPanelViewController);
             }
 
             if (NotePreviewViewController.NoteContainer == null && NotePreviewViewController.HasInitialized)
