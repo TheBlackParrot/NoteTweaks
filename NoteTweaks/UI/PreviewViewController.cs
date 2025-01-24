@@ -18,7 +18,7 @@ namespace NoteTweaks.UI
         internal static GameObject NoteContainer = new GameObject("_NoteTweaks_NoteContainer");
         
         private static readonly float NoteSize = 0.5f;
-        private static readonly Vector3 InitialPosition = new Vector3(-2.7f, 1.15f, 3.5f);
+        private static readonly Vector3 InitialPosition = new Vector3(0.275f, 1.0f, 4.5f);
         
         internal static bool HasInitialized;
         private static Vector3 _initialArrowPosition = Vector3.one;
@@ -687,7 +687,6 @@ namespace NoteTweaks.UI
             }
             
             NoteContainer.transform.position = InitialPosition;
-            NoteContainer.transform.localRotation = Quaternion.Euler(0, 320, 0);
             
             // ReSharper disable PossibleNullReferenceException
             MenuTransitionsHelper menuTransitionsHelper = Resources.FindObjectsOfTypeAll<MenuTransitionsHelper>().FirstOrDefault();
