@@ -27,12 +27,12 @@ namespace NoteTweaks.Managers
         }
     }
 
-    internal abstract class TextureResources
+    internal abstract class GlowTextures
     {
         internal static Texture2D ReplacementArrowGlowTexture;
         internal static Texture2D ReplacementDotGlowTexture;
 
-        protected TextureResources()
+        protected GlowTextures()
         {
             UnityMainThreadTaskScheduler.Factory.StartNew(async () =>
             {
@@ -74,7 +74,7 @@ namespace NoteTweaks.Managers
         }
     }
     
-    internal abstract class Textures : TextureResources
+    internal abstract class Textures : GlowTextures
     {
         internal static readonly string[] FileExtensions = { ".png", ".jpg", ".tga" };
         internal static readonly string ImagePath = Path.Combine(UnityGame.UserDataPath, "NoteTweaks", "Textures", "Notes");

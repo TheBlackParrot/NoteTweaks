@@ -608,7 +608,7 @@ namespace NoteTweaks.UI
             set
             {
                 _config.GlowTexture = value;
-                _ = TextureResources.UpdateTextures();
+                _ = GlowTextures.UpdateTextures();
             }
         }
 
@@ -619,7 +619,7 @@ namespace NoteTweaks.UI
             {
                 _config.ArrowMesh = value;
                 NotePreviewViewController.UpdateArrowMeshes();
-                _ = TextureResources.UpdateTextures();
+                _ = GlowTextures.UpdateTextures();
             }
         }
 
