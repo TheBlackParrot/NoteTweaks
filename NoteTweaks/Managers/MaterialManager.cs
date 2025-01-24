@@ -74,14 +74,14 @@ namespace NoteTweaks.Managers
 
         private static async Task UpdateDotGlowMaterial()
         {
-            if (TextureResources.ReplacementDotGlowTexture == null)
+            if (GlowTextures.ReplacementDotGlowTexture == null)
             {
-                await TextureResources.LoadTextures();
+                await GlowTextures.LoadTextures();
             }
             
             if (DotGlowMaterial != null)
             {
-                DotGlowMaterial.mainTexture = TextureResources.ReplacementDotGlowTexture;
+                DotGlowMaterial.mainTexture = GlowTextures.ReplacementDotGlowTexture;
                 return;
             }
             
@@ -90,20 +90,20 @@ namespace NoteTweaks.Managers
             DotGlowMaterial = new Material(arrowGlowMat)
             {
                 name = "NoteTweaks_DotGlowMaterial",
-                mainTexture = TextureResources.ReplacementDotGlowTexture
+                mainTexture = GlowTextures.ReplacementDotGlowTexture
             };
         }
 
         private static async Task UpdateArrowGlowMaterial()
         {
-            if (TextureResources.ReplacementArrowGlowTexture == null)
+            if (GlowTextures.ReplacementArrowGlowTexture == null)
             {
-                await TextureResources.LoadTextures();
+                await GlowTextures.LoadTextures();
             }
             
             if (ArrowGlowMaterial != null)
             {
-                ArrowGlowMaterial.mainTexture = TextureResources.ReplacementArrowGlowTexture;
+                ArrowGlowMaterial.mainTexture = GlowTextures.ReplacementArrowGlowTexture;
                 return;
             }
             
@@ -112,7 +112,7 @@ namespace NoteTweaks.Managers
             ArrowGlowMaterial = new Material(arrowGlowMat)
             {
                 name = "NoteTweaks_ArrowGlowMaterial",
-                mainTexture = TextureResources.ReplacementArrowGlowTexture
+                mainTexture = GlowTextures.ReplacementArrowGlowTexture
             };
         }
 
