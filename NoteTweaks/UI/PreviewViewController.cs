@@ -118,7 +118,7 @@ namespace NoteTweaks.UI
             }
             
             Vector3 dotPosition = new Vector3(_initialDotPosition.x + Plugin.Config.DotPosition.x, _initialDotPosition.y + Plugin.Config.DotPosition.y, _initialDotPosition.z);
-            Vector3 dotGlowPosition = new Vector3(_initialDotPosition.x + Plugin.Config.DotPosition.x, _initialDotPosition.y + Plugin.Config.DotPosition.y, _initialDotPosition.z + 0.001f);
+            Vector3 initialDotGlowPosition = new Vector3(_initialDotPosition.x + Plugin.Config.DotPosition.x, _initialDotPosition.y + Plugin.Config.DotPosition.y, _initialDotPosition.z + 0.001f);
             
             for (int i = 0; i < NoteContainer.transform.childCount; i++)
             {
@@ -131,6 +131,8 @@ namespace NoteTweaks.UI
                 Transform noteCircleGlowTransform = noteCube.transform.Find("NoteCircleGlow");
                 if (noteCircleGlowTransform != null)
                 {
+                    Vector3 dotGlowPosition = initialDotGlowPosition + (Vector3)(noteCube.name.Contains("_L_") ? Plugin.Config.LeftGlowOffset : Plugin.Config.RightGlowOffset);
+                    
                     noteCircleGlowTransform.localPosition = dotPosition;
                     noteCube.transform.Find("AddedNoteCircleGlow").localPosition = dotGlowPosition;
                 }
@@ -208,7 +210,7 @@ namespace NoteTweaks.UI
                 }
                 
                 noteCube.transform.Find("NoteArrow").localPosition = position;
-                noteCube.transform.Find("NoteArrowGlow").localPosition = position;
+                noteCube.transform.Find("NoteArrowGlow").localPosition = position + (Vector3)(noteCube.name.Contains("_L_") ? Plugin.Config.LeftGlowOffset : Plugin.Config.RightGlowOffset);
             }
         }
 

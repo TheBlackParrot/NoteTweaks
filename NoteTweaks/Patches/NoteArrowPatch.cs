@@ -353,6 +353,9 @@ namespace NoteTweaks.Patches
                     arrowTransform.localPosition = position;
                     
                     meshRenderer.sharedMaterial = Materials.ReplacementArrowMaterial;
+                    
+                    ColorType colorType = __instance._noteController.noteData.colorType;
+                    bool isLeft = colorType == ColorType.ColorA;
 
                     if (meshRenderer.gameObject.name != "NoteArrowGlow")
                     {
@@ -365,9 +368,6 @@ namespace NoteTweaks.Patches
 
                     if (meshRenderer.TryGetComponent(out MaterialPropertyBlockController materialPropertyBlockController))
                     {
-                        ColorType colorType = __instance._noteController.noteData.colorType;
-                        bool isLeft = colorType == ColorType.ColorA;
-                        
                         Color faceColor = __instance._noteColor;
                             
                         if (isLeft ? Plugin.Config.NormalizeLeftFaceColor : Plugin.Config.NormalizeRightFaceColor)
@@ -406,6 +406,7 @@ namespace NoteTweaks.Patches
                         
                         Vector3 glowScale = new Vector3(scale.x * Plugin.Config.ArrowGlowScale * 0.6f, scale.y * Plugin.Config.ArrowGlowScale * 0.3f, 0.6f);
                         Vector3 glowPosition = new Vector3(InitialPosition.x + Plugin.Config.ArrowPosition.x, InitialPosition.y + Plugin.Config.ArrowPosition.y, InitialPosition.z);
+                        glowPosition += (Vector3)(isLeft ? Plugin.Config.LeftGlowOffset : Plugin.Config.RightGlowOffset);
                         
                         arrowGlowTransform.localScale = glowScale;
                         arrowGlowTransform.localPosition = glowPosition;
@@ -422,6 +423,9 @@ namespace NoteTweaks.Patches
                     {
                         _dotGlowMesh = meshRenderer.GetComponent<MeshFilter>().mesh;
                     }
+                    
+                    ColorType colorType = __instance._noteController.noteData.colorType;
+                    bool isLeft = colorType == ColorType.ColorA;
 
                     Vector3 dotPosition;
                     Vector3 glowPosition;
@@ -441,6 +445,8 @@ namespace NoteTweaks.Patches
                         dotScale = new Vector3(Plugin.Config.DotScale.x / (_fixDots ? 5f : 2f), Plugin.Config.DotScale.y / (_fixDots ? 5f : 2f), 1.0f);
                         glowScale = new Vector3((Plugin.Config.DotScale.x / 1.5f) * Plugin.Config.DotGlowScale, (Plugin.Config.DotScale.y / 1.5f) * Plugin.Config.DotGlowScale, 1.0f);
                     }
+                    
+                    glowPosition += (Vector3)(isLeft ? Plugin.Config.LeftGlowOffset : Plugin.Config.RightGlowOffset);
                     
                     Transform originalDot = isChainLink ? meshRenderer.transform.parent.Find("Circle") : meshRenderer.transform.parent.Find("NoteCircleGlow");
                     Transform addedDot = meshRenderer.transform.parent.Find("AddedNoteCircleGlow");
@@ -483,9 +489,6 @@ namespace NoteTweaks.Patches
                         
                         if (meshRenderer.TryGetComponent(out MaterialPropertyBlockController materialPropertyBlockController))
                         {
-                            ColorType colorType = __instance._noteController.noteData.colorType;
-                            bool isLeft = colorType == ColorType.ColorA;
-
                             Color faceColor = __instance._noteColor;
                             
                             if (isLeft ? Plugin.Config.NormalizeLeftFaceColor : Plugin.Config.NormalizeRightFaceColor)
