@@ -76,7 +76,6 @@ namespace NoteTweaks.Utils
 
         private static Mesh GenerateRectangle(Vector2 size, Vector2 offset = default, Vector3 rotation = default)
         {
-            Vector3 center = Vector3.zero;
             Quaternion newRotation = new Quaternion
             {
                 eulerAngles = rotation
@@ -89,21 +88,15 @@ namespace NoteTweaks.Utils
             
             Vector3[] vertices =
             {
-                new Vector3(negativeX, positiveY, 0f),
-                new Vector3(positiveX, positiveY, 0f),
-                new Vector3(negativeX, negativeY, 0f),
-                new Vector3(positiveX, negativeY, 0f)
+                newRotation * new Vector3(negativeX, positiveY, 0f),
+                newRotation * new Vector3(positiveX, positiveY, 0f),
+                newRotation * new Vector3(negativeX, negativeY, 0f),
+                newRotation * new Vector3(positiveX, negativeY, 0f)
             };
-            Vector3[] rotatedVertices = new Vector3[4];
-
-            for(int i = 0; i < vertices.Length; i++)
-            {
-                rotatedVertices[i] = newRotation * vertices[i];
-            }
             
             Mesh mesh = new Mesh
             {
-                vertices = rotatedVertices,
+                vertices = vertices,
                 triangles = new[] { 1, 3, 2, 0, 1, 2 }
             };
             mesh.Optimize();
@@ -114,6 +107,39 @@ namespace NoteTweaks.Utils
         public static Mesh GenerateBasicLineMesh()
         {
             return GenerateRectangle(new Vector2(0.3f, 0.0933f), new Vector2(0f, -0.00335f));
+        }
+        
+        public static Mesh GenerateChevronMesh()
+        {
+            Mesh[] meshes =
+            {
+                GenerateRectangle(new Vector2(0.25f, 0.0933f) * 0.8f, new Vector2(0f, -0.07833f) * 0.8f, new Vector3(0f, 0f, 45f)),
+                GenerateRectangle(new Vector2(0.25f, 0.0933f) * 0.8f, new Vector2(0f, -0.07833f) * 0.8f, new Vector3(0f, 0f, -45f))
+            };
+
+            Vector3[] vertices = new Vector3[4 * meshes.Length];
+            int[] triangles = new int[6 * meshes.Length];
+            for(int i = 0; i < meshes.Length; i++)
+            {
+                for (int j = 0; j < meshes[i].vertices.Length; j++)
+                {
+                    vertices[i * meshes[i].vertices.Length + j] = meshes[i].vertices[j] + (Vector3.up * 0.033f);
+                }
+
+                for (int j = 0; j < meshes[i].triangles.Length; j++)
+                {
+                    triangles[i * meshes[i].triangles.Length + j] = meshes[i].triangles[j] + (i * 4);
+                }
+            }
+            
+            Mesh mesh = new Mesh
+            {
+                vertices = vertices,
+                triangles = triangles
+            };
+            mesh.Optimize();
+
+            return mesh;
         }
     }
 
