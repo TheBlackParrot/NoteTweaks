@@ -8,6 +8,8 @@ using BeatSaberMarkupLanguage.ViewControllers;
 using NoteTweaks.Managers;
 using NoteTweaks.Utils;
 using UnityEngine;
+using UnityEngine.Rendering;
+using Textures = NoteTweaks.Managers.Textures;
 
 namespace NoteTweaks.UI
 {
@@ -349,8 +351,15 @@ namespace NoteTweaks.UI
                         Transform childTransform = controller.transform.Find(childName);
                         if (childTransform)
                         {
+                            Enum.TryParse(i % 2 == 0 ? Plugin.Config.LeftGlowBlendOp : Plugin.Config.RightGlowBlendOp, out BlendOp operation);
+                            
                             if (childTransform.TryGetComponent(out MaterialPropertyBlockController childController))
                             {
+                                foreach (Renderer renderer in childController.renderers)
+                                {
+                                    renderer.material.SetInt(Materials.BlendOpID, (int)operation);
+                                }
+                                
                                 childController.materialPropertyBlock.SetColor(Color0, glowColor);
                                 childController.ApplyChanges();
                             }   

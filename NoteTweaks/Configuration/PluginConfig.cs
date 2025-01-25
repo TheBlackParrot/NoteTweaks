@@ -87,5 +87,8 @@ namespace NoteTweaks.Configuration
         public virtual float LeftMaxBrightness { get; set; } = 1.0f;
         public virtual float RightMinBrightness { get; set; } = 0.0f;
         public virtual float RightMaxBrightness { get; set; } = 1.0f;
+        
+        public virtual string LeftGlowBlendOp { get; set; } = "Add";
+        public virtual string RightGlowBlendOp { get; set; } = "Add";
     }
 }
