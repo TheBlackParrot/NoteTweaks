@@ -90,5 +90,8 @@ namespace NoteTweaks.Configuration
         
         public virtual string LeftGlowBlendOp { get; set; } = "Add";
         public virtual string RightGlowBlendOp { get; set; } = "Add";
+        
+        public virtual Vector2 LeftGlowOffset { get; set; } = Vector2.zero;
+        public virtual Vector2 RightGlowOffset { get; set; } = Vector2.zero;
     }
 }
