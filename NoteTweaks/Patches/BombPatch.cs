@@ -50,6 +50,7 @@ namespace NoteTweaks.Patches
         [HarmonyPatch(typeof(BeatmapObjectsInstaller), "InstallBindings")]
         [HarmonyPriority(int.MaxValue)]
         [HarmonyPostfix]
+        // ReSharper disable once InconsistentNaming
         internal static void BeatmapObjectsInstallerInitPatch(BombNoteController ____bombNotePrefab) {
             if (!Plugin.Config.Enabled || NotePhysicalTweaks.AutoDisable)
             {
