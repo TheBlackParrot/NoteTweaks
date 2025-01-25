@@ -759,7 +759,7 @@ namespace NoteTweaks.UI
         [UIValue("arrowMeshChoices")]
         [UsedImplicitly]
         // ReSharper disable once InconsistentNaming
-        private List<object> ArrowMeshChoices = new List<object> { "Default", "Line", "Triangle" };
+        private List<object> ArrowMeshChoices = new List<object> { "Default", "Chevron", "Line", "Triangle" };
 
         [UIComponent("selectedNoteTexture")]
         public DropDownListSetting noteTextureDropDown;
