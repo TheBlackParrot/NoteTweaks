@@ -357,6 +357,14 @@ namespace NoteTweaks.UI
                             {
                                 foreach (Renderer renderer in childController.renderers)
                                 {
+                                    // doing this to force a refresh on .material specifically
+                                    // for some reason setting the _BlendOp property breaks material instancing
+                                    renderer.material = null;
+                                    renderer.sharedMaterial = null;
+                                    renderer.sharedMaterial = childName.Contains("Arrow") ? Materials.ArrowGlowMaterial : Materials.DotGlowMaterial;
+                                    renderer.material = renderer.sharedMaterial;
+                                    // (this will never be null, Rider is angy)
+                                    // ReSharper disable once PossibleNullReferenceException
                                     renderer.material.SetInt(Materials.BlendOpID, (int)operation);
                                 }
                                 
