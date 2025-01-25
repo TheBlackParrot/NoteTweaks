@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using BeatSaberMarkupLanguage.Attributes;
 using BeatSaberMarkupLanguage.Components.Settings;
 using BeatSaberMarkupLanguage.ViewControllers;
@@ -610,8 +611,14 @@ namespace NoteTweaks.UI
             set
             {
                 _config.GlowTexture = value;
-                _ = GlowTextures.UpdateTextures();
+                _ = ForceAsyncUpdateForGlowTexture();
             }
+        }
+
+        private static async Task ForceAsyncUpdateForGlowTexture()
+        {
+            await GlowTextures.UpdateTextures();
+            NotePreviewViewController.UpdateColors();
         }
 
         protected string ArrowMesh
@@ -621,7 +628,7 @@ namespace NoteTweaks.UI
             {
                 _config.ArrowMesh = value;
                 NotePreviewViewController.UpdateArrowMeshes();
-                _ = GlowTextures.UpdateTextures();
+                _ = ForceAsyncUpdateForGlowTexture();
             }
         }
 
@@ -671,7 +678,7 @@ namespace NoteTweaks.UI
             set
             {
                 _config.LeftGlowBlendOp = value;
-                NotePreviewViewController.UpdateColors();
+                _ = ForceAsyncUpdateForGlowTexture();
             }
         }
         
@@ -681,7 +688,7 @@ namespace NoteTweaks.UI
             set
             {
                 _config.RightGlowBlendOp = value;
-                NotePreviewViewController.UpdateColors();
+                _ = ForceAsyncUpdateForGlowTexture();
             }
         }
         

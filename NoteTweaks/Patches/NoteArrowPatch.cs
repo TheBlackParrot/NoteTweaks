@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
@@ -9,6 +10,7 @@ using NoteTweaks.Managers;
 using NoteTweaks.Utils;
 using SongCore.Data;
 using UnityEngine;
+using UnityEngine.Rendering;
 using Object = UnityEngine.Object;
 using static SongCore.Collections;
 #pragma warning disable CS0612 // Type or member is obsolete
@@ -138,11 +140,17 @@ namespace NoteTweaks.Patches
                 Transform glowTransform = __instance.transform.GetChild(0).Find("AddedNoteCircleGlow");
                 if (glowTransform != null)
                 {
+                    ColorType colorType = __instance._noteData.colorType;
+                    bool isLeft = colorType == ColorType.ColorA;
+                    
+                    if (glowTransform.TryGetComponent(out MeshRenderer glowRenderer))
+                    {
+                        Enum.TryParse(isLeft ? Plugin.Config.LeftGlowBlendOp : Plugin.Config.RightGlowBlendOp, out BlendOp operation);
+                        glowRenderer.material.SetInt(Materials.BlendOpID, (int)operation);
+                    }
+                    
                     if(glowTransform.gameObject.TryGetComponent(out MaterialPropertyBlockController materialPropertyBlockController) && __instance.gameObject.TryGetComponent(out ColorNoteVisuals colorNoteVisuals))
                     {
-                        ColorType colorType = __instance._noteData.colorType;
-                        bool isLeft = colorType == ColorType.ColorA;
-                        
                         Color glowColor = colorNoteVisuals._noteColor;
                             
                         if (isLeft ? Plugin.Config.NormalizeLeftFaceGlowColor : Plugin.Config.NormalizeRightFaceGlowColor)
@@ -248,11 +256,17 @@ namespace NoteTweaks.Patches
                     Transform glowTransform = instance.transform.GetChild(0).Find(objName);
                     if (glowTransform != null)
                     {
+                        ColorType colorType = instance._noteData.colorType;
+                        bool isLeft = colorType == ColorType.ColorA;
+                    
+                        if (glowTransform.TryGetComponent(out MeshRenderer glowRenderer))
+                        {
+                            Enum.TryParse(isLeft ? Plugin.Config.LeftGlowBlendOp : Plugin.Config.RightGlowBlendOp, out BlendOp operation);
+                            glowRenderer.material.SetInt(Materials.BlendOpID, (int)operation);
+                        }
+                        
                         if(glowTransform.gameObject.TryGetComponent(out MaterialPropertyBlockController materialPropertyBlockController) && instance.gameObject.TryGetComponent(out ColorNoteVisuals colorNoteVisuals))
                         {
-                            ColorType colorType = instance._noteData.colorType;
-                            bool isLeft = colorType == ColorType.ColorA;
-                        
                             Color glowColor = colorNoteVisuals._noteColor;
                             
                             if (isLeft ? Plugin.Config.NormalizeLeftFaceGlowColor : Plugin.Config.NormalizeRightFaceGlowColor)
@@ -344,6 +358,7 @@ namespace NoteTweaks.Patches
                     {
                         if (meshRenderer.TryGetComponent(out MeshFilter arrowMeshFilter))
                         {
+                            Managers.Meshes.UpdateDefaultArrowMesh(arrowMeshFilter.mesh);
                             arrowMeshFilter.mesh = Managers.Meshes.CurrentArrowMesh;
                         }
                     }
