@@ -74,22 +74,46 @@ namespace NoteTweaks.Utils
             return mesh;
         }
 
-        public static Mesh GenerateBasicLineMesh()
+        private static Mesh GenerateRectangle(Vector2 size, Vector2 offset = default, Vector3 rotation = default)
         {
+            Vector3 center = Vector3.zero;
+            Quaternion newRotation = new Quaternion
+            {
+                eulerAngles = rotation
+            };
+            
+            float negativeX = (-1f * (size.x / 2f)) + offset.x;
+            float positiveX = (size.x / 2f) + offset.x;
+            float negativeY = (-1f * (size.y / 2f)) + offset.y;
+            float positiveY = (size.y / 2f) + offset.y;
+            
+            Vector3[] vertices =
+            {
+                new Vector3(negativeX, positiveY, 0f),
+                new Vector3(positiveX, positiveY, 0f),
+                new Vector3(negativeX, negativeY, 0f),
+                new Vector3(positiveX, negativeY, 0f)
+            };
+            Vector3[] rotatedVertices = new Vector3[4];
+
+            for(int i = 0; i < vertices.Length; i++)
+            {
+                rotatedVertices[i] = newRotation * vertices[i];
+            }
+            
             Mesh mesh = new Mesh
             {
-                vertices = new[]
-                {
-                    new Vector3(-0.15f, 0.0433f, 0f),
-                    new Vector3(0.15f, 0.0433f, 0f),
-                    new Vector3(-0.15f, -0.05f, 0f),
-                    new Vector3(0.15f, -0.05f, 0f)
-                },
+                vertices = rotatedVertices,
                 triangles = new[] { 1, 3, 2, 0, 1, 2 }
             };
             mesh.Optimize();
-            
+
             return mesh;
+        }
+
+        public static Mesh GenerateBasicLineMesh()
+        {
+            return GenerateRectangle(new Vector2(0.3f, 0.0933f), new Vector2(0f, -0.00335f));
         }
     }
 
