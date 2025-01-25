@@ -193,6 +193,15 @@
                         <slider-setting apply-on-change="true" value="LeftGlowIntensity" text="Glow Intensity" active="~EnableFaceGlow"
                                         min="0.01" max="3.0" increment="0.01" show-buttons="true" formatter="PercentageFormatter"
                                         hover-hint="Intensity of glow on face symbols"/>
+
+                        <horizontal><text text="-----" font-size="4" color="#00000000" active="~EnableFaceGlow"/></horizontal>
+
+                        <slider-setting apply-on-change="true" value="LeftGlowOffsetX" text="Horizontal Glow Offset" active="~EnableFaceGlow"
+                                        min="-2.0" max="2.0" increment="0.005" show-buttons="true" formatter="PreciseFloatFormatter"
+                                        hover-hint="Horizontal offset (X-axis) of glow textures on face symbols for left-hand notes"/>
+                        <slider-setting apply-on-change="true" value="LeftGlowOffsetY" text="Vertical Glow Offset" active="~EnableFaceGlow"
+                                        min="-2.0" max="2.0" increment="0.005" show-buttons="true" formatter="PreciseFloatFormatter"
+                                        hover-hint="Vertical offset (Y-axis) of glow textures on face symbols for left-hand notes"/>
                     </scroll-view>
                 </tab>
                 
@@ -215,11 +224,20 @@
                                         hover-hint="Skew glow colors towards the note color"/>
                         <toggle-setting apply-on-change="true" value="NormalizeRightFaceGlowColor" text="Normalize Color Brightness" active="~EnableFaceGlow"
                                         hover-hint="Normalizes the brightness of the glow color by the highest RGB component"/>
-                        <dropdown-list-setting apply-on-change="true" value="RightGlowBlendOp" text="Glow Blend Operation" choices="glowBlendOperationChoices"
+                        <dropdown-list-setting apply-on-change="true" value="RightGlowBlendOp" text="Glow Blend Operation" choices="glowBlendOperationChoices"  active="~EnableFaceGlow"
                                                hover-hint="Change the blend mode on glow textures"/>
                         <slider-setting apply-on-change="true" value="RightGlowIntensity" text="Glow Intensity" active="~EnableFaceGlow"
                                         min="0.01" max="3.0" increment="0.01" show-buttons="true" formatter="PercentageFormatter"
                                         hover-hint="Intensity of glow on face symbols"/>
+
+                        <horizontal><text text="-----" font-size="4" color="#00000000" active="~EnableFaceGlow"/></horizontal>
+
+                        <slider-setting apply-on-change="true" value="RightGlowOffsetX" text="Horizontal Glow Offset" active="~EnableFaceGlow"
+                                        min="-2.0" max="2.0" increment="0.005" show-buttons="true" formatter="PreciseFloatFormatter"
+                                        hover-hint="Horizontal offset (X-axis) of glow textures on face symbols for right-hand notes"/>
+                        <slider-setting apply-on-change="true" value="RightGlowOffsetY" text="Vertical Glow Offset" active="~EnableFaceGlow"
+                                        min="-2.0" max="2.0" increment="0.005" show-buttons="true" formatter="PreciseFloatFormatter"
+                                        hover-hint="Vertical offset (Y-axis) of glow textures on face symbols for right-hand notes"/>
                     </scroll-view>
                 </tab>
             </vertical>

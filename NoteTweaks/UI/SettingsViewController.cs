@@ -691,6 +691,60 @@ namespace NoteTweaks.UI
                 _ = ForceAsyncUpdateForGlowTexture();
             }
         }
+
+        protected float LeftGlowOffsetX
+        {
+            get => _config.LeftGlowOffset.x;
+            set
+            {
+                var pos = _config.LeftGlowOffset;
+                pos.x = value;
+                _config.LeftGlowOffset = pos;
+                
+                NotePreviewViewController.UpdateDotPosition();
+                NotePreviewViewController.UpdateArrowPosition();
+            }
+        }
+        protected float LeftGlowOffsetY
+        {
+            get => _config.LeftGlowOffset.y;
+            set
+            {
+                var pos = _config.LeftGlowOffset;
+                pos.y = value;
+                _config.LeftGlowOffset = pos;
+                
+                NotePreviewViewController.UpdateDotPosition();
+                NotePreviewViewController.UpdateArrowPosition();
+            }
+        }
+        
+        protected float RightGlowOffsetX
+        {
+            get => _config.RightGlowOffset.x;
+            set
+            {
+                var pos = _config.RightGlowOffset;
+                pos.x = value;
+                _config.RightGlowOffset = pos;
+                
+                NotePreviewViewController.UpdateDotPosition();
+                NotePreviewViewController.UpdateArrowPosition();
+            }
+        }
+        protected float RightGlowOffsetY
+        {
+            get => _config.RightGlowOffset.y;
+            set
+            {
+                var pos = _config.RightGlowOffset;
+                pos.y = value;
+                _config.RightGlowOffset = pos;
+                
+                NotePreviewViewController.UpdateDotPosition();
+                NotePreviewViewController.UpdateArrowPosition();
+            }
+        }
         
         [UIValue("glowBlendOperationChoices")]
         [UsedImplicitly]
