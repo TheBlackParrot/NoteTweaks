@@ -30,8 +30,8 @@ namespace NoteTweaks.UI
         
         private static readonly int Color0 = Shader.PropertyToID("_Color");
         private static readonly int Color1 = Shader.PropertyToID("_SimpleColor");
-        
-        internal static readonly List<string> FaceNames = new List<string> { "NoteArrow", "NoteCircleGlow", "Circle" };
+
+        private static readonly List<string> FaceNames = new List<string> { "NoteArrow", "NoteCircleGlow", "Circle" };
         private static readonly List<string> GlowNames = new List<string> { "NoteArrowGlow", "AddedNoteCircleGlow" };
 
         public NotePreviewViewController()
@@ -569,7 +569,7 @@ namespace NoteTweaks.UI
         }
 
         private static CancellationTokenSource _currentTokenSource;
-        public static async void CutoutFadeOut()
+        public static async Task CutoutFadeOut()
         {
             _floatTokenSource.Cancel();
             
@@ -610,7 +610,8 @@ namespace NoteTweaks.UI
                 }
             }, _currentTokenSource.Token, 0.4f);
         }
-        public async void CutoutFadeIn()
+
+        private async Task CutoutFadeIn()
         {
             _currentTokenSource?.Cancel();
             _currentTokenSource?.Dispose();
@@ -718,7 +719,7 @@ namespace NoteTweaks.UI
             
             if (HasInitialized)
             {
-                CutoutFadeIn();
+                _ = CutoutFadeIn();
                 return;
             }
             
@@ -784,7 +785,7 @@ namespace NoteTweaks.UI
 
                             HasInitialized = true;
 
-                            CutoutFadeIn();
+                            await CutoutFadeIn();
                             
                             UnityEngine.SceneManagement.SceneManager.UnloadSceneAsync(standardGameplaySceneInfo.sceneName);
                             UnityEngine.SceneManagement.SceneManager.UnloadSceneAsync(gameCoreSceneInfo.sceneName);
