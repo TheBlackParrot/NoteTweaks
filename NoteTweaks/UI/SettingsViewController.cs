@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using BeatSaberMarkupLanguage.Attributes;
@@ -8,6 +9,7 @@ using JetBrains.Annotations;
 using NoteTweaks.Configuration;
 using NoteTweaks.Managers;
 using UnityEngine;
+using UnityEngine.Rendering;
 using Zenject;
 
 namespace NoteTweaks.UI
@@ -662,6 +664,31 @@ namespace NoteTweaks.UI
                 NotePreviewViewController.UpdateColors();
             }
         }
+
+        protected string LeftGlowBlendOp
+        {
+            get => _config.LeftGlowBlendOp;
+            set
+            {
+                _config.LeftGlowBlendOp = value;
+                NotePreviewViewController.UpdateColors();
+            }
+        }
+        
+        protected string RightGlowBlendOp
+        {
+            get => _config.RightGlowBlendOp;
+            set
+            {
+                _config.RightGlowBlendOp = value;
+                NotePreviewViewController.UpdateColors();
+            }
+        }
+        
+        [UIValue("glowBlendOperationChoices")]
+        [UsedImplicitly]
+        // ReSharper disable once InconsistentNaming
+        private List<object> BlendOperationChoices = new List<object> { "Add", "ReverseSubtract" };
         
         [UIValue("glowTextureChoices")]
         [UsedImplicitly]
