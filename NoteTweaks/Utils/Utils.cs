@@ -20,23 +20,6 @@ namespace NoteTweaks.Utils
         }
     }
 
-    /*internal static class Materials
-    {
-        public static void RepairShader(Material material)
-        {
-            ShaderReplacementInfo info = ShaderRepair.FixShaderOnMaterial(material);
-            
-            if (!info.AllShadersReplaced)
-            {
-                Plugin.Log.Info("Could not repair shaders:");
-                foreach (String name in info.MissingShaderNames)
-                {
-                    Plugin.Log.Info($"\t - {name}");
-                }
-            }
-        }
-    }*/
-
     internal static class Meshes
     {
         private static Vector2 PointOnCircle(float radius, float angle, Vector2 origin)

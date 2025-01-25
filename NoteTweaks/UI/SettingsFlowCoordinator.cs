@@ -51,7 +51,7 @@ namespace NoteTweaks.UI
         {
             _mainFlowCoordinator.DismissFlowCoordinator(this);
             
-            NotePreviewViewController.CutoutFadeOut();
+            _ = NotePreviewViewController.CutoutFadeOut();
         }
     }
 }

@@ -79,12 +79,6 @@ namespace NoteTweaks.Managers
         internal static readonly string[] FileExtensions = { ".png", ".jpg", ".tga" };
         internal static readonly string ImagePath = Path.Combine(UnityGame.UserDataPath, "NoteTweaks", "Textures", "Notes");
         internal static readonly string[] IncludedCubemaps = { "Flat", "Radials A", "Radials B" };
-        
-        /*private static readonly Texture2D OriginalArrowGlowTexture = Resources.FindObjectsOfTypeAll<Texture2D>().ToList().First(x => x.name == "ArrowGlow");
-        internal static readonly Texture2D ReplacementArrowGlowTexture = OriginalArrowGlowTexture.PrepareTexture();
-        
-        private static readonly Texture2D OriginalDotGlowTexture = Resources.FindObjectsOfTypeAll<Texture2D>().ToList().First(x => x.name == "NoteCircleBakedGlow");
-        internal static readonly Texture2D ReplacementDotGlowTexture = OriginalDotGlowTexture.PrepareTexture();*/
 
         private static readonly int NoteCubeMapID = Shader.PropertyToID("_EnvironmentReflectionCube");
         private static readonly Cubemap OriginalNoteTexture = Resources.FindObjectsOfTypeAll<Cubemap>().ToList().First(x => x.name == "NotesReflection");
