@@ -6,6 +6,7 @@ namespace NoteTweaks.Managers
     {
         private static readonly Mesh TriangleArrowMesh = Utils.Meshes.GenerateBasicTriangleMesh();
         private static readonly Mesh LineArrowMesh = Utils.Meshes.GenerateBasicLineMesh();
+        private static readonly Mesh ChevronArrowMesh = Utils.Meshes.GenerateChevronMesh();
         private static Mesh _defaultArrowMesh;
 
         public static Mesh CurrentArrowMesh
@@ -18,6 +19,8 @@ namespace NoteTweaks.Managers
                         return TriangleArrowMesh;
                     case "Line":
                         return LineArrowMesh;
+                    case "Chevron":
+                        return ChevronArrowMesh;
                     default:
                         return _defaultArrowMesh;
                 }
