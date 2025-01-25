@@ -31,6 +31,7 @@ namespace NoteTweaks.Managers
     {
         internal static Texture2D ReplacementArrowGlowTexture;
         internal static Texture2D ReplacementDotGlowTexture;
+        private static readonly int MainTex = Shader.PropertyToID("_MainTex");
 
         protected GlowTextures()
         {
