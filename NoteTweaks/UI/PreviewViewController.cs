@@ -762,7 +762,7 @@ namespace NoteTweaks.UI
                             // ReSharper restore PossibleNullReferenceException
                             
                             SettingsViewController.LoadTextures = true;
-                            Textures.SetDefaultTextures();
+                            Managers.Textures.SetDefaultTextures();
                             await Materials.UpdateAll();
                             
                             List<String> noteNames = new List<string> { "L_Arrow", "R_Arrow", "L_Dot", "R_Dot" };
