@@ -43,7 +43,7 @@ namespace NoteTweaks.UI
                 NotePreviewViewController.NoteContainer = new GameObject("_NoteTweaks_NoteContainer");
             }
             NotePreviewViewController.UpdateColors();
-            NotePreviewViewController.NoteContainer.SetActive(true);
+            NotePreviewViewController.NoteContainer?.SetActive(true); // god rider shut UP
         }
 
         // ReSharper disable once ParameterHidesMember
