@@ -9,7 +9,6 @@ using NoteTweaks.Managers;
 using NoteTweaks.Utils;
 using UnityEngine;
 using UnityEngine.Rendering;
-using Textures = NoteTweaks.Managers.Textures;
 
 namespace NoteTweaks.UI
 {
