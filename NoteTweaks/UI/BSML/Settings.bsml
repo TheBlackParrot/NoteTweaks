@@ -188,7 +188,7 @@
                                         hover-hint="Skew glow colors towards the note color"/>
                         <toggle-setting apply-on-change="true" value="NormalizeLeftFaceGlowColor" text="Normalize Color Brightness" active="~EnableFaceGlow"
                                         hover-hint="Normalizes the brightness of the glow color by the highest RGB component"/>
-                        <dropdown-list-setting apply-on-change="true" value="LeftGlowBlendOp" text="Glow Blend Operation" choices="glowBlendOperationChoices"
+                        <dropdown-list-setting apply-on-change="true" value="LeftGlowBlendOp" text="Glow Blend Operation" choices="glowBlendOperationChoices" active="~EnableFaceGlow"
                                                hover-hint="Change the blend mode on glow textures"/>
                         <slider-setting apply-on-change="true" value="LeftGlowIntensity" text="Glow Intensity" active="~EnableFaceGlow"
                                         min="0.01" max="3.0" increment="0.01" show-buttons="true" formatter="PercentageFormatter"
@@ -224,7 +224,7 @@
                                         hover-hint="Skew glow colors towards the note color"/>
                         <toggle-setting apply-on-change="true" value="NormalizeRightFaceGlowColor" text="Normalize Color Brightness" active="~EnableFaceGlow"
                                         hover-hint="Normalizes the brightness of the glow color by the highest RGB component"/>
-                        <dropdown-list-setting apply-on-change="true" value="RightGlowBlendOp" text="Glow Blend Operation" choices="glowBlendOperationChoices"  active="~EnableFaceGlow"
+                        <dropdown-list-setting apply-on-change="true" value="RightGlowBlendOp" text="Glow Blend Operation" choices="glowBlendOperationChoices" active="~EnableFaceGlow"
                                                hover-hint="Change the blend mode on glow textures"/>
                         <slider-setting apply-on-change="true" value="RightGlowIntensity" text="Glow Intensity" active="~EnableFaceGlow"
                                         min="0.01" max="3.0" increment="0.01" show-buttons="true" formatter="PercentageFormatter"
