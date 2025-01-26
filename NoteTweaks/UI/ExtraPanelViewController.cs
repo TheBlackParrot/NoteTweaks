@@ -33,6 +33,13 @@ namespace NoteTweaks.UI
             projectHome = VersionData.Manifest.Links.ProjectHome;
         }
 
+        public void OnEnable()
+        {
+            NotifyPropertyChanged(nameof(Enabled));
+            NotifyPropertyChanged(nameof(DisableIfNoodle));
+            NotifyPropertyChanged(nameof(FixDotsIfNoodle));
+        }
+
         [UIAction("openProjectHome")]
         private void OpenProjectHomeURL()
         {
