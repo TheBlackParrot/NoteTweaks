@@ -44,6 +44,11 @@ namespace NoteTweaks
             Config.RainbowBombTimeScale = Mathf.Max(0.1f, Config.RainbowBombTimeScale);
             Config.RainbowBombSaturation = Mathf.Max(0f, Config.RainbowBombSaturation);
             Config.RainbowBombValue = Mathf.Max(0f, Config.RainbowBombValue);
+            
+            Config.LeftMinBrightness = Mathf.Max(Mathf.Min(Config.LeftMinBrightness, 1.0f), 0.0f);
+            Config.LeftMaxBrightness = Mathf.Max(Mathf.Min(Config.LeftMaxBrightness, 1.0f), 0.0f);
+            Config.RightMinBrightness = Mathf.Max(Mathf.Min(Config.RightMinBrightness, 1.0f), 0.0f);
+            Config.RightMaxBrightness = Mathf.Max(Mathf.Min(Config.RightMaxBrightness, 1.0f), 0.0f);
         }
 
         [Init]

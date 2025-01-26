@@ -1,8 +1,6 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using UnityEngine;
-using UnityEngine.Rendering;
 
 namespace NoteTweaks.Managers
 {
@@ -24,7 +22,6 @@ namespace NoteTweaks.Managers
         internal static Material AccDotMaterial;
         private static readonly int Color0 = Shader.PropertyToID("_Color");
         internal static readonly int BlendOpID = Shader.PropertyToID("_BlendOp");
-        private static readonly int MainTex = Shader.PropertyToID("_MainTex");
 
         internal static async Task UpdateAll()
         {

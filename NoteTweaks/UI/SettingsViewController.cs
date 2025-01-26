@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -10,7 +9,6 @@ using JetBrains.Annotations;
 using NoteTweaks.Configuration;
 using NoteTweaks.Managers;
 using UnityEngine;
-using UnityEngine.Rendering;
 using Zenject;
 
 namespace NoteTweaks.UI
