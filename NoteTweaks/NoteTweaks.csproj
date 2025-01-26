@@ -128,6 +128,7 @@
         <EmbeddedResource Include="UI/BSML/Settings.bsml"/>
         <EmbeddedResource Include="UI/BSML/Empty.bsml"/>
         <EmbeddedResource Include="UI/BSML/ExtraPanel.bsml"/>
+        <EmbeddedResource Include="UI/BSML/SideSettings.bsml"/>
     </ItemGroup>
     <ItemGroup>
         <Folder Include="Resources/Textures/" />
