@@ -1,0 +1,11 @@
+﻿<settings-container xsi:noNamespaceSchemaLocation="https://monkeymanboy.github.io/BSML-Docs/BSMLSchema.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <toggle-setting apply-on-change="true" value="Enabled" text="Mod Enabled"
+                    hover-hint="Remember to drink water! Hydrate!"/>
+    <toggle-setting apply-on-change="true" value="DisableIfNoodle" text="Disable on Noodle Maps"
+                    hover-hint="Automatically disable the mod if the map being played requires Noodle Extensions"/>
+
+    <horizontal><text text="-----" font-size="4" color="#00000000"/></horizontal>
+
+    <toggle-setting apply-on-change="true" value="FixDotsIfNoodle" text="Fix Dots on Noodle Maps"
+                    hover-hint="Leaves dots as just a glow texture if the map being played requires Noodle Extensions"/>
+</settings-container>
