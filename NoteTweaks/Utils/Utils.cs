@@ -123,7 +123,7 @@ namespace NoteTweaks.Utils
             {
                 for (int j = 0; j < meshes[i].vertices.Length; j++)
                 {
-                    vertices[i * meshes[i].vertices.Length + j] = meshes[i].vertices[j] + (Vector3.up * 0.033f);
+                    vertices[i * meshes[i].vertices.Length + j] = meshes[i].vertices[j] + (Vector3.up * 0.045f);
                 }
 
                 for (int j = 0; j < meshes[i].triangles.Length; j++)
