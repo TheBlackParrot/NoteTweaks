@@ -5,7 +5,7 @@
   <PropertyGroup>
     <AssemblyName>NoteTweaks</AssemblyName>
     <Authors>TheBlackParrot</Authors>
-    <Version>0.6.0</Version>
+    <Version>0.6.1</Version>
     <GameVersion>1.39.1</GameVersion>
     <Description>Change various aspects of the default note</Description>
     <ProjectHome>https://github.com/TheBlackParrot/NoteTweaks</ProjectHome>
