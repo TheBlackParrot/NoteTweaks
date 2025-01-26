@@ -763,7 +763,7 @@ namespace NoteTweaks.UI
                             
                             SettingsViewController.LoadTextures = true;
                             Managers.Textures.SetDefaultTextures();
-                            await Materials.UpdateAll();
+                            Materials.UpdateAll();
                             
                             List<String> noteNames = new List<string> { "L_Arrow", "R_Arrow", "L_Dot", "R_Dot" };
                             for (int i = 0; i < noteNames.Count; i++)

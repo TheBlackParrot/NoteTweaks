@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
 using BeatSaberMarkupLanguage.Attributes;
 using BeatSaberMarkupLanguage.Components.Settings;
 using BeatSaberMarkupLanguage.ViewControllers;
@@ -609,14 +608,9 @@ namespace NoteTweaks.UI
             set
             {
                 _config.GlowTexture = value;
-                _ = ForceAsyncUpdateForGlowTexture();
+                GlowTextures.UpdateTextures();
+                NotePreviewViewController.UpdateColors();
             }
-        }
-
-        private static async Task ForceAsyncUpdateForGlowTexture()
-        {
-            await GlowTextures.UpdateTextures();
-            NotePreviewViewController.UpdateColors();
         }
 
         protected string ArrowMesh
@@ -626,7 +620,8 @@ namespace NoteTweaks.UI
             {
                 _config.ArrowMesh = value;
                 NotePreviewViewController.UpdateArrowMeshes();
-                _ = ForceAsyncUpdateForGlowTexture();
+                GlowTextures.UpdateTextures();
+                NotePreviewViewController.UpdateColors();
             }
         }
 
@@ -676,7 +671,8 @@ namespace NoteTweaks.UI
             set
             {
                 _config.LeftGlowBlendOp = value;
-                _ = ForceAsyncUpdateForGlowTexture();
+                GlowTextures.UpdateTextures();
+                NotePreviewViewController.UpdateColors();
             }
         }
         
@@ -686,7 +682,8 @@ namespace NoteTweaks.UI
             set
             {
                 _config.RightGlowBlendOp = value;
-                _ = ForceAsyncUpdateForGlowTexture();
+                GlowTextures.UpdateTextures();
+                NotePreviewViewController.UpdateColors();
             }
         }
 
@@ -760,7 +757,10 @@ namespace NoteTweaks.UI
         private List<object> ArrowMeshChoices = new List<object> { "Default", "Chevron", "Line", "Triangle" };
 
         [UIComponent("selectedNoteTexture")]
+        // i don't know what Rider is complaining about here, it's only getting angry about this in 1.29.1's version
+        #pragma warning disable CS0649
         public DropDownListSetting noteTextureDropDown;
+        #pragma warning restore CS0649
 
         [UIValue("noteTextureChoices")]
         private List<object> NoteTextureChoices => LoadTextureChoices();
@@ -768,6 +768,7 @@ namespace NoteTweaks.UI
         [UIAction("#post-parse")]
         public void UpdateTextureList()
         {
+            // this gets triggered guaranteed!!
             UpdateTextureChoices();
         }
 
@@ -778,6 +779,7 @@ namespace NoteTweaks.UI
                 return;
             }
             
+            // like, you're getting assigned right here!!
             noteTextureDropDown.values = NoteTextureChoices;
             noteTextureDropDown.UpdateChoices();
         }

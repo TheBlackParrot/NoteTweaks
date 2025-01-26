@@ -1,12 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Reflection;
-using System.Threading.Tasks;
 using BeatSaberMarkupLanguage;
 using HarmonyLib;
 using IPA.Utilities;
-using IPA.Utilities.Async;
 using NoteTweaks.Utils;
 using UnityEngine;
 
@@ -34,17 +31,14 @@ namespace NoteTweaks.Managers
 
         protected GlowTextures()
         {
-            UnityMainThreadTaskScheduler.Factory.StartNew(async () =>
-            {
-                await LoadTextures();
-            });
+            LoadTextures();
         }
 
-        internal static async Task LoadTextures()
+        internal static void LoadTextures()
         {
             Plugin.Log.Info("Loading glow textures...");
-            
-            ReplacementArrowGlowTexture = await Utilities.LoadTextureFromAssemblyAsync($"NoteTweaks.Resources.Textures.Arrow{Plugin.Config.ArrowMesh}{Plugin.Config.GlowTexture}.png");
+
+            ReplacementArrowGlowTexture = Utilities.FindTextureInAssembly($"NoteTweaks.Resources.Textures.Arrow{Plugin.Config.ArrowMesh}{Plugin.Config.GlowTexture}.png");
             ReplacementArrowGlowTexture.PrepareTexture();
             if (Materials.ArrowGlowMaterial != null)
             {
@@ -52,7 +46,7 @@ namespace NoteTweaks.Managers
             }
             Plugin.Log.Info("Loaded replacement arrow glow texture");
             
-            ReplacementDotGlowTexture = await Utilities.LoadTextureFromAssemblyAsync($"NoteTweaks.Resources.Textures.Circle{Plugin.Config.GlowTexture}.png");
+            ReplacementDotGlowTexture = Utilities.FindTextureInAssembly($"NoteTweaks.Resources.Textures.Circle{Plugin.Config.GlowTexture}.png");
             ReplacementDotGlowTexture.PrepareTexture();
             if (Materials.DotGlowMaterial != null)
             {
@@ -61,11 +55,11 @@ namespace NoteTweaks.Managers
             Plugin.Log.Info("Loaded replacement dot glow texture");
         }
 
-        internal static async Task UpdateTextures()
+        internal static void UpdateTextures()
         {
             Plugin.Log.Info("Updating glow textures...");
 
-            await LoadTextures();
+            LoadTextures();
             
             Materials.DotGlowMaterial.mainTexture = ReplacementDotGlowTexture;
             Materials.ArrowGlowMaterial.mainTexture = ReplacementArrowGlowTexture;
@@ -86,11 +80,11 @@ namespace NoteTweaks.Managers
         private static readonly Texture2D OriginalDotGlowTexture = Resources.FindObjectsOfTypeAll<Texture2D>().ToList().First(x => x.name == "NoteCircleBakedGlow");
         internal static readonly Texture2D ReplacementDotGlowTexture = OriginalDotGlowTexture.PrepareTexture();*/
         
-        private static Texture2D OriginalArrowGlowTexture;
-        private static Texture2D OriginalDotGlowTexture;
+        private static Texture2D _originalArrowGlowTexture;
+        private static Texture2D _originalDotGlowTexture;
 
         private static readonly int NoteCubeMapID = Shader.PropertyToID("_EnvironmentReflectionCube");
-        private static Cubemap OriginalNoteTexture;
+        private static Cubemap _originalNoteTexture;
         private static Cubemap _noteTexture;
         private static Cubemap _bombTexture;
         
@@ -115,15 +109,15 @@ namespace NoteTweaks.Managers
         
         internal static void SetDefaultTextures()
         {
-            OriginalArrowGlowTexture = Resources.FindObjectsOfTypeAll<Texture2D>().ToList().First(x => x.name == "ArrowGlow");
-            ReplacementArrowGlowTexture = OriginalArrowGlowTexture.PrepareTexture();
+            _originalArrowGlowTexture = Resources.FindObjectsOfTypeAll<Texture2D>().ToList().First(x => x.name == "ArrowGlow");
+            ReplacementArrowGlowTexture = _originalArrowGlowTexture.PrepareTexture();
             
-            OriginalDotGlowTexture = Resources.FindObjectsOfTypeAll<Texture2D>().ToList().First(x => x.name == "NoteCircleBakedGlow");
-            ReplacementDotGlowTexture = OriginalDotGlowTexture.PrepareTexture();
+            _originalDotGlowTexture = Resources.FindObjectsOfTypeAll<Texture2D>().ToList().First(x => x.name == "NoteCircleBakedGlow");
+            ReplacementDotGlowTexture = _originalDotGlowTexture.PrepareTexture();
             
-            OriginalNoteTexture = Resources.FindObjectsOfTypeAll<Cubemap>().ToList().First(x => x.name == "NotesReflection");
-            _noteTexture = OriginalNoteTexture;
-            _bombTexture = OriginalNoteTexture;
+            _originalNoteTexture = Resources.FindObjectsOfTypeAll<Cubemap>().ToList().First(x => x.name == "NotesReflection");
+            _noteTexture = _originalNoteTexture;
+            _bombTexture = _originalNoteTexture;
         }
         
         private static void OnNoteImageLoaded(List<KeyValuePair<string, Texture2D>> textures)
@@ -192,18 +186,18 @@ namespace NoteTweaks.Managers
         {
             if (isBomb)
             {
-                _bombTexture = OriginalNoteTexture;
+                _bombTexture = _originalNoteTexture;
                 Materials.BombMaterial.SetTexture(NoteCubeMapID, _bombTexture);
             }
             else
             {
-                _noteTexture = OriginalNoteTexture;
+                _noteTexture = _originalNoteTexture;
                 Materials.NoteMaterial.SetTexture(NoteCubeMapID, _noteTexture);
                 Materials.DebrisMaterial.SetTexture(NoteCubeMapID, _noteTexture);
             }
         }
 
-        internal static async Task LoadNoteTexture(string dirname, bool isBomb = false)
+        internal static void LoadNoteTexture(string dirname, bool isBomb = false)
         {
             if (dirname == "Default")
             {
@@ -218,8 +212,8 @@ namespace NoteTweaks.Managers
                 
                 if (IncludedCubemaps.Contains(dirname))
                 {
-                    // LoadTextureFromAssemblyAsync doesn't have a flag to allow this to continue to be readable, so we have to load it this way instead
-                    Texture2D loadedImage = await Utilities.LoadImageAsync(Utilities.GetResourceAsync(Assembly.GetExecutingAssembly(), $"NoteTweaks.Resources.Textures.CubemapSingles.{dirname}.png").Result, false, false);
+                    //Texture2D loadedImage = await Utilities.LoadImageAsync(Utilities.GetResourceAsync(Assembly.GetExecutingAssembly(), $"NoteTweaks.Resources.Textures.CubemapSingles.{dirname}.png").Result, false, false);
+                    Texture2D loadedImage = Utilities.FindTextureInAssembly($"NoteTweaks.Resources.Textures.CubemapSingles.{dirname}.png");
                     textures.Add(new KeyValuePair<string, Texture2D>("all", loadedImage));
 
                     goto done;
@@ -238,7 +232,7 @@ namespace NoteTweaks.Managers
                 
                 if (singleFileFilename != null)
                 {
-                    Texture2D loadedImage = await Utilities.LoadImageAsync(singleFileFilename, true, false);
+                    Texture2D loadedImage = Utilities.LoadTextureRaw(File.ReadAllBytes(singleFileFilename));
                     textures.Add(new KeyValuePair<string, Texture2D>("all", loadedImage));
 
                     goto done;
@@ -266,7 +260,7 @@ namespace NoteTweaks.Managers
                     }
                     
                     //Plugin.Log.Info($"Loading texture {path}...");
-                    Texture2D loadedImage = await Utilities.LoadImageAsync(path, true, false);
+                    Texture2D loadedImage = Utilities.LoadTextureRaw(File.ReadAllBytes(path));
                     //Plugin.Log.Info($"Loaded texture {path}");
                     
                     textures.Add(new KeyValuePair<string, Texture2D>(Path.GetFileNameWithoutExtension(path), loadedImage));

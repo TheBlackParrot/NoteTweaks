@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-using System.Threading.Tasks;
 using UnityEngine;
 
 namespace NoteTweaks.Managers
@@ -72,11 +71,11 @@ namespace NoteTweaks.Managers
             };
         }
 
-        private static async Task UpdateDotGlowMaterial()
+        private static void UpdateDotGlowMaterial()
         {
             if (GlowTextures.ReplacementDotGlowTexture == null)
             {
-                await GlowTextures.LoadTextures();
+                GlowTextures.LoadTextures();
             }
             
             if (DotGlowMaterial != null)
@@ -94,11 +93,11 @@ namespace NoteTweaks.Managers
             };
         }
 
-        private static async Task UpdateArrowGlowMaterial()
+        private static void UpdateArrowGlowMaterial()
         {
             if (GlowTextures.ReplacementArrowGlowTexture == null)
             {
-                await GlowTextures.LoadTextures();
+                GlowTextures.LoadTextures();
             }
             
             if (ArrowGlowMaterial != null)
@@ -139,7 +138,7 @@ namespace NoteTweaks.Managers
             // Utils.Materials.RepairShader(AccDotDepthMaterial);
         }
         
-        private static async Task UpdateNoteMaterial()
+        private static void UpdateNoteMaterial()
         {
             if (NoteMaterial != null)
             {
@@ -155,7 +154,7 @@ namespace NoteTweaks.Managers
             
             if (Textures.GetLoadedNoteTexture() != Plugin.Config.NoteTexture)
             {
-                await Textures.LoadNoteTexture(Plugin.Config.NoteTexture);
+                Textures.LoadNoteTexture(Plugin.Config.NoteTexture);
             }
         }
         
@@ -174,7 +173,7 @@ namespace NoteTweaks.Managers
             };
         }
         
-        private static async Task UpdateBombMaterial()
+        private static void UpdateBombMaterial()
         {
             if (BombMaterial != null)
             {
@@ -189,7 +188,7 @@ namespace NoteTweaks.Managers
             
             if (Textures.GetLoadedBombTexture() != Plugin.Config.BombTexture)
             {
-                await Textures.LoadNoteTexture(Plugin.Config.BombTexture, true);
+                Textures.LoadNoteTexture(Plugin.Config.BombTexture, true);
             }
         }
 
