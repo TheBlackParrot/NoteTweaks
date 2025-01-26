@@ -23,6 +23,7 @@ namespace NoteTweaks.UI
         [UsedImplicitly] private readonly string gameVersion;
         [UsedImplicitly] private readonly string author;
         [UsedImplicitly] private readonly string projectHome;
+        [UsedImplicitly] private string latestVersion => $"(<alpha=#CC>{VersionManager.LatestVersion?.ToString(3)}<alpha=#FF>)";
 
         public ExtraPanelViewController()
         {
@@ -60,6 +61,20 @@ namespace NoteTweaks.UI
         {
             get => _config.FixDotsIfNoodle;
             set => _config.FixDotsIfNoodle = value;
+        }
+
+        [UIValue("UpdateIsAvailable")]
+        internal bool UpdateIsAvailable
+        {
+            get
+            {
+                if (VersionManager.LatestVersion == null)
+                {
+                    return false;
+                }
+
+                return VersionManager.LatestVersion > VersionData.ModVersion;
+            }
         }
     }
 }

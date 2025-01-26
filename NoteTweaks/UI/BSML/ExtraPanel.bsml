@@ -29,11 +29,15 @@
                 </horizontal>
             </vertical>
             
-            <vertical background="round-rect-panel" bg-color="#FFFFFF" vertical-fit="PreferredSize" pref-height="13" pad-top="3" pad-bottom="3" pad-left="6" pad-right="6">
-                <horizontal child-align="MiddleCenter">
+            <vertical background="round-rect-panel" bg-color="#FFFFFF" vertical-fit="PreferredSize" child-control-height="true" pad-top="3" pad-bottom="3" pad-left="6" pad-right="6">
+                <horizontal child-align="MiddleCenter" pref-height="6" active="~UpdateIsAvailable" spacing="1">
+                    <text text="Update available!" font-size="4" font-color="#FFDD99" rich-text="true" align="Right"/>
+                    <text text="~latestVersion" font-size="4" font-color="#FFDD99" rich-text="true" align="Left"/>
+                </horizontal>
+                <horizontal child-align="MiddleCenter" pref-height="4">
                     <text text="~author" font-size="4" align="Center" font-color="#CBADFF" rich-text="true"/>
                 </horizontal>
-                <horizontal child-align="MiddleCenter">
+                <horizontal child-align="MiddleCenter" pref-height="2.5">
                     <clickable-text text="~projectHome" font-size="2.5" align="Center" font-color="#FFFFFF" rich-text="true" on-click="openProjectHome"/>
                 </horizontal>
             </vertical>
