@@ -752,7 +752,7 @@ namespace NoteTweaks.UI
                 operation1 =>
                 {
                     UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(standardGameplaySceneInfo.sceneName, UnityEngine.SceneManagement.LoadSceneMode.Additive).completed +=
-                        operation2 =>
+                        async operation2 =>
                         {
                             BeatmapObjectsInstaller beatmapObjectsInstaller = Resources.FindObjectsOfTypeAll<BeatmapObjectsInstaller>().FirstOrDefault();
                             
@@ -762,8 +762,8 @@ namespace NoteTweaks.UI
                             // ReSharper restore PossibleNullReferenceException
                             
                             SettingsViewController.LoadTextures = true;
-                            Textures.SetDefaultTextures();
-                            Materials.UpdateAll();
+                            Managers.Textures.SetDefaultTextures();
+                            await Materials.UpdateAll();
                             
                             List<String> noteNames = new List<string> { "L_Arrow", "R_Arrow", "L_Dot", "R_Dot" };
                             for (int i = 0; i < noteNames.Count; i++)
