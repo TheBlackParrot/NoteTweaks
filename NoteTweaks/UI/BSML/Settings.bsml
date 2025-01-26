@@ -1,9 +1,9 @@
-<vertical child-control-height="false"
+<vertical child-control-height="false" vertical-fit="PreferredSize" pref-height="77"
           xsi:noNamespaceSchemaLocation="https://monkeymanboy.github.io/BSML-Docs/BSMLSchema.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-    <horizontal vertical-fit="Unconstrained" horizontal-fit="PreferredSize" pref-width="120" child-expand-width="true" size-delta="-6 6">
-        <page-button pref-width="4" pref-height="4" tags="LeftButton" direction="Left"/>
+    <horizontal vertical-fit="PreferredSize" horizontal-fit="PreferredSize" child-expand-width="true" child-expand-height="true" pref-height="7" pref-width="120">
+        <page-button pref-width="6" pref-height="6" tags="LeftButton" direction="Left"/>
         <tab-selector child-expand-width="true" child-control-width="true" tab-tag="tabs" id="tabSelector" page-count="4" left-button-tag="LeftButton" right-button-tag="RightButton"/>
-        <page-button pref-width="4" pref-height="4" tags="RightButton" direction="Right"/>
+        <page-button pref-width="6" pref-height="6" tags="RightButton" direction="Right"/>
     </horizontal>
     
     <tab tags="tabs" tab-name="Notes">
@@ -112,12 +112,12 @@
     </tab>
     
     <tab tags="tabs" tab-name="Colors">
-        <vertical vertical-fit="PreferredSize" pref-height="70" pref-width="110" anchored-position-x="4">
-            <vertical vertical-fit="PreferredSize" pad-left="1" pad-right="1" pref-width="100" child-control-height="false">
+        <vertical vertical-fit="PreferredSize" pref-height="70" pref-width="110" anchored-position-x="4" spacing="0" pad-top="0" pad-bottom="0">
+            <vertical vertical-fit="PreferredSize" pad-left="1" pad-right="1" pref-width="100" child-control-height="false"  pref-height="7">
                 <tab-selector tab-tag="colorsTabs" id="colorTabSelector"/>
             </vertical>
 
-            <vertical vertical-fit="PreferredSize" pref-height="37" pref-width="100">
+            <vertical vertical-fit="PreferredSize" pref-height="55" pref-width="130">
                 <tab tags="colorsTabs" tab-name="Left">
                     <scroll-view spacing="0" pref-height="55" child-expand-width="true">
                         <slider-setting apply-on-change="true" value="LeftMinBrightness" text="Minimum Brightness"
@@ -136,7 +136,7 @@
                 </tab>
 
                 <tab tags="colorsTabs" tab-name="Right">
-                    <scroll-view spacing="0" pref-height="50" child-expand-width="true">
+                    <scroll-view spacing="0" pref-height="55" child-expand-width="true">
                         <slider-setting apply-on-change="true" value="RightMinBrightness" text="Minimum Brightness"
                                         min="0.0" max="1.0" increment="0.01" show-buttons="true" formatter="PercentageFormatter"
                                         hover-hint="Ensure right note colors are above a (YIQ) brightness threshold"/>
@@ -157,7 +157,7 @@
     
     <tab tags="tabs" tab-name="Symbols">
         <vertical vertical-fit="PreferredSize" pref-height="70" pref-width="110" anchored-position-x="4">
-            <vertical spacing="2" vertical-fit="PreferredSize" pad-left="1" pad-right="1" pad-top="3" pref-width="92" child-control-height="false">
+            <vertical spacing="0" vertical-fit="PreferredSize" pad-left="1" pad-right="1" pad-top="3" pref-width="92" child-control-height="false">
                 <toggle-setting apply-on-change="true" value="EnableFaceGlow" text="Enable Glowing Face Symbols" bind-value="true"
                                 hover-hint="Show glow around symbols"/>
                 <dropdown-list-setting apply-on-change="true" value="GlowTexture" text="Glow Texture" choices="glowTextureChoices"
@@ -168,9 +168,9 @@
                 <tab-selector tab-tag="symbolTabs" id="symbolTabSelector"/>
             </vertical>
 
-            <vertical vertical-fit="PreferredSize" pref-height="37" pref-width="130">
+            <vertical vertical-fit="PreferredSize" pref-height="50" pref-width="130">
                 <tab tags="symbolTabs" tab-name="Left">
-                    <scroll-view spacing="0" pref-height="55" child-expand-width="true">
+                    <scroll-view spacing="0" pref-height="60" child-expand-width="true">
                         <color-setting apply-on-change="true" value="LeftFaceColor" text="Left Face Symbol Color"
                                        hover-hint="Color of arrows and dots themselves"/>
                         <slider-setting apply-on-change="true" value="LeftFaceColorNoteSkew" text="Skew Towards Note Color"
@@ -206,7 +206,7 @@
                 </tab>
                 
                 <tab tags="symbolTabs" tab-name="Right">
-                    <scroll-view spacing="0" pref-height="50" child-expand-width="true">
+                    <scroll-view spacing="0" pref-height="60" child-expand-width="true">
                         <color-setting apply-on-change="true" value="RightFaceColor" text="Right Face Symbol Color"
                                        hover-hint="Color of arrows and dots themselves"/>
                         <slider-setting apply-on-change="true" value="RightFaceColorNoteSkew" text="Skew Towards Note Color"
