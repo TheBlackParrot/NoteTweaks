@@ -695,8 +695,10 @@ namespace NoteTweaks.UI
 
             _floatTokenSource = new CancellationTokenSource();
 
-            float maxRotate = 5.0f;
-            float maxBob = 0.05f;
+            //float maxRotate = 5.0f;
+            //float maxBob = 0.05f;
+            float maxRotate = 0.0f;
+            float maxBob = 0.0f;
             float rotateTimeScale = 2f;
             float bobTimeScale = 1f;
             
