@@ -33,6 +33,15 @@ namespace NoteTweaks.UI
             projectHome = VersionData.Manifest.Links.ProjectHome;
         }
 
+        protected override void DidActivate(bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling)
+        {
+            base.DidActivate(firstActivation, addedToHierarchy, screenSystemEnabling);
+            
+            NotifyPropertyChanged(nameof(Enabled));
+            NotifyPropertyChanged(nameof(DisableIfNoodle));
+            NotifyPropertyChanged(nameof(FixDotsIfNoodle));
+        }
+
         [UIAction("openProjectHome")]
         private void OpenProjectHomeURL()
         {
