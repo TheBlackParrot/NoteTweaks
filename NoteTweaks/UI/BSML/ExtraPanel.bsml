@@ -25,7 +25,7 @@
                     <text text="~version" font-size="12" align="Center" font-color="#CBADFF" rich-text="true"/>
                 </horizontal>
                 <horizontal child-align="MiddleCenter">
-                    <text text="~gameVersion" font-size="5" align="Center" font-color="#FFFFFF" rich-text="true"/>
+                    <text id="gameVersionText" text="~gameVersion" font-size="5" align="Center" font-color="#FFFFFF" rich-text="true"/>
                 </horizontal>
             </vertical>
             

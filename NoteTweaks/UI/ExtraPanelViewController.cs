@@ -4,6 +4,7 @@ using BeatSaberMarkupLanguage.ViewControllers;
 using JetBrains.Annotations;
 using NoteTweaks.Configuration;
 using NoteTweaks.Managers;
+using TMPro;
 using UnityEngine;
 using Zenject;
 
@@ -20,15 +21,23 @@ namespace NoteTweaks.UI
         private readonly VersionManager VersionData = new VersionManager();
         
         [UsedImplicitly] private readonly string version;
-        [UsedImplicitly] private readonly string gameVersion;
+        [UsedImplicitly] private readonly string originalGameVersion;
         [UsedImplicitly] private readonly string author;
         [UsedImplicitly] private readonly string projectHome;
         [UsedImplicitly] private string latestVersion => $"(<alpha=#CC>{VersionManager.LatestVersion?.ToString(3)}<alpha=#FF>)";
+        private static string isPreRelease = "";
+        [UsedImplicitly] private string gameVersion => $"{originalGameVersion}{isPreRelease}";
+        
+        // shut the hekc
+        [UIComponent("gameVersionText")]
+        #pragma warning disable CS0649
+        private TextMeshProUGUI gameVersionText;
+        #pragma warning restore CS0649
 
         public ExtraPanelViewController()
         {
             version = $"<size=80%><smallcaps><alpha=#CC>NoteTweaks</smallcaps></size> <alpha=#FF><b>v{VersionData.ModVersion.ToString(3)}</b>";
-            gameVersion = $"<alpha=#CC>(<alpha=#77><size=80%>for</size> <b><alpha=#FF>{VersionData.GameVersion.ToString(3)}<alpha=#CC></b>)";
+            originalGameVersion = $"<alpha=#CC>(<alpha=#77><size=80%>for</size> <b><alpha=#FF>{VersionData.GameVersion.ToString(3)}<alpha=#CC></b>)";
             author = $"<alpha=#77><size=80%>developed by</size> <b><alpha=#FF>{VersionData.Manifest.Author}</b>";
             projectHome = VersionData.Manifest.Links.ProjectHome;
         }
@@ -40,6 +49,17 @@ namespace NoteTweaks.UI
             NotifyPropertyChanged(nameof(Enabled));
             NotifyPropertyChanged(nameof(DisableIfNoodle));
             NotifyPropertyChanged(nameof(FixDotsIfNoodle));
+
+            if (VersionManager.LatestVersion != null)
+            {
+                Plugin.Log.Info($"LatestVersion not null: {VersionManager.LatestVersion} vs {VersionData.ModVersion}");
+                if (VersionData.ModVersion > VersionManager.LatestVersion)
+                {
+                    Plugin.Log.Info("Pre-release string should update");
+                    isPreRelease = " <alpha=#77><size=80%>(Pre-release)";
+                    gameVersionText.text = gameVersion;
+                }
+            }
         }
 
         [UIAction("openProjectHome")]
