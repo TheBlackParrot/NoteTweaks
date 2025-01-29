@@ -48,19 +48,31 @@ namespace NoteTweaks.UI
         protected bool Enabled
         {
             get => _config.Enabled;
-            set => _config.Enabled = value;
+            set
+            {
+                _config.Enabled = value;
+                NotifyPropertyChanged();
+            }
         }
-        
+
         protected bool DisableIfNoodle
         {
             get => _config.DisableIfNoodle;
-            set => _config.DisableIfNoodle = value;
+            set
+            {
+                _config.DisableIfNoodle = value;
+                NotifyPropertyChanged();
+            }
         }
-        
+
         protected bool FixDotsIfNoodle
         {
             get => _config.FixDotsIfNoodle;
-            set => _config.FixDotsIfNoodle = value;
+            set
+            {
+                _config.FixDotsIfNoodle = value;
+                NotifyPropertyChanged();
+            }
         }
 
         [UIValue("UpdateIsAvailable")]

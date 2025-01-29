@@ -12,6 +12,7 @@ namespace NoteTweaks.Installers
             Container.Bind<NotePreviewViewController>().FromNewComponentAsViewController().AsSingle();
             Container.Bind<ExtraPanelViewController>().FromNewComponentAsViewController().AsSingle();
             Container.Bind<UI.SettingsFlowCoordinator>().FromNewComponentOnNewGameObject().AsSingle();
+            Container.BindInterfacesAndSelfTo<ModSettingsViewController>().AsSingle();
             Container.BindInterfacesTo<MenuButtonManager>().AsSingle();
         }
     }

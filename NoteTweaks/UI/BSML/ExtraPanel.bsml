@@ -5,14 +5,14 @@
     <tab tags="tabs" tab-name="General">
         <vertical vertical-fit="PreferredSize" pref-height="70" pref-width="100" anchored-position-x="4">
             <scroll-view spacing="0" pref-height="70" child-expand-width="true">
-                <toggle-setting apply-on-change="true" value="Enabled" text="Mod Enabled"
+                <toggle-setting apply-on-change="true" value="Enabled" text="Mod Enabled" bind-value="true"
                                 hover-hint="Remember to drink water! Hydrate!"/>
-                <toggle-setting apply-on-change="true" value="DisableIfNoodle" text="Disable on Noodle Maps"
+                <toggle-setting apply-on-change="true" value="DisableIfNoodle" text="Disable on Noodle Maps" bind-value="true"
                                 hover-hint="Automatically disable the mod if the map being played requires Noodle Extensions"/>
 
                 <horizontal><text text="-----" font-size="4" color="#00000000"/></horizontal>
 
-                <toggle-setting apply-on-change="true" value="FixDotsIfNoodle" text="Fix Dots on Noodle Maps"
+                <toggle-setting apply-on-change="true" value="FixDotsIfNoodle" text="Fix Dots on Noodle Maps" bind-value="true"
                                 hover-hint="Leaves dots as just a glow texture if the map being played requires Noodle Extensions"/>
             </scroll-view>
         </vertical>
