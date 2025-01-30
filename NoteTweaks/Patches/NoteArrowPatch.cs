@@ -582,6 +582,7 @@ namespace NoteTweaks.Patches
         public static class MaterialPropertyBlockControllerPatch
         {
             [UsedImplicitly]
+            // ReSharper disable once InconsistentNaming
             private static bool Prefix(MaterialPropertyBlockController __instance)
             {
                 if (!Plugin.Config.Enabled || AutoDisable)
@@ -595,11 +596,7 @@ namespace NoteTweaks.Patches
                 }
                 
                 Color wantedColor = __instance.materialPropertyBlock.GetColor(ColorNoteVisuals._colorId);
-                if (__instance.TryGetComponent(out CutoutEffect cutoutEffect))
-                {
-                    //cutoutEffect.SetCutout(Mathf.Abs(wantedColor.a - 1.0f));
-                    __instance.materialPropertyBlock.SetFloat(CutoutEffect._cutoutPropertyID, Mathf.Min(Mathf.Max(Mathf.Abs(wantedColor.a - 1.0f), 0f), 1f));
-                }
+                __instance.materialPropertyBlock.SetFloat(CutoutEffect._cutoutPropertyID, Mathf.Min(Mathf.Max(Mathf.Abs(wantedColor.a - 1.0f), 0f), 1f));
 
                 Transform glowTransform = __instance.transform.parent.Find("AddedNoteCircleGlow");
                 if (glowTransform != null)
