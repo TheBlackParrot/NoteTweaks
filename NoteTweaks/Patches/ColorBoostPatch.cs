@@ -119,12 +119,17 @@ namespace NoteTweaks.Patches
         // ReSharper disable once InconsistentNaming
         private static void InitColorInfoPatch(StandardLevelScenesTransitionSetupDataSO __instance)
         {
-            
             if (!Plugin.Config.Enabled)
             {
                 return;
             }
 
+            if (Plugin.Config.ColorBoostLeft == 0f && Plugin.Config.ColorBoostRight == 0f)
+            {
+                return;
+            }
+
+            __instance.usingOverrideColorScheme = true;
             __instance.colorScheme = PatchColors(__instance.colorScheme);
         }
 
