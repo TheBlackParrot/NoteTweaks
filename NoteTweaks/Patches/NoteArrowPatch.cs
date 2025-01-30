@@ -489,6 +489,18 @@ namespace NoteTweaks.Patches
                         
                         if (meshRenderer.TryGetComponent(out MaterialPropertyBlockController materialPropertyBlockController))
                         {
+                            if (_fixDots)
+                            {
+                                if (!originalDotTransform.TryGetComponent(out CutoutEffect _))
+                                {
+                                    if (meshRenderer.transform.parent.TryGetComponent(out CutoutEffect parentCutoutEffect))
+                                    {
+                                        CutoutEffect cutoutEffect = originalDotTransform.gameObject.AddComponent<CutoutEffect>();
+                                        cutoutEffect._materialPropertyBlockController = materialPropertyBlockController;
+                                        cutoutEffect._useRandomCutoutOffset = parentCutoutEffect._useRandomCutoutOffset;
+                                    }
+                                }
+                            }
                             Color faceColor = __instance._noteColor;
                             
                             if (isLeft ? Plugin.Config.NormalizeLeftFaceColor : Plugin.Config.NormalizeRightFaceColor)
@@ -501,7 +513,7 @@ namespace NoteTweaks.Patches
                             }
                         
                             Color c = Color.LerpUnclamped(isLeft ? Plugin.Config.LeftFaceColor : Plugin.Config.RightFaceColor, faceColor, isLeft ? Plugin.Config.LeftFaceColorNoteSkew : Plugin.Config.RightFaceColorNoteSkew);
-                            c.a = _fixDots ? 0f : materialPropertyBlockController.materialPropertyBlock.GetColor(ColorNoteVisuals._colorId).a;
+                            c.a = _fixDots ? 1f : materialPropertyBlockController.materialPropertyBlock.GetColor(ColorNoteVisuals._colorId).a;
                             materialPropertyBlockController.materialPropertyBlock.SetColor(ColorNoteVisuals._colorId, c);
                             materialPropertyBlockController.ApplyChanges();   
                         }
@@ -563,6 +575,43 @@ namespace NoteTweaks.Patches
                         }
                     }
                 }
+            }
+        }
+        
+        [HarmonyPatch(typeof(MaterialPropertyBlockController), "ApplyChanges")]
+        public static class MaterialPropertyBlockControllerPatch
+        {
+            [UsedImplicitly]
+            private static bool Prefix(MaterialPropertyBlockController __instance)
+            {
+                if (!Plugin.Config.Enabled || AutoDisable)
+                {
+                    return true;
+                }
+                
+                if (__instance.gameObject.name != "NoteCircleGlow")
+                {
+                    return true;
+                }
+                
+                Color wantedColor = __instance.materialPropertyBlock.GetColor(ColorNoteVisuals._colorId);
+                if (__instance.TryGetComponent(out CutoutEffect cutoutEffect))
+                {
+                    //cutoutEffect.SetCutout(Mathf.Abs(wantedColor.a - 1.0f));
+                    __instance.materialPropertyBlock.SetFloat(CutoutEffect._cutoutPropertyID, Mathf.Min(Mathf.Max(Mathf.Abs(wantedColor.a - 1.0f), 0f), 1f));
+                }
+
+                Transform glowTransform = __instance.transform.parent.Find("AddedNoteCircleGlow");
+                if (glowTransform != null)
+                {
+                    if (glowTransform.TryGetComponent(out MaterialPropertyBlockController glowPropertyBlockController))
+                    {
+                        glowPropertyBlockController.materialPropertyBlock.SetColor(ColorNoteVisuals._colorId, wantedColor);
+                        glowPropertyBlockController.ApplyChanges();
+                    }
+                }
+                
+                return true;
             }
         }
         
