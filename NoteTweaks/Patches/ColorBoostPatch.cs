@@ -123,14 +123,17 @@ namespace NoteTweaks.Patches
             {
                 return;
             }
+            
+            ColorScheme patchedColors = PatchColors(__instance.colorScheme);
 
-            if (Plugin.Config.ColorBoostLeft == 0f && Plugin.Config.ColorBoostRight == 0f)
+            if (patchedColors._saberAColor == __instance.colorScheme._saberAColor &&
+                patchedColors._saberBColor == __instance.colorScheme._saberBColor)
             {
                 return;
             }
 
             __instance.usingOverrideColorScheme = true;
-            __instance.colorScheme = PatchColors(__instance.colorScheme);
+            __instance.colorScheme = patchedColors;
         }
 
         [HarmonyPatch]
@@ -166,7 +169,16 @@ namespace NoteTweaks.Patches
             ColorScheme oldScheme = __instance._standardLevelSceneSetupData.colorScheme;
             oldScheme._saberAColor = OriginalLeftColor;
             oldScheme._saberBColor = OriginalRightColor;
-            __instance._standardLevelSceneSetupData.colorScheme = PatchColors(oldScheme);
+            ColorScheme patchedColors = PatchColors(oldScheme);
+
+            if (patchedColors._saberAColor == oldScheme._saberAColor &&
+                patchedColors._saberBColor == oldScheme._saberBColor)
+            {
+                return;
+            }
+            
+            __instance._standardLevelSceneSetupData.usingOverrideColorScheme = true;
+            __instance._standardLevelSceneSetupData.colorScheme = patchedColors;
         }
         
         [HarmonyPatch(typeof(MissionLevelRestartController), "RestartLevel")]
