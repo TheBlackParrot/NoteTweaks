@@ -198,10 +198,10 @@ namespace NoteTweaks.Managers
         {
             if (Plugin.Config.EnableAccDot)
             {
-                ReplacementArrowMaterial.renderQueue = Plugin.Config.RenderAccDotsAboveSymbols ? 1997 : 2000;
-                ReplacementDotMaterial.renderQueue = Plugin.Config.RenderAccDotsAboveSymbols ? 1997 : 2000;
-                DotGlowMaterial.renderQueue = Plugin.Config.RenderAccDotsAboveSymbols ? 1998 : 1999;
-                ArrowGlowMaterial.renderQueue = Plugin.Config.RenderAccDotsAboveSymbols ? 1998 : 1999;
+                ReplacementArrowMaterial.renderQueue = Plugin.Config.RenderAccDotsAboveSymbols ? 1998 : 2000;
+                ReplacementDotMaterial.renderQueue = Plugin.Config.RenderAccDotsAboveSymbols ? 1998 : 2000;
+                DotGlowMaterial.renderQueue = Plugin.Config.RenderAccDotsAboveSymbols ? 1997 : 1999;
+                ArrowGlowMaterial.renderQueue = Plugin.Config.RenderAccDotsAboveSymbols ? 1997 : 1999;
             }
             else
             {
