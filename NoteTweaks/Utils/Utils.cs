@@ -64,9 +64,24 @@ namespace NoteTweaks.Utils
 
         public static Mesh GenerateBasicTriangleMesh()
         {
+            return GenerateTriangleMesh(new Vector2(0.3f, 0.0933f), new Vector2(0f, -0.0033f));
+        }
+        
+        public static Mesh GenerateTriangleMesh(Vector2 size, Vector2 offset = default)
+        {
+            float negativeX = (-1f * (size.x / 2f)) + offset.x;
+            float positiveX = (size.x / 2f) + offset.x;
+            float negativeY = (-1f * (size.y / 2f)) + offset.y;
+            float positiveY = (size.y / 2f) + offset.y;
+            
             Mesh mesh = new Mesh
             {
-                vertices = new [] { new Vector3(-0.15f, 0.0433f, 0f), new Vector3(0f, -0.05f, 0f), new Vector3(0.15f, 0.0433f, 0f) },
+                vertices = new []
+                {
+                    new Vector3(negativeX, positiveY, 0f),
+                    new Vector3(0f, negativeY, 0f),
+                    new Vector3(positiveX, positiveY, 0f)
+                },
                 triangles = new [] { 2, 1, 0 }
             };
             mesh.Optimize();

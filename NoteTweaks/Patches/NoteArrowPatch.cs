@@ -380,7 +380,7 @@ namespace NoteTweaks.Patches
                         }
                         
                         Color c = Color.LerpUnclamped(isLeft ? Plugin.Config.LeftFaceColor : Plugin.Config.RightFaceColor, faceColor, isLeft ? Plugin.Config.LeftFaceColorNoteSkew : Plugin.Config.RightFaceColorNoteSkew);
-                        c.a = 0f;
+                        c.a = 1f;
                         materialPropertyBlockController.materialPropertyBlock.SetColor(ColorNoteVisuals._colorId, c);
                         materialPropertyBlockController.ApplyChanges();   
                     }
