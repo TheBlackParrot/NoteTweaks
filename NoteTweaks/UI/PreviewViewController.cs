@@ -318,7 +318,7 @@ namespace NoteTweaks.UI
                 }
 
                 faceColor = Color.LerpUnclamped(i % 2 == 0 ? Plugin.Config.LeftFaceColor : Plugin.Config.RightFaceColor, faceColor, i % 2 == 0 ? Plugin.Config.LeftFaceColorNoteSkew : Plugin.Config.RightFaceColorNoteSkew);
-                faceColor.a = 0f;
+                faceColor.a = 1f;
                 
                 Color glowColor = Color.LerpUnclamped(i % 2 == 0 ? Plugin.Config.LeftFaceGlowColor : Plugin.Config.RightFaceGlowColor, noteColor, i % 2 == 0 ? Plugin.Config.LeftFaceGlowColorNoteSkew : Plugin.Config.RightFaceGlowColorNoteSkew);
                 
