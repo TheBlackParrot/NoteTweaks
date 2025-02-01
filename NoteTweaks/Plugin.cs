@@ -49,6 +49,11 @@ namespace NoteTweaks
             Config.LeftMaxBrightness = Mathf.Max(Mathf.Min(Config.LeftMaxBrightness, 1.0f), 0.0f);
             Config.RightMinBrightness = Mathf.Max(Mathf.Min(Config.RightMinBrightness, 1.0f), 0.0f);
             Config.RightMaxBrightness = Mathf.Max(Mathf.Min(Config.RightMaxBrightness, 1.0f), 0.0f);
+            
+            Config.ArrowPosition = Vectors.Max(Vectors.Min(Config.ArrowPosition, 0.2f), -0.2f);
+            Config.DotPosition = Vectors.Max(Vectors.Min(Config.DotPosition, 0.2f), -0.2f);
+            Config.LeftGlowOffset = Vectors.Max(Vectors.Min(Config.LeftGlowOffset, 0.2f), -0.2f);
+            Config.RightGlowOffset = Vectors.Max(Vectors.Min(Config.RightGlowOffset, 0.2f), -0.2f);
         }
 
         [Init]

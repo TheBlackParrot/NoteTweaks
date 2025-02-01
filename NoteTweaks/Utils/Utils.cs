@@ -97,7 +97,7 @@ namespace NoteTweaks.Utils
         }
         
         // ...fuck
-        public static Mesh GenerateStarMesh(int sides)
+        /*public static Mesh GenerateStarMesh(int sides)
         {
             Mesh centerMesh = GenerateFaceMesh(sides, 0.5f);
             
@@ -144,7 +144,7 @@ namespace NoteTweaks.Utils
             };
 
             return mesh;
-        }
+        }*/
 
         private static Mesh GenerateRectangle(Vector2 size, Vector2 offset = default, Vector3 rotation = default)
         {
@@ -217,11 +217,27 @@ namespace NoteTweaks.Utils
 
     internal static class Vectors
     {
+        public static Vector2 Min(Vector2 vector, float min)
+        {
+            vector.x = Mathf.Min(vector.x, min);
+            vector.y = Mathf.Min(vector.y, min);
+            
+            return vector;
+        }
+        
         public static Vector3 Min(Vector3 vector, float min)
         {
             vector.x = Mathf.Min(vector.x, min);
             vector.y = Mathf.Min(vector.y, min);
             vector.z = Mathf.Min(vector.z, min);
+            
+            return vector;
+        }
+
+        public static Vector2 Max(Vector2 vector, float max)
+        {
+            vector.x = Mathf.Max(vector.x, max);
+            vector.y = Mathf.Max(vector.y, max);
             
             return vector;
         }
