@@ -98,5 +98,6 @@ namespace NoteTweaks.Configuration
         public int NoteOutlineScale { get; set; } = 5;
         public Color NoteOutlineLeftColor { get; set; } = Color.black;
         public Color NoteOutlineRightColor { get; set; } = Color.black;
+        public Color BombOutlineColor { get; set; } = Color.white;
     }
 }

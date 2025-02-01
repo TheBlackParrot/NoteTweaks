@@ -183,6 +183,13 @@
                                        hover-hint="Color of the outline around right-handed notes"/>
                     </scroll-view>
                 </tab>
+
+                <tab tags="outlineTabs" tab-name="Bombs">
+                    <scroll-view spacing="0" pref-height="50" child-expand-width="true">
+                        <color-setting apply-on-change="true" value="BombOutlineColor" text="Outline Color"
+                                       hover-hint="Color of the outline around bombs"/>
+                    </scroll-view>
+                </tab>
             </vertical>
         </vertical>
     </tab>

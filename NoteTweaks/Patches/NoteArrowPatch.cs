@@ -132,12 +132,14 @@ namespace NoteTweaks.Patches
                     return;
                 }
                 
-                if (__instance.transform.GetChild(0).TryGetComponent(out MeshRenderer cubeRenderer))
+                Transform chainRoot = __instance.transform.GetChild(0);
+                
+                if (chainRoot.TryGetComponent(out MeshRenderer cubeRenderer))
                 {
                     cubeRenderer.sharedMaterial = Materials.NoteMaterial;
                 }
                 
-                Transform glowTransform = __instance.transform.GetChild(0).Find("AddedNoteCircleGlow");
+                Transform glowTransform = chainRoot.Find("AddedNoteCircleGlow");
                 if (glowTransform != null)
                 {
                     ColorType colorType = __instance._noteData.colorType;
@@ -167,7 +169,30 @@ namespace NoteTweaks.Patches
                         materialPropertyBlockController.materialPropertyBlock.SetColor(ColorNoteVisuals._colorId, c);
                         materialPropertyBlockController.ApplyChanges();
                     }
-                } 
+                }
+                
+                if (Outlines.InvertedChainMesh == null)
+                {
+                    if (chainRoot.TryGetComponent(out MeshFilter chainMeshFilter))
+                    {
+                        Outlines.UpdateDefaultChainMesh(chainMeshFilter.sharedMesh);
+                    }
+                }
+
+                if (Plugin.Config.EnableNoteOutlines)
+                {
+                    Outlines.AddOutlineObject(chainRoot, Outlines.InvertedChainMesh);
+                    Transform noteOutline = chainRoot.Find("NoteOutline");
+                    
+                    noteOutline.gameObject.SetActive(Plugin.Config.EnableNoteOutlines);
+                    noteOutline.localScale = (Vector3.one * (Plugin.Config.NoteOutlineScale / 100f)) + Vector3.one;
+                    
+                    if (noteOutline.gameObject.TryGetComponent(out MaterialPropertyBlockController controller))
+                    {
+                        controller.materialPropertyBlock.SetColor(ColorNoteVisuals._colorId, __instance._noteData.colorType == ColorType.ColorA ? Plugin.Config.NoteOutlineLeftColor : Plugin.Config.NoteOutlineRightColor);
+                        controller.ApplyChanges();
+                    }
+                }
                 
                 Vector3 scale = Vectors.Max(Plugin.Config.NoteScale * Plugin.Config.LinkScale, 0.1f);
                 Vector3 invertedScale = new Vector3(1.0f / scale.x, 1.0f / scale.y, 1.0f / scale.z);
@@ -292,13 +317,23 @@ namespace NoteTweaks.Patches
                 {
                     if (noteRoot.TryGetComponent(out MeshFilter cubeMeshFilter))
                     {
-                        Outlines.UpdateDefaultMesh(cubeMeshFilter.sharedMesh);
+                        Outlines.UpdateDefaultNoteMesh(cubeMeshFilter.sharedMesh);
                     }
                 }
 
                 if (Plugin.Config.EnableNoteOutlines)
                 {
-                    Outlines.AddOutlineObject(noteRoot);
+                    Outlines.AddOutlineObject(noteRoot, Outlines.InvertedNoteMesh);
+                    Transform noteOutline = noteRoot.Find("NoteOutline");
+                    
+                    noteOutline.gameObject.SetActive(Plugin.Config.EnableNoteOutlines);
+                    noteOutline.localScale = (Vector3.one * (Plugin.Config.NoteOutlineScale / 100f)) + Vector3.one;
+                    
+                    if (noteOutline.gameObject.TryGetComponent(out MaterialPropertyBlockController controller))
+                    {
+                        controller.materialPropertyBlock.SetColor(ColorNoteVisuals._colorId, __instance._noteData.colorType == ColorType.ColorA ? Plugin.Config.NoteOutlineLeftColor : Plugin.Config.NoteOutlineRightColor);
+                        controller.ApplyChanges();
+                    }
                 }
 
                 if (!IsAllowedToScaleNotes)

@@ -783,6 +783,16 @@ namespace NoteTweaks.UI
                 NotePreviewViewController.UpdateOutlines();
             }
         }
+
+        protected Color BombOutlineColor
+        {
+            get => _config.BombOutlineColor;
+            set
+            {
+                _config.BombOutlineColor = value;
+                NotePreviewViewController.UpdateOutlines();
+            }
+        }
         
         [UIValue("glowBlendOperationChoices")]
         [UsedImplicitly]

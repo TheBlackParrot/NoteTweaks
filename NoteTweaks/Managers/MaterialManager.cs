@@ -13,7 +13,8 @@ namespace NoteTweaks.Managers
         internal static Material NoteMaterial;
         internal static Material DebrisMaterial;
         internal static Material BombMaterial;
-        internal static Material OutlineMaterial;
+        internal static Material OutlineMaterial0;
+        internal static Material OutlineMaterial1;
         
         internal static readonly Material AccDotDepthMaterial = new Material(Resources.FindObjectsOfTypeAll<Shader>().First(x => x.name == "Custom/ClearDepth"))
         {
@@ -23,6 +24,7 @@ namespace NoteTweaks.Managers
         internal static Material AccDotMaterial;
         private static readonly int Color0 = Shader.PropertyToID("_Color");
         internal static readonly int BlendOpID = Shader.PropertyToID("_BlendOp");
+        //private static readonly int ZTestID = Shader.PropertyToID("_ZTest");
 
         internal static async Task UpdateAll()
         {
@@ -144,19 +146,34 @@ namespace NoteTweaks.Managers
         
         private static void UpdateOutlineMaterial()
         {
-            if (OutlineMaterial != null)
+            if (OutlineMaterial0 != null)
             {
                 return;
             }
 
-            Plugin.Log.Info("Creating outline material");
-            Material arrowMat = Resources.FindObjectsOfTypeAll<Material>().ToList().Find(x => x.name == "NoteArrowHD");
-            OutlineMaterial = new Material(arrowMat)
+            Plugin.Log.Info("Creating outline materials");
+            Material arrowMat0 = Resources.FindObjectsOfTypeAll<Material>().ToList().Find(x => x.name == "NoteArrowLW");
+            OutlineMaterial0 = new Material(arrowMat0)
             {
-                name = "NoteTweaks_OutlineMaterial",
+                name = "NoteTweaks_OutlineMaterialLW",
                 color = Color.black,
-                shaderKeywords = arrowMat.shaderKeywords.Where(x => x != "_ENABLE_COLOR_INSTANCING" || x != "_CUTOUT_NONE").ToArray()
+                shaderKeywords = arrowMat0.shaderKeywords.Where(x => x != "_ENABLE_COLOR_INSTANCING" || x != "_CUTOUT_NONE").ToArray(),
+                renderQueue = 1990
             };
+            
+            Material arrowMat1 = Resources.FindObjectsOfTypeAll<Material>().ToList().Find(x => x.name == "NoteArrowHD");
+            OutlineMaterial1 = new Material(arrowMat1)
+            {
+                name = "NoteTweaks_OutlineMaterialHD",
+                color = Color.black,
+                shaderKeywords = arrowMat1.shaderKeywords.Where(x => x != "_ENABLE_COLOR_INSTANCING" || x != "_CUTOUT_NONE").ToArray(),
+                renderQueue = 1990
+            };
+            
+            //arrowMat0.SetInt(ZTestID, (int)UnityEngine.Rendering.CompareFunction.GreaterEqual);
+            //arrowMat1.SetInt(ZTestID, (int)UnityEngine.Rendering.CompareFunction.GreaterEqual);
+            //arrowMat0.SetInt("_CustomZWrite", 0);
+            //arrowMat1.SetInt("_CustomZWrite", 0);
         }
         
         private static async Task UpdateNoteMaterial()

@@ -22,6 +22,31 @@ namespace NoteTweaks.Patches
                 return;
             }
 
+            Transform bombRoot = __instance.transform;
+            
+            if (Outlines.InvertedBombMesh == null)
+            {
+                if (bombRoot.GetChild(0).TryGetComponent(out MeshFilter bombMeshFilter))
+                {
+                    Outlines.UpdateDefaultBombMesh(bombMeshFilter.sharedMesh);
+                }
+            }
+            
+            if (Plugin.Config.EnableNoteOutlines)
+            {
+                Outlines.AddOutlineObject(bombRoot, Outlines.InvertedBombMesh);
+                Transform noteOutline = bombRoot.FindChildRecursively("NoteOutline");
+                    
+                noteOutline.gameObject.SetActive(Plugin.Config.EnableNoteOutlines);
+                noteOutline.localScale = (Vector3.one * (Plugin.Config.NoteOutlineScale / 100f)) + Vector3.one;
+                    
+                if (noteOutline.gameObject.TryGetComponent(out MaterialPropertyBlockController controller))
+                {
+                    controller.materialPropertyBlock.SetColor(ColorNoteVisuals._colorId, Plugin.Config.BombOutlineColor);
+                    controller.ApplyChanges();
+                }
+            }
+
             Color bombColor = Plugin.Config.EnableRainbowBombs ? RainbowGradient.Color : Plugin.Config.BombColor * (1.0f + Plugin.Config.BombColorBoost);
             
             if (__instance.transform.GetChild(0).TryGetComponent(out Renderer bombRenderer))

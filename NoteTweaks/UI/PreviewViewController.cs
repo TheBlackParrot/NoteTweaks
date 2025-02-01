@@ -427,30 +427,22 @@ namespace NoteTweaks.UI
         {
             for (int i = 0; i < NoteContainer.transform.childCount; i++)
             {
-                bool isLeft = i % 2 == 0;
-                
                 GameObject noteCube = NoteContainer.transform.GetChild(i).gameObject;
-                if (noteCube.name.Contains("_Chain_") || noteCube.name.Contains("_Bomb_"))
-                {
-                    // TODO
-                    continue;
-                }
                 
-                Transform noteOutline = noteCube.transform.Find("NoteOutline");
+                bool isLeft = noteCube.name.Contains("_L_");
+                bool isBomb = noteCube.name.Contains("_Bomb_");
+                
+                Transform noteOutline = noteCube.transform.FindChildRecursively("NoteOutline");
                 if (noteOutline)
                 {
                     noteOutline.gameObject.SetActive(Plugin.Config.EnableNoteOutlines);
                     noteOutline.localScale = (Vector3.one * (Plugin.Config.NoteOutlineScale / 100f)) + Vector3.one;
-
-                    if (noteOutline.gameObject.TryGetComponent(out MeshRenderer renderer))
-                    {
-                        renderer.material.SetColor(Color0, isLeft ? Plugin.Config.NoteOutlineLeftColor : Plugin.Config.NoteOutlineRightColor);
-                    }
                     
-                    /*if (noteOutline.gameObject.TryGetComponent(out MaterialPropertyBlockController controller))
+                    if (noteOutline.gameObject.TryGetComponent(out MaterialPropertyBlockController controller))
                     {
-                        controller.materialPropertyBlock.SetColor(Color0, isLeft ? Plugin.Config.NoteOutlineLeftColor : Plugin.Config.NoteOutlineRightColor);
-                    }*/
+                        controller.materialPropertyBlock.SetColor(ColorNoteVisuals._colorId, isBomb ? Plugin.Config.BombOutlineColor : isLeft ? Plugin.Config.NoteOutlineLeftColor : Plugin.Config.NoteOutlineRightColor);
+                        controller.ApplyChanges();
+                    }
                 }
             }
         }
@@ -463,6 +455,16 @@ namespace NoteTweaks.UI
             chainNote.name = "_NoteTweaks_PreviewNote_" + extraName + $"_{linkNum}";
             DestroyImmediate(chainNote.transform.Find("BigCuttable").gameObject);
             DestroyImmediate(chainNote.transform.Find("SmallCuttable").gameObject);
+            
+            if (Outlines.InvertedChainMesh == null)
+            {
+                if (chainNote.TryGetComponent(out MeshFilter chainMeshFilter))
+                {
+                    Outlines.UpdateDefaultChainMesh(chainMeshFilter.sharedMesh);
+                }
+            }
+
+            Outlines.AddOutlineObject(chainNote.transform, Outlines.InvertedChainMesh);
             
             Vector3 position = new Vector3(((-NoteSize / 2) + (cell - (NoteSize * 2)) * NoteSize) - 0.1f, linkNum / 6.667f, linkNum * -0.05f);
             chainNote.transform.localPosition = position;
@@ -524,11 +526,11 @@ namespace NoteTweaks.UI
             {
                 if (noteCube.TryGetComponent(out MeshFilter cubeMeshFilter))
                 {
-                    Outlines.UpdateDefaultMesh(cubeMeshFilter.sharedMesh);
+                    Outlines.UpdateDefaultNoteMesh(cubeMeshFilter.sharedMesh);
                 }
             }
 
-            Outlines.AddOutlineObject(noteCube.transform);
+            Outlines.AddOutlineObject(noteCube.transform, Outlines.InvertedNoteMesh);
             
             Vector3 position = new Vector3(((NoteSize / 2) + (cell % 2) * NoteSize) + 0.1f, (-(int)Math.Floor((float)cell / 2) * NoteSize) + NoteSize + 0.15f, 0);
             noteCube.transform.localPosition = position;
@@ -621,6 +623,16 @@ namespace NoteTweaks.UI
             
             DestroyImmediate(bombObject.GetComponent<SphereCollider>());
             DestroyImmediate(bombObject.GetComponent<SphereCuttableBySaber>());
+            
+            if (Outlines.InvertedBombMesh == null)
+            {
+                if (bombObject.TryGetComponent(out MeshFilter bombMeshFilter))
+                {
+                    Outlines.UpdateDefaultBombMesh(bombMeshFilter.sharedMesh);
+                }
+            }
+
+            Outlines.AddOutlineObject(bombContainer.transform, Outlines.InvertedBombMesh);
             
             MeshRenderer bombMeshRenderer = bombObject.gameObject.GetComponent<MeshRenderer>();
             bombMeshRenderer.sharedMaterial = Materials.BombMaterial;
