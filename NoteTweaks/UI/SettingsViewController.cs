@@ -793,6 +793,46 @@ namespace NoteTweaks.UI
                 NotePreviewViewController.UpdateOutlines();
             }
         }
+
+        protected float NoteOutlineLeftColorSkew
+        {
+            get => _config.NoteOutlineLeftColorSkew;
+            set
+            {
+                _config.NoteOutlineLeftColorSkew = value;
+                NotePreviewViewController.UpdateOutlines();
+            }
+        }
+        
+        protected float NoteOutlineRightColorSkew
+        {
+            get => _config.NoteOutlineRightColorSkew;
+            set
+            {
+                _config.NoteOutlineRightColorSkew = value;
+                NotePreviewViewController.UpdateOutlines();
+            }
+        }
+        
+        protected bool NormalizeLeftOutlineColor
+        {
+            get => _config.NormalizeLeftOutlineColor;
+            set
+            {
+                _config.NormalizeLeftOutlineColor = value;
+                NotePreviewViewController.UpdateOutlines();
+            }
+        }
+        
+        protected bool NormalizeRightOutlineColor
+        {
+            get => _config.NormalizeRightOutlineColor;
+            set
+            {
+                _config.NormalizeRightOutlineColor = value;
+                NotePreviewViewController.UpdateOutlines();
+            }
+        }
         
         [UIValue("glowBlendOperationChoices")]
         [UsedImplicitly]

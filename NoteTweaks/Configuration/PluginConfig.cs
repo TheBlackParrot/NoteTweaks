@@ -97,7 +97,11 @@ namespace NoteTweaks.Configuration
         public bool EnableNoteOutlines { get; set; } = false;
         public int NoteOutlineScale { get; set; } = 5;
         public Color NoteOutlineLeftColor { get; set; } = Color.black;
+        public float NoteOutlineLeftColorSkew { get; set; } = 0.1f;
+        public bool NormalizeLeftOutlineColor { get; set; } = false;
+        public bool NormalizeRightOutlineColor { get; set; } = false;
         public Color NoteOutlineRightColor { get; set; } = Color.black;
+        public float NoteOutlineRightColorSkew { get; set; } = 0.1f;
         public Color BombOutlineColor { get; set; } = Color.white;
     }
 }
