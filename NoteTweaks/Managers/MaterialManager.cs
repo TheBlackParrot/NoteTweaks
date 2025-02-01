@@ -12,6 +12,7 @@ namespace NoteTweaks.Managers
         internal static Material NoteMaterial;
         internal static Material DebrisMaterial;
         internal static Material BombMaterial;
+        internal static Material OutlineMaterial;
         
         internal static readonly Material AccDotDepthMaterial = new Material(Resources.FindObjectsOfTypeAll<Shader>().First(x => x.name == "Custom/ClearDepth"))
         {
@@ -30,6 +31,7 @@ namespace NoteTweaks.Managers
             UpdateDotGlowMaterial();
             UpdateArrowGlowMaterial();
             UpdateAccDotMaterial();
+            UpdateOutlineMaterial();
             
             UpdateNoteMaterial();
             UpdateBombMaterial();
@@ -136,6 +138,23 @@ namespace NoteTweaks.Managers
 
             // uncomment later maybe
             // Utils.Materials.RepairShader(AccDotDepthMaterial);
+        }
+        
+        private static void UpdateOutlineMaterial()
+        {
+            if (OutlineMaterial != null)
+            {
+                return;
+            }
+
+            Plugin.Log.Info("Creating outline material");
+            Material arrowMat = Resources.FindObjectsOfTypeAll<Material>().ToList().Find(x => x.name == "NoteArrowHD");
+            OutlineMaterial = new Material(arrowMat)
+            {
+                name = "NoteTweaks_OutlineMaterial",
+                color = Color.black,
+                shaderKeywords = arrowMat.shaderKeywords.Where(x => x != "_ENABLE_COLOR_INSTANCING" || x != "_CUTOUT_NONE").ToArray()
+            };
         }
         
         private static void UpdateNoteMaterial()
