@@ -423,6 +423,38 @@ namespace NoteTweaks.UI
             }
         }
 
+        public static void UpdateOutlines()
+        {
+            for (int i = 0; i < NoteContainer.transform.childCount; i++)
+            {
+                bool isLeft = i % 2 == 0;
+                
+                GameObject noteCube = NoteContainer.transform.GetChild(i).gameObject;
+                if (noteCube.name.Contains("_Chain_") || noteCube.name.Contains("_Bomb_"))
+                {
+                    // TODO
+                    continue;
+                }
+                
+                Transform noteOutline = noteCube.transform.Find("NoteOutline");
+                if (noteOutline)
+                {
+                    noteOutline.gameObject.SetActive(Plugin.Config.EnableNoteOutlines);
+                    noteOutline.localScale = (Vector3.one * (Plugin.Config.NoteOutlineScale / 100f)) + Vector3.one;
+
+                    if (noteOutline.gameObject.TryGetComponent(out MeshRenderer renderer))
+                    {
+                        renderer.material.SetColor(Color0, isLeft ? Plugin.Config.NoteOutlineLeftColor : Plugin.Config.NoteOutlineRightColor);
+                    }
+                    
+                    /*if (noteOutline.gameObject.TryGetComponent(out MaterialPropertyBlockController controller))
+                    {
+                        controller.materialPropertyBlock.SetColor(Color0, isLeft ? Plugin.Config.NoteOutlineLeftColor : Plugin.Config.NoteOutlineRightColor);
+                    }*/
+                }
+            }
+        }
+
         private static void CreateChainNote(BurstSliderGameNoteController chainPrefab, string extraName, int cell, int linkNum)
         {
             GameObject chainNote = Instantiate(chainPrefab.transform.GetChild(0).gameObject, NoteContainer.transform);
@@ -487,6 +519,16 @@ namespace NoteTweaks.UI
             noteCube.name = "_NoteTweaks_PreviewNote_" + extraName;
             DestroyImmediate(noteCube.transform.Find("BigCuttable").gameObject);
             DestroyImmediate(noteCube.transform.Find("SmallCuttable").gameObject);
+            
+            if (Outlines.InvertedNoteMesh == null)
+            {
+                if (noteCube.TryGetComponent(out MeshFilter cubeMeshFilter))
+                {
+                    Outlines.UpdateDefaultMesh(cubeMeshFilter.sharedMesh);
+                }
+            }
+
+            Outlines.AddOutlineObject(noteCube.transform);
             
             Vector3 position = new Vector3(((NoteSize / 2) + (cell % 2) * NoteSize) + 0.1f, (-(int)Math.Floor((float)cell / 2) * NoteSize) + NoteSize + 0.15f, 0);
             noteCube.transform.localPosition = position;
@@ -796,6 +838,7 @@ namespace NoteTweaks.UI
                             UpdateDotScale();
                             UpdateDotRotation();
                             UpdateNoteScale();
+                            UpdateOutlines();
                             UpdateVisibility();
 
                             NoteContainer.SetActive(true);
