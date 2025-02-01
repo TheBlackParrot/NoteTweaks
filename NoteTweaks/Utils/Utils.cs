@@ -29,7 +29,7 @@ namespace NoteTweaks.Utils
 
             return new Vector2(x, y);
         }
-        public static Mesh GenerateFaceMesh(int sides)
+        public static Mesh GenerateFaceMesh(int sides, float size = 1f)
         {
             // no silly gooses here
             sides = Math.Max(4, sides);
@@ -39,7 +39,7 @@ namespace NoteTweaks.Utils
             List<Vector3> vertices = new List<Vector3> { Vector3.zero };
             for (float i = 0; i < 360f; i += 360f / sides)
             {
-                vertices.Add(PointOnCircle(0.5f, i, Vector2.zero));
+                vertices.Add(PointOnCircle(0.5f * size, i, Vector2.zero));
             }
             
             List<int> triangles = new List<int>();
@@ -64,28 +64,85 @@ namespace NoteTweaks.Utils
 
         public static Mesh GenerateBasicTriangleMesh()
         {
-            return GenerateTriangleMesh(new Vector2(0.3f, 0.0933f), new Vector2(0f, -0.0033f));
+            return GenerateTriangleMesh(new Vector2(0.3f, 0.0933f), new Vector2(0f, 0.0033f), new Vector3(0f, 0f, 180f));
         }
-        
-        public static Mesh GenerateTriangleMesh(Vector2 size, Vector2 offset = default)
+
+        private static Mesh GenerateTriangleMesh(Vector2 size, Vector2 offset = default, Vector3 rotation = default)
         {
+            Quaternion newRotation = new Quaternion
+            {
+                eulerAngles = rotation
+            };
+            
             float negativeX = (-1f * (size.x / 2f)) + offset.x;
             float positiveX = (size.x / 2f) + offset.x;
             float negativeY = (-1f * (size.y / 2f)) + offset.y;
             float positiveY = (size.y / 2f) + offset.y;
             
+            Vector3[] vertices =
+            {
+                newRotation * new Vector3(positiveX, negativeY, 0f),
+                newRotation * new Vector3(0f, positiveY, 0f),
+                newRotation * new Vector3(negativeX, negativeY, 0f)
+            };
+            
             Mesh mesh = new Mesh
             {
-                vertices = new []
-                {
-                    new Vector3(negativeX, positiveY, 0f),
-                    new Vector3(0f, negativeY, 0f),
-                    new Vector3(positiveX, positiveY, 0f)
-                },
+                vertices = vertices,
                 triangles = new [] { 2, 1, 0 }
             };
             mesh.Optimize();
             
+            return mesh;
+        }
+        
+        // ...fuck
+        public static Mesh GenerateStarMesh(int sides)
+        {
+            Mesh centerMesh = GenerateFaceMesh(sides, 0.5f);
+            
+            Mesh[] triangleMeshes = new Mesh[sides];
+            for (int i = 0; i < sides; i++)
+            {
+                triangleMeshes[i] = GenerateTriangleMesh(new Vector2(1f / sides, 0.25f), new Vector2(0f, 0.5f), new Vector3(0f, 180f, i * (sides / 360f)));
+            }
+
+            int verticesCount = (sides * triangleMeshes[0].vertices.Length) + centerMesh.vertices.Length;
+            int trianglesCount = (sides * triangleMeshes[0].triangles.Length) + centerMesh.triangles.Length;
+            
+            Vector3[] vertices = new Vector3[verticesCount];
+            int[] triangles = new int[trianglesCount];
+            for (int i = 0; i < centerMesh.vertices.Length; i++)
+            {
+                vertices[i] = centerMesh.vertices[i];
+            }
+            for (int i = 0; i < centerMesh.triangles.Length; i++)
+            {
+                triangles[i] = centerMesh.triangles[i];
+            }
+            
+            for(int i = 0; i < triangleMeshes.Length; i++)
+            {
+                int vertLength = triangleMeshes[i].vertices.Length - 1;
+                int triLength = triangleMeshes[i].triangles.Length - 1;
+                
+                for (int j = 0; j < vertLength; j++)
+                {
+                    vertices[(i * vertLength) + j + centerMesh.vertices.Length] = triangleMeshes[i].vertices[j];
+                }
+                
+                for (int j = 0; j < triLength; j++)
+                {
+                    triangles[(i * triLength) + j + centerMesh.triangles.Length] = triangleMeshes[i].triangles[j] + (i * triLength);   
+                }
+            }
+            
+            Mesh mesh = new Mesh
+            {
+                vertices = vertices,
+                triangles = triangles
+            };
+
             return mesh;
         }
 
