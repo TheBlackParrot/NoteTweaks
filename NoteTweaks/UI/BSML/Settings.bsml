@@ -2,7 +2,7 @@
           xsi:noNamespaceSchemaLocation="https://monkeymanboy.github.io/BSML-Docs/BSMLSchema.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <horizontal vertical-fit="Unconstrained" horizontal-fit="PreferredSize" pref-width="120" child-expand-width="true" size-delta="-6 6">
         <page-button pref-width="4" pref-height="4" tags="LeftButton" direction="Left"/>
-        <tab-selector child-expand-width="true" child-control-width="true" tab-tag="tabs" id="tabSelector" page-count="4" left-button-tag="LeftButton" right-button-tag="RightButton"/>
+        <tab-selector child-expand-width="true" child-control-width="true" tab-tag="tabs" id="tabSelector" page-count="5" left-button-tag="LeftButton" right-button-tag="RightButton"/>
         <page-button pref-width="4" pref-height="4" tags="RightButton" direction="Right"/>
     </horizontal>
     
@@ -155,6 +155,38 @@
         </vertical>
     </tab>
     
+    <tab tags="tabs" tab-name="Outlines">
+        <vertical vertical-fit="PreferredSize" pref-height="70" pref-width="100" anchored-position-x="4">
+            <vertical vertical-fit="PreferredSize" pad-left="1" pad-right="1" pref-width="100" child-control-height="false">
+                <toggle-setting apply-on-change="true" value="EnableNoteOutlines" text="Enable Outlines"
+                                hover-hint="Render an outline around the note"/>
+                <slider-setting apply-on-change="true" value="NoteOutlineScale" text="Outline Size"
+                                min="1" max="25" increment="1" show-buttons="true" integer-only="true"
+                                hover-hint="Size of outlines around notes"/>
+                
+                <horizontal><text text="-----" font-size="2" color="#00000000"/></horizontal>
+                
+                <tab-selector tab-tag="outlineTabs" id="outlineTabSelector"/>
+            </vertical>
+
+            <vertical vertical-fit="PreferredSize" pref-height="37" pref-width="100">
+                <tab tags="outlineTabs" tab-name="Left">
+                    <scroll-view spacing="0" pref-height="50" child-expand-width="true">
+                        <color-setting apply-on-change="true" value="NoteOutlineLeftColor" text="Outline Color"
+                                       hover-hint="Color of the outline around left-handed notes"/>
+                    </scroll-view>
+                </tab>
+                
+                <tab tags="outlineTabs" tab-name="Right">
+                    <scroll-view spacing="0" pref-height="50" child-expand-width="true">
+                        <color-setting apply-on-change="true" value="NoteOutlineRightColor" text="Outline Color"
+                                       hover-hint="Color of the outline around right-handed notes"/>
+                    </scroll-view>
+                </tab>
+            </vertical>
+        </vertical>
+    </tab>
+
     <tab tags="tabs" tab-name="Symbols">
         <vertical vertical-fit="PreferredSize" pref-height="70" pref-width="100" anchored-position-x="4">
             <vertical vertical-fit="PreferredSize" pad-left="1" pad-right="1" pref-width="100" child-control-height="false">
@@ -162,9 +194,9 @@
                                 hover-hint="Show glow around symbols"/>
                 <dropdown-list-setting apply-on-change="true" value="GlowTexture" text="Glow Texture" choices="glowTextureChoices"
                                        hover-hint="Change the glow texture for symbols"/>
-                
+
                 <horizontal><text text="-----" font-size="2" color="#00000000"/></horizontal>
-                
+
                 <tab-selector tab-tag="symbolTabs" id="symbolTabSelector"/>
             </vertical>
 
@@ -180,7 +212,7 @@
                                         hover-hint="Normalizes the brightness of the face color by the highest RGB component"/>
 
                         <horizontal><text text="-----" font-size="4" color="#00000000" active="~EnableFaceGlow"/></horizontal>
-                        
+
                         <color-setting apply-on-change="true" value="LeftFaceGlowColor" text="Left Glow Color" active="~EnableFaceGlow"
                                        hover-hint="Color of the glow around face symbols"/>
                         <slider-setting apply-on-change="true" value="LeftFaceGlowColorNoteSkew" text="Skew Towards Note Color" active="~EnableFaceGlow"
@@ -204,7 +236,7 @@
                                         hover-hint="Vertical offset (Y-axis) of glow textures on face symbols for left-hand notes"/>
                     </scroll-view>
                 </tab>
-                
+
                 <tab tags="symbolTabs" tab-name="Right">
                     <scroll-view spacing="0" pref-height="50" child-expand-width="true">
                         <color-setting apply-on-change="true" value="RightFaceColor" text="Right Face Symbol Color"
@@ -214,9 +246,9 @@
                                         hover-hint="Skew symbol colors towards the note color"/>
                         <toggle-setting apply-on-change="true" value="NormalizeRightFaceColor" text="Normalize Color Brightness"
                                         hover-hint="Normalizes the brightness of the face color by the highest RGB component"/>
-                        
+
                         <horizontal><text text="-----" font-size="4" color="#00000000" active="~EnableFaceGlow"/></horizontal>
-            
+
                         <color-setting apply-on-change="true" value="RightFaceGlowColor" text="Right Glow Color" active="~EnableFaceGlow"
                                        hover-hint="Color of the glow around face symbols"/>
                         <slider-setting apply-on-change="true" value="RightFaceGlowColorNoteSkew" text="Skew Towards Note Color" active="~EnableFaceGlow"

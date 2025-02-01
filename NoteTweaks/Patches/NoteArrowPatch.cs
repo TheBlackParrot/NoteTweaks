@@ -199,6 +199,8 @@ namespace NoteTweaks.Patches
                 {
                     return;
                 }
+                
+                Transform noteRoot = __instance.transform.GetChild(0);
 
                 if (Plugin.Config.EnableAccDot && __instance.gameplayType != NoteData.GameplayType.BurstSliderHead && !IsUsingHiddenTypeModifier)
                 {
@@ -245,7 +247,7 @@ namespace NoteTweaks.Patches
                     }
                 }
                 
-                if (__instance.transform.GetChild(0).TryGetComponent(out MeshRenderer cubeRenderer))
+                if (noteRoot.TryGetComponent(out MeshRenderer cubeRenderer))
                 {
                     cubeRenderer.sharedMaterial = Materials.NoteMaterial;
                 }
@@ -256,7 +258,7 @@ namespace NoteTweaks.Patches
                 GameNoteController instance = __instance;
                 objs.Do(objName =>
                 {
-                    Transform glowTransform = instance.transform.GetChild(0).Find(objName);
+                    Transform glowTransform = noteRoot.Find(objName);
                     if (glowTransform != null)
                     {
                         ColorType colorType = instance._noteData.colorType;
@@ -288,6 +290,19 @@ namespace NoteTweaks.Patches
                         }
                     } 
                 });
+
+                if (Outlines.InvertedNoteMesh == null)
+                {
+                    if (noteRoot.TryGetComponent(out MeshFilter cubeMeshFilter))
+                    {
+                        Outlines.UpdateDefaultMesh(cubeMeshFilter.sharedMesh);
+                    }
+                }
+
+                if (Plugin.Config.EnableNoteOutlines)
+                {
+                    Outlines.AddOutlineObject(noteRoot);
+                }
 
                 if (!IsAllowedToScaleNotes)
                 {
