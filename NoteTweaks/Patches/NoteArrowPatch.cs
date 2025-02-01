@@ -498,6 +498,8 @@ namespace NoteTweaks.Patches
                                         CutoutEffect cutoutEffect = originalDotTransform.gameObject.AddComponent<CutoutEffect>();
                                         cutoutEffect._materialPropertyBlockController = materialPropertyBlockController;
                                         cutoutEffect._useRandomCutoutOffset = parentCutoutEffect._useRandomCutoutOffset;
+                                        //cutoutEffect._cutout = 0f;
+                                        //materialPropertyBlockController.materialPropertyBlock.SetFloat(CutoutEffect._cutoutPropertyID, 0f);
                                     }
                                 }
                             }
@@ -595,15 +597,25 @@ namespace NoteTweaks.Patches
                     return true;
                 }
                 
-                Color wantedColor = __instance.materialPropertyBlock.GetColor(ColorNoteVisuals._colorId);
-                __instance.materialPropertyBlock.SetFloat(CutoutEffect._cutoutPropertyID, Mathf.Min(Mathf.Max(Mathf.Abs(wantedColor.a - 1.0f), 0f), 1f));
+                if (!__instance.transform.parent.parent.TryGetComponent(out GameNoteController gameNoteController))
+                {
+                    return true;
+                }
 
+                Color wantedColor = __instance.materialPropertyBlock.GetColor(ColorNoteVisuals._colorId);
+                float originalAlpha = wantedColor.a;
+                float fixedAlpha = originalAlpha * (gameNoteController._noteData.colorType == ColorType.ColorA ? Plugin.Config.LeftGlowIntensity : Plugin.Config.RightGlowIntensity);
+                
+                __instance.materialPropertyBlock.SetFloat(CutoutEffect._cutoutPropertyID, Mathf.Min(Mathf.Max(Mathf.Abs(originalAlpha - 1.0f), 0f), 1f));
+                
                 Transform glowTransform = __instance.transform.parent.Find("AddedNoteCircleGlow");
                 if (glowTransform != null)
                 {
                     if (glowTransform.TryGetComponent(out MaterialPropertyBlockController glowPropertyBlockController))
                     {
-                        glowPropertyBlockController.materialPropertyBlock.SetColor(ColorNoteVisuals._colorId, wantedColor);
+                        Color wantedGlowColor = glowPropertyBlockController.materialPropertyBlock.GetColor(ColorNoteVisuals._colorId);
+                        wantedGlowColor.a = fixedAlpha;
+                        glowPropertyBlockController.materialPropertyBlock.SetColor(ColorNoteVisuals._colorId, wantedGlowColor);
                         glowPropertyBlockController.ApplyChanges();
                     }
                 }
