@@ -601,10 +601,8 @@ namespace NoteTweaks.Patches
                 {
                     return true;
                 }
-
-                Color wantedColor = __instance.materialPropertyBlock.GetColor(ColorNoteVisuals._colorId);
-                float originalAlpha = wantedColor.a;
-                float fixedAlpha = originalAlpha * (gameNoteController._noteData.colorType == ColorType.ColorA ? Plugin.Config.LeftGlowIntensity : Plugin.Config.RightGlowIntensity);
+                
+                float originalAlpha = __instance.materialPropertyBlock.GetColor(ColorNoteVisuals._colorId).a;
                 
                 __instance.materialPropertyBlock.SetFloat(CutoutEffect._cutoutPropertyID, Mathf.Min(Mathf.Max(Mathf.Abs(originalAlpha - 1.0f), 0f), 1f));
                 
@@ -614,7 +612,7 @@ namespace NoteTweaks.Patches
                     if (glowTransform.TryGetComponent(out MaterialPropertyBlockController glowPropertyBlockController))
                     {
                         Color wantedGlowColor = glowPropertyBlockController.materialPropertyBlock.GetColor(ColorNoteVisuals._colorId);
-                        wantedGlowColor.a = fixedAlpha;
+                        wantedGlowColor.a = originalAlpha * (gameNoteController._noteData.colorType == ColorType.ColorA ? Plugin.Config.LeftGlowIntensity : Plugin.Config.RightGlowIntensity);
                         glowPropertyBlockController.materialPropertyBlock.SetColor(ColorNoteVisuals._colorId, wantedGlowColor);
                         glowPropertyBlockController.ApplyChanges();
                     }
