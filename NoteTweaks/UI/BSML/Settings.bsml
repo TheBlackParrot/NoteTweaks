@@ -197,10 +197,10 @@
                         <horizontal><text text="-----" font-size="4" color="#00000000" active="~EnableFaceGlow"/></horizontal>
 
                         <slider-setting apply-on-change="true" value="LeftGlowOffsetX" text="Horizontal Glow Offset" active="~EnableFaceGlow"
-                                        min="-2.0" max="2.0" increment="0.005" show-buttons="true" formatter="PreciseFloatFormatter"
+                                        min="-0.2" max="0.2" increment="0.001" show-buttons="true" formatter="PreciseFloatFormatter"
                                         hover-hint="Horizontal offset (X-axis) of glow textures on face symbols for left-hand notes"/>
                         <slider-setting apply-on-change="true" value="LeftGlowOffsetY" text="Vertical Glow Offset" active="~EnableFaceGlow"
-                                        min="-2.0" max="2.0" increment="0.005" show-buttons="true" formatter="PreciseFloatFormatter"
+                                        min="-0.2" max="0.2" increment="0.001" show-buttons="true" formatter="PreciseFloatFormatter"
                                         hover-hint="Vertical offset (Y-axis) of glow textures on face symbols for left-hand notes"/>
                     </scroll-view>
                 </tab>
@@ -233,10 +233,10 @@
                         <horizontal><text text="-----" font-size="4" color="#00000000" active="~EnableFaceGlow"/></horizontal>
 
                         <slider-setting apply-on-change="true" value="RightGlowOffsetX" text="Horizontal Glow Offset" active="~EnableFaceGlow"
-                                        min="-2.0" max="2.0" increment="0.005" show-buttons="true" formatter="PreciseFloatFormatter"
+                                        min="-0.2" max="0.2" increment="0.001" show-buttons="true" formatter="PreciseFloatFormatter"
                                         hover-hint="Horizontal offset (X-axis) of glow textures on face symbols for right-hand notes"/>
                         <slider-setting apply-on-change="true" value="RightGlowOffsetY" text="Vertical Glow Offset" active="~EnableFaceGlow"
-                                        min="-2.0" max="2.0" increment="0.005" show-buttons="true" formatter="PreciseFloatFormatter"
+                                        min="-0.2" max="0.2" increment="0.001" show-buttons="true" formatter="PreciseFloatFormatter"
                                         hover-hint="Vertical offset (Y-axis) of glow textures on face symbols for right-hand notes"/>
                     </scroll-view>
                 </tab>
@@ -262,10 +262,10 @@
                 <horizontal><text text="-----" font-size="4" color="#00000000"/></horizontal>
         
                 <slider-setting apply-on-change="true" value="ArrowOffsetX" text="Horizontal Arrow Offset"
-                                min="-2.0" max="2.0" increment="0.005" show-buttons="true" formatter="PreciseFloatFormatter"
+                                min="-0.2" max="0.2" increment="0.001" show-buttons="true" formatter="PreciseFloatFormatter"
                                 hover-hint="Horizontal offset (X-axis) of note arrows"/>
                 <slider-setting apply-on-change="true" value="ArrowOffsetY" text="Vertical Arrow Offset"
-                                min="-2.0" max="2.0" increment="0.005" show-buttons="true" formatter="PreciseFloatFormatter"
+                                min="-0.2" max="0.2" increment="0.001" show-buttons="true" formatter="PreciseFloatFormatter"
                                 hover-hint="Vertical offset (Y-axis) of note arrows"/>
     
                 <horizontal><text text="-----" font-size="4" color="#00000000"/></horizontal>
@@ -304,10 +304,10 @@
                 <horizontal><text text="-----" font-size="2" color="#00000000"/></horizontal>
         
                 <slider-setting apply-on-change="true" value="DotOffsetX" text="Horizontal Dot Offset"
-                                min="-2.0" max="2.0" increment="0.005" show-buttons="true" formatter="PreciseFloatFormatter"
+                                min="-0.2" max="0.2" increment="0.001" show-buttons="true" formatter="PreciseFloatFormatter"
                                 hover-hint="Horizontal offset (X-axis) of note dots"/>
                 <slider-setting apply-on-change="true" value="DotOffsetY" text="Vertical Dot Offset"
-                                min="-2.0" max="2.0" increment="0.005" show-buttons="true" formatter="PreciseFloatFormatter"
+                                min="-0.2" max="0.2" increment="0.001" show-buttons="true" formatter="PreciseFloatFormatter"
                                 hover-hint="Vertical offset (Y-axis) of note dots"/>
     
                 <horizontal><text text="-----" font-size="2" color="#00000000"/></horizontal>
