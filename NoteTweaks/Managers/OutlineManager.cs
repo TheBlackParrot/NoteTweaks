@@ -106,11 +106,21 @@ namespace NoteTweaks.Managers
 
         public static void AddOutlineObject(Transform rootTransform, Mesh wantedMesh)
         {
-            if (rootTransform.Find("NoteOutline") != null)
+            if (wantedMesh == InvertedBombMesh)
             {
-                return;
+                if (rootTransform.Find("Mesh").Find("NoteOutline") != null)
+                {
+                    return;
+                }
             }
-            
+            else
+            {
+                if (rootTransform.Find("NoteOutline") != null)
+                {
+                    return;
+                }
+            }
+
             GameObject outlineObject = new GameObject();
             outlineObject.SetActive(false);
             outlineObject.AddComponent<MeshFilter>();
