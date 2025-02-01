@@ -47,6 +47,7 @@ namespace NoteTweaks.UI
             }
 
             Managers.Meshes.DotMesh = Utils.Meshes.GenerateFaceMesh(Plugin.Config.DotMeshSides);
+            //Managers.Meshes.DotMesh = Utils.Meshes.GenerateStarMesh(Plugin.Config.DotMeshSides);
 
             for (int i = 0; i < NoteContainer.transform.childCount; i++)
             {
