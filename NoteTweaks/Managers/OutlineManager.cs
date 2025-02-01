@@ -1,4 +1,5 @@
-﻿using IPA.Utilities;
+﻿using HarmonyLib;
+using IPA.Utilities;
 using UnityEngine;
 using UnityEngine.Rendering;
 #pragma warning disable CS0612 // Type or member is obsolete
@@ -151,6 +152,11 @@ namespace NoteTweaks.Managers
                     // bombs
                     outlineMaterialSwitcher._value = switcherInMesh._value;
                 }
+            }
+
+            if (rootTransform.TryGetComponent(out CutoutAnimateEffect cutoutAnimateEffect))
+            {
+                cutoutAnimateEffect._cuttoutEffects.AddToArray(outlineCutoutEffect);
             }
             
             clonedOutlineObject.name = "NoteOutline";

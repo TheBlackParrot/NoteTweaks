@@ -432,6 +432,25 @@ namespace NoteTweaks.UI
                 bool isLeft = noteCube.name.Contains("_L_");
                 bool isBomb = noteCube.name.Contains("_Bomb_");
                 
+                Color noteColor = Plugin.Config.BombColor;
+                if (noteCube.TryGetComponent(out MaterialPropertyBlockController noteMaterialController))
+                {
+                    noteColor = noteMaterialController.materialPropertyBlock.GetColor(Color0);
+                }
+                
+                float colorScalar = noteColor.maxColorComponent;
+
+                if (colorScalar != 0 && !isBomb && isLeft ? Plugin.Config.NormalizeLeftOutlineColor : Plugin.Config.NormalizeRightOutlineColor)
+                {
+                    noteColor /= colorScalar;
+                }
+                
+                Color outlineColor = Plugin.Config.BombOutlineColor;
+                if (!isBomb)
+                {
+                    outlineColor = Color.LerpUnclamped(isLeft ? Plugin.Config.NoteOutlineLeftColor : Plugin.Config.NoteOutlineRightColor, noteColor, isLeft ? Plugin.Config.NoteOutlineLeftColorSkew : Plugin.Config.NoteOutlineRightColorSkew);   
+                }
+                
                 Transform noteOutline = noteCube.transform.FindChildRecursively("NoteOutline");
                 if (noteOutline)
                 {
@@ -440,7 +459,7 @@ namespace NoteTweaks.UI
                     
                     if (noteOutline.gameObject.TryGetComponent(out MaterialPropertyBlockController controller))
                     {
-                        controller.materialPropertyBlock.SetColor(ColorNoteVisuals._colorId, isBomb ? Plugin.Config.BombOutlineColor : isLeft ? Plugin.Config.NoteOutlineLeftColor : Plugin.Config.NoteOutlineRightColor);
+                        controller.materialPropertyBlock.SetColor(ColorNoteVisuals._colorId, outlineColor);
                         controller.ApplyChanges();
                     }
                 }

@@ -139,12 +139,12 @@ namespace NoteTweaks.Patches
                     cubeRenderer.sharedMaterial = Materials.NoteMaterial;
                 }
                 
+                ColorType colorType = __instance._noteData.colorType;
+                bool isLeft = colorType == ColorType.ColorA;
+                
                 Transform glowTransform = chainRoot.Find("AddedNoteCircleGlow");
                 if (glowTransform != null)
                 {
-                    ColorType colorType = __instance._noteData.colorType;
-                    bool isLeft = colorType == ColorType.ColorA;
-                    
                     if (glowTransform.TryGetComponent(out MeshRenderer glowRenderer))
                     {
                         Enum.TryParse(isLeft ? Plugin.Config.LeftGlowBlendOp : Plugin.Config.RightGlowBlendOp, out BlendOp operation);
@@ -186,12 +186,38 @@ namespace NoteTweaks.Patches
                     
                     noteOutline.gameObject.SetActive(Plugin.Config.EnableNoteOutlines);
                     noteOutline.localScale = (Vector3.one * (Plugin.Config.NoteOutlineScale / 100f)) + Vector3.one;
+
+                    if (noteOutline.gameObject.TryGetComponent(out MaterialPropertyBlockController controller))
+                    {
+                        Color noteColor = Plugin.Config.BombColor;
+                        if (cubeRenderer.TryGetComponent(out MaterialPropertyBlockController noteMaterialController))
+                        {
+                            noteColor = noteMaterialController.materialPropertyBlock.GetColor(ColorNoteVisuals._colorId);
+                        }
+                
+                        float colorScalar = noteColor.maxColorComponent;
+
+                        if (colorScalar != 0 && isLeft ? Plugin.Config.NormalizeLeftOutlineColor : Plugin.Config.NormalizeRightOutlineColor)
+                        {
+                            noteColor /= colorScalar;
+                        }
+
+                        Color outlineColor = Color.LerpUnclamped(isLeft ? Plugin.Config.NoteOutlineLeftColor : Plugin.Config.NoteOutlineRightColor, noteColor, isLeft ? Plugin.Config.NoteOutlineLeftColorSkew : Plugin.Config.NoteOutlineRightColorSkew);
+                        
+                        controller.materialPropertyBlock.SetColor(ColorNoteVisuals._colorId, outlineColor);
+                        controller.ApplyChanges();
+                    }
+                    /*Outlines.AddOutlineObject(chainRoot, Outlines.InvertedChainMesh);
+                    Transform noteOutline = chainRoot.Find("NoteOutline");
+                    
+                    noteOutline.gameObject.SetActive(Plugin.Config.EnableNoteOutlines);
+                    noteOutline.localScale = (Vector3.one * (Plugin.Config.NoteOutlineScale / 100f)) + Vector3.one;
                     
                     if (noteOutline.gameObject.TryGetComponent(out MaterialPropertyBlockController controller))
                     {
                         controller.materialPropertyBlock.SetColor(ColorNoteVisuals._colorId, __instance._noteData.colorType == ColorType.ColorA ? Plugin.Config.NoteOutlineLeftColor : Plugin.Config.NoteOutlineRightColor);
                         controller.ApplyChanges();
-                    }
+                    }*/
                 }
                 
                 Vector3 scale = Vectors.Max(Plugin.Config.NoteScale * Plugin.Config.LinkScale, 0.1f);
@@ -275,6 +301,9 @@ namespace NoteTweaks.Patches
                 }
                 
                 List<string> objs = new List<string> { "NoteArrowGlow", "AddedNoteCircleGlow" };
+                
+                ColorType colorType = __instance._noteData.colorType;
+                bool isLeft = colorType == ColorType.ColorA;
 
                 // ok buddy, ok pal
                 GameNoteController instance = __instance;
@@ -283,9 +312,6 @@ namespace NoteTweaks.Patches
                     Transform glowTransform = noteRoot.Find(objName);
                     if (glowTransform != null)
                     {
-                        ColorType colorType = instance._noteData.colorType;
-                        bool isLeft = colorType == ColorType.ColorA;
-                    
                         if (glowTransform.TryGetComponent(out MeshRenderer glowRenderer))
                         {
                             Enum.TryParse(isLeft ? Plugin.Config.LeftGlowBlendOp : Plugin.Config.RightGlowBlendOp, out BlendOp operation);
@@ -321,7 +347,7 @@ namespace NoteTweaks.Patches
                     }
                 }
 
-                if (Plugin.Config.EnableNoteOutlines)
+                /*if (Plugin.Config.EnableNoteOutlines)
                 {
                     Outlines.AddOutlineObject(noteRoot, Outlines.InvertedNoteMesh);
                     Transform noteOutline = noteRoot.Find("NoteOutline");
@@ -332,6 +358,35 @@ namespace NoteTweaks.Patches
                     if (noteOutline.gameObject.TryGetComponent(out MaterialPropertyBlockController controller))
                     {
                         controller.materialPropertyBlock.SetColor(ColorNoteVisuals._colorId, __instance._noteData.colorType == ColorType.ColorA ? Plugin.Config.NoteOutlineLeftColor : Plugin.Config.NoteOutlineRightColor);
+                        controller.ApplyChanges();
+                    }
+                }*/
+                if (Plugin.Config.EnableNoteOutlines)
+                {
+                    Outlines.AddOutlineObject(noteRoot, Outlines.InvertedNoteMesh);
+                    Transform noteOutline = noteRoot.Find("NoteOutline");
+                    
+                    noteOutline.gameObject.SetActive(Plugin.Config.EnableNoteOutlines);
+                    noteOutline.localScale = (Vector3.one * (Plugin.Config.NoteOutlineScale / 100f)) + Vector3.one;
+
+                    if (noteOutline.gameObject.TryGetComponent(out MaterialPropertyBlockController controller))
+                    {
+                        Color noteColor = Plugin.Config.BombColor;
+                        if (cubeRenderer.TryGetComponent(out MaterialPropertyBlockController noteMaterialController))
+                        {
+                            noteColor = noteMaterialController.materialPropertyBlock.GetColor(ColorNoteVisuals._colorId);
+                        }
+                
+                        float colorScalar = noteColor.maxColorComponent;
+
+                        if (colorScalar != 0 && isLeft ? Plugin.Config.NormalizeLeftOutlineColor : Plugin.Config.NormalizeRightOutlineColor)
+                        {
+                            noteColor /= colorScalar;
+                        }
+
+                        Color outlineColor = Color.LerpUnclamped(isLeft ? Plugin.Config.NoteOutlineLeftColor : Plugin.Config.NoteOutlineRightColor, noteColor, isLeft ? Plugin.Config.NoteOutlineLeftColorSkew : Plugin.Config.NoteOutlineRightColorSkew);
+                        
+                        controller.materialPropertyBlock.SetColor(ColorNoteVisuals._colorId, outlineColor);
                         controller.ApplyChanges();
                     }
                 }
@@ -625,6 +680,39 @@ namespace NoteTweaks.Patches
                         {
                             newGlowMeshRenderer.sharedMaterial = Materials.DotGlowMaterial;
                         }
+                    }
+                }
+            }
+        }
+
+        [HarmonyPatch]
+        public static class CutoutEffectForOutlinesPatch
+        {
+            [UsedImplicitly]
+            static MethodInfo TargetMethod() => AccessTools.FirstMethod(typeof(CutoutEffect),
+                m => m.Name == nameof(CutoutEffect.SetCutout) &&
+                     m.GetParameters().Any(p => p.Name == "cutoutOffset"));
+            
+            // ReSharper disable once InconsistentNaming
+            internal static void Postfix(CutoutEffect __instance, in float cutout, in Vector3 cutoutOffset)
+            {
+                if (__instance.transform.name == "NoteCube")
+                {
+                    if (!Plugin.Config.Enabled || AutoDisable || !Plugin.Config.EnableNoteOutlines)
+                    {
+                        return;
+                    }
+                    
+                    Transform noteOutlineTransform = __instance.transform.Find("NoteOutline");
+                    if (!noteOutlineTransform)
+                    {
+                        return;
+                    }
+                    
+                    if (noteOutlineTransform.TryGetComponent(out CutoutEffect outlineCutoutEffect))
+                    {
+                        // i feel like this should fade in *slower* than normal note cutouts
+                        outlineCutoutEffect.SetCutout(Mathf.Pow(cutout, 0.5f), cutoutOffset);
                     }
                 }
             }
