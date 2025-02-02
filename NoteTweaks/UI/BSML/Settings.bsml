@@ -29,13 +29,13 @@
                                 min="-2" max="2" increment="0.01" show-buttons="true"
                                 hover-hint="How much reflection textures effect notes (DEFAULT: 95%)"/>
                 <slider-setting apply-on-change="true" value="RimCameraDistanceOffset" text="Mask Sharpness"
-                                min="-20" max="20" increment="0.5" show-buttons="true"
+                                min="-40" max="40" increment="0.5" show-buttons="true"
                                 hover-hint="Sharpness of the reflection's rim light mask (DEFAULT: 5.00)"/>
 
                 <horizontal><text text="-----" font-size="4" color="#00000000"/></horizontal>
                 
                 <slider-setting apply-on-change="true" value="RimDarkening" text="Rim Darkening" formatter="PercentageFormatter"
-                                min="-3" max="3" increment="0.05" show-buttons="true"
+                                min="-4" max="4" increment="0.05" show-buttons="true"
                                 hover-hint="Amount to darken objects outside of the rim light area (DEFAULT: 20%)"/>
                 <slider-setting apply-on-change="true" value="RimOffset" text="Rim Offset" formatter="PercentageFormatter"
                                 min="-2" max="2" increment="0.01" show-buttons="true"
