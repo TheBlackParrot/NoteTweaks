@@ -105,5 +105,12 @@ namespace NoteTweaks.Configuration
         public Color NoteOutlineRightColor { get; set; } = Color.black;
         public float NoteOutlineRightColorSkew { get; set; } = 0.1f;
         public Color BombOutlineColor { get; set; } = Color.white;
+        
+        public bool EnableFog { get; set; } = true;
+        public bool EnableHeightFog { get; set; } = true;
+        public float FogStartOffset { get; set; } = 100f;
+        public float FogScale { get; set; } = 0.5f;
+        public float FogHeightOffset { get; set; } = 0f;
+        public float FogHeightScale { get; set; } = 2.5f;
     }
 }

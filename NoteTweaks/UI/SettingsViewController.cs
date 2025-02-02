@@ -854,6 +854,63 @@ namespace NoteTweaks.UI
             }
         }
         
+        protected float FogStartOffset
+        {
+            get => _config.FogStartOffset;
+            set
+            {
+                _config.FogStartOffset = value;
+                Materials.UpdateFogValues("FogStartOffset");
+            }
+        }
+        protected float FogScale
+        {
+            get => _config.FogScale;
+            set
+            {
+                _config.FogScale = value;
+                Materials.UpdateFogValues("FogScale");
+            }
+        }
+        protected float FogHeightOffset
+        {
+            get => _config.FogHeightOffset;
+            set
+            {
+                _config.FogHeightOffset = value;
+                Materials.UpdateFogValues("FogHeightOffset");
+            }
+        }
+        protected float FogHeightScale
+        {
+            get => _config.FogHeightScale;
+            set
+            {
+                _config.FogHeightScale = value;
+                Materials.UpdateFogValues("FogHeightScale");
+            }
+        }
+
+        protected bool EnableFog
+        {
+            get => _config.EnableFog;
+            set
+            {
+                _config.EnableFog = value;
+                Materials.UpdateFogValues("FogStartOffset");
+            }
+        }
+        
+        protected bool EnableHeightFog
+        {
+            get => _config.EnableHeightFog;
+            set
+            {
+                _config.EnableHeightFog = value;
+                Materials.UpdateFogValues("FogHeightOffset");
+            }
+        }
+        
         [UIValue("glowBlendOperationChoices")]
         [UsedImplicitly]
         // ReSharper disable once InconsistentNaming
