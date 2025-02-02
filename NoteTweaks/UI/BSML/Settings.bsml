@@ -158,7 +158,7 @@
     <tab tags="tabs" tab-name="Outlines">
         <vertical vertical-fit="PreferredSize" pref-height="70" pref-width="100" anchored-position-x="4">
             <vertical vertical-fit="PreferredSize" pad-left="1" pad-right="1" pref-width="100" child-control-height="false">
-                <toggle-setting apply-on-change="true" value="EnableNoteOutlines" text="Enable Outlines"
+                <toggle-setting apply-on-change="true" value="EnableNoteOutlines" text="Enable Note Outlines"
                                 hover-hint="Render an outline around the note"/>
                 <slider-setting apply-on-change="true" value="NoteOutlineScale" text="Outline Size"
                                 min="1" max="25" increment="1" show-buttons="true" integer-only="true"
@@ -196,6 +196,11 @@
 
                 <tab tags="outlineTabs" tab-name="Bombs">
                     <scroll-view spacing="0" pref-height="50" child-expand-width="true">
+                        <toggle-setting apply-on-change="true" value="EnableBombOutlines" text="Enable Bomb Outlines"
+                                        hover-hint="Render an outline around bombs"/>
+                        <slider-setting apply-on-change="true" value="BombOutlineScale" text="Outline Size"
+                                        min="1" max="25" increment="1" show-buttons="true" integer-only="true"
+                                        hover-hint="Size of outlines around bombs"/>
                         <color-setting apply-on-change="true" value="BombOutlineColor" text="Outline Color"
                                        hover-hint="Color of the outline around bombs"/>
                     </scroll-view>

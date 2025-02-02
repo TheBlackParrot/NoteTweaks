@@ -170,7 +170,7 @@ namespace NoteTweaks.Managers
             }
             
             clonedOutlineObject.name = "NoteOutline";
-            clonedOutlineObject.SetActive(Plugin.Config.EnableNoteOutlines);
+            clonedOutlineObject.SetActive(wantedMesh == InvertedBombMesh ? Plugin.Config.EnableBombOutlines : Plugin.Config.EnableNoteOutlines);
         }
     }
 }
