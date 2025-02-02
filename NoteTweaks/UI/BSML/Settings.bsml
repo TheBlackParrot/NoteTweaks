@@ -378,8 +378,8 @@
             <scroll-view spacing="0" pref-height="70" child-expand-width="true">
                 <toggle-setting apply-on-change="true" value="EnableFog" text="Enable Fog"
                                 hover-hint="Enable distance fog"/>
-                <slider-setting apply-on-change="true" value="FogStartOffset" text="Fog Start Offset"
-                                min="0" max="200" increment="1" show-buttons="true"
+                <slider-setting apply-on-change="true" value="FogStartOffset" text="Fog Start Offset" formatter="FakeIntFormatter"
+                                min="-100" max="200" increment="1" show-buttons="true"
                                 hover-hint="How far away to start decreasing fog amount"/>
                 <slider-setting apply-on-change="true" value="FogScale" text="Fog Scale"
                                 min="0" max="10" increment="0.01" show-buttons="true"
@@ -391,10 +391,10 @@
                                 hover-hint="Enable height fog"/>
                 
                 <slider-setting apply-on-change="true" value="FogHeightOffset" text="Fog Height Offset"
-                                min="-20" max="20" increment="0.1" show-buttons="true"
+                                min="-8" max="8" increment="0.1" show-buttons="true"
                                 hover-hint="How high up to start decreasing depth fog amount"/>
                 <slider-setting apply-on-change="true" value="FogHeightScale" text="Fog Scale"
-                                min="0.05" max="5" increment="0.05" show-buttons="true"
+                                min="0" max="5" increment="0.05" show-buttons="true"
                                 hover-hint="Tightness of fog values"/>
             </scroll-view>
         </vertical>
