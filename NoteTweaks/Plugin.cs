@@ -54,6 +54,14 @@ namespace NoteTweaks
             Config.DotPosition = Vectors.Max(Vectors.Min(Config.DotPosition, 0.2f), -0.2f);
             Config.LeftGlowOffset = Vectors.Max(Vectors.Min(Config.LeftGlowOffset, 0.2f), -0.2f);
             Config.RightGlowOffset = Vectors.Max(Vectors.Min(Config.RightGlowOffset, 0.2f), -0.2f);
+            
+            Config.NoteOutlineLeftColorSkew = Mathf.Max(0f, Mathf.Min(Config.NoteOutlineLeftColorSkew, 1.0f));
+            Config.NoteOutlineRightColorSkew = Mathf.Max(0f, Mathf.Min(Config.NoteOutlineRightColorSkew, 1.0f));
+            Config.NoteOutlineScale = Math.Max(Config.NoteOutlineScale, 0);
+            Config.BombOutlineScale = Math.Max(Config.BombOutlineScale, 0);
+            
+            Config.FogScale = Mathf.Max(Config.FogScale, 0.0f);
+            Config.FogHeightScale = Mathf.Max(Config.FogHeightScale, 0.0f);
         }
 
         [Init]
