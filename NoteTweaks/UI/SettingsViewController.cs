@@ -22,6 +22,7 @@ namespace NoteTweaks.UI
         public string PreciseFloatFormatter(float x) => x.ToString("F3");
         public string AccFormatter(int x) => (x + 100).ToString();
         public string DegreesFormatter(float x) => $"{x:0.#}\u00b0";
+        public string FakeIntFormatter(float x) => x.ToString("N0");
 
         internal static bool LoadTextures = false;
 
