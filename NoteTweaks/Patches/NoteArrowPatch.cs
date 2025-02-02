@@ -328,17 +328,30 @@ namespace NoteTweaks.Patches
                     } 
                 });
 
-                if (Outlines.InvertedNoteMesh == null)
+                if (__instance.gameplayType == NoteData.GameplayType.BurstSliderHead)
                 {
-                    if (noteRoot.TryGetComponent(out MeshFilter cubeMeshFilter))
+                    if (Outlines.InvertedChainHeadMesh == null)
                     {
-                        Outlines.UpdateDefaultNoteMesh(cubeMeshFilter.sharedMesh);
-                    }
+                        if (noteRoot.TryGetComponent(out MeshFilter cubeMeshFilter))
+                        {
+                            Outlines.UpdateDefaultChainHeadMesh(cubeMeshFilter.sharedMesh);
+                        }
+                    } 
+                }
+                else
+                {
+                    if (Outlines.InvertedNoteMesh == null)
+                    {
+                        if (noteRoot.TryGetComponent(out MeshFilter cubeMeshFilter))
+                        {
+                            Outlines.UpdateDefaultNoteMesh(cubeMeshFilter.sharedMesh);
+                        }
+                    }   
                 }
                 
                 if (Plugin.Config.EnableNoteOutlines)
                 {
-                    Outlines.AddOutlineObject(noteRoot, Outlines.InvertedNoteMesh);
+                    Outlines.AddOutlineObject(noteRoot, __instance.gameplayType == NoteData.GameplayType.BurstSliderHead ? Outlines.InvertedChainHeadMesh : Outlines.InvertedNoteMesh);
                     Transform noteOutline = noteRoot.Find("NoteOutline");
                     
                     noteOutline.gameObject.SetActive(Plugin.Config.EnableNoteOutlines);

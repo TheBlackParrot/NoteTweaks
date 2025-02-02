@@ -76,6 +76,8 @@ namespace NoteTweaks.Managers
         public static Mesh InvertedNoteMesh;
         private static Mesh _defaultChainMesh;
         public static Mesh InvertedChainMesh;
+        private static Mesh _defaultChainHeadMesh;
+        public static Mesh InvertedChainHeadMesh;
         private static Mesh _defaultBombMesh;
         public static Mesh InvertedBombMesh;
         
@@ -93,6 +95,14 @@ namespace NoteTweaks.Managers
             {
                 _defaultChainMesh = MakeReadableMeshCopy(mesh);
                 InvertedChainMesh = _defaultChainMesh.Invert();
+            }
+        }
+        public static void UpdateDefaultChainHeadMesh(Mesh mesh)
+        {
+            if (_defaultChainHeadMesh == null)
+            {
+                _defaultChainHeadMesh = MakeReadableMeshCopy(mesh);
+                InvertedChainHeadMesh = _defaultChainHeadMesh.Invert();
             }
         }
         public static void UpdateDefaultBombMesh(Mesh mesh)
