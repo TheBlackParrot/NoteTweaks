@@ -25,24 +25,24 @@
                                        hover-hint="Cubemap images in UserData/NoteTweaks/Textures/Notes"/>
                 <toggle-setting apply-on-change="true" value="InvertNoteTexture" text="Invert Note Texture"
                                 hover-hint="Invert the colors of the cubemap texture"/>
-                <slider-setting apply-on-change="true" value="Smoothness" text="Smoothness"
+                <slider-setting apply-on-change="true" value="Smoothness" text="Smoothness" formatter="PercentageFormatter"
                                 min="-2" max="2" increment="0.01" show-buttons="true"
-                                hover-hint="How much reflection textures effect notes"/>
+                                hover-hint="How much reflection textures effect notes (DEFAULT: 95%)"/>
                 <slider-setting apply-on-change="true" value="RimCameraDistanceOffset" text="Mask Sharpness"
                                 min="-20" max="20" increment="0.5" show-buttons="true"
-                                hover-hint="Sharpness of the reflection's rim light mask (_RimCameraDistanceOffset)"/>
+                                hover-hint="Sharpness of the reflection's rim light mask (DEFAULT: 5.00)"/>
 
                 <horizontal><text text="-----" font-size="4" color="#00000000"/></horizontal>
                 
-                <slider-setting apply-on-change="true" value="RimDarkening" text="Rim Darkening"
+                <slider-setting apply-on-change="true" value="RimDarkening" text="Rim Darkening" formatter="PercentageFormatter"
                                 min="-3" max="3" increment="0.05" show-buttons="true"
-                                hover-hint="Amount to darken objects outside of the rim light area"/>
-                <slider-setting apply-on-change="true" value="RimOffset" text="Rim Offset"
+                                hover-hint="Amount to darken objects outside of the rim light area (DEFAULT: 20%)"/>
+                <slider-setting apply-on-change="true" value="RimOffset" text="Rim Offset" formatter="PercentageFormatter"
                                 min="-2" max="2" increment="0.01" show-buttons="true"
-                                hover-hint="Starting point of rim lighting"/>
+                                hover-hint="Starting point of rim lighting (DEFAULT: -10%)"/>
                 <slider-setting apply-on-change="true" value="RimScale" text="Rim Scale"
                                 min="-10" max="10" increment="0.05" show-buttons="true"
-                                hover-hint="Multiplicative value of rim lighting"/>
+                                hover-hint="Multiplicative value of rim lighting (DEFAULT: 2.00)"/>
             </scroll-view>
         </vertical>
     </tab>
@@ -86,16 +86,16 @@
                                 hover-hint="love wins!!!!"/>
                 <slider-setting apply-on-change="true" value="RainbowBombTimeScale" text="Time Scale"
                                 min="0.5" max="64.0" increment="0.5" show-buttons="true" active="~EnableRainbowBombs"
-                                hover-hint="Time scale of color gradients"/>
+                                hover-hint="Time scale of color gradients (DEFAULT: 6.00)"/>
                 <slider-setting apply-on-change="true" value="RainbowBombSaturation" text="Gradient Saturation"
                                 min="0.0" max="1.0" increment="0.01" show-buttons="true" formatter="PercentageFormatter" active="~EnableRainbowBombs"
-                                hover-hint="Saturation of color gradients"/>
+                                hover-hint="Saturation of color gradients (DEFAULT: 67%)"/>
                 <slider-setting apply-on-change="true" value="RainbowBombValue" text="Gradient Brightness"
                                 min="0.0" max="1.0" increment="0.01" show-buttons="true" formatter="PercentageFormatter" active="~EnableRainbowBombs"
-                                hover-hint="Brightness/value of color gradients"/>
+                                hover-hint="Brightness/value of color gradients (DEFAULT: 90%)"/>
 
                 <color-setting apply-on-change="true" value="BombColor" text="Bomb Color"
-                               hover-hint="Color of bombs"/>
+                               hover-hint="Color of bombs (DEFAULT: 64, 64, 64)"/>
                 <slider-setting apply-on-change="true" value="BombColorBoost" text="Bomb Color Boost"
                                 min="-0.95" max="3.0" increment="0.05" show-buttons="true" formatter="PercentageFormatter"
                                 hover-hint="Boost bomb colors beyond the normal clamping levels"/>
@@ -359,7 +359,7 @@
     
                 <slider-setting apply-on-change="true" value="DotMeshSides" text="Dot Shape Sides"
                                 min="4" max="48" increment="1" integer-only="true" show-buttons="true"
-                                hover-hint="Amount of sides on the dot symbol"/>
+                                hover-hint="Amount of sides on the dot symbol (DEFAULT: 16)"/>
                 <slider-setting apply-on-change="true" value="RotateDot" text="Dot Rotation"
                                 min="0" max="360" increment="0.5" show-buttons="true" formatter="DegreesFormatter"
                                 hover-hint="Rotation of the dot"/>
@@ -398,10 +398,10 @@
                                 hover-hint="Enable distance fog"/>
                 <slider-setting apply-on-change="true" value="FogStartOffset" text="Fog Start Offset" formatter="FakeIntFormatter"
                                 min="-100" max="200" increment="1" show-buttons="true"
-                                hover-hint="How far away to start decreasing fog amount"/>
-                <slider-setting apply-on-change="true" value="FogScale" text="Fog Scale"
-                                min="0" max="10" increment="0.01" show-buttons="true"
-                                hover-hint="Tightness of fog values"/>
+                                hover-hint="How far away to start decreasing fog amount (DEFAULT: 100)"/>
+                <slider-setting apply-on-change="true" value="FogScale" text="Fog Scale" formatter="PercentageFormatter"
+                                min="0" max="10" increment="0.05" show-buttons="true"
+                                hover-hint="Tightness of fog values (DEFAULT: 50%)"/>
 
                 <horizontal><text text="-----" font-size="4" color="#00000000"/></horizontal>
 
@@ -410,10 +410,10 @@
                 
                 <slider-setting apply-on-change="true" value="FogHeightOffset" text="Fog Height Offset"
                                 min="-8" max="8" increment="0.1" show-buttons="true"
-                                hover-hint="How high up to start decreasing depth fog amount"/>
-                <slider-setting apply-on-change="true" value="FogHeightScale" text="Fog Scale"
+                                hover-hint="How high up to start decreasing depth fog amount (DEFAULT: 0.00)"/>
+                <slider-setting apply-on-change="true" value="FogHeightScale" text="Fog Scale" formatter="PercentageFormatter"
                                 min="0" max="5" increment="0.05" show-buttons="true"
-                                hover-hint="Tightness of fog values"/>
+                                hover-hint="Tightness of fog values (DEFAULT: 250%)"/>
             </scroll-view>
         </vertical>
     </tab>
