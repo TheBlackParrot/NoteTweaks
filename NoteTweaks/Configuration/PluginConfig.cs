@@ -112,5 +112,11 @@ namespace NoteTweaks.Configuration
         public float FogScale { get; set; } = 0.5f;
         public float FogHeightOffset { get; set; } = 0f;
         public float FogHeightScale { get; set; } = 2.5f;
+        
+        public float RimDarkening { get; set; } = 0.2f;
+        public float RimOffset { get; set; } = -0.1f;
+        public float RimScale { get; set; } = 2f;
+        public float Smoothness { get; set; } = 0.95f;
+        public float RimCameraDistanceOffset { get; set; } = 5f;
     }
 }

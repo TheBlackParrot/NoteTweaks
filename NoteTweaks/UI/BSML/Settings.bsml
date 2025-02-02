@@ -25,6 +25,24 @@
                                        hover-hint="Cubemap images in UserData/NoteTweaks/Textures/Notes"/>
                 <toggle-setting apply-on-change="true" value="InvertNoteTexture" text="Invert Note Texture"
                                 hover-hint="Invert the colors of the cubemap texture"/>
+                <slider-setting apply-on-change="true" value="Smoothness" text="Smoothness"
+                                min="-2" max="2" increment="0.01" show-buttons="true"
+                                hover-hint="How much reflection textures effect notes"/>
+                <slider-setting apply-on-change="true" value="RimCameraDistanceOffset" text="Mask Sharpness"
+                                min="-20" max="20" increment="0.5" show-buttons="true"
+                                hover-hint="Sharpness of the reflection's rim light mask (_RimCameraDistanceOffset)"/>
+
+                <horizontal><text text="-----" font-size="4" color="#00000000"/></horizontal>
+                
+                <slider-setting apply-on-change="true" value="RimDarkening" text="Rim Darkening"
+                                min="-3" max="3" increment="0.05" show-buttons="true"
+                                hover-hint="Amount to darken objects outside of the rim light area"/>
+                <slider-setting apply-on-change="true" value="RimOffset" text="Rim Offset"
+                                min="-2" max="2" increment="0.01" show-buttons="true"
+                                hover-hint="Starting point of rim lighting"/>
+                <slider-setting apply-on-change="true" value="RimScale" text="Rim Scale"
+                                min="-10" max="10" increment="0.05" show-buttons="true"
+                                hover-hint="Multiplicative value of rim lighting"/>
             </scroll-view>
         </vertical>
     </tab>
