@@ -671,12 +671,12 @@ namespace NoteTweaks.Patches
             // ReSharper disable once InconsistentNaming
             internal static void Postfix(CutoutEffect __instance, in float cutout, in Vector3 cutoutOffset)
             {
-                if (!Plugin.Config.Enabled || AutoDisable || !Plugin.Config.EnableNoteOutlines)
+                if (!Plugin.Config.Enabled || AutoDisable)
                 {
                     return;
                 }
                 
-                if (__instance.transform.name == "NoteCube")
+                if (__instance.transform.name == "NoteCube" && Plugin.Config.EnableNoteOutlines)
                 {
                     Transform noteOutlineTransform = __instance.transform.Find("NoteOutline");
                     if (!noteOutlineTransform)
@@ -689,9 +689,11 @@ namespace NoteTweaks.Patches
                         // i feel like this should fade in *slower* than normal note cutouts
                         outlineCutoutEffect.SetCutout(Mathf.Pow(cutout, 0.5f), cutoutOffset);
                     }
+
+                    return;
                 }
 
-                if (__instance.transform.name == "BombNote(Clone)")
+                if (__instance.transform.name == "BombNote(Clone)" && Plugin.Config.EnableBombOutlines)
                 {
                     Transform noteOutlineTransform = __instance.transform.Find("Mesh").Find("NoteOutline");
                     if (!noteOutlineTransform)

@@ -834,6 +834,26 @@ namespace NoteTweaks.UI
             }
         }
         
+        protected bool EnableBombOutlines
+        {
+            get => _config.EnableBombOutlines;
+            set
+            {
+                _config.EnableBombOutlines = value;
+                NotePreviewViewController.UpdateOutlines();
+            }
+        }
+
+        protected int BombOutlineScale
+        {
+            get => _config.BombOutlineScale;
+            set
+            {
+                _config.BombOutlineScale = value;
+                NotePreviewViewController.UpdateOutlines();
+            }
+        }
+        
         [UIValue("glowBlendOperationChoices")]
         [UsedImplicitly]
         // ReSharper disable once InconsistentNaming

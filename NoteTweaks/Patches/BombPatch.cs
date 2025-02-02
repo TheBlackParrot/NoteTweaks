@@ -32,13 +32,13 @@ namespace NoteTweaks.Patches
                 }
             }
             
-            if (Plugin.Config.EnableNoteOutlines)
+            if (Plugin.Config.EnableBombOutlines)
             {
                 Outlines.AddOutlineObject(bombRoot, Outlines.InvertedBombMesh);
                 Transform noteOutline = bombRoot.FindChildRecursively("NoteOutline");
                     
-                noteOutline.gameObject.SetActive(Plugin.Config.EnableNoteOutlines);
-                noteOutline.localScale = (Vector3.one * (Plugin.Config.NoteOutlineScale / 100f)) + Vector3.one;
+                noteOutline.gameObject.SetActive(true);
+                noteOutline.localScale = (Vector3.one * (Plugin.Config.BombOutlineScale / 100f)) + Vector3.one;
                     
                 if (noteOutline.gameObject.TryGetComponent(out MaterialPropertyBlockController controller))
                 {

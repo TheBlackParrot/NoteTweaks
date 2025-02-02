@@ -454,8 +454,8 @@ namespace NoteTweaks.UI
                 Transform noteOutline = noteCube.transform.FindChildRecursively("NoteOutline");
                 if (noteOutline)
                 {
-                    noteOutline.gameObject.SetActive(Plugin.Config.EnableNoteOutlines);
-                    noteOutline.localScale = (Vector3.one * (Plugin.Config.NoteOutlineScale / 100f)) + Vector3.one;
+                    noteOutline.gameObject.SetActive(isBomb ? Plugin.Config.EnableBombOutlines : Plugin.Config.EnableNoteOutlines);
+                    noteOutline.localScale = (Vector3.one * ((isBomb ? Plugin.Config.BombOutlineScale : Plugin.Config.NoteOutlineScale) / 100f)) + Vector3.one;
                     
                     if (noteOutline.gameObject.TryGetComponent(out MaterialPropertyBlockController controller))
                     {

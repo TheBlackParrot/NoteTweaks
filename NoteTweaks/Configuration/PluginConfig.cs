@@ -95,7 +95,9 @@ namespace NoteTweaks.Configuration
         public virtual Vector2 RightGlowOffset { get; set; } = Vector2.zero;
         
         public bool EnableNoteOutlines { get; set; } = false;
+        public bool EnableBombOutlines { get; set; } = false;
         public int NoteOutlineScale { get; set; } = 5;
+        public int BombOutlineScale { get; set; } = 5;
         public Color NoteOutlineLeftColor { get; set; } = Color.black;
         public float NoteOutlineLeftColorSkew { get; set; } = 0.1f;
         public bool NormalizeLeftOutlineColor { get; set; } = false;
