@@ -692,6 +692,15 @@ namespace NoteTweaks.UI
                         {
                             childCutoutEffect.SetCutout(Easing.OutCirc(time));
                         }
+                        
+                        for (int k = 0; k < childObject.transform.childCount; k++)
+                        {
+                            GameObject childChildObject = childObject.transform.GetChild(k).gameObject;
+                            if (childChildObject.TryGetComponent(out CutoutEffect childChildCutoutEffect))
+                            {
+                                childChildCutoutEffect.SetCutout(Easing.OutCirc(time));
+                            }
+                        }
                     }
                 }
 
@@ -733,6 +742,15 @@ namespace NoteTweaks.UI
                         if (childObject.TryGetComponent(out CutoutEffect childCutoutEffect))
                         {
                             childCutoutEffect.SetCutout(Easing.OutExpo(Mathf.Abs(time - 1f)));
+                        }
+                        
+                        for (int k = 0; k < childObject.transform.childCount; k++)
+                        {
+                            GameObject childChildObject = childObject.transform.GetChild(k).gameObject;
+                            if (childChildObject.TryGetComponent(out CutoutEffect childChildCutoutEffect))
+                            {
+                                childChildCutoutEffect.SetCutout(Easing.OutExpo(Mathf.Abs(time - 1f)));
+                            }
                         }
                     }
                 }
