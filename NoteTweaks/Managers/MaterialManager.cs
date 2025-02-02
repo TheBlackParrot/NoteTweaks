@@ -32,7 +32,15 @@ namespace NoteTweaks.Managers
             new KeyValuePair<string, int>("FogHeightOffset", Shader.PropertyToID("_FogHeightOffset")),
             new KeyValuePair<string, int>("FogHeightScale", Shader.PropertyToID("_FogHeightScale")),
             new KeyValuePair<string, int>("FogScale", Shader.PropertyToID("_FogScale")),
-            new KeyValuePair<string, int>("FogStartOffset", Shader.PropertyToID("_FogStartOffset")),
+            new KeyValuePair<string, int>("FogStartOffset", Shader.PropertyToID("_FogStartOffset"))
+        };
+        private static readonly List<KeyValuePair<string, int>> RimKeywords = new List<KeyValuePair<string, int>>
+        {
+            new KeyValuePair<string, int>("RimDarkening", Shader.PropertyToID("_RimDarkening")),
+            new KeyValuePair<string, int>("RimOffset", Shader.PropertyToID("_RimOffset")),
+            new KeyValuePair<string, int>("RimScale", Shader.PropertyToID("_RimScale")),
+            new KeyValuePair<string, int>("Smoothness", Shader.PropertyToID("_Smoothness")),
+            new KeyValuePair<string, int>("RimCameraDistanceOffset", Shader.PropertyToID("_RimCameraDistanceOffset"))
         };
 
         internal static async Task UpdateAll()
@@ -51,23 +59,19 @@ namespace NoteTweaks.Managers
             
             UpdateRenderQueues();
             UpdateFogValues();
+            UpdateRimValues();
         }
 
         internal static void UpdateFogValues(string which = null)
         {
             if (NoteMaterial == null)
             {
-                Plugin.Log.Info("Note material was null, probably haven't initialized yet. This shouldn't happen.");
                 return;
             }
             
-            List<KeyValuePair<string, int>> fogKeywords = FogKeywords;
-            if (which != null)
-            {
-                fogKeywords = fogKeywords.Where(x => x.Key == which).ToList();
-            }
+            List<KeyValuePair<string, int>> fogKeywords = which == null ? FogKeywords : FogKeywords.Where(x => x.Key == which).ToList();
             
-            FogKeywords.Do(keyword =>
+            fogKeywords.Do(keyword =>
             {
                 PropertyInfo prop = Plugin.Config.GetType().GetProperty(keyword.Key);
                 if (prop != null)
@@ -93,6 +97,28 @@ namespace NoteTweaks.Managers
                     OutlineMaterial0.SetFloat(keyword.Value, value);
                     OutlineMaterial1.SetFloat(keyword.Value, value);
                     AccDotMaterial.SetFloat(keyword.Value, value);
+                }
+            });
+        }
+        
+        internal static void UpdateRimValues(string which = null)
+        {
+            if (NoteMaterial == null)
+            {
+                return;
+            }
+            
+            List<KeyValuePair<string, int>> rimKeywords = which == null ? RimKeywords : RimKeywords.Where(x => x.Key == which).ToList();
+            
+            rimKeywords.Do(keyword =>
+            {
+                PropertyInfo prop = Plugin.Config.GetType().GetProperty(keyword.Key);
+                if (prop != null)
+                {
+                    float value = (float)prop.GetValue(Plugin.Config, null);
+                    
+                    NoteMaterial.SetFloat(keyword.Value, value);
+                    DebrisMaterial.SetFloat(keyword.Value, value);
                 }
             });
         }
@@ -244,7 +270,7 @@ namespace NoteTweaks.Managers
                 renderQueue = 1995
             };
 
-            Plugin.Log.Info("--- FLOATS ---");
+            /*Plugin.Log.Info("--- FLOATS ---");
             NoteMaterial.GetPropertyNames(MaterialPropertyType.Float).Do(x =>
             {
                 Plugin.Log.Info($"{x} : {NoteMaterial.GetFloat(x)}");
@@ -258,12 +284,7 @@ namespace NoteTweaks.Managers
             NoteMaterial.GetPropertyNames(MaterialPropertyType.Vector).Do(x =>
             {
                 Plugin.Log.Info($"{x} : {NoteMaterial.GetVector(x).ToString()}");
-            });
-
-            /*Plugin.Log.Info($"_FogStartOffset: {NoteMaterial.GetFloat("_FogStartOffset")}");
-            Plugin.Log.Info($"_FogScale: {NoteMaterial.GetFloat("_FogScale")}");
-            Plugin.Log.Info($"_FogHeightOffset: {NoteMaterial.GetFloat("_FogHeightOffset")}");
-            Plugin.Log.Info($"_FogHeightScale: {NoteMaterial.GetFloat("_FogHeightScale")}");*/
+            });*/
             
             if (Textures.GetLoadedNoteTexture() != Plugin.Config.NoteTexture)
             {

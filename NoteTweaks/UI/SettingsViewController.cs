@@ -912,6 +912,56 @@ namespace NoteTweaks.UI
             }
         }
         
+        protected float RimDarkening
+        {
+            get => _config.RimDarkening;
+            set
+            {
+                _config.RimDarkening = value;
+                Materials.UpdateRimValues("RimDarkening");
+            }
+        }
+        
+        protected float RimOffset
+        {
+            get => _config.RimOffset;
+            set
+            {
+                _config.RimOffset = value;
+                Materials.UpdateRimValues("RimOffset");
+            }
+        }
+        
+        protected float RimScale
+        {
+            get => _config.RimScale;
+            set
+            {
+                _config.RimScale = value;
+                Materials.UpdateRimValues("RimScale");
+            }
+        }
+        
+        protected float Smoothness
+        {
+            get => _config.Smoothness;
+            set
+            {
+                _config.Smoothness = value;
+                Materials.UpdateRimValues("Smoothness");
+            }
+        }
+        
+        protected float RimCameraDistanceOffset
+        {
+            get => _config.RimCameraDistanceOffset;
+            set
+            {
+                _config.RimCameraDistanceOffset = value;
+                Materials.UpdateRimValues("RimCameraDistanceOffset");
+            }
+        }
+        
         [UIValue("glowBlendOperationChoices")]
         [UsedImplicitly]
         // ReSharper disable once InconsistentNaming
