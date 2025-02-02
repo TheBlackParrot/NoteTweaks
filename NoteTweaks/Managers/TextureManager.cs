@@ -78,7 +78,13 @@ namespace NoteTweaks.Managers
     {
         internal static readonly string[] FileExtensions = { ".png", ".jpg", ".tga" };
         internal static readonly string ImagePath = Path.Combine(UnityGame.UserDataPath, "NoteTweaks", "Textures", "Notes");
-        internal static readonly string[] IncludedCubemaps = { "Flat", "Radials A", "Radials B" };
+        internal static readonly string[] IncludedCubemaps =
+        {
+            "Flat", "Flat Black", "Flat Dark",
+            "Radials A", "Radials B", "Radials C", "Radials D",
+            "Ripple A", "Ripple B", "Ripple C",
+            "Soft Metallic A", "Soft Metallic B"
+        };
 
         private static readonly int NoteCubeMapID = Shader.PropertyToID("_EnvironmentReflectionCube");
         private static readonly Cubemap OriginalNoteTexture = Resources.FindObjectsOfTypeAll<Cubemap>().ToList().First(x => x.name == "NotesReflection");

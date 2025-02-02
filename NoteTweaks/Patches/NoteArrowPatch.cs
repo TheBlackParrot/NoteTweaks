@@ -207,17 +207,6 @@ namespace NoteTweaks.Patches
                         controller.materialPropertyBlock.SetColor(ColorNoteVisuals._colorId, outlineColor);
                         controller.ApplyChanges();
                     }
-                    /*Outlines.AddOutlineObject(chainRoot, Outlines.InvertedChainMesh);
-                    Transform noteOutline = chainRoot.Find("NoteOutline");
-                    
-                    noteOutline.gameObject.SetActive(Plugin.Config.EnableNoteOutlines);
-                    noteOutline.localScale = (Vector3.one * (Plugin.Config.NoteOutlineScale / 100f)) + Vector3.one;
-                    
-                    if (noteOutline.gameObject.TryGetComponent(out MaterialPropertyBlockController controller))
-                    {
-                        controller.materialPropertyBlock.SetColor(ColorNoteVisuals._colorId, __instance._noteData.colorType == ColorType.ColorA ? Plugin.Config.NoteOutlineLeftColor : Plugin.Config.NoteOutlineRightColor);
-                        controller.ApplyChanges();
-                    }*/
                 }
                 
                 Vector3 scale = Vectors.Max(Plugin.Config.NoteScale * Plugin.Config.LinkScale, 0.1f);
@@ -346,21 +335,7 @@ namespace NoteTweaks.Patches
                         Outlines.UpdateDefaultNoteMesh(cubeMeshFilter.sharedMesh);
                     }
                 }
-
-                /*if (Plugin.Config.EnableNoteOutlines)
-                {
-                    Outlines.AddOutlineObject(noteRoot, Outlines.InvertedNoteMesh);
-                    Transform noteOutline = noteRoot.Find("NoteOutline");
-                    
-                    noteOutline.gameObject.SetActive(Plugin.Config.EnableNoteOutlines);
-                    noteOutline.localScale = (Vector3.one * (Plugin.Config.NoteOutlineScale / 100f)) + Vector3.one;
-                    
-                    if (noteOutline.gameObject.TryGetComponent(out MaterialPropertyBlockController controller))
-                    {
-                        controller.materialPropertyBlock.SetColor(ColorNoteVisuals._colorId, __instance._noteData.colorType == ColorType.ColorA ? Plugin.Config.NoteOutlineLeftColor : Plugin.Config.NoteOutlineRightColor);
-                        controller.ApplyChanges();
-                    }
-                }*/
+                
                 if (Plugin.Config.EnableNoteOutlines)
                 {
                     Outlines.AddOutlineObject(noteRoot, Outlines.InvertedNoteMesh);
