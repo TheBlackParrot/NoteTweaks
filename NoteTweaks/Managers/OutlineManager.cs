@@ -2,7 +2,7 @@
 using IPA.Utilities;
 using UnityEngine;
 using UnityEngine.Rendering;
-#pragma warning disable CS0612 // Type or member is obsolete
+#pragma warning disable CS0612
 
 namespace NoteTweaks.Managers
 {
