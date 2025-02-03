@@ -1,11 +1,13 @@
 ﻿using System;
 using System.ComponentModel;
 using BeatSaberMarkupLanguage.GameplaySetup;
+using JetBrains.Annotations;
 using NoteTweaks.Configuration;
 using Zenject;
 
 namespace NoteTweaks.UI
 {
+    [UsedImplicitly]
     internal class ModSettingsViewController : IInitializable, IDisposable, INotifyPropertyChanged
     {
         private static PluginConfig _config;

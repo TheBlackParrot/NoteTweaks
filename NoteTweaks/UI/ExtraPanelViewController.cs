@@ -52,10 +52,8 @@ namespace NoteTweaks.UI
 
             if (VersionManager.LatestVersion != null)
             {
-                Plugin.Log.Info($"LatestVersion not null: {VersionManager.LatestVersion} vs {VersionData.ModVersion}");
                 if (VersionData.ModVersion > VersionManager.LatestVersion)
                 {
-                    Plugin.Log.Info("Pre-release string should update");
                     isPreRelease = " <alpha=#77><size=80%>(Pre-release)";
                     gameVersionText.text = gameVersion;
                 }
