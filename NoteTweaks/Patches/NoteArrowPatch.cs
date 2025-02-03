@@ -790,6 +790,8 @@ namespace NoteTweaks.Patches
         [HarmonyPatch(typeof(MirroredNoteController<IGameNoteMirrorable>), "UpdatePositionAndRotation")]
         public static class MirroredNoteControllerPatch
         {
+            // ReSharper disable once InconsistentNaming
+            [UsedImplicitly]
             private static void Postfix(MirroredNoteController<IGameNoteMirrorable> __instance)
             {
                 __instance.gameObject.SetActive(false);
