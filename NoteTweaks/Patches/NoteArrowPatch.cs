@@ -789,6 +789,7 @@ namespace NoteTweaks.Patches
         // temporary until i can look at this further, this disables duplicated note objects used for reflections in the low mirror mode
         // note to self: you need this hook anyways to modify stuff, don't get rid of it
         [HarmonyPatch(typeof(MirroredNoteController<IGameNoteMirrorable>), "UpdatePositionAndRotation")]
+        [HarmonyPriority(int.MinValue)]
         public static class MirroredNoteControllerPatch
         {
             // ReSharper disable once InconsistentNaming
