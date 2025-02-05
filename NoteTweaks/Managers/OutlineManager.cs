@@ -1,5 +1,6 @@
 ﻿using HarmonyLib;
 using IPA.Utilities;
+using NoteTweaks.Configuration;
 using UnityEngine;
 #pragma warning disable CS0612
 
@@ -115,7 +116,7 @@ namespace NoteTweaks.Managers
             }
             
             clonedOutlineObject.name = "NoteOutline";
-            clonedOutlineObject.SetActive(wantedMesh == InvertedBombMesh ? Plugin.Config.EnableBombOutlines : Plugin.Config.EnableNoteOutlines);
+            clonedOutlineObject.SetActive(wantedMesh == InvertedBombMesh ? Config.EnableBombOutlines : Config.EnableNoteOutlines);
         }
     }
 }

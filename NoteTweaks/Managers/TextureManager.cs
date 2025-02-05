@@ -4,6 +4,7 @@ using System.Linq;
 using BeatSaberMarkupLanguage;
 using HarmonyLib;
 using IPA.Utilities;
+using NoteTweaks.Configuration;
 using NoteTweaks.Utils;
 using UnityEngine;
 
@@ -11,9 +12,10 @@ namespace NoteTweaks.Managers
 {
     internal static class ColorExtensions
     {
+        private static PluginConfig Config => PluginConfig.Instance;
         public static Color CheckForInversion(ref this Color color, bool isBomb = false)
         {
-            if (isBomb ? Plugin.Config.InvertBombTexture : Plugin.Config.InvertNoteTexture)
+            if (isBomb ? Config.InvertBombTexture : Config.InvertNoteTexture)
             {
                 color.r = Mathf.Abs(color.r - 1f);
                 color.g = Mathf.Abs(color.g - 1f);
@@ -26,6 +28,8 @@ namespace NoteTweaks.Managers
 
     internal abstract class GlowTextures
     {
+        internal static PluginConfig Config => PluginConfig.Instance;
+        
         internal static Texture2D ReplacementArrowGlowTexture;
         internal static Texture2D ReplacementDotGlowTexture;
 
@@ -38,7 +42,7 @@ namespace NoteTweaks.Managers
         {
             Plugin.Log.Info("Loading glow textures...");
 
-            ReplacementArrowGlowTexture = Utilities.FindTextureInAssembly($"NoteTweaks.Resources.Textures.Arrow{Plugin.Config.ArrowMesh}{Plugin.Config.GlowTexture}.png");
+            ReplacementArrowGlowTexture = Utilities.FindTextureInAssembly($"NoteTweaks.Resources.Textures.Arrow{Config.ArrowMesh}{Config.GlowTexture}.png");
             ReplacementArrowGlowTexture.PrepareTexture();
             if (Materials.ArrowGlowMaterial != null)
             {
@@ -46,7 +50,7 @@ namespace NoteTweaks.Managers
             }
             Plugin.Log.Info("Loaded replacement arrow glow texture");
             
-            ReplacementDotGlowTexture = Utilities.FindTextureInAssembly($"NoteTweaks.Resources.Textures.Circle{Plugin.Config.GlowTexture}.png");
+            ReplacementDotGlowTexture = Utilities.FindTextureInAssembly($"NoteTweaks.Resources.Textures.Circle{Config.GlowTexture}.png");
             ReplacementDotGlowTexture.PrepareTexture();
             if (Materials.DotGlowMaterial != null)
             {
@@ -124,7 +128,7 @@ namespace NoteTweaks.Managers
         {
             _noteTexture = new Cubemap(512, textures.First().Value.format, 0)
             {
-                name = $"NoteTweaks_NoteCubemap_{Plugin.Config.NoteTexture}"
+                name = $"NoteTweaks_NoteCubemap_{Config.NoteTexture}"
             };
             
             if (textures.Any(x => x.Key == "all"))
@@ -156,7 +160,7 @@ namespace NoteTweaks.Managers
         {
             _bombTexture = new Cubemap(512, textures.First().Value.format, 0)
             {
-                name = $"NoteTweaks_BombCubemap_{Plugin.Config.BombTexture}"
+                name = $"NoteTweaks_BombCubemap_{Config.BombTexture}"
             };
             
             if (textures.Any(x => x.Key == "all"))

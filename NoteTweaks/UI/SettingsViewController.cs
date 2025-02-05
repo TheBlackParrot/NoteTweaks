@@ -542,7 +542,7 @@ namespace NoteTweaks.UI
                 _config.InvertBombTexture = value;
                 if (LoadTextures)
                 {
-                    Textures.LoadNoteTexture(Plugin.Config.BombTexture, true);
+                    Textures.LoadNoteTexture(_config.BombTexture, true);
                 }
             }
         }
@@ -555,7 +555,7 @@ namespace NoteTweaks.UI
                 _config.InvertNoteTexture = value;
                 if (LoadTextures)
                 {
-                    Textures.LoadNoteTexture(Plugin.Config.NoteTexture);
+                    Textures.LoadNoteTexture(_config.NoteTexture);
                 }
             }
         }
