@@ -1,9 +1,9 @@
 <vertical child-control-height="false" vertical-fit="PreferredSize" pref-height="77"
           xsi:noNamespaceSchemaLocation="https://monkeymanboy.github.io/BSML-Docs/BSMLSchema.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-    <horizontal vertical-fit="Unconstrained" horizontal-fit="PreferredSize" pref-width="120" child-expand-width="true" size-delta="-6 6">
-        <page-button pref-width="4" pref-height="4" tags="LeftButton" direction="Left"/>
+    <horizontal vertical-fit="PreferredSize" horizontal-fit="PreferredSize" child-expand-width="true" child-expand-height="true" pref-height="7" pref-width="120">
+        <page-button pref-width="6" pref-height="6" tags="LeftButton" direction="Left"/>
         <tab-selector child-expand-width="true" child-control-width="true" tab-tag="tabs" id="tabSelector" page-count="5" left-button-tag="LeftButton" right-button-tag="RightButton"/>
-        <page-button pref-width="4" pref-height="4" tags="RightButton" direction="Right"/>
+        <page-button pref-width="6" pref-height="6" tags="RightButton" direction="Right"/>
     </horizontal>
     
     <tab tags="tabs" tab-name="Notes">
@@ -175,7 +175,7 @@
     
     <tab tags="tabs" tab-name="Outlines">
         <vertical vertical-fit="PreferredSize" pref-height="70" pref-width="110" anchored-position-x="4">
-            <vertical vertical-fit="PreferredSize" pad-left="1" pad-right="1" pref-width="100" child-control-height="false">
+            <vertical spacing="0" vertical-fit="PreferredSize" pad-left="1" pad-right="1" pad-top="3" pref-width="92" child-control-height="false">
                 <toggle-setting apply-on-change="true" value="EnableNoteOutlines" text="Enable Note Outlines"
                                 hover-hint="Render an outline around the note"/>
                 <slider-setting apply-on-change="true" value="NoteOutlineScale" text="Outline Size"
@@ -187,9 +187,9 @@
                 <tab-selector tab-tag="outlineTabs" id="outlineTabSelector"/>
             </vertical>
 
-            <vertical vertical-fit="PreferredSize" pref-height="37" pref-width="100">
+            <vertical vertical-fit="PreferredSize" pref-height="50" pref-width="130">
                 <tab tags="outlineTabs" tab-name="Left">
-                    <scroll-view spacing="0" pref-height="50" child-expand-width="true">
+                    <scroll-view spacing="0" pref-height="60" child-expand-width="true">
                         <color-setting apply-on-change="true" value="NoteOutlineLeftColor" text="Outline Color"
                                        hover-hint="Color of the outline around left-handed notes"/>
                         <slider-setting apply-on-change="true" value="NoteOutlineLeftColorSkew" text="Skew Towards Note Color"
@@ -201,7 +201,7 @@
                 </tab>
                 
                 <tab tags="outlineTabs" tab-name="Right">
-                    <scroll-view spacing="0" pref-height="50" child-expand-width="true">
+                    <scroll-view spacing="0" pref-height="60" child-expand-width="true">
                         <color-setting apply-on-change="true" value="NoteOutlineRightColor" text="Outline Color"
                                        hover-hint="Color of the outline around right-handed notes"/>
                         <slider-setting apply-on-change="true" value="NoteOutlineRightColorSkew" text="Skew Towards Note Color"
@@ -213,7 +213,7 @@
                 </tab>
 
                 <tab tags="outlineTabs" tab-name="Bombs">
-                    <scroll-view spacing="0" pref-height="50" child-expand-width="true">
+                    <scroll-view spacing="0" pref-height="60" child-expand-width="true">
                         <toggle-setting apply-on-change="true" value="EnableBombOutlines" text="Enable Bomb Outlines"
                                         hover-hint="Render an outline around bombs"/>
                         <slider-setting apply-on-change="true" value="BombOutlineScale" text="Outline Size"
@@ -392,7 +392,7 @@
     </tab>
 
     <tab tags="tabs" tab-name="Fog">
-        <vertical vertical-fit="PreferredSize" pref-height="70" pref-width="100" anchored-position-x="4">
+        <vertical vertical-fit="PreferredSize" pref-height="70" pref-width="110" anchored-position-x="4">
             <scroll-view spacing="0" pref-height="70" child-expand-width="true">
                 <toggle-setting apply-on-change="true" value="EnableFog" text="Enable Fog"
                                 hover-hint="Enable distance fog"/>
