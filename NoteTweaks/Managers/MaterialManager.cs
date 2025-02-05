@@ -224,6 +224,9 @@ namespace NoteTweaks.Managers
             // Utils.Materials.RepairShader(AccDotDepthMaterial);
         }
         
+        private static Cubemap _blankCubemap;
+        private static readonly int EnvironmentReflectionCubeID = Shader.PropertyToID("_EnvironmentReflectionCube");
+
         private static void UpdateOutlineMaterial()
         {
             if (OutlineMaterial0 != null)
@@ -231,29 +234,64 @@ namespace NoteTweaks.Managers
                 return;
             }
 
+            if (_blankCubemap == null)
+            {
+                _blankCubemap = new Cubemap(512, TextureFormat.RGBA32, false);
+                
+                Color[] pixels = new Color[262144];
+                for (int i = 0; i < 262144; i++)
+                {
+                    pixels[i] = Color.white;
+                }
+                
+                for (int i = 0; i < 6; i++)
+                {
+                    _blankCubemap.SetPixels(pixels, (CubemapFace)i);
+                }
+                
+                _blankCubemap.Apply();
+            }
+
             Plugin.Log.Info("Creating outline materials");
-            Material arrowMat0 = Resources.FindObjectsOfTypeAll<Material>().ToList().Find(x => x.name == "NoteArrowLW");
-            OutlineMaterial0 = new Material(arrowMat0)
+            
+            Material noteMat = Resources.FindObjectsOfTypeAll<Material>().ToList().Find(x => x.name == "NoteLW");
+            string[] keywords = noteMat.shaderKeywords
+                .Where(x => x != "_ENABLE_COLOR_INSTANCING" || x != "_CUTOUT_NONE" || x != "_ENABLE_RIM_DIM" || x != "_ENABLE_RIM_COLOR").ToArray();
+            
+            OutlineMaterial0 = new Material(noteMat)
             {
                 name = "NoteTweaks_OutlineMaterialLW",
                 color = Color.black,
-                shaderKeywords = arrowMat0.shaderKeywords.Where(x => x != "_ENABLE_COLOR_INSTANCING" || x != "_CUTOUT_NONE").ToArray(),
+                shaderKeywords = keywords,
                 renderQueue = 1990
             };
-            
-            Material arrowMat1 = Resources.FindObjectsOfTypeAll<Material>().ToList().Find(x => x.name == "NoteArrowHD");
-            OutlineMaterial1 = new Material(arrowMat1)
+            OutlineMaterial1 = new Material(noteMat)
             {
                 name = "NoteTweaks_OutlineMaterialHD",
                 color = Color.black,
-                shaderKeywords = arrowMat1.shaderKeywords.Where(x => x != "_ENABLE_COLOR_INSTANCING" || x != "_CUTOUT_NONE").ToArray(),
+                shaderKeywords = keywords,
                 renderQueue = 1990
             };
             
-            //arrowMat0.SetInt(ZTestID, (int)UnityEngine.Rendering.CompareFunction.GreaterEqual);
-            //arrowMat1.SetInt(ZTestID, (int)UnityEngine.Rendering.CompareFunction.GreaterEqual);
-            //arrowMat0.SetInt("_CustomZWrite", 0);
-            //arrowMat1.SetInt("_CustomZWrite", 0);
+            new List<KeyValuePair<string, float>>
+            {
+                new KeyValuePair<string, float>("_CullMode", 1),
+                new KeyValuePair<string, float>("_EnableRimDim", 0),
+                new KeyValuePair<string, float>("_RimDarkening", 0),
+                new KeyValuePair<string, float>("_RimScale", 0),
+                new KeyValuePair<string, float>("_Smoothness", 0)
+            }.Do(pair =>
+            {
+                OutlineMaterial0.SetFloat(pair.Key, pair.Value);
+                OutlineMaterial1.SetFloat(pair.Key, pair.Value);
+            });
+            OutlineMaterial0.SetTexture(EnvironmentReflectionCubeID, _blankCubemap);
+            OutlineMaterial1.SetTexture(EnvironmentReflectionCubeID, _blankCubemap);
+
+            for (int i = 0; i < OutlineMaterial1.shader.GetPropertyCount(); i++)
+            {
+                Plugin.Log.Info($"{OutlineMaterial1.shader.GetPropertyName(i)} -- {OutlineMaterial1.GetFloat(OutlineMaterial1.shader.GetPropertyNameId(i))}");
+            }
         }
         
         private static async Task UpdateNoteMaterial()
