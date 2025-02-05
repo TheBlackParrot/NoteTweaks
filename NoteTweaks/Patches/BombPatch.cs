@@ -35,7 +35,7 @@ namespace NoteTweaks.Patches
             if (Plugin.Config.EnableBombOutlines)
             {
                 Outlines.AddOutlineObject(bombRoot, Outlines.InvertedBombMesh);
-                Transform noteOutline = bombRoot.FindChildRecursively("NoteOutline");
+                Transform noteOutline = bombRoot.Find("Mesh").Find("NoteOutline");
                     
                 noteOutline.gameObject.SetActive(true);
                 noteOutline.localScale = (Vector3.one * (Plugin.Config.BombOutlineScale / 100f)) + Vector3.one;
