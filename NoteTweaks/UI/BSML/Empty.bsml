@@ -1,1 +1,7 @@
-﻿<vertical></vertical>
+﻿<vertical vertical-fit="PreferredSize" pref-height="100" child-align="LowerCenter" anchor-pos-y="-35"
+          xsi:noNamespaceSchemaLocation="https://monkeymanboy.github.io/BSML-Docs/BSMLSchema.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <horizontal child-expand-width="true" child-alignment="LowerCenter" pref-height="10" vertical-fit="PreferredSize">
+        <slider-setting apply-on-change="true" value="NoteContainerZPos" id="NoteContainerZPos" text="Distance" local-scale="0.7 0.7 0.7" bind-value="true"
+                    min="1.0" max="12.0" increment="0.1" show-buttons="true"/>
+    </horizontal>
+</vertical>

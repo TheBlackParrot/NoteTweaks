@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using BeatSaberMarkupLanguage.Attributes;
 using BeatSaberMarkupLanguage.ViewControllers;
+using JetBrains.Annotations;
 using NoteTweaks.Configuration;
 using NoteTweaks.Managers;
 using NoteTweaks.Utils;
@@ -22,7 +23,7 @@ namespace NoteTweaks.UI
         internal static GameObject NoteContainer = new GameObject("_NoteTweaks_NoteContainer");
         
         private static readonly float NoteSize = 0.5f;
-        private static readonly Vector3 InitialPosition = new Vector3(0f, 0.67f, 4.5f);
+        private static Vector3 _initialPosition = new Vector3(0f, 0.67f, 4.5f);
         
         internal static bool HasInitialized;
         private static Vector3 _initialArrowPosition = Vector3.one;
@@ -40,6 +41,18 @@ namespace NoteTweaks.UI
         public NotePreviewViewController()
         {
             DontDestroyOnLoad(NoteContainer);
+        }
+        
+        [UIValue("NoteContainerZPos")]
+        [UsedImplicitly]
+        private float NoteContainerZPos
+        {
+            get => _initialPosition.z;
+            set
+            {
+                _initialPosition.z = value;
+                NotifyPropertyChanged();
+            }
         }
 
         public static void UpdateDotMesh()
@@ -676,8 +689,8 @@ namespace NoteTweaks.UI
             {
                 NoteContainer.transform.localScale = (Vector3.one * (Mathf.Abs(time - 1f) / 2)) + new Vector3(0.5f, 0.5f, 0.5f);
                 
-                Vector3 pos = InitialPosition;
-                pos.y = InitialPosition.y * (Mathf.Abs(time - 1f) * 2f) - InitialPosition.y;
+                Vector3 pos = _initialPosition;
+                pos.y = _initialPosition.y * (Mathf.Abs(time - 1f) * 2f) - _initialPosition.y;
                 NoteContainer.transform.localPosition = pos;
                 
                 for (int i = 0; i < NoteContainer.transform.childCount; i++)
@@ -710,6 +723,7 @@ namespace NoteTweaks.UI
                 if (time >= 1f)
                 {
                     NoteContainer.SetActive(false);
+                    _initialPosition.z = 4.5f;
                 }
             }, _currentTokenSource.Token, 0.4f);
         }
@@ -727,8 +741,8 @@ namespace NoteTweaks.UI
             {
                 NoteContainer.transform.localScale = (Vector3.one * (time / 2)) + new Vector3(0.5f, 0.5f, 0.5f);
                 
-                Vector3 pos = InitialPosition;
-                pos.y = InitialPosition.y * (time * 2f) - InitialPosition.y;
+                Vector3 pos = _initialPosition;
+                pos.y = _initialPosition.y * (time * 2f) - _initialPosition.y;
                 NoteContainer.transform.localPosition = pos;
                 
                 for (int i = 0; i < NoteContainer.transform.childCount; i++)
@@ -797,8 +811,8 @@ namespace NoteTweaks.UI
             Vector3 rotateAngle = new Vector3(0f, 1f, 0f);
 
             await AnimateForever(time => {
-                Vector3 pos = InitialPosition;
-                pos.y = InitialPosition.y + (Mathf.Sin(time / bobTimeScale) * maxBob);
+                Vector3 pos = _initialPosition;
+                pos.y = _initialPosition.y + (Mathf.Sin(time / bobTimeScale) * maxBob);
                 
                 NoteContainer.transform.localRotation = Quaternion.AngleAxis((Mathf.Sin(time / rotateTimeScale) * maxRotate), rotateAngle);
                 NoteContainer.transform.localPosition = pos;
@@ -835,7 +849,7 @@ namespace NoteTweaks.UI
                 return;
             }
             
-            NoteContainer.transform.position = InitialPosition;
+            NoteContainer.transform.position = _initialPosition;
             
             // ReSharper disable PossibleNullReferenceException
             MenuTransitionsHelper menuTransitionsHelper = Resources.FindObjectsOfTypeAll<MenuTransitionsHelper>().FirstOrDefault();
