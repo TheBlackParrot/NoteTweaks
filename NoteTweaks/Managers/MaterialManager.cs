@@ -261,14 +261,14 @@ namespace NoteTweaks.Managers
             OutlineMaterial0 = new Material(noteMat)
             {
                 name = "NoteTweaks_OutlineMaterialLW",
-                color = Color.black,
+                color = Color.white,
                 shaderKeywords = keywords,
                 renderQueue = 1990
             };
             OutlineMaterial1 = new Material(noteMat)
             {
                 name = "NoteTweaks_OutlineMaterialHD",
-                color = Color.black,
+                color = Color.white,
                 shaderKeywords = keywords,
                 renderQueue = 1990
             };
@@ -288,10 +288,33 @@ namespace NoteTweaks.Managers
             OutlineMaterial0.SetTexture(EnvironmentReflectionCubeID, _blankCubemap);
             OutlineMaterial1.SetTexture(EnvironmentReflectionCubeID, _blankCubemap);
 
-            for (int i = 0; i < OutlineMaterial1.shader.GetPropertyCount(); i++)
+            /*for (int i = 0; i < OutlineMaterial1.shader.GetPropertyCount(); i++)
             {
                 Plugin.Log.Info($"{OutlineMaterial1.shader.GetPropertyName(i)} -- {OutlineMaterial1.GetFloat(OutlineMaterial1.shader.GetPropertyNameId(i))}");
             }
+            Plugin.Log.Info("----");
+            OutlineMaterial0.shaderKeywords.Do(x => Plugin.Log.Info(x));
+            Plugin.Log.Info("----");
+            OutlineMaterial1.shaderKeywords.Do(x => Plugin.Log.Info(x));
+            Plugin.Log.Info("----");
+
+            Resources.FindObjectsOfTypeAll<Shader>().Do(shader =>
+            {
+                Plugin.Log.Info(shader.name);
+                for (int i = 0; i < shader.GetPropertyCount(); i++)
+                {
+                    if (shader.GetPropertyName(i).Contains("Cull"))
+                    {
+                        Plugin.Log.Info($"!! {shader.name} contains {shader.GetPropertyName(i)}");
+                    }
+                }
+            });
+            
+            Plugin.Log.Info("----");
+            Resources.FindObjectsOfTypeAll<Material>().Do(material =>
+            {
+                Plugin.Log.Info(material.name);
+            });*/
         }
         
         private static async Task UpdateNoteMaterial()
