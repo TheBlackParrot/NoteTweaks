@@ -3,6 +3,7 @@ using System.Reflection;
 using HarmonyLib;
 using IPA.Utilities;
 using JetBrains.Annotations;
+using NoteTweaks.Configuration;
 using NoteTweaks.Utils;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -12,13 +13,15 @@ namespace NoteTweaks.Patches
     [HarmonyPatch]
     internal class NoteColorTweaks
     {
+        private static PluginConfig Config => PluginConfig.Instance;
+        
         internal static Color OriginalLeftColor;
         internal static Color OriginalRightColor;
         
         private static ColorScheme PatchColors(ColorScheme scheme)
         {
-            float leftScale = 1.0f + Plugin.Config.ColorBoostLeft;
-            float rightScale = 1.0f + Plugin.Config.ColorBoostRight;
+            float leftScale = 1.0f + Config.ColorBoostLeft;
+            float rightScale = 1.0f + Config.ColorBoostRight;
             
             if (OriginalLeftColor != scheme._saberAColor && OriginalLeftColor != (scheme._saberAColor * leftScale))
             {
@@ -34,22 +37,22 @@ namespace NoteTweaks.Patches
             Color rightColor = OriginalRightColor;
             float rightBrightness = rightColor.Brightness();
 
-            if (leftBrightness > Plugin.Config.LeftMaxBrightness)
+            if (leftBrightness > Config.LeftMaxBrightness)
             {
-                leftColor = leftColor.LerpRGBUnclamped(Color.black, Mathf.InverseLerp(leftBrightness, 0.0f, Plugin.Config.LeftMaxBrightness));
+                leftColor = leftColor.LerpRGBUnclamped(Color.black, Mathf.InverseLerp(leftBrightness, 0.0f, Config.LeftMaxBrightness));
             }
-            else if (leftBrightness < Plugin.Config.LeftMinBrightness)
+            else if (leftBrightness < Config.LeftMinBrightness)
             {
-                leftColor = leftColor.LerpRGBUnclamped(Color.white, Mathf.InverseLerp(leftBrightness, 1.0f, Plugin.Config.LeftMinBrightness));
+                leftColor = leftColor.LerpRGBUnclamped(Color.white, Mathf.InverseLerp(leftBrightness, 1.0f, Config.LeftMinBrightness));
             }
             
-            if (rightBrightness > Plugin.Config.RightMaxBrightness)
+            if (rightBrightness > Config.RightMaxBrightness)
             {
-                rightColor = rightColor.LerpRGBUnclamped(Color.black, Mathf.InverseLerp(rightBrightness, 0.0f, Plugin.Config.RightMaxBrightness));
+                rightColor = rightColor.LerpRGBUnclamped(Color.black, Mathf.InverseLerp(rightBrightness, 0.0f, Config.RightMaxBrightness));
             }
-            else if (rightBrightness < Plugin.Config.RightMinBrightness)
+            else if (rightBrightness < Config.RightMinBrightness)
             {
-                rightColor = rightColor.LerpRGBUnclamped(Color.white, Mathf.InverseLerp(rightBrightness, 1.0f, Plugin.Config.RightMinBrightness));
+                rightColor = rightColor.LerpRGBUnclamped(Color.white, Mathf.InverseLerp(rightBrightness, 1.0f, Config.RightMinBrightness));
             }
             
             scheme._saberAColor = leftColor * leftScale;
@@ -66,15 +69,15 @@ namespace NoteTweaks.Patches
         // ReSharper disable once InconsistentNaming
         private static bool SaveFix(PlayerDataModel __instance)
         {
-            if (SceneManager.GetActiveScene().name != "GameCore" || !Plugin.Config.Enabled)
+            if (SceneManager.GetActiveScene().name != "GameCore" || !Config.Enabled)
             {
                 return true;
             }
             
             ColorSchemesSettings settings = __instance.playerData.colorSchemesSettings;
             ColorScheme selectedScheme = settings.GetSelectedColorScheme();
-            float leftScale = 1.0f + Plugin.Config.ColorBoostLeft;
-            float rightScale = 1.0f + Plugin.Config.ColorBoostRight;
+            float leftScale = 1.0f + Config.ColorBoostLeft;
+            float rightScale = 1.0f + Config.ColorBoostRight;
             
             if (selectedScheme._saberAColor == OriginalLeftColor * leftScale && selectedScheme._saberBColor == OriginalRightColor * rightScale)
             {
@@ -98,7 +101,7 @@ namespace NoteTweaks.Patches
         // ReSharper disable once InconsistentNaming
         private static void SaveFixUndo(PlayerDataModel __instance)
         {
-            if (SceneManager.GetActiveScene().name != "GameCore" || !Plugin.Config.Enabled)
+            if (SceneManager.GetActiveScene().name != "GameCore" || !Config.Enabled)
             {
                 return;
             }
@@ -119,7 +122,7 @@ namespace NoteTweaks.Patches
         // ReSharper disable once InconsistentNaming
         private static void InitColorInfoPatch(StandardLevelScenesTransitionSetupDataSO __instance)
         {
-            if (!Plugin.Config.Enabled)
+            if (!Config.Enabled)
             {
                 return;
             }
@@ -147,7 +150,7 @@ namespace NoteTweaks.Patches
             // ReSharper disable once InconsistentNaming
             internal static void Postfix(MissionLevelScenesTransitionSetupDataSO __instance)
             {
-                if (!Plugin.Config.Enabled)
+                if (!Config.Enabled)
                 {
                     return;
                 }
@@ -161,7 +164,7 @@ namespace NoteTweaks.Patches
         // ReSharper disable once InconsistentNaming
         private static void StandardLevelRestartControllerPatch(StandardLevelRestartController __instance)
         {
-            if (!Plugin.Config.Enabled)
+            if (!Config.Enabled)
             {
                 return;
             }
@@ -186,7 +189,7 @@ namespace NoteTweaks.Patches
         // ReSharper disable once InconsistentNaming
         private static void MissionLevelRestartControllerPatch(MissionLevelRestartController __instance)
         {
-            if (!Plugin.Config.Enabled)
+            if (!Config.Enabled)
             {
                 return;
             }
@@ -202,7 +205,7 @@ namespace NoteTweaks.Patches
         // ReSharper disable once InconsistentNaming
         private static void FinishPatch(StandardLevelScenesTransitionSetupDataSO __instance)
         {
-            if (!Plugin.Config.Enabled)
+            if (!Config.Enabled)
             {
                 return;
             }
@@ -219,7 +222,7 @@ namespace NoteTweaks.Patches
         // ReSharper disable once InconsistentNaming
         private static void FinishMissionPatch(MissionLevelScenesTransitionSetupDataSO __instance)
         {
-            if (!Plugin.Config.Enabled)
+            if (!Config.Enabled)
             {
                 return;
             }

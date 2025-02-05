@@ -543,7 +543,7 @@ namespace NoteTweaks.UI
                 _config.InvertBombTexture = value;
                 if (LoadTextures)
                 {
-                    _ = Textures.LoadNoteTexture(Plugin.Config.BombTexture, true);
+                    _ = Textures.LoadNoteTexture(_config.BombTexture, true);
                 }
             }
         }
@@ -556,7 +556,7 @@ namespace NoteTweaks.UI
                 _config.InvertNoteTexture = value;
                 if (LoadTextures)
                 {
-                    _ = Textures.LoadNoteTexture(Plugin.Config.NoteTexture);
+                    _ = Textures.LoadNoteTexture(_config.NoteTexture);
                 }
             }
         }
@@ -978,7 +978,10 @@ namespace NoteTweaks.UI
         private List<object> ArrowMeshChoices = new List<object> { "Default", "Chevron", "Line", "Triangle" };
 
         [UIComponent("selectedNoteTexture")]
+        #pragma warning disable CS0649
+        // ReSharper disable once InconsistentNaming
         public DropDownListSetting noteTextureDropDown;
+        #pragma warning restore CS0649
 
         [UIValue("noteTextureChoices")]
         private List<object> NoteTextureChoices => LoadTextureChoices();
