@@ -451,7 +451,12 @@ namespace NoteTweaks.UI
                     outlineColor = Color.LerpUnclamped(isLeft ? Plugin.Config.NoteOutlineLeftColor : Plugin.Config.NoteOutlineRightColor, noteColor, isLeft ? Plugin.Config.NoteOutlineLeftColorSkew : Plugin.Config.NoteOutlineRightColorSkew);   
                 }
                 
-                Transform noteOutline = noteCube.transform.FindChildRecursively("NoteOutline");
+                Transform noteOutline = noteCube.transform.Find("NoteOutline");
+                if (isBomb)
+                {
+                    noteOutline = noteCube.transform.Find("Mesh").Find("NoteOutline");
+                }
+                
                 if (noteOutline)
                 {
                     noteOutline.gameObject.SetActive(isBomb ? Plugin.Config.EnableBombOutlines : Plugin.Config.EnableNoteOutlines);
