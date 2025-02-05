@@ -14,27 +14,34 @@ namespace NoteTweaks.Patches
     internal class NoteColorTweaks
     {
         private static PluginConfig Config => PluginConfig.Instance;
-        
-        internal static Color OriginalLeftColor;
-        internal static Color OriginalRightColor;
+
+        private static ColorScheme _patchedScheme;
         
         private static ColorScheme PatchColors(ColorScheme scheme)
         {
+            _patchedScheme = new ColorScheme(
+                "NoteTweaksPatched",
+                "NoteTweaksPatched",
+                true,
+                "NoteTweaksPatched",
+                false,
+                scheme._saberAColor,
+                scheme._saberBColor,
+                scheme._environmentColor0,
+                scheme._environmentColor1,
+                scheme._environmentColorW,
+                scheme._supportsEnvironmentColorBoost,
+                scheme._environmentColor0Boost,
+                scheme._environmentColor1Boost,
+                scheme._environmentColorWBoost,
+                scheme._obstaclesColor);
+            
             float leftScale = 1.0f + Config.ColorBoostLeft;
             float rightScale = 1.0f + Config.ColorBoostRight;
             
-            if (OriginalLeftColor != scheme._saberAColor && OriginalLeftColor != (scheme._saberAColor * leftScale))
-            {
-                OriginalLeftColor = scheme._saberAColor;
-            }
-            if (OriginalRightColor != scheme._saberBColor && OriginalRightColor != (scheme._saberBColor * rightScale))
-            {
-                OriginalRightColor = scheme._saberBColor;
-            }
-            
-            Color leftColor = OriginalLeftColor;
+            Color leftColor = _patchedScheme._saberAColor;
             float leftBrightness = leftColor.Brightness();
-            Color rightColor = OriginalRightColor;
+            Color rightColor = _patchedScheme._saberBColor;
             float rightBrightness = rightColor.Brightness();
 
             if (leftBrightness > Config.LeftMaxBrightness)
@@ -55,66 +62,12 @@ namespace NoteTweaks.Patches
                 rightColor = rightColor.LerpRGBUnclamped(Color.white, Mathf.InverseLerp(rightBrightness, 1.0f, Config.RightMinBrightness));
             }
             
-            scheme._saberAColor = leftColor * leftScale;
-            scheme._saberBColor = rightColor * rightScale;
+            _patchedScheme._saberAColor = leftColor * leftScale;
+            _patchedScheme._saberAColor.a = 1f;
+            _patchedScheme._saberBColor = rightColor * rightScale;
+            _patchedScheme._saberBColor.a = 1f;
 
-            return scheme;
-        }
-
-        // i honestly did not think this would touch save data. but it does! what the shit
-        private static bool _didApplySaveFix;
-        [HarmonyPatch(typeof(PlayerDataModel), "Save")]
-        [HarmonyPatch(typeof(PlayerDataModel), "SaveAsync")]
-        [HarmonyPrefix]
-        // ReSharper disable once InconsistentNaming
-        private static bool SaveFix(PlayerDataModel __instance)
-        {
-            if (SceneManager.GetActiveScene().name != "GameCore" || !Config.Enabled)
-            {
-                return true;
-            }
-            
-            ColorSchemesSettings settings = __instance.playerData.colorSchemesSettings;
-            ColorScheme selectedScheme = settings.GetSelectedColorScheme();
-            float leftScale = 1.0f + Config.ColorBoostLeft;
-            float rightScale = 1.0f + Config.ColorBoostRight;
-            
-            if (selectedScheme._saberAColor == OriginalLeftColor * leftScale && selectedScheme._saberBColor == OriginalRightColor * rightScale)
-            {
-                if (selectedScheme.colorSchemeId.Contains("User") && settings.overrideDefaultColors)
-                {
-                    _didApplySaveFix = true;
-                    Plugin.Log.Info("Applied color scheme save data fix");
-                    
-                    selectedScheme._saberAColor = OriginalLeftColor;
-                    selectedScheme._saberBColor = OriginalRightColor;
-                    settings.SetColorSchemeForId(selectedScheme);
-                }
-            }
-
-            return true;
-        }
-
-        [HarmonyPatch(typeof(PlayerDataModel), "Save")]
-        [HarmonyPatch(typeof(PlayerDataModel), "SaveAsync")]
-        [HarmonyPostfix]
-        // ReSharper disable once InconsistentNaming
-        private static void SaveFixUndo(PlayerDataModel __instance)
-        {
-            if (SceneManager.GetActiveScene().name != "GameCore" || !Config.Enabled)
-            {
-                return;
-            }
-            
-            ColorSchemesSettings settings = __instance.playerData.colorSchemesSettings;
-            ColorScheme selectedScheme = settings.GetSelectedColorScheme();
-            
-            if (_didApplySaveFix)
-            {
-                _didApplySaveFix = false;
-                settings.SetColorSchemeForId(PatchColors(selectedScheme));
-                Plugin.Log.Info("Undid color scheme save data fix, data has been saved");
-            }
+            return _patchedScheme;
         }
         
         [HarmonyPatch(typeof(StandardLevelScenesTransitionSetupDataSO), "InitColorInfo")]
@@ -126,37 +79,29 @@ namespace NoteTweaks.Patches
             {
                 return;
             }
-            
-            ColorScheme patchedColors = PatchColors(__instance.colorScheme);
 
-            if (patchedColors._saberAColor == __instance.colorScheme._saberAColor &&
-                patchedColors._saberBColor == __instance.colorScheme._saberBColor)
-            {
-                return;
-            }
+            ColorScheme scheme = __instance.colorScheme;
+            ColorScheme tempScheme = new ColorScheme(
+                "NoteTweaksUnPatched",
+                "NoteTweaksUnPatched",
+                true,
+                "NoteTweaksUnPatched",
+                false,
+                scheme._saberAColor,
+                scheme._saberBColor,
+                scheme._environmentColor0,
+                scheme._environmentColor1,
+                scheme._environmentColorW,
+                scheme._supportsEnvironmentColorBoost,
+                scheme._environmentColor0Boost,
+                scheme._environmentColor1Boost,
+                scheme._environmentColorWBoost,
+                scheme._obstaclesColor);
+            
+            ColorScheme patchedColors = PatchColors(tempScheme);
 
             __instance.usingOverrideColorScheme = true;
             __instance.colorScheme = patchedColors;
-        }
-
-        [HarmonyPatch]
-        internal class MissionInitPatch
-        {
-            [UsedImplicitly]
-            static MethodInfo TargetMethod() => AccessTools.FirstMethod(typeof(MissionLevelScenesTransitionSetupDataSO),
-                m => m.Name == nameof(MissionLevelScenesTransitionSetupDataSO.Init) &&
-                     m.GetParameters().All(p => p.ParameterType != typeof(IBeatmapLevelData)));
-            
-            // ReSharper disable once InconsistentNaming
-            internal static void Postfix(MissionLevelScenesTransitionSetupDataSO __instance)
-            {
-                if (!Config.Enabled)
-                {
-                    return;
-                }
-                
-                __instance.gameplayCoreSceneSetupData.SetField("colorScheme", PatchColors(__instance.gameplayCoreSceneSetupData.colorScheme));
-            }
         }
 
         [HarmonyPatch(typeof(StandardLevelRestartController), "RestartLevel")]
@@ -169,69 +114,28 @@ namespace NoteTweaks.Patches
                 return;
             }
             
-            ColorScheme oldScheme = __instance._standardLevelSceneSetupData.colorScheme;
-            oldScheme._saberAColor = OriginalLeftColor;
-            oldScheme._saberBColor = OriginalRightColor;
-            ColorScheme patchedColors = PatchColors(oldScheme);
-
-            if (patchedColors._saberAColor == oldScheme._saberAColor &&
-                patchedColors._saberBColor == oldScheme._saberBColor)
-            {
-                return;
-            }
+            ColorScheme scheme = __instance._standardLevelSceneSetupData.colorScheme;
+            ColorScheme tempScheme = new ColorScheme(
+                "NoteTweaksUnPatched",
+                "NoteTweaksUnPatched",
+                true,
+                "NoteTweaksUnPatched",
+                false,
+                scheme._saberAColor,
+                scheme._saberBColor,
+                scheme._environmentColor0,
+                scheme._environmentColor1,
+                scheme._environmentColorW,
+                scheme._supportsEnvironmentColorBoost,
+                scheme._environmentColor0Boost,
+                scheme._environmentColor1Boost,
+                scheme._environmentColorWBoost,
+                scheme._obstaclesColor);
             
+            ColorScheme patchedColors = PatchColors(tempScheme);
+
             __instance._standardLevelSceneSetupData.usingOverrideColorScheme = true;
             __instance._standardLevelSceneSetupData.colorScheme = patchedColors;
-        }
-        
-        [HarmonyPatch(typeof(MissionLevelRestartController), "RestartLevel")]
-        [HarmonyPostfix]
-        // ReSharper disable once InconsistentNaming
-        private static void MissionLevelRestartControllerPatch(MissionLevelRestartController __instance)
-        {
-            if (!Config.Enabled)
-            {
-                return;
-            }
-
-            ColorScheme oldScheme = __instance._missionLevelSceneSetupData.gameplayCoreSceneSetupData.colorScheme;
-            oldScheme._saberAColor = OriginalLeftColor;
-            oldScheme._saberBColor = OriginalRightColor;
-            __instance._missionLevelSceneSetupData.gameplayCoreSceneSetupData.SetField("colorScheme", PatchColors(oldScheme));
-        }
-        
-        [HarmonyPatch(typeof(StandardLevelScenesTransitionSetupDataSO), "Finish")]
-        [HarmonyPostfix]
-        // ReSharper disable once InconsistentNaming
-        private static void FinishPatch(StandardLevelScenesTransitionSetupDataSO __instance)
-        {
-            if (!Config.Enabled)
-            {
-                return;
-            }
-            
-            ColorScheme oldScheme = __instance.colorScheme;
-            oldScheme._saberAColor = OriginalLeftColor;
-            oldScheme._saberBColor = OriginalRightColor;
-
-            __instance.colorScheme = oldScheme;
-        }
-        
-        [HarmonyPatch(typeof(MissionLevelScenesTransitionSetupDataSO), "Finish")]
-        [HarmonyPostfix]
-        // ReSharper disable once InconsistentNaming
-        private static void FinishMissionPatch(MissionLevelScenesTransitionSetupDataSO __instance)
-        {
-            if (!Config.Enabled)
-            {
-                return;
-            }
-
-            ColorScheme oldScheme = __instance.gameplayCoreSceneSetupData.colorScheme;
-            oldScheme._saberAColor = OriginalLeftColor;
-            oldScheme._saberBColor = OriginalRightColor;
-
-            __instance.gameplayCoreSceneSetupData.SetField("colorScheme", oldScheme);
         }
     }
 }
