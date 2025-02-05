@@ -1,5 +1,6 @@
 ﻿using HarmonyLib;
 using IPA.Utilities;
+using NoteTweaks.Configuration;
 using UnityEngine;
 using UnityEngine.Rendering;
 #pragma warning disable CS0612
@@ -29,6 +30,8 @@ namespace NoteTweaks.Managers
     }
     internal abstract class Outlines
     {
+        private static PluginConfig Config => PluginConfig.Instance;
+        
         // https://discussions.unity.com/t/reading-meshes-at-runtime-that-are-not-enabled-for-read-write/804189/8
         private static Mesh MakeReadableMeshCopy(Mesh nonReadableMesh)
         {
@@ -180,7 +183,7 @@ namespace NoteTweaks.Managers
             }
             
             clonedOutlineObject.name = "NoteOutline";
-            clonedOutlineObject.SetActive(wantedMesh == InvertedBombMesh ? Plugin.Config.EnableBombOutlines : Plugin.Config.EnableNoteOutlines);
+            clonedOutlineObject.SetActive(wantedMesh == InvertedBombMesh ? Config.EnableBombOutlines : Config.EnableNoteOutlines);
         }
     }
 }

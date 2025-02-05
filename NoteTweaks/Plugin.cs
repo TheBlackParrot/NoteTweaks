@@ -19,58 +19,58 @@ namespace NoteTweaks
     internal class Plugin
     {
         internal static IPALogger Log { get; private set; }
-        internal static PluginConfig Config;
         private static Harmony _harmony;
 
         internal static void ClampSettings()
         {
-            Config.NoteScale = Vectors.Max(Vectors.Min(Config.NoteScale, 2.0f), 0.1f);
-            Config.BombScale = Mathf.Max(Mathf.Min(Config.BombScale, 2.0f), 0.1f);
-            Config.LinkScale = Mathf.Max(Mathf.Min(Config.LinkScale, 2.0f), 0.1f);
+            PluginConfig.Instance.NoteScale = Vectors.Max(Vectors.Min(PluginConfig.Instance.NoteScale, 2.0f), 0.1f);
+            PluginConfig.Instance.BombScale = Mathf.Max(Mathf.Min(PluginConfig.Instance.BombScale, 2.0f), 0.1f);
+            PluginConfig.Instance.LinkScale = Mathf.Max(Mathf.Min(PluginConfig.Instance.LinkScale, 2.0f), 0.1f);
             
-            Config.ColorBoostLeft = Mathf.Max(Config.ColorBoostLeft, -0.95f);
-            Config.ColorBoostRight = Mathf.Max(Config.ColorBoostRight, -0.95f);
-            Config.BombColorBoost = Mathf.Max(Config.BombColorBoost, -0.95f);
+            PluginConfig.Instance.ColorBoostLeft = Mathf.Max(PluginConfig.Instance.ColorBoostLeft, -0.95f);
+            PluginConfig.Instance.ColorBoostRight = Mathf.Max(PluginConfig.Instance.ColorBoostRight, -0.95f);
+            PluginConfig.Instance.BombColorBoost = Mathf.Max(PluginConfig.Instance.BombColorBoost, -0.95f);
             
-            Config.DotMeshSides = Math.Max(Math.Min(Config.DotMeshSides, 48), 4);
+            PluginConfig.Instance.DotMeshSides = Math.Max(Math.Min(PluginConfig.Instance.DotMeshSides, 48), 4);
             
-            Config.LeftFaceColorNoteSkew = Mathf.Max(0f, Mathf.Min(Config.LeftFaceColorNoteSkew, 1.0f));
-            Config.RightFaceColorNoteSkew = Mathf.Max(0f, Mathf.Min(Config.RightFaceColorNoteSkew, 1.0f));
-            Config.LeftFaceGlowColorNoteSkew = Mathf.Max(0f, Mathf.Min(Config.LeftFaceGlowColorNoteSkew, 1.0f));
-            Config.RightFaceGlowColorNoteSkew = Mathf.Max(0f, Mathf.Min(Config.RightFaceGlowColorNoteSkew, 1.0f));
+            PluginConfig.Instance.LeftFaceColorNoteSkew = Mathf.Max(0f, Mathf.Min(PluginConfig.Instance.LeftFaceColorNoteSkew, 1.0f));
+            PluginConfig.Instance.RightFaceColorNoteSkew = Mathf.Max(0f, Mathf.Min(PluginConfig.Instance.RightFaceColorNoteSkew, 1.0f));
+            PluginConfig.Instance.LeftFaceGlowColorNoteSkew = Mathf.Max(0f, Mathf.Min(PluginConfig.Instance.LeftFaceGlowColorNoteSkew, 1.0f));
+            PluginConfig.Instance.RightFaceGlowColorNoteSkew = Mathf.Max(0f, Mathf.Min(PluginConfig.Instance.RightFaceGlowColorNoteSkew, 1.0f));
             
-            Config.AccDotSize = Math.Max(Math.Min(Config.AccDotSize, 15), 5);
+            PluginConfig.Instance.AccDotSize = Math.Max(Math.Min(PluginConfig.Instance.AccDotSize, 15), 5);
 
-            Config.RainbowBombTimeScale = Mathf.Max(0.1f, Config.RainbowBombTimeScale);
-            Config.RainbowBombSaturation = Mathf.Max(0f, Config.RainbowBombSaturation);
-            Config.RainbowBombValue = Mathf.Max(0f, Config.RainbowBombValue);
+            PluginConfig.Instance.RainbowBombTimeScale = Mathf.Max(0.1f, PluginConfig.Instance.RainbowBombTimeScale);
+            PluginConfig.Instance.RainbowBombSaturation = Mathf.Max(0f, PluginConfig.Instance.RainbowBombSaturation);
+            PluginConfig.Instance.RainbowBombValue = Mathf.Max(0f, PluginConfig.Instance.RainbowBombValue);
             
-            Config.LeftMinBrightness = Mathf.Max(Mathf.Min(Config.LeftMinBrightness, 1.0f), 0.0f);
-            Config.LeftMaxBrightness = Mathf.Max(Mathf.Min(Config.LeftMaxBrightness, 1.0f), 0.0f);
-            Config.RightMinBrightness = Mathf.Max(Mathf.Min(Config.RightMinBrightness, 1.0f), 0.0f);
-            Config.RightMaxBrightness = Mathf.Max(Mathf.Min(Config.RightMaxBrightness, 1.0f), 0.0f);
+            PluginConfig.Instance.LeftMinBrightness = Mathf.Max(Mathf.Min(PluginConfig.Instance.LeftMinBrightness, 1.0f), 0.0f);
+            PluginConfig.Instance.LeftMaxBrightness = Mathf.Max(Mathf.Min(PluginConfig.Instance.LeftMaxBrightness, 1.0f), 0.0f);
+            PluginConfig.Instance.RightMinBrightness = Mathf.Max(Mathf.Min(PluginConfig.Instance.RightMinBrightness, 1.0f), 0.0f);
+            PluginConfig.Instance.RightMaxBrightness = Mathf.Max(Mathf.Min(PluginConfig.Instance.RightMaxBrightness, 1.0f), 0.0f);
             
-            Config.ArrowPosition = Vectors.Max(Vectors.Min(Config.ArrowPosition, 0.2f), -0.2f);
-            Config.DotPosition = Vectors.Max(Vectors.Min(Config.DotPosition, 0.2f), -0.2f);
-            Config.LeftGlowOffset = Vectors.Max(Vectors.Min(Config.LeftGlowOffset, 0.2f), -0.2f);
-            Config.RightGlowOffset = Vectors.Max(Vectors.Min(Config.RightGlowOffset, 0.2f), -0.2f);
+            PluginConfig.Instance.ArrowPosition = Vectors.Max(Vectors.Min(PluginConfig.Instance.ArrowPosition, 0.2f), -0.2f);
+            PluginConfig.Instance.DotPosition = Vectors.Max(Vectors.Min(PluginConfig.Instance.DotPosition, 0.2f), -0.2f);
+            PluginConfig.Instance.LeftGlowOffset = Vectors.Max(Vectors.Min(PluginConfig.Instance.LeftGlowOffset, 0.2f), -0.2f);
+            PluginConfig.Instance.RightGlowOffset = Vectors.Max(Vectors.Min(PluginConfig.Instance.RightGlowOffset, 0.2f), -0.2f);
             
-            Config.NoteOutlineLeftColorSkew = Mathf.Max(0f, Mathf.Min(Config.NoteOutlineLeftColorSkew, 1.0f));
-            Config.NoteOutlineRightColorSkew = Mathf.Max(0f, Mathf.Min(Config.NoteOutlineRightColorSkew, 1.0f));
-            Config.NoteOutlineScale = Math.Max(Config.NoteOutlineScale, 0);
-            Config.BombOutlineScale = Math.Max(Config.BombOutlineScale, 0);
+            PluginConfig.Instance.NoteOutlineLeftColorSkew = Mathf.Max(0f, Mathf.Min(PluginConfig.Instance.NoteOutlineLeftColorSkew, 1.0f));
+            PluginConfig.Instance.NoteOutlineRightColorSkew = Mathf.Max(0f, Mathf.Min(PluginConfig.Instance.NoteOutlineRightColorSkew, 1.0f));
+            PluginConfig.Instance.NoteOutlineScale = Math.Max(PluginConfig.Instance.NoteOutlineScale, 0);
+            PluginConfig.Instance.BombOutlineScale = Math.Max(PluginConfig.Instance.BombOutlineScale, 0);
             
-            Config.FogScale = Mathf.Max(Config.FogScale, 0.0f);
-            Config.FogHeightScale = Mathf.Max(Config.FogHeightScale, 0.0f);
+            PluginConfig.Instance.FogScale = Mathf.Max(PluginConfig.Instance.FogScale, 0.0f);
+            PluginConfig.Instance.FogHeightScale = Mathf.Max(PluginConfig.Instance.FogHeightScale, 0.0f);
         }
 
         [Init]
         public Plugin(IPALogger logger, Config config, Zenjector zenjector)
         {
             Log = logger;
-            Config = config.Generated<PluginConfig>();
+            PluginConfig c = config.Generated<PluginConfig>();
+            PluginConfig.Instance = c;
             
-            zenjector.Install<AppInstaller>(Location.App, Config);
+            zenjector.Install<AppInstaller>(Location.App, PluginConfig.Instance);
             zenjector.Install<MenuInstaller>(Location.Menu);
             zenjector.Install<GameInstaller>(Location.Player);
         }

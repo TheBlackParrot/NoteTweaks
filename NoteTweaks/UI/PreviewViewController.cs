@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using BeatSaberMarkupLanguage.Attributes;
 using BeatSaberMarkupLanguage.ViewControllers;
+using NoteTweaks.Configuration;
 using NoteTweaks.Managers;
 using NoteTweaks.Utils;
 using UnityEngine;
@@ -16,6 +17,8 @@ namespace NoteTweaks.UI
     [HotReload(RelativePathToLayout = "BSML.Empty.bsml")]
     internal class NotePreviewViewController : BSMLAutomaticViewController
     {
+        private static PluginConfig Config => PluginConfig.Instance;
+        
         internal static GameObject NoteContainer = new GameObject("_NoteTweaks_NoteContainer");
         
         private static readonly float NoteSize = 0.5f;
@@ -46,8 +49,8 @@ namespace NoteTweaks.UI
                 _dotGlowMesh = NoteContainer.transform.GetChild(0).Find("NoteCircleGlow").GetComponent<MeshFilter>().mesh;
             }
 
-            Managers.Meshes.DotMesh = Utils.Meshes.GenerateFaceMesh(Plugin.Config.DotMeshSides);
-            //Managers.Meshes.DotMesh = Utils.Meshes.GenerateStarMesh(Plugin.Config.DotMeshSides);
+            Managers.Meshes.DotMesh = Utils.Meshes.GenerateFaceMesh(Config.DotMeshSides);
+            //Managers.Meshes.DotMesh = Utils.Meshes.GenerateStarMesh(Config.DotMeshSides);
 
             for (int i = 0; i < NoteContainer.transform.childCount; i++)
             {
@@ -86,7 +89,7 @@ namespace NoteTweaks.UI
                     if (noteCube.transform.Find("NoteArrow").gameObject.activeSelf)
                     {
                         // is not a dot note
-                        noteCube.transform.Find("NoteArrowGlow").gameObject.SetActive(Plugin.Config.EnableFaceGlow);
+                        noteCube.transform.Find("NoteArrowGlow").gameObject.SetActive(Config.EnableFaceGlow);
                     }
                     else
                     {
@@ -95,8 +98,8 @@ namespace NoteTweaks.UI
                         if (noteCircleGlowTransform != null)
                         {
                             GameObject dotObject = noteCircleGlowTransform.gameObject;
-                            dotObject.SetActive(Plugin.Config.EnableDots);
-                            noteCube.transform.Find("AddedNoteCircleGlow").gameObject.SetActive(Plugin.Config.EnableFaceGlow && Plugin.Config.EnableDots);
+                            dotObject.SetActive(Config.EnableDots);
+                            noteCube.transform.Find("AddedNoteCircleGlow").gameObject.SetActive(Config.EnableFaceGlow && Config.EnableDots);
                         }
                     }
                 }
@@ -104,8 +107,8 @@ namespace NoteTweaks.UI
                 {
                     // is a chain link
                     GameObject dotObject = noteCube.transform.Find("Circle").gameObject;
-                    dotObject.SetActive(Plugin.Config.EnableChainDots);
-                    noteCube.transform.Find("AddedNoteCircleGlow").gameObject.SetActive(Plugin.Config.EnableChainDotGlow && Plugin.Config.EnableChainDots);
+                    dotObject.SetActive(Config.EnableChainDots);
+                    noteCube.transform.Find("AddedNoteCircleGlow").gameObject.SetActive(Config.EnableChainDotGlow && Config.EnableChainDots);
                 }
             }
         }
@@ -117,8 +120,8 @@ namespace NoteTweaks.UI
                 _initialDotPosition = NoteContainer.transform.GetChild(0).Find("NoteCircleGlow").localPosition;
             }
             
-            Vector3 dotPosition = new Vector3(_initialDotPosition.x + Plugin.Config.DotPosition.x, _initialDotPosition.y + Plugin.Config.DotPosition.y, _initialDotPosition.z);
-            Vector3 initialDotGlowPosition = new Vector3(_initialDotPosition.x + Plugin.Config.DotPosition.x, _initialDotPosition.y + Plugin.Config.DotPosition.y, _initialDotPosition.z + 0.001f);
+            Vector3 dotPosition = new Vector3(_initialDotPosition.x + Config.DotPosition.x, _initialDotPosition.y + Config.DotPosition.y, _initialDotPosition.z);
+            Vector3 initialDotGlowPosition = new Vector3(_initialDotPosition.x + Config.DotPosition.x, _initialDotPosition.y + Config.DotPosition.y, _initialDotPosition.z + 0.001f);
             
             for (int i = 0; i < NoteContainer.transform.childCount; i++)
             {
@@ -131,7 +134,7 @@ namespace NoteTweaks.UI
                 Transform noteCircleGlowTransform = noteCube.transform.Find("NoteCircleGlow");
                 if (noteCircleGlowTransform != null)
                 {
-                    Vector3 dotGlowPosition = initialDotGlowPosition + (Vector3)(noteCube.name.Contains("_L_") ? Plugin.Config.LeftGlowOffset : Plugin.Config.RightGlowOffset);
+                    Vector3 dotGlowPosition = initialDotGlowPosition + (Vector3)(noteCube.name.Contains("_L_") ? Config.LeftGlowOffset : Config.RightGlowOffset);
                     
                     noteCircleGlowTransform.localPosition = dotPosition;
                     noteCube.transform.Find("AddedNoteCircleGlow").localPosition = dotGlowPosition;
@@ -141,10 +144,10 @@ namespace NoteTweaks.UI
 
         public static void UpdateDotScale()
         {
-            Vector3 scale = new Vector3(Plugin.Config.DotScale.x / 5f, Plugin.Config.DotScale.y / 5f, 1.0f);
-            Vector3 glowScale = new Vector3((Plugin.Config.DotScale.x / 1.5f) * Plugin.Config.DotGlowScale, (Plugin.Config.DotScale.y / 1.5f) * Plugin.Config.DotGlowScale, 1.0f);
-            Vector3 chainLinkDotScale = new Vector3(Plugin.Config.ChainDotScale.x / 18f, Plugin.Config.ChainDotScale.y / 18f, 1.0f);
-            Vector3 chainLinkGlowScale = new Vector3((Plugin.Config.ChainDotScale.x / 5.4f) * Plugin.Config.DotGlowScale, (Plugin.Config.ChainDotScale.y / 5.4f) * Plugin.Config.DotGlowScale, 1.0f);
+            Vector3 scale = new Vector3(Config.DotScale.x / 5f, Config.DotScale.y / 5f, 1.0f);
+            Vector3 glowScale = new Vector3((Config.DotScale.x / 1.5f) * Config.DotGlowScale, (Config.DotScale.y / 1.5f) * Config.DotGlowScale, 1.0f);
+            Vector3 chainLinkDotScale = new Vector3(Config.ChainDotScale.x / 18f, Config.ChainDotScale.y / 18f, 1.0f);
+            Vector3 chainLinkGlowScale = new Vector3((Config.ChainDotScale.x / 5.4f) * Config.DotGlowScale, (Config.ChainDotScale.y / 5.4f) * Config.DotGlowScale, 1.0f);
             
             for (int i = 0; i < NoteContainer.transform.childCount; i++)
             {
@@ -184,9 +187,9 @@ namespace NoteTweaks.UI
                 if (noteCircleGlowTransform != null)
                 {
                     noteCircleGlowTransform.localRotation = Quaternion.identity;
-                    noteCircleGlowTransform.Rotate(0f, 0f, Plugin.Config.RotateDot);
+                    noteCircleGlowTransform.Rotate(0f, 0f, Config.RotateDot);
                     addedNoteCircleGlowTransform.localRotation = Quaternion.identity;
-                    addedNoteCircleGlowTransform.Rotate(0f, 0f, Plugin.Config.RotateDot);
+                    addedNoteCircleGlowTransform.Rotate(0f, 0f, Config.RotateDot);
                 }
             }            
         }
@@ -198,7 +201,7 @@ namespace NoteTweaks.UI
                 _initialArrowPosition = NoteContainer.transform.GetChild(0).Find("NoteArrow").localPosition;
             }
             
-            Vector3 position = new Vector3(Plugin.Config.ArrowPosition.x, _initialArrowPosition.y + Plugin.Config.ArrowPosition.y, _initialArrowPosition.z);
+            Vector3 position = new Vector3(Config.ArrowPosition.x, _initialArrowPosition.y + Config.ArrowPosition.y, _initialArrowPosition.z);
             
             for (int i = 0; i < NoteContainer.transform.childCount; i++)
             {
@@ -210,14 +213,14 @@ namespace NoteTweaks.UI
                 }
                 
                 noteCube.transform.Find("NoteArrow").localPosition = position;
-                noteCube.transform.Find("NoteArrowGlow").localPosition = position + (Vector3)(noteCube.name.Contains("_L_") ? Plugin.Config.LeftGlowOffset : Plugin.Config.RightGlowOffset);
+                noteCube.transform.Find("NoteArrowGlow").localPosition = position + (Vector3)(noteCube.name.Contains("_L_") ? Config.LeftGlowOffset : Config.RightGlowOffset);
             }
         }
 
         public static void UpdateArrowScale()
         {
-            Vector3 scale = new Vector3(Plugin.Config.ArrowScale.x, Plugin.Config.ArrowScale.y, 1.0f);
-            Vector3 glowScale = new Vector3(scale.x * Plugin.Config.ArrowGlowScale * 0.6f, scale.y * Plugin.Config.ArrowGlowScale * 0.3f, 0.6f);
+            Vector3 scale = new Vector3(Config.ArrowScale.x, Config.ArrowScale.y, 1.0f);
+            Vector3 glowScale = new Vector3(scale.x * Config.ArrowGlowScale * 0.6f, scale.y * Config.ArrowGlowScale * 0.3f, 0.6f);
             
             for (int i = 0; i < NoteContainer.transform.childCount; i++)
             {
@@ -244,7 +247,7 @@ namespace NoteTweaks.UI
                     continue;
                 }
 
-                noteCube.transform.localScale = noteCube.name.Contains("_Chain_") ? Vectors.Max(Plugin.Config.NoteScale * Plugin.Config.LinkScale, 0.1f) : Plugin.Config.NoteScale;
+                noteCube.transform.localScale = noteCube.name.Contains("_Chain_") ? Vectors.Max(Config.NoteScale * Config.LinkScale, 0.1f) : Config.NoteScale;
             }
         }
         
@@ -258,7 +261,7 @@ namespace NoteTweaks.UI
                     continue;
                 }
 
-                bombObject.transform.localScale = Vector3.one * Plugin.Config.BombScale;
+                bombObject.transform.localScale = Vector3.one * Config.BombScale;
             }
         }
 
@@ -277,26 +280,26 @@ namespace NoteTweaks.UI
             Color rightColor = colors._saberBColor;
             float rightBrightness = rightColor.Brightness();
             
-            if (leftBrightness > Plugin.Config.LeftMaxBrightness)
+            if (leftBrightness > Config.LeftMaxBrightness)
             {
-                leftColor = leftColor.LerpRGBUnclamped(Color.black, Mathf.InverseLerp(leftBrightness, 0.0f, Plugin.Config.LeftMaxBrightness));
+                leftColor = leftColor.LerpRGBUnclamped(Color.black, Mathf.InverseLerp(leftBrightness, 0.0f, Config.LeftMaxBrightness));
             }
-            else if (leftBrightness < Plugin.Config.LeftMinBrightness)
+            else if (leftBrightness < Config.LeftMinBrightness)
             {
-                leftColor = leftColor.LerpRGBUnclamped(Color.white, Mathf.InverseLerp(leftBrightness, 1.0f, Plugin.Config.LeftMinBrightness));
-            }
-            
-            if (rightBrightness > Plugin.Config.RightMaxBrightness)
-            {
-                rightColor = rightColor.LerpRGBUnclamped(Color.black, Mathf.InverseLerp(rightBrightness, 0.0f, Plugin.Config.RightMaxBrightness));
-            }
-            else if (rightBrightness < Plugin.Config.RightMinBrightness)
-            {
-                rightColor = rightColor.LerpRGBUnclamped(Color.white, Mathf.InverseLerp(rightBrightness, 1.0f, Plugin.Config.RightMinBrightness));
+                leftColor = leftColor.LerpRGBUnclamped(Color.white, Mathf.InverseLerp(leftBrightness, 1.0f, Config.LeftMinBrightness));
             }
             
-            float leftScale = 1.0f + Plugin.Config.ColorBoostLeft;
-            float rightScale = 1.0f + Plugin.Config.ColorBoostRight;
+            if (rightBrightness > Config.RightMaxBrightness)
+            {
+                rightColor = rightColor.LerpRGBUnclamped(Color.black, Mathf.InverseLerp(rightBrightness, 0.0f, Config.RightMaxBrightness));
+            }
+            else if (rightBrightness < Config.RightMinBrightness)
+            {
+                rightColor = rightColor.LerpRGBUnclamped(Color.white, Mathf.InverseLerp(rightBrightness, 1.0f, Config.RightMinBrightness));
+            }
+            
+            float leftScale = 1.0f + Config.ColorBoostLeft;
+            float rightScale = 1.0f + Config.ColorBoostRight;
 
             for (int i = 0; i < NoteContainer.transform.childCount; i++)
             {
@@ -313,22 +316,22 @@ namespace NoteTweaks.UI
 
                 float colorScalar = noteColor.maxColorComponent;
 
-                if (colorScalar != 0 && i % 2 == 0 ? Plugin.Config.NormalizeLeftFaceColor : Plugin.Config.NormalizeRightFaceColor)
+                if (colorScalar != 0 && i % 2 == 0 ? Config.NormalizeLeftFaceColor : Config.NormalizeRightFaceColor)
                 {
                     faceColor /= colorScalar;
                 }
 
-                faceColor = Color.LerpUnclamped(i % 2 == 0 ? Plugin.Config.LeftFaceColor : Plugin.Config.RightFaceColor, faceColor, i % 2 == 0 ? Plugin.Config.LeftFaceColorNoteSkew : Plugin.Config.RightFaceColorNoteSkew);
+                faceColor = Color.LerpUnclamped(i % 2 == 0 ? Config.LeftFaceColor : Config.RightFaceColor, faceColor, i % 2 == 0 ? Config.LeftFaceColorNoteSkew : Config.RightFaceColorNoteSkew);
                 faceColor.a = 1f;
                 
-                Color glowColor = Color.LerpUnclamped(i % 2 == 0 ? Plugin.Config.LeftFaceGlowColor : Plugin.Config.RightFaceGlowColor, noteColor, i % 2 == 0 ? Plugin.Config.LeftFaceGlowColorNoteSkew : Plugin.Config.RightFaceGlowColorNoteSkew);
+                Color glowColor = Color.LerpUnclamped(i % 2 == 0 ? Config.LeftFaceGlowColor : Config.RightFaceGlowColor, noteColor, i % 2 == 0 ? Config.LeftFaceGlowColorNoteSkew : Config.RightFaceGlowColorNoteSkew);
                 
-                if (colorScalar != 0 && i % 2 == 0 ? Plugin.Config.NormalizeLeftFaceGlowColor : Plugin.Config.NormalizeRightFaceGlowColor)
+                if (colorScalar != 0 && i % 2 == 0 ? Config.NormalizeLeftFaceGlowColor : Config.NormalizeRightFaceGlowColor)
                 {
                     glowColor /= colorScalar;
                 }
                 
-                glowColor.a = i % 2 == 0 ? Plugin.Config.LeftGlowIntensity : Plugin.Config.RightGlowIntensity;
+                glowColor.a = i % 2 == 0 ? Config.LeftGlowIntensity : Config.RightGlowIntensity;
                 
                 foreach (MaterialPropertyBlockController controller in noteCube.GetComponents<MaterialPropertyBlockController>())
                 {
@@ -353,7 +356,7 @@ namespace NoteTweaks.UI
                         Transform childTransform = controller.transform.Find(childName);
                         if (childTransform)
                         {
-                            Enum.TryParse(i % 2 == 0 ? Plugin.Config.LeftGlowBlendOp : Plugin.Config.RightGlowBlendOp, out BlendOp operation);
+                            Enum.TryParse(i % 2 == 0 ? Config.LeftGlowBlendOp : Config.RightGlowBlendOp, out BlendOp operation);
                             
                             if (childTransform.TryGetComponent(out MaterialPropertyBlockController childController))
                             {
@@ -381,7 +384,7 @@ namespace NoteTweaks.UI
         
         public static void UpdateBombColors()
         {
-            float scale = 1.0f + Plugin.Config.BombColorBoost;
+            float scale = 1.0f + Config.BombColorBoost;
 
             for (int i = 0; i < NoteContainer.transform.childCount; i++)
             {
@@ -391,7 +394,7 @@ namespace NoteTweaks.UI
                     continue;
                 }
                 
-                Color bombColor = Plugin.Config.EnableRainbowBombs ? RainbowGradient.Color : Plugin.Config.BombColor * scale;
+                Color bombColor = Config.EnableRainbowBombs ? RainbowGradient.Color : Config.BombColor * scale;
                 
                 foreach (MaterialPropertyBlockController controller in bombObj.GetComponents<MaterialPropertyBlockController>())
                 {
@@ -432,7 +435,7 @@ namespace NoteTweaks.UI
                 bool isLeft = noteCube.name.Contains("_L_");
                 bool isBomb = noteCube.name.Contains("_Bomb_");
                 
-                Color noteColor = Plugin.Config.BombColor;
+                Color noteColor = Config.BombColor;
                 if (noteCube.TryGetComponent(out MaterialPropertyBlockController noteMaterialController))
                 {
                     noteColor = noteMaterialController.materialPropertyBlock.GetColor(Color0);
@@ -440,22 +443,22 @@ namespace NoteTweaks.UI
                 
                 float colorScalar = noteColor.maxColorComponent;
 
-                if (colorScalar != 0 && !isBomb && isLeft ? Plugin.Config.NormalizeLeftOutlineColor : Plugin.Config.NormalizeRightOutlineColor)
+                if (colorScalar != 0 && !isBomb && isLeft ? Config.NormalizeLeftOutlineColor : Config.NormalizeRightOutlineColor)
                 {
                     noteColor /= colorScalar;
                 }
                 
-                Color outlineColor = Plugin.Config.BombOutlineColor;
+                Color outlineColor = Config.BombOutlineColor;
                 if (!isBomb)
                 {
-                    outlineColor = Color.LerpUnclamped(isLeft ? Plugin.Config.NoteOutlineLeftColor : Plugin.Config.NoteOutlineRightColor, noteColor, isLeft ? Plugin.Config.NoteOutlineLeftColorSkew : Plugin.Config.NoteOutlineRightColorSkew);   
+                    outlineColor = Color.LerpUnclamped(isLeft ? Config.NoteOutlineLeftColor : Config.NoteOutlineRightColor, noteColor, isLeft ? Config.NoteOutlineLeftColorSkew : Config.NoteOutlineRightColorSkew);   
                 }
                 
                 Transform noteOutline = noteCube.transform.FindChildRecursively("NoteOutline");
                 if (noteOutline)
                 {
-                    noteOutline.gameObject.SetActive(isBomb ? Plugin.Config.EnableBombOutlines : Plugin.Config.EnableNoteOutlines);
-                    noteOutline.localScale = (Vector3.one * ((isBomb ? Plugin.Config.BombOutlineScale : Plugin.Config.NoteOutlineScale) / 100f)) + Vector3.one;
+                    noteOutline.gameObject.SetActive(isBomb ? Config.EnableBombOutlines : Config.EnableNoteOutlines);
+                    noteOutline.localScale = (Vector3.one * ((isBomb ? Config.BombOutlineScale : Config.NoteOutlineScale) / 100f)) + Vector3.one;
                     
                     if (noteOutline.gameObject.TryGetComponent(out MaterialPropertyBlockController controller))
                     {
@@ -504,8 +507,8 @@ namespace NoteTweaks.UI
                     
                 Vector3 dotPosition = new Vector3(_initialChainDotPosition.x, _initialChainDotPosition.y, _initialChainDotPosition.z - 0.002f);
                 Vector3 glowPosition = new Vector3(_initialChainDotPosition.x, _initialChainDotPosition.y, _initialChainDotPosition.z - 0.001f);
-                Vector3 dotScale = new Vector3(Plugin.Config.ChainDotScale.x / 18f, Plugin.Config.ChainDotScale.y / 18f, 1.0f);
-                Vector3 glowScale = new Vector3((Plugin.Config.ChainDotScale.x / 5.4f) * Plugin.Config.DotGlowScale, (Plugin.Config.ChainDotScale.y / 5.4f) * Plugin.Config.DotGlowScale, 1.0f);
+                Vector3 dotScale = new Vector3(Config.ChainDotScale.x / 18f, Config.ChainDotScale.y / 18f, 1.0f);
+                Vector3 glowScale = new Vector3((Config.ChainDotScale.x / 5.4f) * Config.DotGlowScale, (Config.ChainDotScale.y / 5.4f) * Config.DotGlowScale, 1.0f);
 
                 originalDotTransform.localScale = dotScale;
                 originalDotTransform.localPosition = dotPosition;
@@ -573,10 +576,10 @@ namespace NoteTweaks.UI
                     _initialDotPosition = originalDotTransform.localPosition;
                 }
                     
-                Vector3 dotPosition = new Vector3(_initialDotPosition.x + Plugin.Config.DotPosition.x, _initialDotPosition.y + Plugin.Config.DotPosition.y, _initialDotPosition.z);
-                Vector3 glowPosition = new Vector3(_initialDotPosition.x + Plugin.Config.DotPosition.x, _initialDotPosition.y + Plugin.Config.DotPosition.y, _initialDotPosition.z + 0.001f);
-                Vector3 dotScale = new Vector3(Plugin.Config.DotScale.x / 5f, Plugin.Config.DotScale.y / 5f, 1.0f);
-                Vector3 glowScale = new Vector3((Plugin.Config.DotScale.x / 1.5f) * Plugin.Config.DotGlowScale, (Plugin.Config.DotScale.y / 1.5f) * Plugin.Config.DotGlowScale, 1.0f);
+                Vector3 dotPosition = new Vector3(_initialDotPosition.x + Config.DotPosition.x, _initialDotPosition.y + Config.DotPosition.y, _initialDotPosition.z);
+                Vector3 glowPosition = new Vector3(_initialDotPosition.x + Config.DotPosition.x, _initialDotPosition.y + Config.DotPosition.y, _initialDotPosition.z + 0.001f);
+                Vector3 dotScale = new Vector3(Config.DotScale.x / 5f, Config.DotScale.y / 5f, 1.0f);
+                Vector3 glowScale = new Vector3((Config.DotScale.x / 1.5f) * Config.DotGlowScale, (Config.DotScale.y / 1.5f) * Config.DotGlowScale, 1.0f);
 
                 originalDotTransform.localScale = dotScale;
                 originalDotTransform.localPosition = dotPosition;

@@ -3,12 +3,15 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using HarmonyLib;
+using NoteTweaks.Configuration;
 using UnityEngine;
 
 namespace NoteTweaks.Managers
 {
     internal abstract class Materials
     {
+        private static PluginConfig Config => PluginConfig.Instance;
+        
         internal static Material ReplacementDotMaterial;
         internal static Material ReplacementArrowMaterial;
         internal static Material DotGlowMaterial;
@@ -73,18 +76,18 @@ namespace NoteTweaks.Managers
             
             fogKeywords.Do(keyword =>
             {
-                PropertyInfo prop = Plugin.Config.GetType().GetProperty(keyword.Key);
+                PropertyInfo prop = Config.GetType().GetProperty(keyword.Key);
                 if (prop != null)
                 {
-                    float value = (float)prop.GetValue(Plugin.Config, null);
+                    float value = (float)prop.GetValue(Config, null);
 
                     if (keyword.Key == "FogStartOffset")
                     {
-                        value = Plugin.Config.EnableFog ? value : 999999f;
+                        value = Config.EnableFog ? value : 999999f;
                     }
                     if (keyword.Key == "FogHeightOffset")
                     {
-                        value = Plugin.Config.EnableHeightFog ? value : 999999f;
+                        value = Config.EnableHeightFog ? value : 999999f;
                     }
                     
                     ReplacementDotMaterial.SetFloat(keyword.Value, value);
@@ -112,10 +115,10 @@ namespace NoteTweaks.Managers
             
             rimKeywords.Do(keyword =>
             {
-                PropertyInfo prop = Plugin.Config.GetType().GetProperty(keyword.Key);
+                PropertyInfo prop = Config.GetType().GetProperty(keyword.Key);
                 if (prop != null)
                 {
-                    float value = (float)prop.GetValue(Plugin.Config, null);
+                    float value = (float)prop.GetValue(Config, null);
                     
                     NoteMaterial.SetFloat(keyword.Value, value);
                     DebrisMaterial.SetFloat(keyword.Value, value);
@@ -205,7 +208,7 @@ namespace NoteTweaks.Managers
         {
             if (AccDotMaterial != null)
             {
-                AccDotMaterial.SetColor(Color0, Plugin.Config.AccDotColor.ColorWithAlpha(0f));
+                AccDotMaterial.SetColor(Color0, Config.AccDotColor.ColorWithAlpha(0f));
                 return;
             }
 
@@ -218,7 +221,7 @@ namespace NoteTweaks.Managers
                 enableInstancing = true,
                 shaderKeywords = arrowMat.shaderKeywords.Where(x => x != "_ENABLE_COLOR_INSTANCING").ToArray()
             };
-            AccDotMaterial.SetColor(Color0, Plugin.Config.AccDotColor.ColorWithAlpha(0f));
+            AccDotMaterial.SetColor(Color0, Config.AccDotColor.ColorWithAlpha(0f));
 
             // uncomment later maybe
             // Utils.Materials.RepairShader(AccDotDepthMaterial);
@@ -286,9 +289,9 @@ namespace NoteTweaks.Managers
                 Plugin.Log.Info($"{x} : {NoteMaterial.GetVector(x).ToString()}");
             });*/
             
-            if (Textures.GetLoadedNoteTexture() != Plugin.Config.NoteTexture)
+            if (Textures.GetLoadedNoteTexture() != Config.NoteTexture)
             {
-                await Textures.LoadNoteTexture(Plugin.Config.NoteTexture);
+                await Textures.LoadNoteTexture(Config.NoteTexture);
             }
         }
         
@@ -320,20 +323,20 @@ namespace NoteTweaks.Managers
                 name = "NoteTweaks_BombMaterial"
             };
             
-            if (Textures.GetLoadedBombTexture() != Plugin.Config.BombTexture)
+            if (Textures.GetLoadedBombTexture() != Config.BombTexture)
             {
-                await Textures.LoadNoteTexture(Plugin.Config.BombTexture, true);
+                await Textures.LoadNoteTexture(Config.BombTexture, true);
             }
         }
 
         private static void UpdateRenderQueues()
         {
-            if (Plugin.Config.EnableAccDot)
+            if (Config.EnableAccDot)
             {
-                ReplacementArrowMaterial.renderQueue = Plugin.Config.RenderAccDotsAboveSymbols ? 1998 : 2000;
-                ReplacementDotMaterial.renderQueue = Plugin.Config.RenderAccDotsAboveSymbols ? 1998 : 2000;
-                DotGlowMaterial.renderQueue = Plugin.Config.RenderAccDotsAboveSymbols ? 1997 : 1999;
-                ArrowGlowMaterial.renderQueue = Plugin.Config.RenderAccDotsAboveSymbols ? 1997 : 1999;
+                ReplacementArrowMaterial.renderQueue = Config.RenderAccDotsAboveSymbols ? 1998 : 2000;
+                ReplacementDotMaterial.renderQueue = Config.RenderAccDotsAboveSymbols ? 1998 : 2000;
+                DotGlowMaterial.renderQueue = Config.RenderAccDotsAboveSymbols ? 1997 : 1999;
+                ArrowGlowMaterial.renderQueue = Config.RenderAccDotsAboveSymbols ? 1997 : 1999;
             }
             else
             {
@@ -343,7 +346,7 @@ namespace NoteTweaks.Managers
                 ArrowGlowMaterial.renderQueue = 1999;
             }
             
-            if (Plugin.Config.RenderAccDotsAboveSymbols)
+            if (Config.RenderAccDotsAboveSymbols)
             {
                 AccDotMaterial.renderQueue = 1999;
                 AccDotDepthMaterial.renderQueue = 1998;

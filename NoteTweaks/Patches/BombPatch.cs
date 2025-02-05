@@ -1,4 +1,5 @@
 ﻿using HarmonyLib;
+using NoteTweaks.Configuration;
 using NoteTweaks.Managers;
 using UnityEngine;
 #pragma warning disable CS0612
@@ -8,6 +9,7 @@ namespace NoteTweaks.Patches
     [HarmonyPatch]
     internal class BombPatch
     {
+        private static PluginConfig Config => PluginConfig.Instance;
         private static readonly int Color0 = Shader.PropertyToID("_SimpleColor");
         
         [HarmonyPatch(typeof(BombNoteController), "Init")]
@@ -17,7 +19,7 @@ namespace NoteTweaks.Patches
         // ReSharper disable once InconsistentNaming
         internal static void BombNoteControllerInitPatch(BombNoteController __instance)
         {
-            if (!Plugin.Config.Enabled || NotePhysicalTweaks.AutoDisable)
+            if (!Config.Enabled || NotePhysicalTweaks.AutoDisable)
             {
                 return;
             }
@@ -32,22 +34,22 @@ namespace NoteTweaks.Patches
                 }
             }
             
-            if (Plugin.Config.EnableBombOutlines)
+            if (Config.EnableBombOutlines)
             {
                 Outlines.AddOutlineObject(bombRoot, Outlines.InvertedBombMesh);
                 Transform noteOutline = bombRoot.FindChildRecursively("NoteOutline");
                     
                 noteOutline.gameObject.SetActive(true);
-                noteOutline.localScale = (Vector3.one * (Plugin.Config.BombOutlineScale / 100f)) + Vector3.one;
+                noteOutline.localScale = (Vector3.one * (Config.BombOutlineScale / 100f)) + Vector3.one;
                     
                 if (noteOutline.gameObject.TryGetComponent(out MaterialPropertyBlockController controller))
                 {
-                    controller.materialPropertyBlock.SetColor(ColorNoteVisuals._colorId, Plugin.Config.BombOutlineColor);
+                    controller.materialPropertyBlock.SetColor(ColorNoteVisuals._colorId, Config.BombOutlineColor);
                     controller.ApplyChanges();
                 }
             }
 
-            Color bombColor = Plugin.Config.EnableRainbowBombs ? RainbowGradient.Color : Plugin.Config.BombColor * (1.0f + Plugin.Config.BombColorBoost);
+            Color bombColor = Config.EnableRainbowBombs ? RainbowGradient.Color : Config.BombColor * (1.0f + Config.BombColorBoost);
             
             if (__instance.transform.GetChild(0).TryGetComponent(out Renderer bombRenderer))
             {
@@ -66,10 +68,10 @@ namespace NoteTweaks.Patches
                 return;
             }
 
-            Vector3 scale = Vector3.one * Plugin.Config.BombScale;
+            Vector3 scale = Vector3.one * Config.BombScale;
             
             __instance.transform.localScale = scale;
-            __instance._cuttableBySaber.GetComponent<SphereCollider>().radius = 0.18f * (1.0f / Plugin.Config.BombScale);
+            __instance._cuttableBySaber.GetComponent<SphereCollider>().radius = 0.18f * (1.0f / Config.BombScale);
         }
         
         [HarmonyPatch(typeof(BeatmapObjectsInstaller), "InstallBindings")]
@@ -77,12 +79,12 @@ namespace NoteTweaks.Patches
         [HarmonyPostfix]
         // ReSharper disable once InconsistentNaming
         internal static void BeatmapObjectsInstallerInitPatch(BombNoteController ____bombNotePrefab) {
-            if (!Plugin.Config.Enabled || NotePhysicalTweaks.AutoDisable)
+            if (!Config.Enabled || NotePhysicalTweaks.AutoDisable)
             {
                 return;
             }
             
-            Color bombColor = Plugin.Config.EnableRainbowBombs ? RainbowGradient.Color : Plugin.Config.BombColor * (1.0f + Plugin.Config.BombColorBoost);
+            Color bombColor = Config.EnableRainbowBombs ? RainbowGradient.Color : Config.BombColor * (1.0f + Config.BombColorBoost);
 
             if (____bombNotePrefab.transform.GetChild(0).TryGetComponent(out ConditionalMaterialSwitcher switcher))
             {

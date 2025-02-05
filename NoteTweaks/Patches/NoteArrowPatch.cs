@@ -6,6 +6,7 @@ using System.Reflection;
 using HarmonyLib;
 using IPA.Utilities.Async;
 using JetBrains.Annotations;
+using NoteTweaks.Configuration;
 using NoteTweaks.Managers;
 using NoteTweaks.Utils;
 using SongCore.Data;
@@ -20,6 +21,8 @@ namespace NoteTweaks.Patches
     [HarmonyPatch]
     internal class NotePhysicalTweaks
     {
+        private static PluginConfig Config => PluginConfig.Instance;
+        
         private static GameplayModifiers _gameplayModifiers;
         
         private static Mesh _dotGlowMesh;
@@ -74,13 +77,13 @@ namespace NoteTweaks.Patches
             {
                 AutoDisable =
                     (MapHasRequirement(__instance.beatmapLevel, __instance.beatmapKey, "Noodle Extensions") &&
-                     Plugin.Config.DisableIfNoodle) ||
+                     Config.DisableIfNoodle) ||
                     MapHasRequirement(__instance.beatmapLevel, __instance.beatmapKey, "Vivify");
 
                 _fixDots = true;
                 if (MapHasRequirement(__instance.beatmapLevel, __instance.beatmapKey, "Noodle Extensions"))
                 {
-                    _fixDots = Plugin.Config.FixDotsIfNoodle;
+                    _fixDots = Config.FixDotsIfNoodle;
                 }
                 
                 _gameplayModifiers = gameplayModifiers;
@@ -127,7 +130,7 @@ namespace NoteTweaks.Patches
             [SuppressMessage("ReSharper", "InconsistentNaming")]
             internal static void Postfix(ref BurstSliderGameNoteController __instance, ref BoxCuttableBySaber[] ____bigCuttableBySaberList, ref BoxCuttableBySaber[] ____smallCuttableBySaberList)
             {
-                if (!Plugin.Config.Enabled || !IsAllowedToScaleNotes || AutoDisable)
+                if (!Config.Enabled || !IsAllowedToScaleNotes || AutoDisable)
                 {
                     return;
                 }
@@ -147,7 +150,7 @@ namespace NoteTweaks.Patches
                 {
                     if (glowTransform.TryGetComponent(out MeshRenderer glowRenderer))
                     {
-                        Enum.TryParse(isLeft ? Plugin.Config.LeftGlowBlendOp : Plugin.Config.RightGlowBlendOp, out BlendOp operation);
+                        Enum.TryParse(isLeft ? Config.LeftGlowBlendOp : Config.RightGlowBlendOp, out BlendOp operation);
                         glowRenderer.material.SetInt(Materials.BlendOpID, (int)operation);
                     }
                     
@@ -155,7 +158,7 @@ namespace NoteTweaks.Patches
                     {
                         Color glowColor = colorNoteVisuals._noteColor;
                             
-                        if (isLeft ? Plugin.Config.NormalizeLeftFaceGlowColor : Plugin.Config.NormalizeRightFaceGlowColor)
+                        if (isLeft ? Config.NormalizeLeftFaceGlowColor : Config.NormalizeRightFaceGlowColor)
                         {
                             float colorScalar = colorNoteVisuals._noteColor.maxColorComponent;
                             if (colorScalar != 0)
@@ -164,8 +167,8 @@ namespace NoteTweaks.Patches
                             }
                         }
                         
-                        Color c = Color.LerpUnclamped(isLeft ? Plugin.Config.LeftFaceGlowColor : Plugin.Config.RightFaceGlowColor, glowColor, isLeft ? Plugin.Config.LeftFaceGlowColorNoteSkew : Plugin.Config.RightFaceGlowColorNoteSkew);
-                        c.a = isLeft ? Plugin.Config.LeftGlowIntensity : Plugin.Config.RightGlowIntensity;
+                        Color c = Color.LerpUnclamped(isLeft ? Config.LeftFaceGlowColor : Config.RightFaceGlowColor, glowColor, isLeft ? Config.LeftFaceGlowColorNoteSkew : Config.RightFaceGlowColorNoteSkew);
+                        c.a = isLeft ? Config.LeftGlowIntensity : Config.RightGlowIntensity;
                         materialPropertyBlockController.materialPropertyBlock.SetColor(ColorNoteVisuals._colorId, c);
                         materialPropertyBlockController.ApplyChanges();
                     }
@@ -179,17 +182,17 @@ namespace NoteTweaks.Patches
                     }
                 }
 
-                if (Plugin.Config.EnableNoteOutlines)
+                if (Config.EnableNoteOutlines)
                 {
                     Outlines.AddOutlineObject(chainRoot, Outlines.InvertedChainMesh);
                     Transform noteOutline = chainRoot.Find("NoteOutline");
                     
-                    noteOutline.gameObject.SetActive(Plugin.Config.EnableNoteOutlines);
-                    noteOutline.localScale = (Vector3.one * (Plugin.Config.NoteOutlineScale / 100f)) + Vector3.one;
+                    noteOutline.gameObject.SetActive(Config.EnableNoteOutlines);
+                    noteOutline.localScale = (Vector3.one * (Config.NoteOutlineScale / 100f)) + Vector3.one;
 
                     if (noteOutline.gameObject.TryGetComponent(out MaterialPropertyBlockController controller))
                     {
-                        Color noteColor = Plugin.Config.BombColor;
+                        Color noteColor = Config.BombColor;
                         if (cubeRenderer.TryGetComponent(out MaterialPropertyBlockController noteMaterialController))
                         {
                             noteColor = noteMaterialController.materialPropertyBlock.GetColor(ColorNoteVisuals._colorId);
@@ -197,19 +200,19 @@ namespace NoteTweaks.Patches
                 
                         float colorScalar = noteColor.maxColorComponent;
 
-                        if (colorScalar != 0 && isLeft ? Plugin.Config.NormalizeLeftOutlineColor : Plugin.Config.NormalizeRightOutlineColor)
+                        if (colorScalar != 0 && isLeft ? Config.NormalizeLeftOutlineColor : Config.NormalizeRightOutlineColor)
                         {
                             noteColor /= colorScalar;
                         }
 
-                        Color outlineColor = Color.LerpUnclamped(isLeft ? Plugin.Config.NoteOutlineLeftColor : Plugin.Config.NoteOutlineRightColor, noteColor, isLeft ? Plugin.Config.NoteOutlineLeftColorSkew : Plugin.Config.NoteOutlineRightColorSkew);
+                        Color outlineColor = Color.LerpUnclamped(isLeft ? Config.NoteOutlineLeftColor : Config.NoteOutlineRightColor, noteColor, isLeft ? Config.NoteOutlineLeftColorSkew : Config.NoteOutlineRightColorSkew);
                         
                         controller.materialPropertyBlock.SetColor(ColorNoteVisuals._colorId, outlineColor);
                         controller.ApplyChanges();
                     }
                 }
                 
-                Vector3 scale = Vectors.Max(Plugin.Config.NoteScale * Plugin.Config.LinkScale, 0.1f);
+                Vector3 scale = Vectors.Max(Config.NoteScale * Config.LinkScale, 0.1f);
                 Vector3 invertedScale = new Vector3(1.0f / scale.x, 1.0f / scale.y, 1.0f / scale.z);
 
                 __instance.transform.localScale = scale;
@@ -232,21 +235,21 @@ namespace NoteTweaks.Patches
             [SuppressMessage("ReSharper", "InconsistentNaming")]
             internal static void Postfix(ref GameNoteController __instance, ref BoxCuttableBySaber[] ____bigCuttableBySaberList, ref BoxCuttableBySaber[] ____smallCuttableBySaberList)
             {
-                if (!Plugin.Config.Enabled || AutoDisable)
+                if (!Config.Enabled || AutoDisable)
                 {
                     return;
                 }
                 
                 Transform noteRoot = __instance.transform.GetChild(0);
 
-                if (Plugin.Config.EnableAccDot && __instance.gameplayType != NoteData.GameplayType.BurstSliderHead && !IsUsingHiddenTypeModifier)
+                if (Config.EnableAccDot && __instance.gameplayType != NoteData.GameplayType.BurstSliderHead && !IsUsingHiddenTypeModifier)
                 {
                     if (!_accDotObject)
                     {
                         _accDotObject = CreateAccDotObject();
                     }
                     
-                    _accDotObject.transform.localScale = Vector3.one * (AccDotSizeStep * (Mathf.Abs(Plugin.Config.AccDotSize - 15) + 1));
+                    _accDotObject.transform.localScale = Vector3.one * (AccDotSizeStep * (Mathf.Abs(Config.AccDotSize - 15) + 1));
                     
                     foreach (BoxCuttableBySaber saberBox in ____bigCuttableBySaberList)
                     {
@@ -303,7 +306,7 @@ namespace NoteTweaks.Patches
                     {
                         if (glowTransform.TryGetComponent(out MeshRenderer glowRenderer))
                         {
-                            Enum.TryParse(isLeft ? Plugin.Config.LeftGlowBlendOp : Plugin.Config.RightGlowBlendOp, out BlendOp operation);
+                            Enum.TryParse(isLeft ? Config.LeftGlowBlendOp : Config.RightGlowBlendOp, out BlendOp operation);
                             glowRenderer.material.SetInt(Materials.BlendOpID, (int)operation);
                         }
                         
@@ -311,7 +314,7 @@ namespace NoteTweaks.Patches
                         {
                             Color glowColor = colorNoteVisuals._noteColor;
                             
-                            if (isLeft ? Plugin.Config.NormalizeLeftFaceGlowColor : Plugin.Config.NormalizeRightFaceGlowColor)
+                            if (isLeft ? Config.NormalizeLeftFaceGlowColor : Config.NormalizeRightFaceGlowColor)
                             {
                                 float colorScalar = colorNoteVisuals._noteColor.maxColorComponent;
                                 if (colorScalar != 0)
@@ -320,8 +323,8 @@ namespace NoteTweaks.Patches
                                 }
                             }
                         
-                            Color c = Color.LerpUnclamped(isLeft ? Plugin.Config.LeftFaceGlowColor : Plugin.Config.RightFaceGlowColor, glowColor, isLeft ? Plugin.Config.LeftFaceGlowColorNoteSkew : Plugin.Config.RightFaceGlowColorNoteSkew);
-                            c.a = isLeft ? Plugin.Config.LeftGlowIntensity : Plugin.Config.RightGlowIntensity;
+                            Color c = Color.LerpUnclamped(isLeft ? Config.LeftFaceGlowColor : Config.RightFaceGlowColor, glowColor, isLeft ? Config.LeftFaceGlowColorNoteSkew : Config.RightFaceGlowColorNoteSkew);
+                            c.a = isLeft ? Config.LeftGlowIntensity : Config.RightGlowIntensity;
                             materialPropertyBlockController.materialPropertyBlock.SetColor(ColorNoteVisuals._colorId, c);
                             materialPropertyBlockController.ApplyChanges();
                         }
@@ -349,17 +352,17 @@ namespace NoteTweaks.Patches
                     }   
                 }
                 
-                if (Plugin.Config.EnableNoteOutlines)
+                if (Config.EnableNoteOutlines)
                 {
                     Outlines.AddOutlineObject(noteRoot, __instance.gameplayType == NoteData.GameplayType.BurstSliderHead ? Outlines.InvertedChainHeadMesh : Outlines.InvertedNoteMesh);
                     Transform noteOutline = noteRoot.Find("NoteOutline");
                     
-                    noteOutline.gameObject.SetActive(Plugin.Config.EnableNoteOutlines);
-                    noteOutline.localScale = (Vector3.one * (Plugin.Config.NoteOutlineScale / 100f)) + Vector3.one;
+                    noteOutline.gameObject.SetActive(Config.EnableNoteOutlines);
+                    noteOutline.localScale = (Vector3.one * (Config.NoteOutlineScale / 100f)) + Vector3.one;
 
                     if (noteOutline.gameObject.TryGetComponent(out MaterialPropertyBlockController controller))
                     {
-                        Color noteColor = Plugin.Config.BombColor;
+                        Color noteColor = Config.BombColor;
                         if (cubeRenderer.TryGetComponent(out MaterialPropertyBlockController noteMaterialController))
                         {
                             noteColor = noteMaterialController.materialPropertyBlock.GetColor(ColorNoteVisuals._colorId);
@@ -367,12 +370,12 @@ namespace NoteTweaks.Patches
                 
                         float colorScalar = noteColor.maxColorComponent;
 
-                        if (colorScalar != 0 && isLeft ? Plugin.Config.NormalizeLeftOutlineColor : Plugin.Config.NormalizeRightOutlineColor)
+                        if (colorScalar != 0 && isLeft ? Config.NormalizeLeftOutlineColor : Config.NormalizeRightOutlineColor)
                         {
                             noteColor /= colorScalar;
                         }
 
-                        Color outlineColor = Color.LerpUnclamped(isLeft ? Plugin.Config.NoteOutlineLeftColor : Plugin.Config.NoteOutlineRightColor, noteColor, isLeft ? Plugin.Config.NoteOutlineLeftColorSkew : Plugin.Config.NoteOutlineRightColorSkew);
+                        Color outlineColor = Color.LerpUnclamped(isLeft ? Config.NoteOutlineLeftColor : Config.NoteOutlineRightColor, noteColor, isLeft ? Config.NoteOutlineLeftColorSkew : Config.NoteOutlineRightColorSkew);
                         
                         controller.materialPropertyBlock.SetColor(ColorNoteVisuals._colorId, outlineColor);
                         controller.ApplyChanges();
@@ -384,7 +387,7 @@ namespace NoteTweaks.Patches
                     return;
                 }
                 
-                Vector3 scale = Plugin.Config.NoteScale;
+                Vector3 scale = Config.NoteScale;
                 Vector3 invertedScale = new Vector3(1.0f / scale.x, 1.0f / scale.y, 1.0f / scale.z);
 
                 __instance.transform.localScale = scale;
@@ -407,7 +410,7 @@ namespace NoteTweaks.Patches
             // ReSharper disable once InconsistentNaming
             internal static void Postfix(NoteDebris __instance)
             {
-                if (!Plugin.Config.Enabled || AutoDisable)
+                if (!Config.Enabled || AutoDisable)
                 {
                     return;
                 }
@@ -430,7 +433,7 @@ namespace NoteTweaks.Patches
             [SuppressMessage("ReSharper", "InconsistentNaming")]
             internal static void Postfix(ColorNoteVisuals __instance, ref MeshRenderer[] ____arrowMeshRenderers, ref MeshRenderer[] ____circleMeshRenderers)
             {
-                if (!Plugin.Config.Enabled || AutoDisable || IsUsingHiddenTypeModifier)
+                if (!Config.Enabled || AutoDisable || IsUsingHiddenTypeModifier)
                 {
                     return;
                 }
@@ -439,8 +442,8 @@ namespace NoteTweaks.Patches
                 {
                     Transform arrowTransform = meshRenderer.gameObject.transform;
                     
-                    Vector3 scale = new Vector3(Plugin.Config.ArrowScale.x, Plugin.Config.ArrowScale.y, 1.0f);
-                    Vector3 position = new Vector3(Plugin.Config.ArrowPosition.x, InitialPosition.y + Plugin.Config.ArrowPosition.y, InitialPosition.z);
+                    Vector3 scale = new Vector3(Config.ArrowScale.x, Config.ArrowScale.y, 1.0f);
+                    Vector3 position = new Vector3(Config.ArrowPosition.x, InitialPosition.y + Config.ArrowPosition.y, InitialPosition.z);
                     
                     arrowTransform.localScale = scale;
                     arrowTransform.localPosition = position;
@@ -463,7 +466,7 @@ namespace NoteTweaks.Patches
                     {
                         Color faceColor = __instance._noteColor;
                             
-                        if (isLeft ? Plugin.Config.NormalizeLeftFaceColor : Plugin.Config.NormalizeRightFaceColor)
+                        if (isLeft ? Config.NormalizeLeftFaceColor : Config.NormalizeRightFaceColor)
                         {
                             float colorScalar = __instance._noteColor.maxColorComponent;
                             if (colorScalar != 0)
@@ -472,7 +475,7 @@ namespace NoteTweaks.Patches
                             }
                         }
                         
-                        Color c = Color.LerpUnclamped(isLeft ? Plugin.Config.LeftFaceColor : Plugin.Config.RightFaceColor, faceColor, isLeft ? Plugin.Config.LeftFaceColorNoteSkew : Plugin.Config.RightFaceColorNoteSkew);
+                        Color c = Color.LerpUnclamped(isLeft ? Config.LeftFaceColor : Config.RightFaceColor, faceColor, isLeft ? Config.LeftFaceColorNoteSkew : Config.RightFaceColorNoteSkew);
                         c.a = 1f;
                         materialPropertyBlockController.materialPropertyBlock.SetColor(ColorNoteVisuals._colorId, c);
                         materialPropertyBlockController.ApplyChanges();   
@@ -493,13 +496,13 @@ namespace NoteTweaks.Patches
                     Transform arrowGlowObject = meshRenderer.transform.parent.Find("NoteArrowGlow");
                     if (arrowGlowObject)
                     {
-                        arrowGlowObject.gameObject.SetActive(Plugin.Config.EnableFaceGlow);
+                        arrowGlowObject.gameObject.SetActive(Config.EnableFaceGlow);
                         
                         Transform arrowGlowTransform = arrowGlowObject.transform;
                         
-                        Vector3 glowScale = new Vector3(scale.x * Plugin.Config.ArrowGlowScale * 0.6f, scale.y * Plugin.Config.ArrowGlowScale * 0.3f, 0.6f);
-                        Vector3 glowPosition = new Vector3(InitialPosition.x + Plugin.Config.ArrowPosition.x, InitialPosition.y + Plugin.Config.ArrowPosition.y, InitialPosition.z);
-                        glowPosition += (Vector3)(isLeft ? Plugin.Config.LeftGlowOffset : Plugin.Config.RightGlowOffset);
+                        Vector3 glowScale = new Vector3(scale.x * Config.ArrowGlowScale * 0.6f, scale.y * Config.ArrowGlowScale * 0.3f, 0.6f);
+                        Vector3 glowPosition = new Vector3(InitialPosition.x + Config.ArrowPosition.x, InitialPosition.y + Config.ArrowPosition.y, InitialPosition.z);
+                        glowPosition += (Vector3)(isLeft ? Config.LeftGlowOffset : Config.RightGlowOffset);
                         
                         arrowGlowTransform.localScale = glowScale;
                         arrowGlowTransform.localPosition = glowPosition;
@@ -528,18 +531,18 @@ namespace NoteTweaks.Patches
                     {
                         dotPosition = InitialDotPosition;
                         glowPosition = new Vector3(InitialDotPosition.x, InitialDotPosition.y, InitialDotPosition.z + 0.001f);
-                        dotScale = new Vector3(Plugin.Config.ChainDotScale.x / (_fixDots ? 18f : 10f), Plugin.Config.ChainDotScale.y / (_fixDots ? 18f : 10f), 1.0f);
-                        glowScale = new Vector3((Plugin.Config.ChainDotScale.x / 5.4f) * Plugin.Config.DotGlowScale, (Plugin.Config.ChainDotScale.y / 5.4f) * Plugin.Config.DotGlowScale, 1.0f);
+                        dotScale = new Vector3(Config.ChainDotScale.x / (_fixDots ? 18f : 10f), Config.ChainDotScale.y / (_fixDots ? 18f : 10f), 1.0f);
+                        glowScale = new Vector3((Config.ChainDotScale.x / 5.4f) * Config.DotGlowScale, (Config.ChainDotScale.y / 5.4f) * Config.DotGlowScale, 1.0f);
                     }
                     else
                     {
-                        dotPosition = new Vector3(InitialDotPosition.x + Plugin.Config.DotPosition.x, InitialDotPosition.y + Plugin.Config.DotPosition.y, InitialDotPosition.z);
-                        glowPosition = new Vector3(InitialDotPosition.x + Plugin.Config.DotPosition.x, InitialDotPosition.y + Plugin.Config.DotPosition.y, InitialDotPosition.z + 0.001f);
-                        dotScale = new Vector3(Plugin.Config.DotScale.x / (_fixDots ? 5f : 2f), Plugin.Config.DotScale.y / (_fixDots ? 5f : 2f), 1.0f);
-                        glowScale = new Vector3((Plugin.Config.DotScale.x / 1.5f) * Plugin.Config.DotGlowScale, (Plugin.Config.DotScale.y / 1.5f) * Plugin.Config.DotGlowScale, 1.0f);
+                        dotPosition = new Vector3(InitialDotPosition.x + Config.DotPosition.x, InitialDotPosition.y + Config.DotPosition.y, InitialDotPosition.z);
+                        glowPosition = new Vector3(InitialDotPosition.x + Config.DotPosition.x, InitialDotPosition.y + Config.DotPosition.y, InitialDotPosition.z + 0.001f);
+                        dotScale = new Vector3(Config.DotScale.x / (_fixDots ? 5f : 2f), Config.DotScale.y / (_fixDots ? 5f : 2f), 1.0f);
+                        glowScale = new Vector3((Config.DotScale.x / 1.5f) * Config.DotGlowScale, (Config.DotScale.y / 1.5f) * Config.DotGlowScale, 1.0f);
                     }
                     
-                    glowPosition += (Vector3)(isLeft ? Plugin.Config.LeftGlowOffset : Plugin.Config.RightGlowOffset);
+                    glowPosition += (Vector3)(isLeft ? Config.LeftGlowOffset : Config.RightGlowOffset);
                     
                     Transform originalDot = isChainLink ? meshRenderer.transform.parent.Find("Circle") : meshRenderer.transform.parent.Find("NoteCircleGlow");
                     Transform addedDot = meshRenderer.transform.parent.Find("AddedNoteCircleGlow");
@@ -547,18 +550,18 @@ namespace NoteTweaks.Patches
                     {
                         if (isChainLink)
                         {
-                            originalDot.gameObject.SetActive(Plugin.Config.EnableChainDots);
+                            originalDot.gameObject.SetActive(Config.EnableChainDots);
 
-                            if (!Plugin.Config.EnableChainDots)
+                            if (!Config.EnableChainDots)
                             {
                                 continue;
                             }
                         }
                         else
                         {
-                            originalDot.gameObject.SetActive(Plugin.Config.EnableDots);
+                            originalDot.gameObject.SetActive(Config.EnableDots);
 
-                            if (!Plugin.Config.EnableDots)
+                            if (!Config.EnableDots)
                             {
                                 continue;
                             }   
@@ -571,7 +574,7 @@ namespace NoteTweaks.Patches
                         if (!isChainLink)
                         {
                             originalDotTransform.localRotation = Quaternion.identity;
-                            originalDotTransform.Rotate(0f, 0f, Plugin.Config.RotateDot);
+                            originalDotTransform.Rotate(0f, 0f, Config.RotateDot);
                         }
 
                         if (_fixDots)
@@ -598,7 +601,7 @@ namespace NoteTweaks.Patches
                             }
                             Color faceColor = __instance._noteColor;
                             
-                            if (isLeft ? Plugin.Config.NormalizeLeftFaceColor : Plugin.Config.NormalizeRightFaceColor)
+                            if (isLeft ? Config.NormalizeLeftFaceColor : Config.NormalizeRightFaceColor)
                             {
                                 float colorScalar = __instance._noteColor.maxColorComponent;
                                 if (colorScalar != 0)
@@ -607,7 +610,7 @@ namespace NoteTweaks.Patches
                                 }
                             }
                         
-                            Color c = Color.LerpUnclamped(isLeft ? Plugin.Config.LeftFaceColor : Plugin.Config.RightFaceColor, faceColor, isLeft ? Plugin.Config.LeftFaceColorNoteSkew : Plugin.Config.RightFaceColorNoteSkew);
+                            Color c = Color.LerpUnclamped(isLeft ? Config.LeftFaceColor : Config.RightFaceColor, faceColor, isLeft ? Config.LeftFaceColorNoteSkew : Config.RightFaceColorNoteSkew);
                             c.a = _fixDots ? 1f : materialPropertyBlockController.materialPropertyBlock.GetColor(ColorNoteVisuals._colorId).a;
                             materialPropertyBlockController.materialPropertyBlock.SetColor(ColorNoteVisuals._colorId, c);
                             materialPropertyBlockController.ApplyChanges();   
@@ -615,14 +618,14 @@ namespace NoteTweaks.Patches
 
                         if (isChainLink)
                         {
-                            if (!Plugin.Config.EnableChainDotGlow)
+                            if (!Config.EnableChainDotGlow)
                             {
                                 continue;
                             }
                         }
                         else
                         {
-                            if (!Plugin.Config.EnableFaceGlow)
+                            if (!Config.EnableFaceGlow)
                             {
                                 continue;
                             }   
@@ -661,7 +664,7 @@ namespace NoteTweaks.Patches
                         if (!isChainLink)
                         {
                             newGlowObject.transform.localRotation = Quaternion.identity;
-                            newGlowObject.transform.Rotate(0f, 0f, Plugin.Config.RotateDot);
+                            newGlowObject.transform.Rotate(0f, 0f, Config.RotateDot);
                         }
 
                         if (newGlowObject.TryGetComponent(out MeshRenderer newGlowMeshRenderer))
@@ -684,12 +687,12 @@ namespace NoteTweaks.Patches
             // ReSharper disable once InconsistentNaming
             internal static void Postfix(CutoutEffect __instance, in float cutout, in Vector3 cutoutOffset)
             {
-                if (!Plugin.Config.Enabled || AutoDisable)
+                if (!Config.Enabled || AutoDisable)
                 {
                     return;
                 }
                 
-                if (__instance.transform.name == "NoteCube" && Plugin.Config.EnableNoteOutlines)
+                if (__instance.transform.name == "NoteCube" && Config.EnableNoteOutlines)
                 {
                     Transform noteOutlineTransform = __instance.transform.Find("NoteOutline");
                     if (!noteOutlineTransform)
@@ -706,7 +709,7 @@ namespace NoteTweaks.Patches
                     return;
                 }
 
-                if (__instance.transform.name == "BombNote(Clone)" && Plugin.Config.EnableBombOutlines)
+                if (__instance.transform.name == "BombNote(Clone)" && Config.EnableBombOutlines)
                 {
                     Transform noteOutlineTransform = __instance.transform.Find("Mesh").Find("NoteOutline");
                     if (!noteOutlineTransform)
@@ -729,7 +732,7 @@ namespace NoteTweaks.Patches
             // ReSharper disable once InconsistentNaming
             private static bool Prefix(MaterialPropertyBlockController __instance)
             {
-                if (!Plugin.Config.Enabled || AutoDisable)
+                if (!Config.Enabled || AutoDisable)
                 {
                     return true;
                 }
@@ -754,7 +757,7 @@ namespace NoteTweaks.Patches
                     if (glowTransform.TryGetComponent(out MaterialPropertyBlockController glowPropertyBlockController))
                     {
                         Color wantedGlowColor = glowPropertyBlockController.materialPropertyBlock.GetColor(ColorNoteVisuals._colorId);
-                        wantedGlowColor.a = originalAlpha * (gameNoteController._noteData.colorType == ColorType.ColorA ? Plugin.Config.LeftGlowIntensity : Plugin.Config.RightGlowIntensity);
+                        wantedGlowColor.a = originalAlpha * (gameNoteController._noteData.colorType == ColorType.ColorA ? Config.LeftGlowIntensity : Config.RightGlowIntensity);
                         glowPropertyBlockController.materialPropertyBlock.SetColor(ColorNoteVisuals._colorId, wantedGlowColor);
                         glowPropertyBlockController.ApplyChanges();
                     }
@@ -771,7 +774,7 @@ namespace NoteTweaks.Patches
             [UsedImplicitly]
             private static bool Prefix(SliderController __instance)
             {
-                if (!Plugin.Config.Enabled || AutoDisable)
+                if (!Config.Enabled || AutoDisable)
                 {
                     return true;
                 }
@@ -796,7 +799,7 @@ namespace NoteTweaks.Patches
             [UsedImplicitly]
             private static void Postfix(MirroredNoteController<IGameNoteMirrorable> __instance)
             {
-                if (!Plugin.Config.Enabled || AutoDisable)
+                if (!Config.Enabled || AutoDisable)
                 {
                     return;
                 }

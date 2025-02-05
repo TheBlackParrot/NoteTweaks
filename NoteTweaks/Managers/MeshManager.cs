@@ -1,9 +1,12 @@
-﻿using UnityEngine;
+﻿using NoteTweaks.Configuration;
+using UnityEngine;
 
 namespace NoteTweaks.Managers
 {
     internal abstract class Meshes
     {
+        private static PluginConfig Config => PluginConfig.Instance;
+        
         private static readonly Mesh TriangleArrowMesh = Utils.Meshes.GenerateBasicTriangleMesh();
         private static readonly Mesh LineArrowMesh = Utils.Meshes.GenerateBasicLineMesh();
         private static readonly Mesh ChevronArrowMesh = Utils.Meshes.GenerateChevronMesh();
@@ -13,7 +16,7 @@ namespace NoteTweaks.Managers
         {
             get
             {
-                switch (Plugin.Config.ArrowMesh)
+                switch (Config.ArrowMesh)
                 {
                     case "Triangle":
                         return TriangleArrowMesh;
@@ -27,7 +30,7 @@ namespace NoteTweaks.Managers
             }
         }
 
-        internal static Mesh DotMesh = Utils.Meshes.GenerateFaceMesh(Plugin.Config.DotMeshSides);
+        internal static Mesh DotMesh = Utils.Meshes.GenerateFaceMesh(Config.DotMeshSides);
 
         public static void UpdateDefaultArrowMesh(Mesh mesh)
         {
