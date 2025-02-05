@@ -766,7 +766,7 @@ namespace NoteTweaks.Patches
             }
         }
         
-        [HarmonyPatch(typeof(SliderController), "Hide")]
+        /*[HarmonyPatch(typeof(SliderController), "Hide")]
         public static class SliderControllerPatch
         {
             // ReSharper disable once InconsistentNaming
@@ -786,7 +786,7 @@ namespace NoteTweaks.Patches
 
                 return true;
             }
-        }
+        }*/
 
         // temporary until i can look at this further, this disables duplicated note objects used for reflections in the low mirror mode
         // note to self: you need this hook anyways to modify stuff, don't get rid of it
