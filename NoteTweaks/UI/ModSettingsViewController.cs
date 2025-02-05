@@ -11,26 +11,24 @@ namespace NoteTweaks.UI
     internal class ModSettingsViewController : IInitializable, IDisposable, INotifyPropertyChanged
     {
         private static PluginConfig _config;
-        private readonly GameplaySetup _gameplaySetup;
         private readonly GameplaySetupViewController _gameplaySetupViewController;
         public event PropertyChangedEventHandler PropertyChanged;
         
-        private ModSettingsViewController(PluginConfig config, GameplaySetup gameplaySetup, GameplaySetupViewController gameplaySetupViewController)
+        private ModSettingsViewController(PluginConfig config, GameplaySetupViewController gameplaySetupViewController)
         {
             _config = config;
-            _gameplaySetup = gameplaySetup;
             _gameplaySetupViewController = gameplaySetupViewController;
         }
         
         public void Initialize()
         {
-            _gameplaySetup.AddTab("NoteTweaks", "NoteTweaks.UI.BSML.SideSettings.bsml", this);
+            GameplaySetup.instance.AddTab("NoteTweaks", "NoteTweaks.UI.BSML.SideSettings.bsml", this);
             _gameplaySetupViewController.didActivateEvent += GameplaySetupViewController_DidActivateEvent;
         }
 
         public void Dispose()
         {
-            _gameplaySetup.RemoveTab("NoteTweaks");
+            GameplaySetup.instance.RemoveTab("NoteTweaks");
             _gameplaySetupViewController.didActivateEvent -= GameplaySetupViewController_DidActivateEvent;
         }
 
