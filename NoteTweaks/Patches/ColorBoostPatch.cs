@@ -1,4 +1,5 @@
 ﻿using HarmonyLib;
+using IPA.Utilities;
 using NoteTweaks.Configuration;
 using NoteTweaks.Utils;
 using UnityEngine;
@@ -12,16 +13,25 @@ namespace NoteTweaks.Patches
 
         private static ColorScheme _patchedScheme;
         
-        private static ColorScheme PatchColors(ColorSchemeSO schemeObj)
+        private static ColorScheme PatchColors(ColorScheme scheme)
         {
-            _patchedScheme = new ColorScheme(schemeObj)
-            {
-                _colorSchemeId = "NoteTweaksPatched",
-                _colorSchemeNameLocalizationKey = "NoteTweaksPatched",
-                _useNonLocalizedName = true,
-                _nonLocalizedName = "NoteTweaksPatched",
-                _isEditable = false
-            };
+            _patchedScheme = new ColorScheme(
+                "NoteTweaksPatched",
+                "NoteTweaksPatched",
+                true,
+                "NoteTweaksPatched",
+                false,
+                scheme._saberAColor,
+                scheme._saberBColor,
+                scheme._environmentColor0,
+                scheme._environmentColor1,
+                scheme._environmentColorW,
+                scheme._supportsEnvironmentColorBoost,
+                scheme._environmentColor0Boost,
+                scheme._environmentColor1Boost,
+                scheme._environmentColorWBoost,
+                scheme._obstaclesColor
+            );
             
             float leftScale = 1.0f + Config.ColorBoostLeft;
             float rightScale = 1.0f + Config.ColorBoostRight;
@@ -67,13 +77,11 @@ namespace NoteTweaks.Patches
                 return;
             }
 
-            ColorSchemeSO schemeObj = ScriptableObject.CreateInstance<ColorSchemeSO>();
-            schemeObj._colorScheme = __instance.colorScheme;
-
-            ColorScheme patchedColors = PatchColors(schemeObj);
-
+            ColorScheme patchedColors = PatchColors(__instance.colorScheme);
+            
             __instance.usingOverrideColorScheme = true;
             __instance.colorScheme = patchedColors;
+            __instance.gameplayCoreSceneSetupData.SetField("colorScheme", patchedColors);
         }
 
         [HarmonyPatch(typeof(StandardLevelRestartController), "RestartLevel")]
@@ -86,9 +94,7 @@ namespace NoteTweaks.Patches
                 return;
             }
             
-            ColorSchemeSO schemeObj = ScriptableObject.CreateInstance<ColorSchemeSO>();
-            schemeObj._colorScheme = __instance._standardLevelSceneSetupData.colorScheme;
-            ColorScheme patchedColors = PatchColors(schemeObj);
+            ColorScheme patchedColors = PatchColors(__instance._standardLevelSceneSetupData.colorScheme);
 
             __instance._standardLevelSceneSetupData.usingOverrideColorScheme = true;
             __instance._standardLevelSceneSetupData.colorScheme = patchedColors;
