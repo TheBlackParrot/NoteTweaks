@@ -17,24 +17,16 @@ namespace NoteTweaks.Patches
 
         private static ColorScheme _patchedScheme;
         
-        private static ColorScheme PatchColors(ColorScheme scheme)
+        private static ColorScheme PatchColors(ColorSchemeSO schemeObj)
         {
-            _patchedScheme = new ColorScheme(
-                "NoteTweaksPatched",
-                "NoteTweaksPatched",
-                true,
-                "NoteTweaksPatched",
-                false,
-                scheme._saberAColor,
-                scheme._saberBColor,
-                scheme._environmentColor0,
-                scheme._environmentColor1,
-                scheme._environmentColorW,
-                scheme._supportsEnvironmentColorBoost,
-                scheme._environmentColor0Boost,
-                scheme._environmentColor1Boost,
-                scheme._environmentColorWBoost,
-                scheme._obstaclesColor);
+            _patchedScheme = new ColorScheme(schemeObj)
+            {
+                _colorSchemeId = "NoteTweaksUnPatched",
+                _colorSchemeNameLocalizationKey = "NoteTweaksUnPatched",
+                _useNonLocalizedName = true,
+                _nonLocalizedName = "NoteTweaksUnPatched",
+                _isEditable = false
+            };
             
             float leftScale = 1.0f + Config.ColorBoostLeft;
             float rightScale = 1.0f + Config.ColorBoostRight;
@@ -80,25 +72,10 @@ namespace NoteTweaks.Patches
                 return;
             }
 
-            ColorScheme scheme = __instance.colorScheme;
-            ColorScheme tempScheme = new ColorScheme(
-                "NoteTweaksUnPatched",
-                "NoteTweaksUnPatched",
-                true,
-                "NoteTweaksUnPatched",
-                false,
-                scheme._saberAColor,
-                scheme._saberBColor,
-                scheme._environmentColor0,
-                scheme._environmentColor1,
-                scheme._environmentColorW,
-                scheme._supportsEnvironmentColorBoost,
-                scheme._environmentColor0Boost,
-                scheme._environmentColor1Boost,
-                scheme._environmentColorWBoost,
-                scheme._obstaclesColor);
-            
-            ColorScheme patchedColors = PatchColors(tempScheme);
+            ColorSchemeSO schemeObj = ScriptableObject.CreateInstance<ColorSchemeSO>();
+            schemeObj._colorScheme = __instance.colorScheme;
+
+            ColorScheme patchedColors = PatchColors(schemeObj);
 
             __instance.usingOverrideColorScheme = true;
             __instance.colorScheme = patchedColors;
@@ -114,25 +91,9 @@ namespace NoteTweaks.Patches
                 return;
             }
             
-            ColorScheme scheme = __instance._standardLevelSceneSetupData.colorScheme;
-            ColorScheme tempScheme = new ColorScheme(
-                "NoteTweaksUnPatched",
-                "NoteTweaksUnPatched",
-                true,
-                "NoteTweaksUnPatched",
-                false,
-                scheme._saberAColor,
-                scheme._saberBColor,
-                scheme._environmentColor0,
-                scheme._environmentColor1,
-                scheme._environmentColorW,
-                scheme._supportsEnvironmentColorBoost,
-                scheme._environmentColor0Boost,
-                scheme._environmentColor1Boost,
-                scheme._environmentColorWBoost,
-                scheme._obstaclesColor);
-            
-            ColorScheme patchedColors = PatchColors(tempScheme);
+            ColorSchemeSO schemeObj = ScriptableObject.CreateInstance<ColorSchemeSO>();
+            schemeObj._colorScheme = __instance._standardLevelSceneSetupData.colorScheme;
+            ColorScheme patchedColors = PatchColors(schemeObj);
 
             __instance._standardLevelSceneSetupData.usingOverrideColorScheme = true;
             __instance._standardLevelSceneSetupData.colorScheme = patchedColors;
