@@ -840,8 +840,6 @@ namespace NoteTweaks.Patches
                 {
                     return;
                 }
-                
-                __instance.gameObject.SetActive(false);
             }
         }
     }
