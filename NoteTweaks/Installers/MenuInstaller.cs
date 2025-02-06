@@ -1,4 +1,6 @@
-﻿using NoteTweaks.UI;
+﻿using IPA.Loader;
+using NoteTweaks.Configuration;
+using NoteTweaks.UI;
 using Zenject;
 
 namespace NoteTweaks.Installers
@@ -14,6 +16,11 @@ namespace NoteTweaks.Installers
             Container.Bind<UI.SettingsFlowCoordinator>().FromNewComponentOnNewGameObject().AsSingle();
             Container.BindInterfacesAndSelfTo<ModSettingsViewController>().AsSingle();
             Container.BindInterfacesTo<MenuButtonManager>().AsSingle();
+            
+            if (PluginManager.GetPlugin("Heck") != null)
+            {
+                Container.BindInterfacesAndSelfTo<NoteTweaksSettableSettings>().AsSingle().NonLazy();
+            }
         }
     }
 }
