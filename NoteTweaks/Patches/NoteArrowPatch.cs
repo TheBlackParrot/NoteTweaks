@@ -724,33 +724,21 @@ namespace NoteTweaks.Patches
             }
         }
         
-        [HarmonyPatch(typeof(MaterialPropertyBlockController), "ApplyChanges")]
+        [HarmonyPatch]
         public static class MaterialPropertyBlockControllerPatch
         {
-            [UsedImplicitly]
-            // ReSharper disable once InconsistentNaming
-            private static bool Prefix(MaterialPropertyBlockController __instance)
+            private static bool DoFacePatch(MaterialPropertyBlockController instance)
             {
-                if (!Config.Enabled || AutoDisable)
+                if (!instance.transform.parent.parent.TryGetComponent(out GameNoteController gameNoteController))
                 {
                     return true;
                 }
                 
-                if (__instance.gameObject.name != "NoteCircleGlow")
-                {
-                    return true;
-                }
+                float originalAlpha = instance.materialPropertyBlock.GetColor(ColorNoteVisuals._colorId).a;
                 
-                if (!__instance.transform.parent.parent.TryGetComponent(out GameNoteController gameNoteController))
-                {
-                    return true;
-                }
+                instance.materialPropertyBlock.SetFloat(CutoutEffect._cutoutPropertyID, Mathf.Min(Mathf.Max(Mathf.Abs(originalAlpha - 1.0f), 0f), 1f));
                 
-                float originalAlpha = __instance.materialPropertyBlock.GetColor(ColorNoteVisuals._colorId).a;
-                
-                __instance.materialPropertyBlock.SetFloat(CutoutEffect._cutoutPropertyID, Mathf.Min(Mathf.Max(Mathf.Abs(originalAlpha - 1.0f), 0f), 1f));
-                
-                Transform glowTransform = __instance.transform.parent.Find("AddedNoteCircleGlow");
+                Transform glowTransform = instance.transform.parent.Find("AddedNoteCircleGlow");
                 if (glowTransform != null)
                 {
                     if (glowTransform.TryGetComponent(out MaterialPropertyBlockController glowPropertyBlockController))
@@ -761,7 +749,58 @@ namespace NoteTweaks.Patches
                         glowPropertyBlockController.ApplyChanges();
                     }
                 }
+
+                return true;
+            }
+
+            private static bool DoNotePatch(MaterialPropertyBlockController instance)
+            {
+                if (!instance.transform.TryGetComponent(out CutoutEffect cutoutEffect))
+                {
+                    return true;
+                }
                 
+                Transform accDotTransform = instance.transform.Find("AccDotObject");
+                Transform accDotClearTransform = instance.transform.Find("AccDotObjectDepthClear");
+                if (accDotTransform == null || accDotClearTransform == null)
+                {
+                    return true;
+                }
+                
+                Transform saberBox = instance.transform.Find("BigCuttable");
+                
+                if (saberBox.TryGetComponent(out NoteBigCuttableColliderSize colliderSize))
+                {
+                    float ratio = colliderSize._defaultColliderSize.x / colliderSize._defaultColliderSize.y;
+                    float cutoutAmount = Mathf.Pow(Mathf.Abs(cutoutEffect._cutout - 1.0f), 1.5f);
+                    accDotTransform.transform.localScale = Vector3.one * (AccDotSizeStep * (Mathf.Abs(Config.AccDotSize - 15) + 1)) * ratio * cutoutAmount;
+                    accDotClearTransform.transform.localScale = Vector3.one * (AccDotSizeStep * (Mathf.Abs(Config.AccDotSize - 15) + 1)) * ratio * cutoutAmount;
+                }
+
+                return true;
+            }
+
+            [UsedImplicitly]
+            [HarmonyPatch(typeof(MaterialPropertyBlockController), "ApplyChanges")]
+            [HarmonyPrefix]
+            // ReSharper disable once InconsistentNaming
+            private static bool DoPatching(MaterialPropertyBlockController __instance)
+            {
+                if (!Config.Enabled || AutoDisable)
+                {
+                    return true;
+                }
+                
+                if (__instance.gameObject.name == "NoteCircleGlow")
+                {
+                    return DoFacePatch(__instance);
+                }
+
+                if (__instance.gameObject.name == "NoteCube")
+                {
+                    return DoNotePatch(__instance);
+                }
+
                 return true;
             }
         }
