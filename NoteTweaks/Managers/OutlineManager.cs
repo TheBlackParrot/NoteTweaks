@@ -8,6 +8,8 @@ namespace NoteTweaks.Managers
 {
     internal abstract class Outlines
     {
+        private static PluginConfig Config => PluginConfig.Instance;
+        
         private static Mesh _defaultNoteMesh;
         public static Mesh InvertedNoteMesh;
         private static Mesh _defaultChainMesh;
