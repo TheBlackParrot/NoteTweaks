@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Heck.SettingsSetter;
+using IPA.Utilities;
 using JetBrains.Annotations;
 using UnityEngine;
 
@@ -72,7 +73,7 @@ namespace NoteTweaks.Configuration
         private const string GroupIdentifier = "_noteTweaks";
         private readonly BindingFlags bindingFlags = BindingFlags.Public | BindingFlags.Instance;
         private static readonly List<ISettableSetting> SettableSettings = new List<ISettableSetting>();
-        private static readonly string[] BlockedSettings = { "Instance", "DisableIfNoodle" };
+        private static readonly string[] BlockedSettings = { "Instance", "DisableIfNoodle", "ArrowScale", "ArrowPosition", "DotScale", "DotPosition", "NoteScale", "ChainDotScale", "LeftGlowOffset", "RightGlowOffset" };
         
         public NoteTweaksSettableSettings()
         {
@@ -94,12 +95,12 @@ namespace NoteTweaks.Configuration
                 }
 
                 //public NoteTweaksWrapperSetting(this, string groupName, string fieldName, PropertyInfo settingsProperty, object settingsInstance)
-                ISettableSetting setting = Activator.CreateInstance(settableSettingType, $"NoteTweaks", propName, property, PluginConfig.Instance)
+                ISettableSetting setting = Activator.CreateInstance(settableSettingType, "NoteTweaks", propName, property, PluginConfig.Instance)
                     as ISettableSetting;
 
                 SettableSettings.Add(setting);
-                
-                string heckFieldName = $"_{property.Name.ToLowerInvariant()}";
+
+                string heckFieldName = $"_{propName[0].ToString().ToLower() + propName.Substring(1)}";
                 if (setting != null)
                 {
                     SettingSetterSettableSettingsManager.RegisterSettableSetting(GroupIdentifier, heckFieldName, setting);
