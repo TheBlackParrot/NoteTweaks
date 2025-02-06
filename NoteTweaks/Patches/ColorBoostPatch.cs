@@ -21,10 +21,10 @@ namespace NoteTweaks.Patches
         {
             _patchedScheme = new ColorScheme(schemeObj)
             {
-                _colorSchemeId = "NoteTweaksUnPatched",
-                _colorSchemeNameLocalizationKey = "NoteTweaksUnPatched",
+                _colorSchemeId = "NoteTweaksPatched",
+                _colorSchemeNameLocalizationKey = "NoteTweaksPatched",
                 _useNonLocalizedName = true,
-                _nonLocalizedName = "NoteTweaksUnPatched",
+                _nonLocalizedName = "NoteTweaksPatched",
                 _isEditable = false
             };
             
