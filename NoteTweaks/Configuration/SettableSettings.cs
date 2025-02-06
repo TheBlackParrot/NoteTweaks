@@ -54,6 +54,9 @@ namespace NoteTweaks.Configuration
                 else if (_settingsProperty.PropertyType == typeof(int))
                 {
                     tempValue = Convert.ToInt32(tempValue);
+                } else if (_settingsProperty.PropertyType == typeof(float) || _settingsProperty.PropertyType == typeof(double))
+                {
+                    tempValue = Convert.ToSingle(tempValue);
                 }
 
                 _settingsProperty.SetValue(_settingsInstance, tempValue);
@@ -71,7 +74,7 @@ namespace NoteTweaks.Configuration
     {
         private static bool HasRunBefore { get; set; }
         private const string GroupIdentifier = "_noteTweaks";
-        private readonly BindingFlags bindingFlags = BindingFlags.Public | BindingFlags.Instance;
+        private const BindingFlags BindingFlags = System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance;
         private static readonly List<ISettableSetting> SettableSettings = new List<ISettableSetting>();
         private static readonly string[] BlockedSettings = { "Instance", "DisableIfNoodle", "ArrowScale", "ArrowPosition", "DotScale", "DotPosition", "NoteScale", "ChainDotScale", "LeftGlowOffset", "RightGlowOffset" };
         
@@ -84,9 +87,9 @@ namespace NoteTweaks.Configuration
             HasRunBefore = true;
 
             Type settableSettingType = typeof(NoteTweaksWrapperSetting);
-            PropertyInfo[] properties = typeof(PluginConfig).GetProperties(bindingFlags);
+            PropertyInfo[] properties = typeof(PluginConfig).GetProperties(BindingFlags);
             
-            foreach (PropertyInfo property in typeof(PluginConfig).GetProperties())
+            foreach (PropertyInfo property in properties)
             {
                 string propName = property.Name;
                 if (BlockedSettings.Contains(propName))
