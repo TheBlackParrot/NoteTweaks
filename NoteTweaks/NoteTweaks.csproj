@@ -4,7 +4,7 @@
         <ProjectGuid>{5470ACDB-CE6B-4791-8F32-3F5E5CB70FFD}</ProjectGuid>
         <RootNamespace>NoteTweaks</RootNamespace>
         <AssemblyName>NoteTweaks</AssemblyName>
-        <TargetFramework>net472</TargetFramework>
+        <TargetFramework>net48</TargetFramework>
         <DebugSymbols>true</DebugSymbols>
         <LocalRefsDir Condition="Exists('..\Refs')">..\Refs</LocalRefsDir>
         <BeatSaberDir>$(LocalRefsDir)</BeatSaberDir>
@@ -53,6 +53,10 @@
         </Reference>
         <Reference Include="HMRendering">
             <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\HMRendering.dll</HintPath>
+            <Private>false</Private>
+        </Reference>
+        <Reference Include="Heck">
+            <HintPath>$(BeatSaberDir)\Plugins\Heck.dll</HintPath>
             <Private>false</Private>
         </Reference>
         <Reference Include="SongCore">
