@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Heck.SettingsSetter;
-using IPA.Utilities;
 using JetBrains.Annotations;
 using UnityEngine;
 
@@ -48,13 +47,14 @@ namespace NoteTweaks.Configuration
                 }
                 else if (_settingsProperty.PropertyType == typeof(Color))
                 {
-                    ColorUtility.TryParseHtmlString(tempValue.ToString(), out var tempColorValue);
+                    ColorUtility.TryParseHtmlString(tempValue.ToString(), out Color tempColorValue);
                     tempValue = tempColorValue;
                 }
                 else if (_settingsProperty.PropertyType == typeof(int))
                 {
                     tempValue = Convert.ToInt32(tempValue);
-                } else if (_settingsProperty.PropertyType == typeof(float) || _settingsProperty.PropertyType == typeof(double))
+                }
+                else if (_settingsProperty.PropertyType == typeof(float) || _settingsProperty.PropertyType == typeof(double))
                 {
                     tempValue = Convert.ToSingle(tempValue);
                 }
@@ -76,7 +76,7 @@ namespace NoteTweaks.Configuration
         private const string GroupIdentifier = "_noteTweaks";
         private const BindingFlags BindingFlags = System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance;
         private static readonly List<ISettableSetting> SettableSettings = new List<ISettableSetting>();
-        private static readonly string[] BlockedSettings = { "Instance", "DisableIfNoodle", "ArrowScale", "ArrowPosition", "DotScale", "DotPosition", "NoteScale", "ChainDotScale", "LeftGlowOffset", "RightGlowOffset" };
+        private static readonly string[] BlockedSettings = { "Instance", "DisableIfNoodle" };
         
         public NoteTweaksSettableSettings()
         {
@@ -87,7 +87,8 @@ namespace NoteTweaks.Configuration
             HasRunBefore = true;
 
             Type settableSettingType = typeof(NoteTweaksWrapperSetting);
-            PropertyInfo[] properties = typeof(PluginConfig).GetProperties(BindingFlags);
+            PropertyInfo[] properties = typeof(PluginConfig).GetProperties(BindingFlags)
+                .Where(x => x.CanWrite && x.CanRead && (x.PropertyType != typeof(Vector2) || x.PropertyType != typeof(Vector3))).ToArray();
             
             foreach (PropertyInfo property in properties)
             {
@@ -107,7 +108,7 @@ namespace NoteTweaks.Configuration
                 if (setting != null)
                 {
                     SettingSetterSettableSettingsManager.RegisterSettableSetting(GroupIdentifier, heckFieldName, setting);
-                    Plugin.Log.Info($"NoteTweaks settable setting: {heckFieldName}");
+                    Plugin.Log.Info($"NoteTweaks settable setting: {heckFieldName} as {property.PropertyType.Name}");
                 }
             }
         }

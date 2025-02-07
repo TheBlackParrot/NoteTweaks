@@ -1,5 +1,6 @@
 ﻿using System.Runtime.CompilerServices;
 using IPA.Config.Stores;
+using IPA.Config.Stores.Attributes;
 using UnityEngine;
 // ReSharper disable RedundantDefaultMemberInitializer
 
@@ -17,13 +18,124 @@ namespace NoteTweaks.Configuration
         public virtual bool EnableFaceGlow { get; set; } = true;
 
         public virtual Vector2 ArrowScale { get; set; } = Vector2.one;
+        [Ignore] public virtual float ArrowScaleX
+        {
+            get => ArrowScale.x;
+            set
+            {
+                Vector2 vec = ArrowScale;
+                vec.x = value;
+                ArrowScale = vec;
+            }
+        }
+        [Ignore] public virtual float ArrowScaleY
+        {
+            get => ArrowScale.y;
+            set
+            {
+                Vector2 vec = ArrowScale;
+                vec.y = value;
+                ArrowScale = vec;
+            }
+        }
+
         public virtual Vector2 ArrowPosition { get; set; } = Vector2.zero;
+        [Ignore] public virtual float ArrowPositionX
+        {
+            get => ArrowPosition.x;
+            set
+            {
+                Vector2 vec = ArrowPosition;
+                vec.x = value;
+                ArrowPosition = vec;
+            }
+        }
+        [Ignore] public virtual float ArrowPositionY
+        {
+            get => ArrowPosition.y;
+            set
+            {
+                Vector2 vec = ArrowPosition;
+                vec.y = value;
+                ArrowPosition = vec;
+            }
+        }
         
         public virtual bool EnableDots { get; set; } = true;
         public virtual Vector2 DotScale { get; set; } = Vector2.one;
+        [Ignore] public virtual float DotScaleX
+        {
+            get => DotScale.x;
+            set
+            {
+                Vector2 vec = DotScale;
+                vec.x = value;
+                DotScale = vec;
+            }
+        }
+        [Ignore] public virtual float DotScaleY
+        {
+            get => DotScale.y;
+            set
+            {
+                Vector2 vec = DotScale;
+                vec.y = value;
+                DotScale = vec;
+            }
+        }
         public virtual Vector2 DotPosition { get; set; } = Vector2.zero;
+        [Ignore] public virtual float DotPositionX
+        {
+            get => DotPosition.x;
+            set
+            {
+                Vector2 vec = DotPosition;
+                vec.x = value;
+                DotPosition = vec;
+            }
+        }
+        [Ignore] public virtual float DotPositionY
+        {
+            get => DotPosition.y;
+            set
+            {
+                Vector2 vec = DotPosition;
+                vec.y = value;
+                DotPosition = vec;
+            }
+        }
         
         public virtual Vector3 NoteScale { get; set; } = Vector3.one;
+        [Ignore] public virtual float NoteScaleX
+        {
+            get => NoteScale.x;
+            set
+            {
+                Vector3 vec = NoteScale;
+                vec.x = value;
+                NoteScale = vec;
+            }
+        }
+        [Ignore] public virtual float NoteScaleY
+        {
+            get => NoteScale.y;
+            set
+            {
+                Vector3 vec = NoteScale;
+                vec.y = value;
+                NoteScale = vec;
+            }
+        }
+        [Ignore] public virtual float NoteScaleZ
+        {
+            get => NoteScale.z;
+            set
+            {
+                Vector3 vec = NoteScale;
+                vec.z = value;
+                NoteScale = vec;
+            }
+        }
         
         public virtual float LinkScale { get; set; } = 1.0f;
 
@@ -36,6 +148,26 @@ namespace NoteTweaks.Configuration
         public virtual float DotGlowScale { get; set; } = 1.0f;
         public virtual bool EnableChainDots { get; set; } = true;
         public virtual Vector2 ChainDotScale { get; set; } = Vector2.one;
+        [Ignore] public virtual float ChainDotScaleX
+        {
+            get => ChainDotScale.x;
+            set
+            {
+                Vector2 vec = ChainDotScale;
+                vec.x = value;
+                ChainDotScale = vec;
+            }
+        }
+        [Ignore] public virtual float ChainDotScaleY
+        {
+            get => ChainDotScale.y;
+            set
+            {
+                Vector2 vec = ChainDotScale;
+                vec.y = value;
+                ChainDotScale = vec;
+            }
+        }
         public virtual bool EnableChainDotGlow { get; set; } = true;
         
         public virtual Color LeftFaceColor { get; set; } = new Color(1f, 1f, 1f, 1f);
@@ -92,7 +224,47 @@ namespace NoteTweaks.Configuration
         public virtual string RightGlowBlendOp { get; set; } = "Add";
         
         public virtual Vector2 LeftGlowOffset { get; set; } = Vector2.zero;
+        [Ignore] public virtual float LeftGlowOffsetX
+        {
+            get => LeftGlowOffset.x;
+            set
+            {
+                Vector2 vec = LeftGlowOffset;
+                vec.x = value;
+                LeftGlowOffset = vec;
+            }
+        }
+        [Ignore] public virtual float LeftGlowOffsetY
+        {
+            get => LeftGlowOffset.y;
+            set
+            {
+                Vector2 vec = LeftGlowOffset;
+                vec.y = value;
+                LeftGlowOffset = vec;
+            }
+        }
         public virtual Vector2 RightGlowOffset { get; set; } = Vector2.zero;
+        [Ignore] public virtual float RightGlowOffsetX
+        {
+            get => RightGlowOffset.x;
+            set
+            {
+                Vector2 vec = RightGlowOffset;
+                vec.x = value;
+                RightGlowOffset = vec;
+            }
+        }
+        [Ignore] public virtual float RightGlowOffsetY
+        {
+            get => RightGlowOffset.y;
+            set
+            {
+                Vector2 vec = RightGlowOffset;
+                vec.y = value;
+                RightGlowOffset = vec;
+            }
+        }
         
         public bool EnableNoteOutlines { get; set; } = false;
         public bool EnableBombOutlines { get; set; } = false;
