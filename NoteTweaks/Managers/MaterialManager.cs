@@ -322,6 +322,10 @@ namespace NoteTweaks.Managers
         {
             if (NoteMaterial != null)
             {
+                if (Textures.GetLoadedNoteTexture() != Config.NoteTexture)
+                {
+                    await Textures.LoadNoteTexture(Config.NoteTexture);
+                }
                 return;
             }
             Plugin.Log.Info("Creating new note material");
@@ -373,6 +377,10 @@ namespace NoteTweaks.Managers
         {
             if (BombMaterial != null)
             {
+                if (Textures.GetLoadedBombTexture() != Config.BombTexture)
+                {
+                    await Textures.LoadNoteTexture(Config.BombTexture, true);
+                }
                 return;
             }
             Plugin.Log.Info("Creating new bomb material");
