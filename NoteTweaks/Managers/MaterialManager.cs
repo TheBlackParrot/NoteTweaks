@@ -169,6 +169,7 @@ namespace NoteTweaks.Managers
             
             if (DotGlowMaterial != null)
             {
+                await GlowTextures.UpdateTextures();
                 DotGlowMaterial.mainTexture = GlowTextures.ReplacementDotGlowTexture;
                 return;
             }
@@ -191,6 +192,7 @@ namespace NoteTweaks.Managers
             
             if (ArrowGlowMaterial != null)
             {
+                await GlowTextures.UpdateTextures();
                 ArrowGlowMaterial.mainTexture = GlowTextures.ReplacementArrowGlowTexture;
                 return;
             }

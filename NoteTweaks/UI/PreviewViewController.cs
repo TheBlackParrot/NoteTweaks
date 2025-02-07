@@ -845,6 +845,7 @@ namespace NoteTweaks.UI
             
             if (HasInitialized)
             {
+                UpdateArrowMeshes();
                 _ = CutoutFadeIn();
                 return;
             }
