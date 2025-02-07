@@ -118,6 +118,7 @@ namespace NoteTweaks.Managers
             }
             
             clonedOutlineObject.name = "NoteOutline";
+            clonedOutlineObject.layer = LayerMask.NameToLayer("Note");
             clonedOutlineObject.SetActive(wantedMesh == InvertedBombMesh ? Config.EnableBombOutlines : Config.EnableNoteOutlines);
         }
     }
