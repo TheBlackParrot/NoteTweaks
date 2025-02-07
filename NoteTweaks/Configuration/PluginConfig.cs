@@ -1,6 +1,7 @@
 ﻿using System.Runtime.CompilerServices;
 using IPA.Config.Stores;
 using IPA.Config.Stores.Attributes;
+using IPA.Config.Stores.Converters;
 using UnityEngine;
 // ReSharper disable RedundantDefaultMemberInitializer
 
@@ -170,11 +171,14 @@ namespace NoteTweaks.Configuration
         }
         public virtual bool EnableChainDotGlow { get; set; } = true;
         
+        [UseConverter(typeof(HexColorConverter))]
         public virtual Color LeftFaceColor { get; set; } = new Color(1f, 1f, 1f, 1f);
+        [UseConverter(typeof(HexColorConverter))]
         public virtual Color RightFaceColor { get; set; } = new Color(1f, 1f, 1f, 1f);
         
         public virtual bool EnableAccDot { get; set; } = false;
         public virtual int AccDotSize { get; set; } = 15;
+        [UseConverter(typeof(HexColorConverter))]
         public virtual Color AccDotColor { get; set; } = new Color(1f, 1f, 1f, 1f);
         public virtual bool RenderAccDotsAboveSymbols { get; set; } = false;
         
@@ -188,9 +192,11 @@ namespace NoteTweaks.Configuration
         public bool NormalizeLeftFaceColor { get; set; } = false;
         public bool NormalizeRightFaceColor { get; set; } = false;
         
+        [UseConverter(typeof(HexColorConverter))]
         public virtual Color LeftFaceGlowColor { get; set; } = new Color(1f, 1f, 1f, 1f);
         public virtual float LeftFaceGlowColorNoteSkew { get; set; } = 1.0f;
         public virtual bool NormalizeLeftFaceGlowColor { get; set; } = false;
+        [UseConverter(typeof(HexColorConverter))]
         public virtual Color RightFaceGlowColor { get; set; } = new Color(1f, 1f, 1f, 1f);
         public virtual float RightFaceGlowColorNoteSkew { get; set; } = 1.0f;
         public virtual bool NormalizeRightFaceGlowColor { get; set; } = false;
@@ -198,6 +204,7 @@ namespace NoteTweaks.Configuration
         public virtual string NoteTexture { get; set; } = "Default";
         public virtual bool InvertNoteTexture { get; set; } = false;
         
+        [UseConverter(typeof(HexColorConverter))]
         public virtual Color BombColor { get; set; } = new Color(0.251f, 0.251f, 0.251f, 1.0f);
         public virtual float BombColorBoost { get; set; } = 0.0f;
         public virtual string BombTexture { get; set; } = "Default";
@@ -270,12 +277,15 @@ namespace NoteTweaks.Configuration
         public bool EnableBombOutlines { get; set; } = false;
         public int NoteOutlineScale { get; set; } = 5;
         public int BombOutlineScale { get; set; } = 5;
+        [UseConverter(typeof(HexColorConverter))]
         public Color NoteOutlineLeftColor { get; set; } = Color.black;
         public float NoteOutlineLeftColorSkew { get; set; } = 0.1f;
         public bool NormalizeLeftOutlineColor { get; set; } = false;
         public bool NormalizeRightOutlineColor { get; set; } = false;
+        [UseConverter(typeof(HexColorConverter))]
         public Color NoteOutlineRightColor { get; set; } = Color.black;
         public float NoteOutlineRightColorSkew { get; set; } = 0.1f;
+        [UseConverter(typeof(HexColorConverter))]
         public Color BombOutlineColor { get; set; } = Color.white;
         
         public bool EnableFog { get; set; } = true;
