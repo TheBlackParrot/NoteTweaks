@@ -108,7 +108,7 @@ namespace NoteTweaks.Configuration
                 if (setting != null)
                 {
                     SettingSetterSettableSettingsManager.RegisterSettableSetting(GroupIdentifier, heckFieldName, setting);
-                    Plugin.Log.Info($"NoteTweaks settable setting: {heckFieldName} as {property.PropertyType.Name}");
+                    //Plugin.Log.Info($"NoteTweaks settable setting: {heckFieldName} as {property.PropertyType.Name}");
                 }
             }
         }
