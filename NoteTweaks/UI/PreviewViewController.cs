@@ -437,6 +437,14 @@ namespace NoteTweaks.UI
                     }
                 }
             }
+
+            _ = ForceAsyncUpdateForGlowTexture();
+        }
+        
+        private static async Task ForceAsyncUpdateForGlowTexture()
+        {
+            await GlowTextures.UpdateTextures();
+            UpdateColors();
         }
 
         public static void UpdateOutlines()
