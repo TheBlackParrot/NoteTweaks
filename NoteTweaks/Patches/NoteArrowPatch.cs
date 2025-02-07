@@ -30,6 +30,8 @@ namespace NoteTweaks.Patches
         private static GameObject CreateAccDotObject()
         {
             GameObject obj = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+            obj.layer = LayerMask.NameToLayer("Note");
+            
             if (obj.TryGetComponent(out MeshRenderer meshRenderer))
             {
                 meshRenderer.sharedMaterial = Materials.AccDotMaterial;
@@ -38,6 +40,7 @@ namespace NoteTweaks.Patches
             {
                 Object.DestroyImmediate(sphereCollider);
             }
+            
             obj.SetActive(false);
             Plugin.Log.Info("setup acc dot object");
 
