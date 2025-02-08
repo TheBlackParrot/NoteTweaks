@@ -167,7 +167,7 @@ namespace NoteTweaks.Managers
             
             if (DotGlowMaterial != null)
             {
-                await GlowTextures.UpdateTextures();
+                GlowTextures.UpdateTextures();
                 DotGlowMaterial.mainTexture = GlowTextures.ReplacementDotGlowTexture;
                 return;
             }
@@ -190,7 +190,7 @@ namespace NoteTweaks.Managers
             
             if (ArrowGlowMaterial != null)
             {
-                await GlowTextures.UpdateTextures();
+                GlowTextures.UpdateTextures();
                 ArrowGlowMaterial.mainTexture = GlowTextures.ReplacementArrowGlowTexture;
                 return;
             }
@@ -319,14 +319,14 @@ namespace NoteTweaks.Managers
                 Plugin.Log.Info(material.name);
             });*/
         }
-        
-        private static void UpdateNoteMaterial()
+
+        internal static void UpdateNoteMaterial()
         {
             if (NoteMaterial != null)
             {
                 if (Textures.GetLoadedNoteTexture() != Config.NoteTexture)
                 {
-                    await Textures.LoadNoteTexture(Config.NoteTexture);
+                    Textures.LoadNoteTexture(Config.NoteTexture);
                 }
                 return;
             }
@@ -374,14 +374,14 @@ namespace NoteTweaks.Managers
                 renderQueue = 1995
             };
         }
-        
-        private static void UpdateBombMaterial()
+
+        internal static void UpdateBombMaterial()
         {
             if (BombMaterial != null)
             {
                 if (Textures.GetLoadedBombTexture() != Config.BombTexture)
                 {
-                    await Textures.LoadNoteTexture(Config.BombTexture, true);
+                    Textures.LoadNoteTexture(Config.BombTexture, true);
                 }
                 return;
             }

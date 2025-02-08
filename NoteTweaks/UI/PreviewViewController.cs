@@ -438,12 +438,7 @@ namespace NoteTweaks.UI
                 }
             }
 
-            _ = ForceAsyncUpdateForGlowTexture();
-        }
-        
-        private static async Task ForceAsyncUpdateForGlowTexture()
-        {
-            await GlowTextures.UpdateTextures();
+            GlowTextures.UpdateTextures();
             UpdateColors();
         }
 
@@ -858,6 +853,8 @@ namespace NoteTweaks.UI
             
             if (HasInitialized)
             {
+                Materials.UpdateNoteMaterial();
+                Materials.UpdateBombMaterial();
                 UpdateArrowMeshes();
                 _ = CutoutFadeIn();
                 return;
