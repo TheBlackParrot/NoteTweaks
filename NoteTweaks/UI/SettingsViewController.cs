@@ -25,6 +25,13 @@ namespace NoteTweaks.UI
         public string FakeIntFormatter(float x) => x.ToString("N0");
 
         internal static bool LoadTextures = false;
+        
+        protected override void DidActivate(bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling)
+        {
+            base.DidActivate(firstActivation, addedToHierarchy, screenSystemEnabling);
+            
+            NotifyPropertyChanged(nameof(EnableAccDot));
+        }
 
         [Inject]
         [UsedImplicitly]
@@ -338,7 +345,11 @@ namespace NoteTweaks.UI
         protected bool EnableAccDot
         {
             get => _config.EnableAccDot;
-            set => _config.EnableAccDot = value;
+            set
+            {
+                _config.EnableAccDot = value;
+                NotifyPropertyChanged();
+            }
         }
 
         protected int AccDotSize
