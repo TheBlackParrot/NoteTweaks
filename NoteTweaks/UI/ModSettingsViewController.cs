@@ -1,8 +1,11 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Reflection;
+using BeatSaberMarkupLanguage.Attributes;
 using BeatSaberMarkupLanguage.GameplaySetup;
 using JetBrains.Annotations;
 using NoteTweaks.Configuration;
+using NoteTweaks.Managers;
 using Zenject;
 
 namespace NoteTweaks.UI
@@ -34,18 +37,33 @@ namespace NoteTweaks.UI
             _gameplaySetupViewController.didActivateEvent -= GameplaySetupViewController_DidActivateEvent;
         }
 
-        private void ParentControllerActivated()
+        private void ParentControllerActivated(bool firstActivation)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Enabled)));
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(DisableIfNoodle)));
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(DisableIfVivify)));
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(FixDotsIfNoodle)));
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(EnableAccDot)));
+            
+            if (VersionManager.LatestVersion != null && firstActivation)
+            {
+                Version modVersion = Assembly.GetExecutingAssembly().GetName().Version;
+                
+                UpdateIsAvailable = VersionManager.LatestVersion > modVersion;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(UpdateIsAvailable)));
+                
+                LatestVersion = $"(<alpha=#CC>{modVersion.ToString(3)} <alpha=#88>-> <alpha=#CC>{VersionManager.LatestVersion?.ToString(3)}<alpha=#FF>)";
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(LatestVersion)));
+                
+                // this... looks like a bad idea. but it works? how tf else do i refresh this? at least firstActivation only triggers it once. idk
+                _gameplaySetup.RemoveTab("NoteTweaks");
+                _gameplaySetup.AddTab("NoteTweaks", "NoteTweaks.UI.BSML.SideSettings.bsml", this);
+            }
         }
         
         private void GameplaySetupViewController_DidActivateEvent(bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling)
         {
-            ParentControllerActivated();
+            ParentControllerActivated(firstActivation);
         }
 
         protected bool Enabled
@@ -97,5 +115,11 @@ namespace NoteTweaks.UI
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(EnableAccDot)));
             }
         }
+
+        [UIValue("UpdateIsAvailable")]
+        protected bool UpdateIsAvailable;
+        
+        [UIValue("LatestVersion")]
+        protected string LatestVersion = "";
     }
 }
