@@ -64,6 +64,7 @@ namespace NoteTweaks.UI
             
             NotifyPropertyChanged(nameof(Enabled));
             NotifyPropertyChanged(nameof(DisableIfNoodle));
+            NotifyPropertyChanged(nameof(DisableIfVivify));
             NotifyPropertyChanged(nameof(FixDotsIfNoodle));
 
             if (VersionManager.LatestVersion != null)
@@ -193,6 +194,16 @@ namespace NoteTweaks.UI
             set
             {
                 Config.DisableIfNoodle = value;
+                NotifyPropertyChanged();
+            }
+        }
+        
+        protected bool DisableIfVivify
+        {
+            get => Config.DisableIfVivify;
+            set
+            {
+                Config.DisableIfVivify = value;
                 NotifyPropertyChanged();
             }
         }
