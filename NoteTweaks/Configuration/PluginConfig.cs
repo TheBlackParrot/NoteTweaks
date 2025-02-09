@@ -187,6 +187,7 @@ namespace NoteTweaks.Configuration
         public virtual float LeftFaceColorNoteSkew { get; set; } = 0.04f;
         public virtual float RightFaceColorNoteSkew { get; set; } = 0.04f;
         public virtual bool DisableIfNoodle { get; set; } = false;
+        public virtual bool DisableIfVivify { get; set; } = false;
         public virtual float RotateDot { get; set; } = 0.0f;
         
         public bool NormalizeLeftFaceColor { get; set; } = false;

@@ -38,6 +38,7 @@ namespace NoteTweaks.UI
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Enabled)));
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(DisableIfNoodle)));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(DisableIfVivify)));
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(FixDotsIfNoodle)));
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(EnableAccDot)));
         }
@@ -64,6 +65,16 @@ namespace NoteTweaks.UI
             {
                 _config.DisableIfNoodle = value;
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(DisableIfNoodle)));
+            }
+        }
+        
+        protected bool DisableIfVivify
+        {
+            get => _config.DisableIfVivify;
+            set
+            {
+                _config.DisableIfVivify = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(DisableIfVivify)));
             }
         }
 

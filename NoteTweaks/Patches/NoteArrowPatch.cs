@@ -77,7 +77,11 @@ namespace NoteTweaks.Patches
             // ReSharper disable once InconsistentNaming
             internal static void Postfix(StandardLevelScenesTransitionSetupDataSO __instance, in GameplayModifiers gameplayModifiers)
             {
-                AutoDisable = MapHasRequirement(__instance.beatmapLevel, __instance.beatmapKey, "Noodle Extensions") && Config.DisableIfNoodle;
+                AutoDisable =
+                    (MapHasRequirement(__instance.beatmapLevel, __instance.beatmapKey, "Noodle Extensions") &&
+                     Config.DisableIfNoodle) ||
+                    (MapHasRequirement(__instance.beatmapLevel, __instance.beatmapKey, "Vivify") &&
+                     Config.DisableIfVivify);
 
                 _fixDots = true;
                 if (MapHasRequirement(__instance.beatmapLevel, __instance.beatmapKey, "Noodle Extensions"))

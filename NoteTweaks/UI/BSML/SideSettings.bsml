@@ -1,8 +1,13 @@
 ﻿<settings-container xsi:noNamespaceSchemaLocation="https://monkeymanboy.github.io/BSML-Docs/BSMLSchema.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <toggle-setting apply-on-change="true" value="Enabled" text="Mod Enabled" bind-value="true"
                     hover-hint="Remember to drink water! Hydrate!"/>
+
+    <horizontal><text text="-----" font-size="4" color="#00000000"/></horizontal>
+    
     <toggle-setting apply-on-change="true" value="DisableIfNoodle" text="Disable on Noodle Maps" bind-value="true"
                     hover-hint="Automatically disable the mod if the map being played requires Noodle Extensions"/>
+    <toggle-setting apply-on-change="true" value="DisableIfVivify" text="Disable on Vivify Maps" bind-value="true"
+                    hover-hint="Automatically disable the mod if the map being played requires Vivify (Maps using custom notes will override NoteTweaks)"/>
 
     <horizontal><text text="-----" font-size="4" color="#00000000"/></horizontal>
 
