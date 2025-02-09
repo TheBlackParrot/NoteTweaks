@@ -19,8 +19,7 @@ namespace NoteTweaks.Managers
         internal static Material NoteMaterial;
         internal static Material DebrisMaterial;
         internal static Material BombMaterial;
-        internal static Material OutlineMaterial0;
-        internal static Material OutlineMaterial1;
+        internal static Material OutlineMaterial;
         
         internal static readonly Material AccDotDepthMaterial = new Material(Resources.FindObjectsOfTypeAll<Shader>().First(x => x.name == "Custom/ClearDepth"))
         {
@@ -45,6 +44,9 @@ namespace NoteTweaks.Managers
             new KeyValuePair<string, int>("Smoothness", Shader.PropertyToID("_Smoothness")),
             new KeyValuePair<string, int>("RimCameraDistanceOffset", Shader.PropertyToID("_RimCameraDistanceOffset"))
         };
+        
+        private static readonly BoolSO MainEffectContainer = Resources.FindObjectsOfTypeAll<BoolSO>().First(x => x.name.StartsWith("MainEffectContainer"));
+        internal static float SaneAlphaValue => MainEffectContainer.value ? 1f : 0f;
 
         internal static async Task UpdateAll()
         {
@@ -97,8 +99,7 @@ namespace NoteTweaks.Managers
                     NoteMaterial.SetFloat(keyword.Value, value);
                     DebrisMaterial.SetFloat(keyword.Value, value);
                     BombMaterial.SetFloat(keyword.Value, value);
-                    OutlineMaterial0.SetFloat(keyword.Value, value);
-                    OutlineMaterial1.SetFloat(keyword.Value, value);
+                    OutlineMaterial.SetFloat(keyword.Value, value);
                     AccDotMaterial.SetFloat(keyword.Value, value);
                 }
             });
@@ -141,6 +142,13 @@ namespace NoteTweaks.Managers
                 color = Color.white,
                 shaderKeywords = arrowMat.shaderKeywords.Where(x => x != "_ENABLE_COLOR_INSTANCING" || x != "_CUTOUT_NONE").ToArray()
             };
+            
+            foreach (string propertyName in ReplacementDotMaterial.GetPropertyNames(MaterialPropertyType.Float))
+            {
+                Plugin.Log.Info($"{propertyName} = {ReplacementDotMaterial.GetFloat(propertyName)}");
+            }
+            
+            //ReplacementDotMaterial.SetFloat("_BlendSrcFactor");
         }
 
         private static void UpdateReplacementArrowMaterial()
@@ -231,34 +239,20 @@ namespace NoteTweaks.Managers
         
         private static void UpdateOutlineMaterial()
         {
-            if (OutlineMaterial0 != null)
+            if (OutlineMaterial != null)
             {
                 return;
             }
 
-            Plugin.Log.Info("Creating outline materials");
-            Material arrowMat0 = Resources.FindObjectsOfTypeAll<Material>().ToList().Find(x => x.name == "NoteArrowLW");
-            OutlineMaterial0 = new Material(arrowMat0)
-            {
-                name = "NoteTweaks_OutlineMaterialLW",
-                color = Color.black,
-                shaderKeywords = arrowMat0.shaderKeywords.Where(x => x != "_ENABLE_COLOR_INSTANCING" || x != "_CUTOUT_NONE").ToArray(),
-                renderQueue = 1990
-            };
-            
+            Plugin.Log.Info("Creating outline material");
             Material arrowMat1 = Resources.FindObjectsOfTypeAll<Material>().ToList().Find(x => x.name == "NoteArrowHD");
-            OutlineMaterial1 = new Material(arrowMat1)
+            OutlineMaterial = new Material(arrowMat1)
             {
                 name = "NoteTweaks_OutlineMaterialHD",
                 color = Color.black,
                 shaderKeywords = arrowMat1.shaderKeywords.Where(x => x != "_ENABLE_COLOR_INSTANCING" || x != "_CUTOUT_NONE").ToArray(),
                 renderQueue = 1990
             };
-            
-            //arrowMat0.SetInt(ZTestID, (int)UnityEngine.Rendering.CompareFunction.GreaterEqual);
-            //arrowMat1.SetInt(ZTestID, (int)UnityEngine.Rendering.CompareFunction.GreaterEqual);
-            //arrowMat0.SetInt("_CustomZWrite", 0);
-            //arrowMat1.SetInt("_CustomZWrite", 0);
         }
         
         private static async Task UpdateNoteMaterial()

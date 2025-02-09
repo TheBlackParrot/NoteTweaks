@@ -210,7 +210,7 @@ namespace NoteTweaks.Patches
 
                         Color outlineColor = Color.LerpUnclamped(isLeft ? Config.NoteOutlineLeftColor : Config.NoteOutlineRightColor, noteColor, isLeft ? Config.NoteOutlineLeftColorSkew : Config.NoteOutlineRightColorSkew);
                         
-                        controller.materialPropertyBlock.SetColor(ColorNoteVisuals._colorId, outlineColor);
+                        controller.materialPropertyBlock.SetColor(ColorNoteVisuals._colorId, outlineColor.ColorWithAlpha(Materials.SaneAlphaValue));
                         controller.ApplyChanges();
                     }
                 }
@@ -380,7 +380,7 @@ namespace NoteTweaks.Patches
 
                         Color outlineColor = Color.LerpUnclamped(isLeft ? Config.NoteOutlineLeftColor : Config.NoteOutlineRightColor, noteColor, isLeft ? Config.NoteOutlineLeftColorSkew : Config.NoteOutlineRightColorSkew);
                         
-                        controller.materialPropertyBlock.SetColor(ColorNoteVisuals._colorId, outlineColor);
+                        controller.materialPropertyBlock.SetColor(ColorNoteVisuals._colorId, outlineColor.ColorWithAlpha(Materials.SaneAlphaValue));
                         controller.ApplyChanges();
                     }
                 }
@@ -485,8 +485,7 @@ namespace NoteTweaks.Patches
                         }
                         
                         Color c = Color.LerpUnclamped(isLeft ? Config.LeftFaceColor : Config.RightFaceColor, faceColor, isLeft ? Config.LeftFaceColorNoteSkew : Config.RightFaceColorNoteSkew);
-                        c.a = 1f;
-                        materialPropertyBlockController.materialPropertyBlock.SetColor(ColorNoteVisuals._colorId, c);
+                        materialPropertyBlockController.materialPropertyBlock.SetColor(ColorNoteVisuals._colorId, c.ColorWithAlpha(Materials.SaneAlphaValue));
                         materialPropertyBlockController.ApplyChanges();   
                     }
 
@@ -603,8 +602,6 @@ namespace NoteTweaks.Patches
                                         CutoutEffect cutoutEffect = originalDotTransform.gameObject.AddComponent<CutoutEffect>();
                                         cutoutEffect._materialPropertyBlockController = materialPropertyBlockController;
                                         cutoutEffect._useRandomCutoutOffset = parentCutoutEffect._useRandomCutoutOffset;
-                                        //cutoutEffect._cutout = 0f;
-                                        //materialPropertyBlockController.materialPropertyBlock.SetFloat(CutoutEffect._cutoutPropertyID, 0f);
                                     }
                                 }
                             }

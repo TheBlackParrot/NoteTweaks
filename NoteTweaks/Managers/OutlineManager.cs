@@ -157,12 +157,12 @@ namespace NoteTweaks.Managers
             outlineMaterialPropertyBlockController.SetField("_renderers", new [] { outlineRenderer });
             
             outlineMeshFilter.sharedMesh = wantedMesh;
-            outlineRenderer.sharedMaterial = Materials.OutlineMaterial1;
+            outlineRenderer.sharedMaterial = Materials.OutlineMaterial;
             outlineRenderer.SetPropertyBlock(outlineMaterialPropertyBlockController.materialPropertyBlock);
             outlineCutoutEffect._materialPropertyBlockController = outlineMaterialPropertyBlockController;
             
-            outlineMaterialSwitcher._material0 = Materials.OutlineMaterial0;
-            outlineMaterialSwitcher._material1 = Materials.OutlineMaterial1;
+            outlineMaterialSwitcher._material0 = Materials.OutlineMaterial;
+            outlineMaterialSwitcher._material1 = Materials.OutlineMaterial;
             outlineMaterialSwitcher._renderer = outlineRenderer;
             if (rootTransform.TryGetComponent(out ConditionalMaterialSwitcher switcher))
             {
