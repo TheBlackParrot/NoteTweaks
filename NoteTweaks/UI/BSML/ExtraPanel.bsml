@@ -1,10 +1,14 @@
 ﻿<vertical child-control-height="true"
           xsi:noNamespaceSchemaLocation="https://monkeymanboy.github.io/BSML-Docs/BSMLSchema.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <modifier-container vertical-fit="Unconstrained" pref-height="6" child-alignment="UpperCenter">
-        <horizontal child-align="MiddleCenter" active="~UpdateIsAvailable" spacing="1">
-            <!-- i'm so over dealing with BSML just take 2 damn spaces -->
-            <text text="  Update available!" font-size="3" font-color="#FFDD99" rich-text="true" align="Right"/>
-            <text text="~latestVersion" font-size="3" font-color="#FFDD99" rich-text="true" align="Left"/>
+        <horizontal horizontal-fit="Unconstrained" pref-width="70" child-align="MiddleCenter" active="~UpdateIsAvailable" child-control-width="true">
+            <horizontal horizontal-fit="Unconstrained" pref-width="48" child-align="MiddleRight" spacing="1">
+                <text text="Update available!" font-size="3" font-color="#FFDD99" rich-text="true" align="Right"/>
+                <text text="~latestVersion" font-size="3" font-color="#FFDD99" rich-text="true" align="Left"/>
+            </horizontal>
+            <horizontal horizontal-fit="Unconstrained" pref-width="35" child-align="MiddleLeft">
+                <button text="Download from GitHub" local-scale="0.67" on-click="openNewReleaseTag" align="Left"/>
+            </horizontal>
         </horizontal>
         
         <tab-selector tab-tag="tabs" id="tabSelector" child-expand-height="true"/>
@@ -12,8 +16,8 @@
 
     <modifier-container vertical-fit="Unconstrained" child-alignment="UpperCenter">
         <tab tags="tabs" tab-name="General">
-            <vertical vertical-fit="PreferredSize" pref-height="70" pref-width="100" anchored-position-x="4">
-                <scroll-view spacing="0" pref-height="70" child-expand-width="true">
+            <vertical vertical-fit="PreferredSize" pref-height="65" pref-width="100" anchored-position-x="4">
+                <scroll-view spacing="0" pref-height="65" child-expand-width="true">
                     <toggle-setting apply-on-change="true" value="Enabled" text="Mod Enabled" bind-value="true"
                                     hover-hint="Remember to drink water! Hydrate!"/>
                     
@@ -33,7 +37,7 @@
         </tab>
         
         <tab tags="tabs" tab-name="Tools">
-            <vertical vertical-fit="PreferredSize" pref-height="70" pref-width="100" anchored-position-x="4" child-alignment="UpperCenter">
+            <vertical vertical-fit="PreferredSize" pref-height="65" pref-width="100" anchored-position-x="4" child-alignment="UpperCenter">
                 <button text="Export Settings for Settings Setter" on-click="export-settings-setter"/>
                 <text text="" font-size="2" font-color="#FFFFFF" rich-text="true" align="Left" id="export-text"/>
             </vertical>
