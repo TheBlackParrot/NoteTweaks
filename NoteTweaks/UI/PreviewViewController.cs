@@ -407,12 +407,31 @@ namespace NoteTweaks.UI
                     continue;
                 }
                 
-                Color bombColor = Config.EnableRainbowBombs ? RainbowGradient.Color : Config.BombColor * scale;
+                Color bombColor =
+                    Config.EnableRainbowBombs &&
+                    (Config.RainbowBombMode == "Both" || Config.RainbowBombMode == "Only Bombs")
+                        ? RainbowGradient.Color
+                        : Config.BombColor * scale;
+                Color outlineColor =
+                    Config.EnableRainbowBombs &&
+                    (Config.RainbowBombMode == "Both" || Config.RainbowBombMode == "Only Outlines")
+                        ? RainbowGradient.Color
+                        : Config.BombOutlineColor;
                 
                 foreach (MaterialPropertyBlockController controller in bombObj.GetComponents<MaterialPropertyBlockController>())
                 {
                     controller.materialPropertyBlock.SetColor(Color1, bombColor);
                     controller.ApplyChanges();
+                }
+                
+                Transform noteOutline = bombObj.transform.FindChildRecursively("NoteOutline");
+                if (noteOutline != null)
+                {
+                    if (noteOutline.gameObject.TryGetComponent(out MaterialPropertyBlockController controller))
+                    {
+                        controller.materialPropertyBlock.SetColor(ColorNoteVisuals._colorId, outlineColor);
+                        controller.ApplyChanges();
+                    }
                 }
             }
         }
@@ -469,7 +488,7 @@ namespace NoteTweaks.UI
                     noteColor /= colorScalar;
                 }
                 
-                Color outlineColor = Config.BombOutlineColor;
+                Color outlineColor = Config.EnableRainbowBombs ? RainbowGradient.Color : Config.BombOutlineColor;
                 if (!isBomb)
                 {
                     outlineColor = Color.LerpUnclamped(isLeft ? Config.NoteOutlineLeftColor : Config.NoteOutlineRightColor, noteColor, isLeft ? Config.NoteOutlineLeftColorSkew : Config.NoteOutlineRightColorSkew);   

@@ -9,7 +9,6 @@ using JetBrains.Annotations;
 using NoteTweaks.Configuration;
 using NoteTweaks.Managers;
 using UnityEngine;
-using Zenject;
 
 namespace NoteTweaks.UI
 {
@@ -17,7 +16,7 @@ namespace NoteTweaks.UI
     [HotReload(RelativePathToLayout = "BSML.Settings.bsml")]
     internal class SettingsViewController : BSMLAutomaticViewController
     {
-        private static PluginConfig _config;
+        private static PluginConfig Config => PluginConfig.Instance;
         public string PercentageFormatter(float x) => x.ToString("0%");
         public string PreciseFloatFormatter(float x) => x.ToString("F3");
         public string AccFormatter(int x) => (x + 100).ToString();
@@ -32,21 +31,14 @@ namespace NoteTweaks.UI
             
             NotifyPropertyChanged(nameof(EnableAccDot));
         }
-
-        [Inject]
-        [UsedImplicitly]
-        private void Construct(PluginConfig config)
-        {
-            _config = config;
-        }
         
         [UIValue("EnableFaceGlow")]
         protected bool EnableFaceGlow
         {
-            get => _config.EnableFaceGlow;
+            get => Config.EnableFaceGlow;
             set
             {
-                _config.EnableFaceGlow = value;
+                Config.EnableFaceGlow = value;
                 NotePreviewViewController.UpdateVisibility();
 
                 NotifyPropertyChanged();
@@ -55,12 +47,12 @@ namespace NoteTweaks.UI
 
         protected float ArrowScaleX
         {
-            get => _config.ArrowScale.x;
+            get => Config.ArrowScale.x;
             set
             {
-                Vector2 scale = _config.ArrowScale;
+                Vector2 scale = Config.ArrowScale;
                 scale.x = value;
-                _config.ArrowScale = scale;
+                Config.ArrowScale = scale;
                 
                 NotePreviewViewController.UpdateArrowScale();
             }
@@ -68,12 +60,12 @@ namespace NoteTweaks.UI
         
         protected float ArrowScaleY
         {
-            get => _config.ArrowScale.y;
+            get => Config.ArrowScale.y;
             set
             {
-                Vector2 scale = _config.ArrowScale;
+                Vector2 scale = Config.ArrowScale;
                 scale.y = value;
-                _config.ArrowScale = scale;
+                Config.ArrowScale = scale;
                 
                 NotePreviewViewController.UpdateArrowScale();
             }
@@ -81,12 +73,12 @@ namespace NoteTweaks.UI
         
         protected float ArrowOffsetX
         {
-            get => _config.ArrowPosition.x;
+            get => Config.ArrowPosition.x;
             set
             {
-                Vector3 position = _config.ArrowPosition;
+                Vector3 position = Config.ArrowPosition;
                 position.x = value;
-                _config.ArrowPosition = position;
+                Config.ArrowPosition = position;
                 
                 NotePreviewViewController.UpdateArrowPosition();
             }
@@ -94,12 +86,12 @@ namespace NoteTweaks.UI
         
         protected float ArrowOffsetY
         {
-            get => _config.ArrowPosition.y;
+            get => Config.ArrowPosition.y;
             set
             {
-                Vector3 position = _config.ArrowPosition;
+                Vector3 position = Config.ArrowPosition;
                 position.y = value;
-                _config.ArrowPosition = position;
+                Config.ArrowPosition = position;
                 
                 NotePreviewViewController.UpdateArrowPosition();
             }
@@ -107,12 +99,12 @@ namespace NoteTweaks.UI
         
         protected float DotScaleX
         {
-            get => _config.DotScale.x;
+            get => Config.DotScale.x;
             set
             {
-                Vector2 scale = _config.DotScale;
+                Vector2 scale = Config.DotScale;
                 scale.x = value;
-                _config.DotScale = scale;
+                Config.DotScale = scale;
                 
                 NotePreviewViewController.UpdateDotScale();
             }
@@ -120,12 +112,12 @@ namespace NoteTweaks.UI
         
         protected float DotScaleY
         {
-            get => _config.DotScale.y;
+            get => Config.DotScale.y;
             set
             {
-                Vector2 scale = _config.DotScale;
+                Vector2 scale = Config.DotScale;
                 scale.y = value;
-                _config.DotScale = scale;
+                Config.DotScale = scale;
                 
                 NotePreviewViewController.UpdateDotScale();
             }
@@ -133,12 +125,12 @@ namespace NoteTweaks.UI
         
         protected float DotOffsetX
         {
-            get => _config.DotPosition.x;
+            get => Config.DotPosition.x;
             set
             {
-                Vector3 position = _config.DotPosition;
+                Vector3 position = Config.DotPosition;
                 position.x = value;
-                _config.DotPosition = position;
+                Config.DotPosition = position;
                 
                 NotePreviewViewController.UpdateDotPosition();
             }
@@ -146,12 +138,12 @@ namespace NoteTweaks.UI
         
         protected float DotOffsetY
         {
-            get => _config.DotPosition.y;
+            get => Config.DotPosition.y;
             set
             {
-                Vector3 position = _config.DotPosition;
+                Vector3 position = Config.DotPosition;
                 position.y = value;
-                _config.DotPosition = position;
+                Config.DotPosition = position;
                 
                 NotePreviewViewController.UpdateDotPosition();
             }
@@ -159,22 +151,22 @@ namespace NoteTweaks.UI
 
         protected bool EnableDots
         {
-            get => _config.EnableDots;
+            get => Config.EnableDots;
             set
             {
-                _config.EnableDots = value;
+                Config.EnableDots = value;
                 NotePreviewViewController.UpdateVisibility();
             }
         }
 
         protected float NoteScaleX
         {
-            get => _config.NoteScale.x;
+            get => Config.NoteScale.x;
             set
             {
-                Vector3 scale = _config.NoteScale;
+                Vector3 scale = Config.NoteScale;
                 scale.x = value;
-                _config.NoteScale = scale;
+                Config.NoteScale = scale;
                 
                 NotePreviewViewController.UpdateNoteScale();
             }
@@ -182,12 +174,12 @@ namespace NoteTweaks.UI
         
         protected float NoteScaleY
         {
-            get => _config.NoteScale.y;
+            get => Config.NoteScale.y;
             set
             {
-                Vector3 scale = _config.NoteScale;
+                Vector3 scale = Config.NoteScale;
                 scale.y = value;
-                _config.NoteScale = scale;
+                Config.NoteScale = scale;
                 
                 NotePreviewViewController.UpdateNoteScale();
             }
@@ -195,12 +187,12 @@ namespace NoteTweaks.UI
         
         protected float NoteScaleZ
         {
-            get => _config.NoteScale.z;
+            get => Config.NoteScale.z;
             set
             {
-                Vector3 scale = _config.NoteScale;
+                Vector3 scale = Config.NoteScale;
                 scale.z = value;
-                _config.NoteScale = scale;
+                Config.NoteScale = scale;
                 
                 NotePreviewViewController.UpdateNoteScale();
             }
@@ -208,92 +200,92 @@ namespace NoteTweaks.UI
         
         protected float LinkScale
         {
-            get => _config.LinkScale;
+            get => Config.LinkScale;
             set
             {
-                _config.LinkScale = value;
+                Config.LinkScale = value;
                 NotePreviewViewController.UpdateNoteScale();
             }
         }
 
         protected float ColorBoostLeft
         {
-            get => _config.ColorBoostLeft;
+            get => Config.ColorBoostLeft;
             set
             {
-                _config.ColorBoostLeft = value;
+                Config.ColorBoostLeft = value;
                 NotePreviewViewController.UpdateColors();
             }
         }
 
         protected float ColorBoostRight
         {
-            get => _config.ColorBoostRight;
+            get => Config.ColorBoostRight;
             set
             {
-                _config.ColorBoostRight = value;
+                Config.ColorBoostRight = value;
                 NotePreviewViewController.UpdateColors();
             }
         }
 
         protected float ArrowGlowScale
         {
-            get => _config.ArrowGlowScale;
+            get => Config.ArrowGlowScale;
             set
             {
-                _config.ArrowGlowScale = value;
+                Config.ArrowGlowScale = value;
                 NotePreviewViewController.UpdateArrowScale();
             }
         }
         
         protected float DotGlowScale
         {
-            get => _config.DotGlowScale;
+            get => Config.DotGlowScale;
             set
             {
-                _config.DotGlowScale = value;
+                Config.DotGlowScale = value;
                 NotePreviewViewController.UpdateDotScale();
             }
         }
 
         protected float LeftGlowIntensity
         {
-            get => _config.LeftGlowIntensity;
+            get => Config.LeftGlowIntensity;
             set
             {
-                _config.LeftGlowIntensity = value;
+                Config.LeftGlowIntensity = value;
                 NotePreviewViewController.UpdateColors();
             }
         }
         
         protected float RightGlowIntensity
         {
-            get => _config.RightGlowIntensity;
+            get => Config.RightGlowIntensity;
             set
             {
-                _config.RightGlowIntensity = value;
+                Config.RightGlowIntensity = value;
                 NotePreviewViewController.UpdateColors();
             }
         }
 
         protected bool EnableChainDots
         {
-            get => _config.EnableChainDots;
+            get => Config.EnableChainDots;
             set
             {
-                _config.EnableChainDots = value;
+                Config.EnableChainDots = value;
                 NotePreviewViewController.UpdateVisibility();
             }
         }
 
         protected float ChainDotScaleX
         {
-            get => _config.ChainDotScale.x;
+            get => Config.ChainDotScale.x;
             set
             {
-                Vector3 scale = _config.ChainDotScale;
+                Vector3 scale = Config.ChainDotScale;
                 scale.x = value;
-                _config.ChainDotScale = scale;
+                Config.ChainDotScale = scale;
                 
                 NotePreviewViewController.UpdateDotScale();
             }
@@ -301,12 +293,12 @@ namespace NoteTweaks.UI
         
         protected float ChainDotScaleY
         {
-            get => _config.ChainDotScale.y;
+            get => Config.ChainDotScale.y;
             set
             {
-                Vector3 scale = _config.ChainDotScale;
+                Vector3 scale = Config.ChainDotScale;
                 scale.y = value;
-                _config.ChainDotScale = scale;
+                Config.ChainDotScale = scale;
                 
                 NotePreviewViewController.UpdateDotScale();
             }
@@ -314,188 +306,188 @@ namespace NoteTweaks.UI
         
         protected bool EnableChainDotGlow
         {
-            get => _config.EnableChainDotGlow;
+            get => Config.EnableChainDotGlow;
             set
             {
-                _config.EnableChainDotGlow = value;
+                Config.EnableChainDotGlow = value;
                 NotePreviewViewController.UpdateVisibility();
             }
         }
 
         protected Color LeftFaceColor
         {
-            get => _config.LeftFaceColor;
+            get => Config.LeftFaceColor;
             set
             {
-                _config.LeftFaceColor = value;
+                Config.LeftFaceColor = value;
                 NotePreviewViewController.UpdateColors();
             }
         }
         
         protected Color RightFaceColor
         {
-            get => _config.RightFaceColor;
+            get => Config.RightFaceColor;
             set
             {
-                _config.RightFaceColor = value;
+                Config.RightFaceColor = value;
                 NotePreviewViewController.UpdateColors();
             }
         }
 
         protected bool EnableAccDot
         {
-            get => _config.EnableAccDot;
+            get => Config.EnableAccDot;
             set
             {
-                _config.EnableAccDot = value;
+                Config.EnableAccDot = value;
                 NotifyPropertyChanged();
             }
         }
 
         protected int AccDotSize
         {
-            get => _config.AccDotSize;
-            set => _config.AccDotSize = value;
+            get => Config.AccDotSize;
+            set => Config.AccDotSize = value;
         }
 
         protected Color AccDotColor
         {
-            get => _config.AccDotColor;
-            set => _config.AccDotColor = value;
+            get => Config.AccDotColor;
+            set => Config.AccDotColor = value;
         }
 
         protected bool RenderAccDotsAboveSymbols
         {
-            get => _config.RenderAccDotsAboveSymbols;
-            set => _config.RenderAccDotsAboveSymbols = value;
+            get => Config.RenderAccDotsAboveSymbols;
+            set => Config.RenderAccDotsAboveSymbols = value;
         }
 
         protected int DotMeshSides
         {
-            get => _config.DotMeshSides;
+            get => Config.DotMeshSides;
             set
             {
-                _config.DotMeshSides = value;
+                Config.DotMeshSides = value;
                 NotePreviewViewController.UpdateDotMesh();
             }
         }
 
         protected float LeftFaceColorNoteSkew
         {
-            get => _config.LeftFaceColorNoteSkew;
+            get => Config.LeftFaceColorNoteSkew;
             set
             {
-                _config.LeftFaceColorNoteSkew = value;
+                Config.LeftFaceColorNoteSkew = value;
                 NotePreviewViewController.UpdateColors();
             }
         }
         
         protected float RightFaceColorNoteSkew
         {
-            get => _config.RightFaceColorNoteSkew;
+            get => Config.RightFaceColorNoteSkew;
             set
             {
-                _config.RightFaceColorNoteSkew = value;
+                Config.RightFaceColorNoteSkew = value;
                 NotePreviewViewController.UpdateColors();
             }
         }
 
         protected float RotateDot
         {
-            get => _config.RotateDot;
+            get => Config.RotateDot;
             set
             {
-                _config.RotateDot = value;
+                Config.RotateDot = value;
                 NotePreviewViewController.UpdateDotRotation();
             }
         }
         
         protected bool NormalizeLeftFaceColor
         {
-            get => _config.NormalizeLeftFaceColor;
+            get => Config.NormalizeLeftFaceColor;
             set
             {
-                _config.NormalizeLeftFaceColor = value;
+                Config.NormalizeLeftFaceColor = value;
                 NotePreviewViewController.UpdateColors();
             }
         }
         
         protected bool NormalizeRightFaceColor
         {
-            get => _config.NormalizeRightFaceColor;
+            get => Config.NormalizeRightFaceColor;
             set
             {
-                _config.NormalizeRightFaceColor = value;
+                Config.NormalizeRightFaceColor = value;
                 NotePreviewViewController.UpdateColors();
             }
         }
 
         protected Color LeftFaceGlowColor
         {
-            get => _config.LeftFaceGlowColor;
+            get => Config.LeftFaceGlowColor;
             set
             {
-                _config.LeftFaceGlowColor = value;
+                Config.LeftFaceGlowColor = value;
                 NotePreviewViewController.UpdateColors();
             }
         }
 
         protected float LeftFaceGlowColorNoteSkew
         {
-            get => _config.LeftFaceGlowColorNoteSkew;
+            get => Config.LeftFaceGlowColorNoteSkew;
             set
             {
-                _config.LeftFaceGlowColorNoteSkew = value;
+                Config.LeftFaceGlowColorNoteSkew = value;
                 NotePreviewViewController.UpdateColors();
             }
         }
 
         protected bool NormalizeLeftFaceGlowColor
         {
-            get => _config.NormalizeLeftFaceGlowColor;
+            get => Config.NormalizeLeftFaceGlowColor;
             set
             {
-                _config.NormalizeLeftFaceGlowColor = value;
+                Config.NormalizeLeftFaceGlowColor = value;
                 NotePreviewViewController.UpdateColors();
             }
         }
         
         protected Color RightFaceGlowColor
         {
-            get => _config.RightFaceGlowColor;
+            get => Config.RightFaceGlowColor;
             set
             {
-                _config.RightFaceGlowColor = value;
+                Config.RightFaceGlowColor = value;
                 NotePreviewViewController.UpdateColors();
             }
         }
 
         protected float RightFaceGlowColorNoteSkew
         {
-            get => _config.RightFaceGlowColorNoteSkew;
+            get => Config.RightFaceGlowColorNoteSkew;
             set
             {
-                _config.RightFaceGlowColorNoteSkew = value;
+                Config.RightFaceGlowColorNoteSkew = value;
                 NotePreviewViewController.UpdateColors();
             }
         }
 
         protected bool NormalizeRightFaceGlowColor
         {
-            get => _config.NormalizeRightFaceGlowColor;
+            get => Config.NormalizeRightFaceGlowColor;
             set
             {
-                _config.NormalizeRightFaceGlowColor = value;
+                Config.NormalizeRightFaceGlowColor = value;
                 NotePreviewViewController.UpdateColors();
             }
         }
 
         protected string NoteTexture
         {
-            get => _config.NoteTexture;
+            get => Config.NoteTexture;
             set
             {
-                _config.NoteTexture = value;
+                Config.NoteTexture = value;
                 if (LoadTextures)
                 {
                     _ = Textures.LoadNoteTexture(value);
@@ -505,30 +497,30 @@ namespace NoteTweaks.UI
         
         protected Color BombColor
         {
-            get => _config.BombColor;
+            get => Config.BombColor;
             set
             {
-                _config.BombColor = value;
+                Config.BombColor = value;
                 NotePreviewViewController.UpdateBombColors();
             }
         }
 
         protected float BombColorBoost
         {
-            get => _config.BombColorBoost;
+            get => Config.BombColorBoost;
             set
             {
-                _config.BombColorBoost = value;
+                Config.BombColorBoost = value;
                 NotePreviewViewController.UpdateBombColors();
             }
         }
         
         protected string BombTexture
         {
-            get => _config.BombTexture;
+            get => Config.BombTexture;
             set
             {
-                _config.BombTexture = value;
+                Config.BombTexture = value;
                 if (LoadTextures)
                 {
                     _ = Textures.LoadNoteTexture(value, true);
@@ -538,36 +530,36 @@ namespace NoteTweaks.UI
         
         protected float BombScale
         {
-            get => _config.BombScale;
+            get => Config.BombScale;
             set
             {
-                _config.BombScale = value;
+                Config.BombScale = value;
                 NotePreviewViewController.UpdateBombScale();
             }
         }
         
         protected bool InvertBombTexture
         {
-            get => _config.InvertBombTexture;
+            get => Config.InvertBombTexture;
             set
             {
-                _config.InvertBombTexture = value;
+                Config.InvertBombTexture = value;
                 if (LoadTextures)
                 {
-                    _ = Textures.LoadNoteTexture(_config.BombTexture, true);
+                    _ = Textures.LoadNoteTexture(Config.BombTexture, true);
                 }
             }
         }
         
         protected bool InvertNoteTexture
         {
-            get => _config.InvertNoteTexture;
+            get => Config.InvertNoteTexture;
             set
             {
-                _config.InvertNoteTexture = value;
+                Config.InvertNoteTexture = value;
                 if (LoadTextures)
                 {
-                    _ = Textures.LoadNoteTexture(_config.NoteTexture);
+                    _ = Textures.LoadNoteTexture(Config.NoteTexture);
                 }
             }
         }
@@ -575,10 +567,10 @@ namespace NoteTweaks.UI
         [UIValue("EnableRainbowBombs")]
         protected bool EnableRainbowBombs
         {
-            get => _config.EnableRainbowBombs;
+            get => Config.EnableRainbowBombs;
             set
             {
-                _config.EnableRainbowBombs = value;
+                Config.EnableRainbowBombs = value;
                 NotePreviewViewController.UpdateBombColors();
 
                 NotifyPropertyChanged();
@@ -587,40 +579,40 @@ namespace NoteTweaks.UI
         
         protected float RainbowBombTimeScale
         {
-            get => _config.RainbowBombTimeScale;
+            get => Config.RainbowBombTimeScale;
             set
             {
-                _config.RainbowBombTimeScale = value;
+                Config.RainbowBombTimeScale = value;
                 NotePreviewViewController.UpdateBombColors();
             }
         }
 
         protected float RainbowBombSaturation
         {
-            get => _config.RainbowBombSaturation;
+            get => Config.RainbowBombSaturation;
             set
             {
-                _config.RainbowBombSaturation = value;
+                Config.RainbowBombSaturation = value;
                 NotePreviewViewController.UpdateBombColors();
             }
         }
 
         protected float RainbowBombValue
         {
-            get => _config.RainbowBombValue;
+            get => Config.RainbowBombValue;
             set
             {
-                _config.RainbowBombValue = value;
+                Config.RainbowBombValue = value;
                 NotePreviewViewController.UpdateBombColors();
             }
         }
 
         protected string GlowTexture
         {
-            get => _config.GlowTexture;
+            get => Config.GlowTexture;
             set
             {
-                _config.GlowTexture = value;
+                Config.GlowTexture = value;
                 _ = ForceAsyncUpdateForGlowTexture();
             }
         }
@@ -633,10 +625,10 @@ namespace NoteTweaks.UI
 
         protected string ArrowMesh
         {
-            get => _config.ArrowMesh;
+            get => Config.ArrowMesh;
             set
             {
-                _config.ArrowMesh = value;
+                Config.ArrowMesh = value;
                 NotePreviewViewController.UpdateArrowMeshes();
                 _ = ForceAsyncUpdateForGlowTexture();
             }
@@ -644,72 +636,72 @@ namespace NoteTweaks.UI
 
         protected float LeftMinBrightness
         {
-            get => _config.LeftMinBrightness;
+            get => Config.LeftMinBrightness;
             set
             {
-                _config.LeftMinBrightness = Mathf.Clamp(value, 0.0f, 1.0f);
+                Config.LeftMinBrightness = Mathf.Clamp(value, 0.0f, 1.0f);
                 NotePreviewViewController.UpdateColors();
             }
         }
         
         protected float LeftMaxBrightness
         {
-            get => _config.LeftMaxBrightness;
+            get => Config.LeftMaxBrightness;
             set
             {
-                _config.LeftMaxBrightness = Mathf.Clamp(value, 0.0f, 1.0f);
+                Config.LeftMaxBrightness = Mathf.Clamp(value, 0.0f, 1.0f);
                 NotePreviewViewController.UpdateColors();
             }
         }
         
         protected float RightMinBrightness
         {
-            get => _config.RightMinBrightness;
+            get => Config.RightMinBrightness;
             set
             {
-                _config.RightMinBrightness = Mathf.Clamp(value, 0.0f, 1.0f);
+                Config.RightMinBrightness = Mathf.Clamp(value, 0.0f, 1.0f);
                 NotePreviewViewController.UpdateColors();
             }
         }
         
         protected float RightMaxBrightness
         {
-            get => _config.RightMaxBrightness;
+            get => Config.RightMaxBrightness;
             set
             {
-                _config.RightMaxBrightness = Mathf.Clamp(value, 0.0f, 1.0f);
+                Config.RightMaxBrightness = Mathf.Clamp(value, 0.0f, 1.0f);
                 NotePreviewViewController.UpdateColors();
             }
         }
 
         protected string LeftGlowBlendOp
         {
-            get => _config.LeftGlowBlendOp;
+            get => Config.LeftGlowBlendOp;
             set
             {
-                _config.LeftGlowBlendOp = value;
+                Config.LeftGlowBlendOp = value;
                 _ = ForceAsyncUpdateForGlowTexture();
             }
         }
         
         protected string RightGlowBlendOp
         {
-            get => _config.RightGlowBlendOp;
+            get => Config.RightGlowBlendOp;
             set
             {
-                _config.RightGlowBlendOp = value;
+                Config.RightGlowBlendOp = value;
                 _ = ForceAsyncUpdateForGlowTexture();
             }
         }
 
         protected float LeftGlowOffsetX
         {
-            get => _config.LeftGlowOffset.x;
+            get => Config.LeftGlowOffset.x;
             set
             {
-                var pos = _config.LeftGlowOffset;
+                var pos = Config.LeftGlowOffset;
                 pos.x = value;
-                _config.LeftGlowOffset = pos;
+                Config.LeftGlowOffset = pos;
                 
                 NotePreviewViewController.UpdateDotPosition();
                 NotePreviewViewController.UpdateArrowPosition();
@@ -717,12 +709,12 @@ namespace NoteTweaks.UI
         }
         protected float LeftGlowOffsetY
         {
-            get => _config.LeftGlowOffset.y;
+            get => Config.LeftGlowOffset.y;
             set
             {
-                var pos = _config.LeftGlowOffset;
+                var pos = Config.LeftGlowOffset;
                 pos.y = value;
-                _config.LeftGlowOffset = pos;
+                Config.LeftGlowOffset = pos;
                 
                 NotePreviewViewController.UpdateDotPosition();
                 NotePreviewViewController.UpdateArrowPosition();
@@ -731,12 +723,12 @@ namespace NoteTweaks.UI
         
         protected float RightGlowOffsetX
         {
-            get => _config.RightGlowOffset.x;
+            get => Config.RightGlowOffset.x;
             set
             {
-                var pos = _config.RightGlowOffset;
+                var pos = Config.RightGlowOffset;
                 pos.x = value;
-                _config.RightGlowOffset = pos;
+                Config.RightGlowOffset = pos;
                 
                 NotePreviewViewController.UpdateDotPosition();
                 NotePreviewViewController.UpdateArrowPosition();
@@ -744,12 +736,12 @@ namespace NoteTweaks.UI
         }
         protected float RightGlowOffsetY
         {
-            get => _config.RightGlowOffset.y;
+            get => Config.RightGlowOffset.y;
             set
             {
-                var pos = _config.RightGlowOffset;
+                var pos = Config.RightGlowOffset;
                 pos.y = value;
-                _config.RightGlowOffset = pos;
+                Config.RightGlowOffset = pos;
                 
                 NotePreviewViewController.UpdateDotPosition();
                 NotePreviewViewController.UpdateArrowPosition();
@@ -758,220 +750,235 @@ namespace NoteTweaks.UI
 
         protected bool EnableNoteOutlines
         {
-            get => _config.EnableNoteOutlines;
+            get => Config.EnableNoteOutlines;
             set
             {
-                _config.EnableNoteOutlines = value;
+                Config.EnableNoteOutlines = value;
                 NotePreviewViewController.UpdateOutlines();
             }
         }
 
         protected int NoteOutlineScale
         {
-            get => _config.NoteOutlineScale;
+            get => Config.NoteOutlineScale;
             set
             {
-                _config.NoteOutlineScale = value;
+                Config.NoteOutlineScale = value;
                 NotePreviewViewController.UpdateOutlines();
             }
         }
 
         protected Color NoteOutlineLeftColor
         {
-            get => _config.NoteOutlineLeftColor;
+            get => Config.NoteOutlineLeftColor;
             set
             {
-                _config.NoteOutlineLeftColor = value;
+                Config.NoteOutlineLeftColor = value;
                 NotePreviewViewController.UpdateOutlines();
             }
         }
 
         protected Color NoteOutlineRightColor
         {
-            get => _config.NoteOutlineRightColor;
+            get => Config.NoteOutlineRightColor;
             set
             {
-                _config.NoteOutlineRightColor = value;
+                Config.NoteOutlineRightColor = value;
                 NotePreviewViewController.UpdateOutlines();
             }
         }
 
         protected Color BombOutlineColor
         {
-            get => _config.BombOutlineColor;
+            get => Config.BombOutlineColor;
             set
             {
-                _config.BombOutlineColor = value;
+                Config.BombOutlineColor = value;
                 NotePreviewViewController.UpdateOutlines();
             }
         }
 
         protected float NoteOutlineLeftColorSkew
         {
-            get => _config.NoteOutlineLeftColorSkew;
+            get => Config.NoteOutlineLeftColorSkew;
             set
             {
-                _config.NoteOutlineLeftColorSkew = value;
+                Config.NoteOutlineLeftColorSkew = value;
                 NotePreviewViewController.UpdateOutlines();
             }
         }
         
         protected float NoteOutlineRightColorSkew
         {
-            get => _config.NoteOutlineRightColorSkew;
+            get => Config.NoteOutlineRightColorSkew;
             set
             {
-                _config.NoteOutlineRightColorSkew = value;
+                Config.NoteOutlineRightColorSkew = value;
                 NotePreviewViewController.UpdateOutlines();
             }
         }
         
         protected bool NormalizeLeftOutlineColor
         {
-            get => _config.NormalizeLeftOutlineColor;
+            get => Config.NormalizeLeftOutlineColor;
             set
             {
-                _config.NormalizeLeftOutlineColor = value;
+                Config.NormalizeLeftOutlineColor = value;
                 NotePreviewViewController.UpdateOutlines();
             }
         }
         
         protected bool NormalizeRightOutlineColor
         {
-            get => _config.NormalizeRightOutlineColor;
+            get => Config.NormalizeRightOutlineColor;
             set
             {
-                _config.NormalizeRightOutlineColor = value;
+                Config.NormalizeRightOutlineColor = value;
                 NotePreviewViewController.UpdateOutlines();
             }
         }
         
         protected bool EnableBombOutlines
         {
-            get => _config.EnableBombOutlines;
+            get => Config.EnableBombOutlines;
             set
             {
-                _config.EnableBombOutlines = value;
+                Config.EnableBombOutlines = value;
                 NotePreviewViewController.UpdateOutlines();
             }
         }
 
         protected int BombOutlineScale
         {
-            get => _config.BombOutlineScale;
+            get => Config.BombOutlineScale;
             set
             {
-                _config.BombOutlineScale = value;
+                Config.BombOutlineScale = value;
                 NotePreviewViewController.UpdateOutlines();
             }
         }
         
         protected float FogStartOffset
         {
-            get => _config.FogStartOffset;
+            get => Config.FogStartOffset;
             set
             {
-                _config.FogStartOffset = value;
+                Config.FogStartOffset = value;
                 Materials.UpdateFogValues("FogStartOffset");
             }
         }
         protected float FogScale
         {
-            get => _config.FogScale;
+            get => Config.FogScale;
             set
             {
-                _config.FogScale = value;
+                Config.FogScale = value;
                 Materials.UpdateFogValues("FogScale");
             }
         }
         protected float FogHeightOffset
         {
-            get => _config.FogHeightOffset;
+            get => Config.FogHeightOffset;
             set
             {
-                _config.FogHeightOffset = value;
+                Config.FogHeightOffset = value;
                 Materials.UpdateFogValues("FogHeightOffset");
             }
         }
         protected float FogHeightScale
         {
-            get => _config.FogHeightScale;
+            get => Config.FogHeightScale;
             set
             {
-                _config.FogHeightScale = value;
+                Config.FogHeightScale = value;
                 Materials.UpdateFogValues("FogHeightScale");
             }
         }
 
         protected bool EnableFog
         {
-            get => _config.EnableFog;
+            get => Config.EnableFog;
             set
             {
-                _config.EnableFog = value;
+                Config.EnableFog = value;
                 Materials.UpdateFogValues("FogStartOffset");
             }
         }
         
         protected bool EnableHeightFog
         {
-            get => _config.EnableHeightFog;
+            get => Config.EnableHeightFog;
             set
             {
-                _config.EnableHeightFog = value;
+                Config.EnableHeightFog = value;
                 Materials.UpdateFogValues("FogHeightOffset");
             }
         }
         
         protected float RimDarkening
         {
-            get => _config.RimDarkening;
+            get => Config.RimDarkening;
             set
             {
-                _config.RimDarkening = value;
+                Config.RimDarkening = value;
                 Materials.UpdateRimValues("RimDarkening");
             }
         }
         
         protected float RimOffset
         {
-            get => _config.RimOffset;
+            get => Config.RimOffset;
             set
             {
-                _config.RimOffset = value;
+                Config.RimOffset = value;
                 Materials.UpdateRimValues("RimOffset");
             }
         }
         
         protected float RimScale
         {
-            get => _config.RimScale;
+            get => Config.RimScale;
             set
             {
-                _config.RimScale = value;
+                Config.RimScale = value;
                 Materials.UpdateRimValues("RimScale");
             }
         }
         
         protected float Smoothness
         {
-            get => _config.Smoothness;
+            get => Config.Smoothness;
             set
             {
-                _config.Smoothness = value;
+                Config.Smoothness = value;
                 Materials.UpdateRimValues("Smoothness");
             }
         }
         
         protected float RimCameraDistanceOffset
         {
-            get => _config.RimCameraDistanceOffset;
+            get => Config.RimCameraDistanceOffset;
             set
             {
-                _config.RimCameraDistanceOffset = value;
+                Config.RimCameraDistanceOffset = value;
                 Materials.UpdateRimValues("RimCameraDistanceOffset");
             }
         }
+
+        protected string RainbowBombMode
+        {
+            get => Config.RainbowBombMode;
+            set
+            {
+                Config.RainbowBombMode = value;
+                NotePreviewViewController.UpdateBombColors();
+            }
+        }
+        
+        [UIValue("rainbowBombModeChoices")]
+        [UsedImplicitly]
+        // ReSharper disable once InconsistentNaming
+        private List<object> RainbowBombModeChoices = new List<object> { "Both", "Only Outlines", "Only Bombs" };
         
         [UIValue("glowBlendOperationChoices")]
         [UsedImplicitly]
