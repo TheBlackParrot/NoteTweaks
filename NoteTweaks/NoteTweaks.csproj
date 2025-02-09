@@ -21,6 +21,9 @@
         <DisableCopyToPlugins>True</DisableCopyToPlugins>
         <DisableZipRelease>True</DisableZipRelease>
     </PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
+        <DefineConstants>PREREL</DefineConstants>
+    </PropertyGroup>
     <ItemGroup>
         <Reference Include="BeatmapCore">
             <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\BeatmapCore.dll</HintPath>
