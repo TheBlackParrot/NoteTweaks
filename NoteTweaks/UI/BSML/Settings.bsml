@@ -84,6 +84,9 @@
 
                 <toggle-setting apply-on-change="true" value="EnableRainbowBombs" text="Enable Rainbow Bombs" bind-value="true"
                                 hover-hint="love wins!!!!"/>
+                <dropdown-list-setting apply-on-change="true" value="RainbowBombMode" text="Rainbow Bomb Mode"
+                                       choices="rainbowBombModeChoices" active="~EnableRainbowBombs"
+                                       hover-hint="What parts of the bomb to rainbow-ify"/>
                 <slider-setting apply-on-change="true" value="RainbowBombTimeScale" text="Time Scale"
                                 min="0.5" max="64.0" increment="0.5" show-buttons="true" active="~EnableRainbowBombs"
                                 hover-hint="Time scale of color gradients (DEFAULT: 6.00)"/>

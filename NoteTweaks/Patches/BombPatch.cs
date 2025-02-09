@@ -44,12 +44,20 @@ namespace NoteTweaks.Patches
                     
                 if (noteOutline.gameObject.TryGetComponent(out MaterialPropertyBlockController controller))
                 {
-                    controller.materialPropertyBlock.SetColor(ColorNoteVisuals._colorId, Config.BombOutlineColor);
+                    controller.materialPropertyBlock.SetColor(ColorNoteVisuals._colorId,
+                        Config.EnableRainbowBombs && (Config.RainbowBombMode == "Both" ||
+                                                      Config.RainbowBombMode == "Only Outlines")
+                            ? RainbowGradient.Color
+                            : Config.BombOutlineColor);
                     controller.ApplyChanges();
                 }
             }
 
-            Color bombColor = Config.EnableRainbowBombs ? RainbowGradient.Color : Config.BombColor * (1.0f + Config.BombColorBoost);
+            Color bombColor =
+                Config.EnableRainbowBombs && (Config.RainbowBombMode == "Both" ||
+                                              Config.RainbowBombMode == "Only Bombs")
+                    ? RainbowGradient.Color
+                    : Config.BombColor * (1.0f + Config.BombColorBoost);
             
             if (__instance.transform.GetChild(0).TryGetComponent(out Renderer bombRenderer))
             {
