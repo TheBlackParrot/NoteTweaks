@@ -19,8 +19,7 @@ namespace NoteTweaks.Managers
         internal static Material NoteMaterial;
         internal static Material DebrisMaterial;
         internal static Material BombMaterial;
-        internal static Material OutlineMaterial0;
-        internal static Material OutlineMaterial1;
+        internal static Material OutlineMaterial;
         
         internal static readonly Material AccDotDepthMaterial = new Material(Resources.FindObjectsOfTypeAll<Shader>().First(x => x.name == "Custom/ClearDepth"))
         {
@@ -45,6 +44,9 @@ namespace NoteTweaks.Managers
             new KeyValuePair<string, int>("Smoothness", Shader.PropertyToID("_Smoothness")),
             new KeyValuePair<string, int>("RimCameraDistanceOffset", Shader.PropertyToID("_RimCameraDistanceOffset"))
         };
+        
+        private static readonly BoolSO MainEffectContainer = Resources.FindObjectsOfTypeAll<BoolSO>().First(x => x.name.StartsWith("MainEffectContainer"));
+        internal static float SaneAlphaValue => MainEffectContainer.value ? 1f : 0f;
 
         internal static async Task UpdateAll()
         {
@@ -97,8 +99,7 @@ namespace NoteTweaks.Managers
                     NoteMaterial.SetFloat(keyword.Value, value);
                     DebrisMaterial.SetFloat(keyword.Value, value);
                     BombMaterial.SetFloat(keyword.Value, value);
-                    OutlineMaterial0.SetFloat(keyword.Value, value);
-                    OutlineMaterial1.SetFloat(keyword.Value, value);
+                    OutlineMaterial.SetFloat(keyword.Value, value);
                     AccDotMaterial.SetFloat(keyword.Value, value);
                 }
             });
@@ -141,6 +142,13 @@ namespace NoteTweaks.Managers
                 color = Color.white,
                 shaderKeywords = arrowMat.shaderKeywords.Where(x => x != "_ENABLE_COLOR_INSTANCING" || x != "_CUTOUT_NONE").ToArray()
             };
+            
+            foreach (string propertyName in ReplacementDotMaterial.GetPropertyNames(MaterialPropertyType.Float))
+            {
+                Plugin.Log.Info($"{propertyName} = {ReplacementDotMaterial.GetFloat(propertyName)}");
+            }
+            
+            //ReplacementDotMaterial.SetFloat("_BlendSrcFactor");
         }
 
         private static void UpdateReplacementArrowMaterial()
@@ -234,11 +242,11 @@ namespace NoteTweaks.Managers
 
         private static void UpdateOutlineMaterial()
         {
-            if (OutlineMaterial0 != null)
+            if (OutlineMaterial != null)
             {
                 return;
             }
-
+            
             if (_blankCubemap == null)
             {
                 _blankCubemap = new Cubemap(512, TextureFormat.RGBA32, false);
@@ -257,22 +265,15 @@ namespace NoteTweaks.Managers
                 _blankCubemap.Apply();
             }
 
-            Plugin.Log.Info("Creating outline materials");
+            Plugin.Log.Info("Creating outline material");
             
             Material noteMat = Resources.FindObjectsOfTypeAll<Material>().ToList().Find(x => x.name == "NoteLW");
             string[] keywords = noteMat.shaderKeywords
                 .Where(x => x != "_ENABLE_COLOR_INSTANCING" || x != "_CUTOUT_NONE" || x != "_ENABLE_RIM_DIM" || x != "_ENABLE_RIM_COLOR").ToArray();
             
-            OutlineMaterial0 = new Material(noteMat)
+            OutlineMaterial = new Material(noteMat)
             {
                 name = "NoteTweaks_OutlineMaterialLW",
-                color = Color.white,
-                shaderKeywords = keywords,
-                renderQueue = 1990
-            };
-            OutlineMaterial1 = new Material(noteMat)
-            {
-                name = "NoteTweaks_OutlineMaterialHD",
                 color = Color.white,
                 shaderKeywords = keywords,
                 renderQueue = 1990
@@ -285,41 +286,8 @@ namespace NoteTweaks.Managers
                 new KeyValuePair<string, float>("_RimDarkening", 0),
                 new KeyValuePair<string, float>("_RimScale", 0),
                 new KeyValuePair<string, float>("_Smoothness", 0)
-            }.Do(pair =>
-            {
-                OutlineMaterial0.SetFloat(pair.Key, pair.Value);
-                OutlineMaterial1.SetFloat(pair.Key, pair.Value);
-            });
-            OutlineMaterial0.SetTexture(EnvironmentReflectionCubeID, _blankCubemap);
-            OutlineMaterial1.SetTexture(EnvironmentReflectionCubeID, _blankCubemap);
-
-            /*for (int i = 0; i < OutlineMaterial1.shader.GetPropertyCount(); i++)
-            {
-                Plugin.Log.Info($"{OutlineMaterial1.shader.GetPropertyName(i)} -- {OutlineMaterial1.GetFloat(OutlineMaterial1.shader.GetPropertyNameId(i))}");
-            }
-            Plugin.Log.Info("----");
-            OutlineMaterial0.shaderKeywords.Do(x => Plugin.Log.Info(x));
-            Plugin.Log.Info("----");
-            OutlineMaterial1.shaderKeywords.Do(x => Plugin.Log.Info(x));
-            Plugin.Log.Info("----");
-
-            Resources.FindObjectsOfTypeAll<Shader>().Do(shader =>
-            {
-                Plugin.Log.Info(shader.name);
-                for (int i = 0; i < shader.GetPropertyCount(); i++)
-                {
-                    if (shader.GetPropertyName(i).Contains("Cull"))
-                    {
-                        Plugin.Log.Info($"!! {shader.name} contains {shader.GetPropertyName(i)}");
-                    }
-                }
-            });
-            
-            Plugin.Log.Info("----");
-            Resources.FindObjectsOfTypeAll<Material>().Do(material =>
-            {
-                Plugin.Log.Info(material.name);
-            });*/
+            }.Do(pair => OutlineMaterial.SetFloat(pair.Key, pair.Value));
+            OutlineMaterial.SetTexture(EnvironmentReflectionCubeID, _blankCubemap);
         }
         
         private static async Task UpdateNoteMaterial()
