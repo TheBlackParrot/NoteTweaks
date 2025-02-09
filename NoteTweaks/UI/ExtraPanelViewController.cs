@@ -81,6 +81,12 @@ namespace NoteTweaks.UI
         {
             Application.OpenURL(VersionData.Manifest.Links.ProjectHome);
         }
+
+        [UIAction("openNewReleaseTag")]
+        private void OpenNewReleaseTag()
+        {
+            Application.OpenURL($"https://github.com/TheBlackParrot/NoteTweaks/releases/tag/{VersionManager.LatestVersion.ToString(3)}");
+        }
         
         [UIComponent("export-text")]
         #pragma warning disable CS0649
