@@ -113,6 +113,14 @@ namespace NoteTweaks.Managers
         {
             return _bombTexture.name.Split("_"[0]).Last();
         }
+
+        protected Textures()
+        {
+            if (!Directory.Exists(ImagePath))
+            {
+                Directory.CreateDirectory(ImagePath);
+            }
+        }
         
         private static void OnNoteImageLoaded(List<KeyValuePair<string, Texture2D>> textures)
         {

@@ -75,8 +75,8 @@ namespace NoteTweaks.Configuration
         private static bool HasRunBefore { get; set; }
         private const string GroupIdentifier = "_noteTweaks";
         private const BindingFlags BindingFlags = System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance;
-        private static readonly List<ISettableSetting> SettableSettings = new List<ISettableSetting>();
-        private static readonly string[] BlockedSettings = { "Instance", "DisableIfNoodle" };
+        internal static readonly List<ISettableSetting> SettableSettings = new List<ISettableSetting>();
+        internal static readonly string[] BlockedSettings = { "Instance", "DisableIfNoodle" };
         
         public NoteTweaksSettableSettings()
         {

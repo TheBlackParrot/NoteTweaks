@@ -1,12 +1,20 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
+using System.IO;
+using System.Linq;
+using System.Reflection;
 using BeatSaberMarkupLanguage.Attributes;
 using BeatSaberMarkupLanguage.ViewControllers;
+using IPA.Config.Stores.Converters;
+using IPA.Utilities;
 using JetBrains.Annotations;
+using Newtonsoft.Json;
 using NoteTweaks.Configuration;
 using NoteTweaks.Managers;
 using TMPro;
 using UnityEngine;
-using Zenject;
 
 namespace NoteTweaks.UI
 {
@@ -16,7 +24,9 @@ namespace NoteTweaks.UI
     [SuppressMessage("ReSharper", "InconsistentNaming")]
     internal class ExtraPanelViewController : BSMLAutomaticViewController
     {
-        private PluginConfig _config;
+        private static PluginConfig Config => PluginConfig.Instance;
+        
+        private static readonly string ExportRoot = Path.Combine(UnityGame.UserDataPath, "NoteTweaks", "Export");
         
         private readonly VersionManager VersionData = new VersionManager();
         
@@ -66,38 +76,128 @@ namespace NoteTweaks.UI
             Application.OpenURL(VersionData.Manifest.Links.ProjectHome);
         }
         
-        [Inject]
-        private void Construct(PluginConfig config)
+        [UIComponent("export-text")]
+        #pragma warning disable CS0649
+        private TextMeshProUGUI exportText;
+        #pragma warning restore CS0649
+
+        private const BindingFlags BindingFlags = System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance;
+        [UIAction("export-settings-setter")]
+        private void ExportAsSettingsSetter()
         {
-            _config = config;
+            if (!Directory.Exists(ExportRoot))
+            {
+                Directory.CreateDirectory(ExportRoot);
+            }
+            
+            HexColorConverter converter = new HexColorConverter();
+            char[] trimChars = "\"\\".ToCharArray();
+            
+            string filename = DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".json";
+            string filepath = Path.Combine(ExportRoot, filename);
+
+            Dictionary<string, object> exports = new Dictionary<string, object>();
+            
+            PropertyInfo[] properties = typeof(PluginConfig).GetProperties(BindingFlags)
+                .Where(x => x.CanWrite && x.CanRead).ToArray();
+            
+            foreach (PropertyInfo property in properties)
+            {
+                string propName = property.Name;
+                Type propType = property.PropertyType;
+                
+                if (NoteTweaksSettableSettings.BlockedSettings.Contains(propName))
+                {
+                    continue;
+                }
+
+                // wtf, for some reason these need to be... down here? instead of in the .Where call? i'm so confused
+                if (propType == typeof(Vector2) || propType == typeof(Vector3))
+                {
+                    continue;
+                }
+                
+                object value = null;
+                if (propType == typeof(float) || propType == typeof(int))
+                {
+                    object originalValue = property.GetValue(Config) as float?;
+                    if (originalValue != null)
+                    {
+                        // good fucking lord dude
+                        decimal impreciseDecimal = decimal.Round((decimal)(float)originalValue, 4);
+                        decimal parsedDecimal = decimal.Parse(impreciseDecimal.ToString("G", CultureInfo.InvariantCulture), NumberStyles.Float);
+                        value = parsedDecimal;
+                        
+                        int roundedIntValue = decimal.ToInt32(parsedDecimal);
+                        if (parsedDecimal == roundedIntValue)
+                        {
+                            value = roundedIntValue;
+                        }
+                    }
+                }
+                if (propType == typeof(string))
+                {
+                    value = property.GetValue(Config).ToString();
+                }
+                if (propType == typeof(Color))
+                {
+                    // uh. is that last parameter even used?
+                    value = converter.ToValue((Color)property.GetValue(Config), property).ToString();
+                    foreach (char trimChar in trimChars)
+                    {
+                        value = ((string)value).Replace(trimChar.ToString(), string.Empty);
+                    }
+                }
+                if (propType == typeof(bool))
+                {
+                    value = (bool)property.GetValue(Config);
+                }
+
+                if (value != null)
+                {
+                    exports.Add($"_{propName[0].ToString().ToLower() + propName.Substring(1)}", value);
+                }
+            }
+
+            try
+            {
+                File.WriteAllText(filepath, JsonConvert.SerializeObject(exports, Formatting.Indented));
+            }
+            catch (Exception e)
+            {
+                exportText.text = $"<color=#FF7777>Error while exporting: \n<color=#FFCCCC>{e.GetType().Name}";
+                return;
+            }
+            
+            exportText.text = $"<color=#77FF77>Exported settings to: \n<color=#CCFFCC>{filepath}";
         }
 
         protected bool Enabled
         {
-            get => _config.Enabled;
+            get => Config.Enabled;
             set
             {
-                _config.Enabled = value;
+                Config.Enabled = value;
                 NotifyPropertyChanged();
             }
         }
 
         protected bool DisableIfNoodle
         {
-            get => _config.DisableIfNoodle;
+            get => Config.DisableIfNoodle;
             set
             {
-                _config.DisableIfNoodle = value;
+                Config.DisableIfNoodle = value;
                 NotifyPropertyChanged();
             }
         }
 
         protected bool FixDotsIfNoodle
         {
-            get => _config.FixDotsIfNoodle;
+            get => Config.FixDotsIfNoodle;
             set
             {
-                _config.FixDotsIfNoodle = value;
+                Config.FixDotsIfNoodle = value;
                 NotifyPropertyChanged();
             }
         }
