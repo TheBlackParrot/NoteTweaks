@@ -8,4 +8,9 @@
 
     <toggle-setting apply-on-change="true" value="FixDotsIfNoodle" text="Fix Dots on Noodle Maps" bind-value="true"
                     hover-hint="Leaves dots as just a glow texture if the map being played requires Noodle Extensions"/>
+
+    <horizontal><text text="-----" font-size="4" color="#00000000"/></horizontal>
+
+    <toggle-setting apply-on-change="true" value="EnableAccDot" text="Enable Acc Dots" bind-value="true"
+                    hover-hint="Enable small dots in the center of notes to help show where to swing for accuracy"/>
 </settings-container>

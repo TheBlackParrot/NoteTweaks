@@ -39,6 +39,7 @@ namespace NoteTweaks.UI
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Enabled)));
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(DisableIfNoodle)));
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(FixDotsIfNoodle)));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(EnableAccDot)));
         }
         
         private void GameplaySetupViewController_DidActivateEvent(bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling)
@@ -73,6 +74,16 @@ namespace NoteTweaks.UI
             {
                 _config.FixDotsIfNoodle = value;
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(FixDotsIfNoodle)));
+            }
+        }
+        
+        protected bool EnableAccDot
+        {
+            get => _config.EnableAccDot;
+            set
+            {
+                _config.EnableAccDot = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(EnableAccDot)));
             }
         }
     }

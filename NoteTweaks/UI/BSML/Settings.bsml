@@ -113,7 +113,7 @@
     <tab tags="tabs" tab-name="Acc Dots">
         <vertical vertical-fit="PreferredSize" pref-height="70" pref-width="100" anchored-position-x="4">
             <scroll-view spacing="0" pref-height="70" child-expand-width="true">
-                <toggle-setting apply-on-change="true" value="EnableAccDot" text="Enable Acc Dots"
+                <toggle-setting apply-on-change="true" value="EnableAccDot" text="Enable Acc Dots" bind-value="true"
                                 hover-hint="Enable small dots in the center of notes to help show where to swing for accuracy"/>
 
                 <horizontal><text text="-----" font-size="4" color="#00000000"/></horizontal>
