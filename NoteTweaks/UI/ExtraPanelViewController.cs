@@ -35,7 +35,13 @@ namespace NoteTweaks.UI
         [UsedImplicitly] private readonly string author;
         [UsedImplicitly] private readonly string projectHome;
         [UsedImplicitly] private string latestVersion => $"(<alpha=#CC>{VersionData.ModVersion.ToString(3)} <alpha=#88>-> <alpha=#CC>{VersionManager.LatestVersion?.ToString(3)}<alpha=#FF>)";
-        private static string isPreRelease = "";
+        
+#if PREREL
+        private const string isPreRelease = " <alpha=#77><size=80%>(Pre-release)";
+#else
+        private const string isPreRelease = "";
+#endif
+        
         [UsedImplicitly] private string gameVersion => $"{originalGameVersion}{isPreRelease}";
         
         // shut the hekc
@@ -64,7 +70,6 @@ namespace NoteTweaks.UI
             {
                 if (VersionData.ModVersion > VersionManager.LatestVersion)
                 {
-                    isPreRelease = " <alpha=#77><size=80%>(Pre-release)";
                     gameVersionText.text = gameVersion;
                 }
             }
