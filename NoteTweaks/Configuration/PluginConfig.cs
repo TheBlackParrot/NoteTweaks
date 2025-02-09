@@ -301,5 +301,7 @@ namespace NoteTweaks.Configuration
         public float RimScale { get; set; } = 2f;
         public float Smoothness { get; set; } = 0.95f;
         public float RimCameraDistanceOffset { get; set; } = 5f;
+        
+        public string RainbowBombMode { get; set; } = "Both";
     }
 }
