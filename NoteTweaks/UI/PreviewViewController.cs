@@ -334,8 +334,7 @@ namespace NoteTweaks.UI
                     faceColor /= colorScalar;
                 }
 
-                faceColor = Color.LerpUnclamped(i % 2 == 0 ? Config.LeftFaceColor : Config.RightFaceColor, faceColor, i % 2 == 0 ? Config.LeftFaceColorNoteSkew : Config.RightFaceColorNoteSkew);
-                faceColor.a = 1f;
+                faceColor = Color.LerpUnclamped(i % 2 == 0 ? Config.LeftFaceColor : Config.RightFaceColor, faceColor, i % 2 == 0 ? Config.LeftFaceColorNoteSkew : Config.RightFaceColorNoteSkew).ColorWithAlpha(Materials.SaneAlphaValue);
                 
                 Color glowColor = Color.LerpUnclamped(i % 2 == 0 ? Config.LeftFaceGlowColor : Config.RightFaceGlowColor, noteColor, i % 2 == 0 ? Config.LeftFaceGlowColorNoteSkew : Config.RightFaceGlowColorNoteSkew);
                 
@@ -502,7 +501,7 @@ namespace NoteTweaks.UI
                     
                     if (noteOutline.gameObject.TryGetComponent(out MaterialPropertyBlockController controller))
                     {
-                        controller.materialPropertyBlock.SetColor(ColorNoteVisuals._colorId, outlineColor);
+                        controller.materialPropertyBlock.SetColor(ColorNoteVisuals._colorId, outlineColor.ColorWithAlpha(Materials.SaneAlphaValue));
                         controller.ApplyChanges();
                     }
                 }
