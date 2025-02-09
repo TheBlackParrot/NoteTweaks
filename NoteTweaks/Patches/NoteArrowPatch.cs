@@ -77,10 +77,7 @@ namespace NoteTweaks.Patches
             // ReSharper disable once InconsistentNaming
             internal static void Postfix(StandardLevelScenesTransitionSetupDataSO __instance, in GameplayModifiers gameplayModifiers)
             {
-                AutoDisable =
-                    (MapHasRequirement(__instance.beatmapLevel, __instance.beatmapKey, "Noodle Extensions") &&
-                     Config.DisableIfNoodle) ||
-                    MapHasRequirement(__instance.beatmapLevel, __instance.beatmapKey, "Vivify");
+                AutoDisable = MapHasRequirement(__instance.beatmapLevel, __instance.beatmapKey, "Noodle Extensions") && Config.DisableIfNoodle;
 
                 _fixDots = true;
                 if (MapHasRequirement(__instance.beatmapLevel, __instance.beatmapKey, "Noodle Extensions"))
@@ -437,6 +434,12 @@ namespace NoteTweaks.Patches
             {
                 if (!Config.Enabled || AutoDisable || IsUsingHiddenTypeModifier)
                 {
+                    return;
+                }
+                
+                if (__instance.gameObject.TryGetComponent(out MirroredGameNoteController _))
+                {
+                    // just don't even touch these for now, actually
                     return;
                 }
                 
@@ -829,24 +832,5 @@ namespace NoteTweaks.Patches
                 return true;
             }
         }*/
-
-        // temporary until i can look at this further, this disables duplicated note objects used for reflections in the low mirror mode
-        // note to self: you need this hook anyways to modify stuff, don't get rid of it
-        [HarmonyPatch(typeof(MirroredNoteController<IGameNoteMirrorable>), "UpdatePositionAndRotation")]
-        [HarmonyPriority(int.MinValue)]
-        public static class MirroredNoteControllerPatch
-        {
-            // ReSharper disable once InconsistentNaming
-            [UsedImplicitly]
-            private static void Postfix(MirroredNoteController<IGameNoteMirrorable> __instance)
-            {
-                if (!Config.Enabled || AutoDisable)
-                {
-                    return;
-                }
-                
-                __instance.gameObject.SetActive(false);
-            }
-        }
     }
 }
