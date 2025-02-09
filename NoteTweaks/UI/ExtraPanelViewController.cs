@@ -24,7 +24,7 @@ namespace NoteTweaks.UI
         [UsedImplicitly] private readonly string originalGameVersion;
         [UsedImplicitly] private readonly string author;
         [UsedImplicitly] private readonly string projectHome;
-        [UsedImplicitly] private string latestVersion => $"(<alpha=#CC>{VersionManager.LatestVersion?.ToString(3)}<alpha=#FF>)";
+        [UsedImplicitly] private string latestVersion => $"(<alpha=#CC>{VersionData.ModVersion.ToString(3)} <alpha=#88>-> <alpha=#CC>{VersionManager.LatestVersion?.ToString(3)}<alpha=#FF>)";
         private static string isPreRelease = "";
         [UsedImplicitly] private string gameVersion => $"{originalGameVersion}{isPreRelease}";
         
