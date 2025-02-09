@@ -26,6 +26,13 @@
                 </scroll-view>
             </vertical>
         </tab>
+        
+        <tab tags="tabs" tab-name="Tools">
+            <vertical vertical-fit="PreferredSize" pref-height="70" pref-width="100" anchored-position-x="4" child-alignment="UpperCenter">
+                <button text="Export Settings for Settings Setter" on-click="export-settings-setter"/>
+                <text text="" font-size="2" font-color="#FFFFFF" rich-text="true" align="Left" id="export-text"/>
+            </vertical>
+        </tab>
     
         <tab tags="tabs" tab-name="About">
             <modifier-container child-expand-width="true" horizontal-fit="PreferredSize" spacing="3">

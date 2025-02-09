@@ -110,6 +110,14 @@ namespace NoteTweaks.Managers
         {
             return _bombTexture.name.Split("_"[0]).Last();
         }
+
+        protected Textures()
+        {
+            if (!Directory.Exists(ImagePath))
+            {
+                Directory.CreateDirectory(ImagePath);
+            }
+        }
         
         internal static void SetDefaultTextures()
         {
