@@ -27,8 +27,21 @@ namespace NoteTweaks.Managers
             enableInstancing = true
         };
         internal static Material AccDotMaterial;
+
+        internal static readonly BoolSO MainEffectContainer = Resources.FindObjectsOfTypeAll<BoolSO>().First(x => x.name.StartsWith("MainEffectContainer"));
+        internal static float SaneAlphaValue => MainEffectContainer.value ? 1f : 0f;
+        
         private static readonly int Color0 = Shader.PropertyToID("_Color");
         internal static readonly int BlendOpID = Shader.PropertyToID("_BlendOp");
+        internal static readonly int SrcFactorID = Shader.PropertyToID("_BlendSrcFactor");
+        internal static int SrcFactor => 1;
+        internal static readonly int DstFactorID = Shader.PropertyToID("_BlendDstFactor");
+        internal static int DstFactor => 0;
+        internal static readonly int SrcFactorAlphaID = Shader.PropertyToID("_BlendSrcFactorA");
+        internal static int SrcFactorAlpha => 0;
+        internal static readonly int DstFactorAlphaID = Shader.PropertyToID("_BlendDstFactorA");
+        internal static int DstFactorAlpha => 0;
+        
         private static readonly List<KeyValuePair<string, int>> FogKeywords = new List<KeyValuePair<string, int>>
         {
             new KeyValuePair<string, int>("FogHeightOffset", Shader.PropertyToID("_FogHeightOffset")),
@@ -44,9 +57,6 @@ namespace NoteTweaks.Managers
             new KeyValuePair<string, int>("Smoothness", Shader.PropertyToID("_Smoothness")),
             new KeyValuePair<string, int>("RimCameraDistanceOffset", Shader.PropertyToID("_RimCameraDistanceOffset"))
         };
-        
-        private static readonly BoolSO MainEffectContainer = Resources.FindObjectsOfTypeAll<BoolSO>().First(x => x.name.StartsWith("MainEffectContainer"));
-        internal static float SaneAlphaValue => MainEffectContainer.value ? 1f : 0f;
 
         internal static async Task UpdateAll()
         {
@@ -145,6 +155,11 @@ namespace NoteTweaks.Managers
                 enabledKeywords = arrowMat.enabledKeywords
                     .Where(x => x.name != "_ENABLE_COLOR_INSTANCING" || x.name != "_CUTOUT_NONE" || x.name != "_EMISSION").ToArray()
             };
+            
+            ReplacementDotMaterial.SetInt(SrcFactorID, SrcFactor);
+            ReplacementDotMaterial.SetInt(DstFactorID, DstFactor);
+            ReplacementDotMaterial.SetInt(SrcFactorAlphaID, SrcFactorAlpha);
+            ReplacementDotMaterial.SetInt(DstFactorAlphaID, DstFactorAlpha);
         }
 
         private static void UpdateReplacementArrowMaterial()
@@ -165,6 +180,11 @@ namespace NoteTweaks.Managers
                 enabledKeywords = arrowMat.enabledKeywords
                     .Where(x => x.name != "_ENABLE_COLOR_INSTANCING" || x.name != "_CUTOUT_NONE" || x.name != "_EMISSION").ToArray()
             };
+            
+            ReplacementDotMaterial.SetInt(SrcFactorID, SrcFactor);
+            ReplacementDotMaterial.SetInt(DstFactorID, DstFactor);
+            ReplacementDotMaterial.SetInt(SrcFactorAlphaID, SrcFactorAlpha);
+            ReplacementDotMaterial.SetInt(DstFactorAlphaID, DstFactorAlpha);
         }
 
         private static async Task UpdateDotGlowMaterial()

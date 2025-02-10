@@ -720,6 +720,19 @@ namespace NoteTweaks.UI
             }
             
             noteCube.transform.Find("NoteArrowGlow").GetComponent<MeshRenderer>().sharedMaterial = Materials.ArrowGlowMaterial;
+
+            Transform arrowTransform = noteCube.transform.Find("NoteArrow");
+            
+            // yeah well y'all are still using it so it's not quite obsolete yet!
+            #pragma warning disable CS0612
+            if (arrowTransform.TryGetComponent(out ConditionalMaterialSwitcher switcher))
+            {
+                switcher._material0 = Materials.ReplacementArrowMaterial;
+                switcher._material1 = Materials.ReplacementArrowMaterial;   
+            }
+            #pragma warning restore CS0612
+
+            arrowTransform.GetComponent<Renderer>().sharedMaterial = Materials.ReplacementArrowMaterial;
             
             if (cell >= 2)
             {
