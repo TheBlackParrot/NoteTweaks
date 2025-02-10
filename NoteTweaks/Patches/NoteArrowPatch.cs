@@ -51,6 +51,7 @@ namespace NoteTweaks.Patches
 
         internal static bool AutoDisable;
         private static bool _fixDots = true;
+        private static readonly int Color0 = Shader.PropertyToID("_Color");
 
         private static bool MapHasRequirement(IDifficultyBeatmap beatmapLevel, string requirement)
         {
@@ -493,10 +494,8 @@ namespace NoteTweaks.Patches
 
                     if (meshRenderer.gameObject.TryGetComponent(out ConditionalMaterialSwitcher switcher))
                     {
-                        if (switcher._material0.name == "NoteArrowHD")
-                        {
-                            switcher._material0 = Materials.ReplacementArrowMaterial;
-                        }
+                        switcher._material0 = Materials.ReplacementArrowMaterial;
+                        switcher._material1 = Materials.ReplacementArrowMaterial;
                     }
 
                     Transform arrowGlowObject = meshRenderer.transform.parent.Find("NoteArrowGlow");

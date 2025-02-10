@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using BeatSaberMarkupLanguage.Attributes;
 using BeatSaberMarkupLanguage.ViewControllers;
+using IPA.Utilities;
 using JetBrains.Annotations;
 using NoteTweaks.Configuration;
 using NoteTweaks.Managers;
@@ -37,6 +38,10 @@ namespace NoteTweaks.UI
 
         private static readonly List<string> FaceNames = new List<string> { "NoteArrow", "NoteCircleGlow", "Circle" };
         private static readonly List<string> GlowNames = new List<string> { "NoteArrowGlow", "AddedNoteCircleGlow" };
+        
+        private static float _cutoutAmount;
+        
+        public string PercentageFormatter(float x) => x.ToString("0%");
 
         public NotePreviewViewController()
         {
@@ -51,6 +56,46 @@ namespace NoteTweaks.UI
             set
             {
                 _initialPosition.z = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        [UIValue("NoteContainerCutout")]
+        [UsedImplicitly]
+        private float NoteContainerCutout
+        {
+            get => _cutoutAmount;
+            set
+            {
+                _cutoutAmount = value;
+                
+                for (int i = 0; i < NoteContainer.transform.childCount; i++)
+                {
+                    GameObject noteCube = NoteContainer.transform.GetChild(i).gameObject;
+                    if (noteCube.TryGetComponent(out CutoutEffect cutoutEffect))
+                    {
+                        cutoutEffect.SetCutout(Easing.OutCirc(value));
+                    }
+                    
+                    for (int j = 0; j < noteCube.transform.childCount; j++)
+                    {
+                        GameObject childObject = noteCube.transform.GetChild(j).gameObject;
+                        if (childObject.TryGetComponent(out CutoutEffect childCutoutEffect))
+                        {
+                            childCutoutEffect.SetCutout(Easing.OutCirc(value));
+                        }
+                        
+                        for (int k = 0; k < childObject.transform.childCount; k++)
+                        {
+                            GameObject childChildObject = childObject.transform.GetChild(k).gameObject;
+                            if (childChildObject.TryGetComponent(out CutoutEffect childChildCutoutEffect))
+                            {
+                                childChildCutoutEffect.SetCutout(Easing.OutCirc(value));
+                            }
+                        }
+                    }
+                }
+                
                 NotifyPropertyChanged();
             }
         }
@@ -569,6 +614,21 @@ namespace NoteTweaks.UI
                 {
                     newGlowMeshRenderer.sharedMaterial = Materials.DotGlowMaterial;
                 }
+                
+                GameObject arrowObj = NoteContainer.transform.FindChildRecursively("NoteArrow").gameObject;
+                GameObject dotObj = originalDot.gameObject;
+                
+                if (arrowObj.transform.TryGetComponent(out CutoutEffect parentCutoutEffect))
+                {
+                    CutoutEffect cutoutEffect = dotObj.AddComponent<CutoutEffect>();
+
+                    arrowObj.GetComponent<MaterialPropertyBlockController>().CopyComponent<MaterialPropertyBlockController>(dotObj);
+                    MaterialPropertyBlockController controller = dotObj.GetComponent<MaterialPropertyBlockController>();
+                    controller.renderers[0] = meshRenderer;
+
+                    cutoutEffect._materialPropertyBlockController = controller;
+                    cutoutEffect._useRandomCutoutOffset = parentCutoutEffect._useRandomCutoutOffset;
+                }
             }
             
             chainNote.gameObject.SetActive(true);
@@ -641,6 +701,21 @@ namespace NoteTweaks.UI
                 {
                     newGlowMeshRenderer.material = Materials.DotGlowMaterial;
                     newGlowMeshRenderer.sharedMaterial = Materials.DotGlowMaterial;
+                }
+                
+                GameObject arrowObj = noteCube.transform.Find("NoteArrow").gameObject;
+                GameObject dotObj = originalDot.gameObject;
+
+                if (arrowObj.transform.TryGetComponent(out CutoutEffect parentCutoutEffect))
+                {
+                    CutoutEffect cutoutEffect = dotObj.AddComponent<CutoutEffect>();
+
+                    arrowObj.GetComponent<MaterialPropertyBlockController>().CopyComponent<MaterialPropertyBlockController>(dotObj);
+                    MaterialPropertyBlockController controller = dotObj.GetComponent<MaterialPropertyBlockController>();
+                    controller.renderers[0] = meshRenderer;
+
+                    cutoutEffect._materialPropertyBlockController = controller;
+                    cutoutEffect._useRandomCutoutOffset = parentCutoutEffect._useRandomCutoutOffset;
                 }
             }
             
