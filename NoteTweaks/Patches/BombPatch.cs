@@ -94,7 +94,11 @@ namespace NoteTweaks.Patches
                 return;
             }
             
-            Color bombColor = Config.EnableRainbowBombs ? RainbowGradient.Color : Config.BombColor * (1.0f + Config.BombColorBoost);
+            Color bombColor =
+                Config.EnableRainbowBombs && (Config.RainbowBombMode == "Both" ||
+                                              Config.RainbowBombMode == "Only Bombs")
+                    ? RainbowGradient.Color
+                    : Config.BombColor * (1.0f + Config.BombColorBoost);
 
             if (____bombNotePrefab.transform.GetChild(0).TryGetComponent(out ConditionalMaterialSwitcher switcher))
             {
