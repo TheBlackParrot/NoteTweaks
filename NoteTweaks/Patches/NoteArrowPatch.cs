@@ -51,7 +51,6 @@ namespace NoteTweaks.Patches
 
         internal static bool AutoDisable;
         private static bool _fixDots = true;
-        private static readonly int Color0 = Shader.PropertyToID("_Color");
 
         private static bool MapHasRequirement(IDifficultyBeatmap beatmapLevel, string requirement)
         {
@@ -489,7 +488,12 @@ namespace NoteTweaks.Patches
                         
                         Color c = Color.LerpUnclamped(isLeft ? Config.LeftFaceColor : Config.RightFaceColor, faceColor, isLeft ? Config.LeftFaceColorNoteSkew : Config.RightFaceColorNoteSkew);
                         materialPropertyBlockController.materialPropertyBlock.SetColor(ColorNoteVisuals._colorId, c.ColorWithAlpha(Materials.SaneAlphaValue));
-                        materialPropertyBlockController.ApplyChanges();   
+                        materialPropertyBlockController.ApplyChanges();
+                        
+                        meshRenderer.material.SetInt(Materials.SrcFactorID, Materials.SrcFactor);
+                        meshRenderer.material.SetInt(Materials.DstFactorID, Materials.DstFactor);
+                        meshRenderer.material.SetInt(Materials.SrcFactorAlphaID, Materials.SrcFactorAlpha);
+                        meshRenderer.material.SetInt(Materials.DstFactorAlphaID, Materials.DstFactorAlpha);
                     }
 
                     if (meshRenderer.gameObject.TryGetComponent(out ConditionalMaterialSwitcher switcher))
@@ -614,9 +618,18 @@ namespace NoteTweaks.Patches
                             }
                         
                             Color c = Color.LerpUnclamped(isLeft ? Config.LeftFaceColor : Config.RightFaceColor, faceColor, isLeft ? Config.LeftFaceColorNoteSkew : Config.RightFaceColorNoteSkew);
-                            c.a = _fixDots ? 1f : materialPropertyBlockController.materialPropertyBlock.GetColor(ColorNoteVisuals._colorId).a;
+                            c.a = _fixDots ? Materials.SaneAlphaValue : materialPropertyBlockController.materialPropertyBlock.GetColor(ColorNoteVisuals._colorId).a;
                             materialPropertyBlockController.materialPropertyBlock.SetColor(ColorNoteVisuals._colorId, c);
-                            materialPropertyBlockController.ApplyChanges();   
+                            materialPropertyBlockController.ApplyChanges();
+                            
+                            meshRenderer.material.SetInt(Materials.SrcFactorID, Materials.SrcFactor);
+                            meshRenderer.material.SetInt(Materials.DstFactorID, Materials.DstFactor);
+                            meshRenderer.material.SetInt(Materials.SrcFactorAlphaID, Materials.SrcFactorAlpha);
+                            meshRenderer.material.SetInt(Materials.DstFactorAlphaID, Materials.DstFactorAlpha);
+                            meshRenderer.sharedMaterial.SetInt(Materials.SrcFactorID, Materials.SrcFactor);
+                            meshRenderer.sharedMaterial.SetInt(Materials.DstFactorID, Materials.DstFactor);
+                            meshRenderer.sharedMaterial.SetInt(Materials.SrcFactorAlphaID, Materials.SrcFactorAlpha);
+                            meshRenderer.sharedMaterial.SetInt(Materials.DstFactorAlphaID, Materials.DstFactorAlpha);
                         }
 
                         if (isChainLink)
@@ -735,6 +748,12 @@ namespace NoteTweaks.Patches
             {
                 if (!instance.transform.parent.parent.TryGetComponent(out GameNoteController gameNoteController))
                 {
+                    return true;
+                }
+
+                if (!Materials.MainEffectContainer.value)
+                {
+                    // this completely breaks stuff if bloom is off. just turn bloom on, it's not 2018 anymore
                     return true;
                 }
                 
