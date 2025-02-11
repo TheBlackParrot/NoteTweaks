@@ -410,6 +410,31 @@ namespace NoteTweaks.Patches
                     }
                 }
 
+                // TO DO improve this later
+                Transform dotRoot = noteRoot.Find("NoteCircleGlow");
+                if (_fixDots && dotRoot != null)
+                {
+                    if (noteRoot.gameObject.TryGetComponent(out MaterialPropertyBlockController noteController) && dotRoot.gameObject.TryGetComponent(out MaterialPropertyBlockController dotController))
+                    {
+                        Color noteColor = noteController.materialPropertyBlock.GetColor(ColorNoteVisuals._colorId);
+                        Color faceColor = noteColor;
+                    
+                        if (isLeft ? Config.NormalizeLeftFaceColor : Config.NormalizeRightFaceColor)
+                        {
+                            float colorScalar = noteColor.maxColorComponent;
+                            if (colorScalar != 0)
+                            {
+                                faceColor /= colorScalar;
+                            }
+                        }
+                        
+                        Color c = Color.LerpUnclamped(isLeft ? Config.LeftFaceColor : Config.RightFaceColor, faceColor, isLeft ? Config.LeftFaceColorNoteSkew : Config.RightFaceColorNoteSkew);
+                        c.a = Materials.SaneAlphaValue;
+                        dotController.materialPropertyBlock.SetColor(ColorNoteVisuals._colorId, c);
+                        dotController.ApplyChanges();
+                    }   
+                }
+
                 if (!IsAllowedToScaleNotes)
                 {
                     return;
