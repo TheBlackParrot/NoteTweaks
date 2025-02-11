@@ -318,10 +318,6 @@ namespace NoteTweaks.Managers
                 new KeyValuePair<string, float>("_Smoothness", 0),
                 new KeyValuePair<string, float>("_WhiteBoostType", 0)
             }.Do(pair => OutlineMaterial.SetFloat(pair.Key, pair.Value));
-            for (int i = 0; i < OutlineMaterial.shader.GetPropertyCount(); i++)
-            {
-                Plugin.Log.Info(OutlineMaterial.shader.GetPropertyName(i));
-            }
             
             OutlineMaterial.SetInt(FinalColorMul, -1);
             OutlineMaterial.SetTexture(EnvironmentReflectionCubeID, _blankCubemap);
