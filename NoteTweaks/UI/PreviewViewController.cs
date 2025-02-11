@@ -551,7 +551,14 @@ namespace NoteTweaks.UI
                     
                     if (noteOutline.gameObject.TryGetComponent(out MaterialPropertyBlockController controller))
                     {
+                        float mult = isBomb
+                            ? Config.BombOutlineFinalColorMultiplier
+                            : (isLeft
+                                ? Config.LeftOutlineFinalColorMultiplier
+                                : Config.RightOutlineFinalColorMultiplier);
+                        
                         controller.materialPropertyBlock.SetColor(ColorNoteVisuals._colorId, outlineColor.ColorWithAlpha(1f));
+                        controller.materialPropertyBlock.SetFloat(Materials.FinalColorMul, mult);
                         controller.ApplyChanges();
                     }
                 }

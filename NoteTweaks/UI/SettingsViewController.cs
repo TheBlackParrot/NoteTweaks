@@ -974,6 +974,36 @@ namespace NoteTweaks.UI
                 NotePreviewViewController.UpdateBombColors();
             }
         }
+
+        protected float LeftOutlineFinalColorMultiplier
+        {
+            get => Config.LeftOutlineFinalColorMultiplier;
+            set
+            {
+                Config.LeftOutlineFinalColorMultiplier = value;
+                NotePreviewViewController.UpdateOutlines();
+            }
+        }
+        
+        protected float RightOutlineFinalColorMultiplier
+        {
+            get => Config.RightOutlineFinalColorMultiplier;
+            set
+            {
+                Config.RightOutlineFinalColorMultiplier = value;
+                NotePreviewViewController.UpdateOutlines();
+            }
+        }
+        
+        protected float BombOutlineFinalColorMultiplier
+        {
+            get => Config.BombOutlineFinalColorMultiplier;
+            set
+            {
+                Config.BombOutlineFinalColorMultiplier = value;
+                NotePreviewViewController.UpdateOutlines();
+            }
+        }
         
         [UIValue("rainbowBombModeChoices")]
         [UsedImplicitly]

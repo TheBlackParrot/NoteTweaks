@@ -239,6 +239,7 @@ namespace NoteTweaks.Patches
                         Color outlineColor = Color.LerpUnclamped(isLeft ? Config.NoteOutlineLeftColor : Config.NoteOutlineRightColor, noteColor, isLeft ? Config.NoteOutlineLeftColorSkew : Config.NoteOutlineRightColorSkew);
                         
                         controller.materialPropertyBlock.SetColor(ColorNoteVisuals._colorId, outlineColor.ColorWithAlpha(1f));
+                        controller.materialPropertyBlock.SetFloat(Materials.FinalColorMul, isLeft ? Config.LeftOutlineFinalColorMultiplier : Config.RightOutlineFinalColorMultiplier);
                         controller.ApplyChanges();
                     }
                 }
@@ -409,6 +410,7 @@ namespace NoteTweaks.Patches
                         Color outlineColor = Color.LerpUnclamped(isLeft ? Config.NoteOutlineLeftColor : Config.NoteOutlineRightColor, noteColor, isLeft ? Config.NoteOutlineLeftColorSkew : Config.NoteOutlineRightColorSkew);
                         
                         controller.materialPropertyBlock.SetColor(ColorNoteVisuals._colorId, outlineColor.ColorWithAlpha(1f));
+                        controller.materialPropertyBlock.SetFloat(Materials.FinalColorMul, isLeft ? Config.LeftOutlineFinalColorMultiplier : Config.RightOutlineFinalColorMultiplier);
                         controller.ApplyChanges();
                     }
                 }
