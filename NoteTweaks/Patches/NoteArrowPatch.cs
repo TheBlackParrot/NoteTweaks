@@ -4,6 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
 using HarmonyLib;
+using IPA.Loader;
 using IPA.Utilities.Async;
 using JetBrains.Annotations;
 using NoteTweaks.Configuration;
@@ -52,8 +53,9 @@ namespace NoteTweaks.Patches
 
         internal static bool AutoDisable;
         private static bool _fixDots = true;
+        internal static bool UsesChroma;
 
-        private static bool MapHasRequirement(IDifficultyBeatmap beatmapLevel, string requirement)
+        private static bool MapHasRequirement(IDifficultyBeatmap beatmapLevel, string requirement, bool alsoCheckSuggestions = false)
         {
             bool hasRequirement = false;
             
@@ -61,6 +63,10 @@ namespace NoteTweaks.Patches
             if (diffData != null)
             {
                 hasRequirement = diffData.additionalDifficultyData._requirements.Any(x => x == requirement);
+                if (!hasRequirement && alsoCheckSuggestions)
+                {
+                    hasRequirement = diffData.additionalDifficultyData._suggestions.Any(x => x == requirement);
+                }
             }
             return hasRequirement;
         }
@@ -77,11 +83,20 @@ namespace NoteTweaks.Patches
             // ReSharper disable once InconsistentNaming
             internal static void Postfix(StandardLevelScenesTransitionSetupDataSO __instance, in GameplayModifiers gameplayModifiers)
             {
+                if (!Config.Enabled)
+                {
+                    UsesChroma = false;
+                    return;
+                }
+                
                 AutoDisable =
                     (MapHasRequirement(__instance.difficultyBeatmap, "Noodle Extensions") &&
                      Config.DisableIfNoodle) ||
                     (MapHasRequirement(__instance.difficultyBeatmap, "Vivify") &&
                      Config.DisableIfVivify);
+                
+                UsesChroma = PluginManager.GetPluginFromId("Chroma") != null &&
+                             MapHasRequirement(__instance.difficultyBeatmap, "Chroma", true);
 
                 _fixDots = true;
                 if (MapHasRequirement(__instance.difficultyBeatmap, "Noodle Extensions"))
@@ -99,8 +114,18 @@ namespace NoteTweaks.Patches
         {
             internal static void Postfix()
             {
+                if (!Config.Enabled)
+                {
+                    return;
+                }
+                
                 Managers.Textures.SetDefaultTextures();
-                UnityMainThreadTaskScheduler.Factory.StartNew(async () => await Materials.UpdateAll());
+                
+                UnityMainThreadTaskScheduler.Factory.StartNew(async () =>
+                {
+                    await Materials.UpdateAll();
+                    BombPatch.SetStaticBombColor();
+                });
             }
         }
 
@@ -852,6 +877,3 @@ namespace NoteTweaks.Patches
         }*/
     }
 }
-
-//Managers.Textures.SetDefaultTextures();
-//UnityMainThreadTaskScheduler.Factory.StartNew(async () => await Materials.UpdateAll());
