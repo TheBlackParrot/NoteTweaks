@@ -4,7 +4,6 @@ using System.Reflection;
 using HarmonyLib;
 using NoteTweaks.Configuration;
 using UnityEngine;
-using UnityEngine.Rendering;
 
 namespace NoteTweaks.Managers
 {
@@ -156,9 +155,7 @@ namespace NoteTweaks.Managers
                 name = wantedMaterialName,
                 color = Color.white,
                 shaderKeywords = arrowMat.shaderKeywords
-                    .Where(x => x != "_ENABLE_COLOR_INSTANCING" || x != "_CUTOUT_NONE" || x != "_EMISSION").ToArray(),
-                enabledKeywords = arrowMat.enabledKeywords
-                    .Where(x => x.name != "_ENABLE_COLOR_INSTANCING" || x.name != "_CUTOUT_NONE" || x.name != "_EMISSION").ToArray()
+                    .Where(x => x != "_ENABLE_COLOR_INSTANCING" || x != "_CUTOUT_NONE" || x != "_EMISSION").ToArray()
             };
             
             ReplacementDotMaterial.SetInt(SrcFactorID, SrcFactor);
@@ -186,9 +183,7 @@ namespace NoteTweaks.Managers
                 name = wantedMaterialName,
                 color = Color.white,
                 shaderKeywords = arrowMat.shaderKeywords
-                    .Where(x => x != "_ENABLE_COLOR_INSTANCING" || x != "_CUTOUT_NONE" || x != "_EMISSION").ToArray(),
-                enabledKeywords = arrowMat.enabledKeywords
-                    .Where(x => x.name != "_ENABLE_COLOR_INSTANCING" || x.name != "_CUTOUT_NONE" || x.name != "_EMISSION").ToArray()
+                    .Where(x => x != "_ENABLE_COLOR_INSTANCING" || x != "_CUTOUT_NONE" || x != "_EMISSION").ToArray()
             };
             
             ReplacementDotMaterial.SetInt(SrcFactorID, SrcFactor);
@@ -258,8 +253,7 @@ namespace NoteTweaks.Managers
                 name = "NoteTweaks_AccDotMaterial",
                 globalIlluminationFlags = MaterialGlobalIlluminationFlags.RealtimeEmissive,
                 enableInstancing = true,
-                shaderKeywords = arrowMat.shaderKeywords.Where(x => x != "_ENABLE_COLOR_INSTANCING").ToArray(),
-                enabledKeywords = arrowMat.enabledKeywords.Where(x => x.name != "_ENABLE_COLOR_INSTANCING").ToArray()
+                shaderKeywords = arrowMat.shaderKeywords.Where(x => x != "_ENABLE_COLOR_INSTANCING").ToArray()
             };
             AccDotMaterial.SetColor(Color0, Config.AccDotColor.ColorWithAlpha(0f));
 
@@ -306,17 +300,12 @@ namespace NoteTweaks.Managers
             string[] keywords = noteMat.shaderKeywords
                 .Where(x => x != "_CUTOUT_NONE" ||
                             x != "_ENABLE_RIM_DIM" || x != "_ENABLE_RIM_COLOR").ToArray();
-            LocalKeyword[] enabledKeywords = noteMat.enabledKeywords
-                .Where(x => x.name != "_CUTOUT_NONE" ||
-                            x.name != "_ENABLE_RIM_DIM" || x.name != "_ENABLE_RIM_COLOR")
-                .ToArray();
             
             OutlineMaterial = new Material(noteMat)
             {
                 name = wantedMaterialName,
                 color = Color.white,
                 shaderKeywords = keywords,
-                enabledKeywords = enabledKeywords,
                 renderQueue = 1990
             };
             

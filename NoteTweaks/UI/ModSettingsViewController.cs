@@ -52,10 +52,6 @@ namespace NoteTweaks.UI
                 
                 LatestVersion = $"(<alpha=#CC>{modVersion.ToString(3)} <alpha=#88>-> <alpha=#CC>{VersionManager.LatestVersion?.ToString(3)}<alpha=#FF>)";
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(LatestVersion)));
-                
-                // this... looks like a bad idea. but it works? how tf else do i refresh this? at least firstActivation only triggers it once. idk
-                _gameplaySetup.RemoveTab("NoteTweaks");
-                _gameplaySetup.AddTab("NoteTweaks", "NoteTweaks.UI.BSML.SideSettings.bsml", this);
             }
         }
         
