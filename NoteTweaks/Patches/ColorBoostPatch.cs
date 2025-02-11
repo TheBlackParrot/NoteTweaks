@@ -1,12 +1,7 @@
-﻿using System.Linq;
-using System.Reflection;
-using HarmonyLib;
-using IPA.Utilities;
-using JetBrains.Annotations;
+﻿using HarmonyLib;
 using NoteTweaks.Configuration;
 using NoteTweaks.Utils;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 namespace NoteTweaks.Patches
 {
