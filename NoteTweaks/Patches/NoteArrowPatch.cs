@@ -4,6 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
 using HarmonyLib;
+using IPA.Loader;
 using IPA.Utilities.Async;
 using JetBrains.Annotations;
 using NoteTweaks.Configuration;
@@ -52,8 +53,9 @@ namespace NoteTweaks.Patches
 
         internal static bool AutoDisable;
         private static bool _fixDots = true;
+        internal static bool UsesChroma;
 
-        private static bool MapHasRequirement(BeatmapLevel beatmapLevel, BeatmapKey beatmapKey, string requirement)
+        private static bool MapHasRequirement(BeatmapLevel beatmapLevel, BeatmapKey beatmapKey, string requirement, bool alsoCheckSuggestions = false)
         {
             bool hasRequirement = false;
             
@@ -61,6 +63,10 @@ namespace NoteTweaks.Patches
             if (diffData != null)
             {
                 hasRequirement = diffData.additionalDifficultyData._requirements.Any(x => x == requirement);
+                if (!hasRequirement && alsoCheckSuggestions)
+                {
+                    hasRequirement = diffData.additionalDifficultyData._suggestions.Any(x => x == requirement);
+                }
             }
             return hasRequirement;
         }
@@ -77,11 +83,20 @@ namespace NoteTweaks.Patches
             // ReSharper disable once InconsistentNaming
             internal static void Postfix(StandardLevelScenesTransitionSetupDataSO __instance, in GameplayModifiers gameplayModifiers)
             {
+                if (!Config.Enabled)
+                {
+                    UsesChroma = false;
+                    return;
+                }
+                
                 AutoDisable =
                     (MapHasRequirement(__instance.beatmapLevel, __instance.beatmapKey, "Noodle Extensions") &&
                      Config.DisableIfNoodle) ||
                     (MapHasRequirement(__instance.beatmapLevel, __instance.beatmapKey, "Vivify") &&
                      Config.DisableIfVivify);
+                
+                UsesChroma = PluginManager.GetPluginFromId("Chroma") != null &&
+                             MapHasRequirement(__instance.beatmapLevel, __instance.beatmapKey, "Chroma", true);
 
                 _fixDots = true;
                 if (MapHasRequirement(__instance.beatmapLevel, __instance.beatmapKey, "Noodle Extensions"))
@@ -96,7 +111,17 @@ namespace NoteTweaks.Patches
             // ReSharper disable once InconsistentNaming
             internal static bool Prefix(StandardLevelScenesTransitionSetupDataSO __instance)
             {
-                UnityMainThreadTaskScheduler.Factory.StartNew(async () => await Materials.UpdateAll());
+                if (!Config.Enabled)
+                {
+                    return true;
+                }
+                
+                UnityMainThreadTaskScheduler.Factory.StartNew(async () =>
+                {
+                    await Materials.UpdateAll();
+                    BombPatch.SetStaticBombColor();
+                });
+                
                 return true;
             }
         }

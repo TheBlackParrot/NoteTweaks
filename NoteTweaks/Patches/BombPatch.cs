@@ -11,6 +11,12 @@ namespace NoteTweaks.Patches
     {
         private static PluginConfig Config => PluginConfig.Instance;
         private static readonly int Color0 = Shader.PropertyToID("_SimpleColor");
+
+        public static void SetStaticBombColor()
+        {
+            Color staticBombColor = Config.BombColor * (1.0f + Config.BombColorBoost);
+            Materials.BombMaterial.SetColor(Color0, staticBombColor);
+        }
         
         [HarmonyPatch(typeof(BombNoteController), "Init")]
         [HarmonyPriority(int.MaxValue)]
@@ -54,23 +60,21 @@ namespace NoteTweaks.Patches
                     controller.ApplyChanges();
                 }
             }
-
-            Color bombColor =
-                Config.EnableRainbowBombs && (Config.RainbowBombMode == "Both" ||
-                                              Config.RainbowBombMode == "Only Bombs")
-                    ? RainbowGradient.Color
-                    : Config.BombColor * (1.0f + Config.BombColorBoost);
             
             if (__instance.transform.GetChild(0).TryGetComponent(out Renderer bombRenderer))
             {
                 bombRenderer.sharedMaterial = Materials.BombMaterial;
-                bombRenderer.sharedMaterial.SetColor(Color0, bombColor);
             }
-
-            if (__instance.gameObject.TryGetComponent(out MaterialPropertyBlockController materialPropertyBlockController))
+            
+            if (Config.EnableRainbowBombs && (Config.RainbowBombMode == "Both" ||
+                                              Config.RainbowBombMode == "Only Bombs")
+                                          && !NotePhysicalTweaks.UsesChroma)
             {
-                materialPropertyBlockController.materialPropertyBlock.SetColor(Color0, bombColor);
-                materialPropertyBlockController.ApplyChanges();   
+                if (__instance.gameObject.TryGetComponent(out MaterialPropertyBlockController materialPropertyBlockController))
+                {
+                    materialPropertyBlockController.materialPropertyBlock.SetColor(Color0, RainbowGradient.Color);
+                    materialPropertyBlockController.ApplyChanges();   
+                }
             }
 
             if (!NotePhysicalTweaks.IsAllowedToScaleNotes)
@@ -97,6 +101,7 @@ namespace NoteTweaks.Patches
             Color bombColor =
                 Config.EnableRainbowBombs && (Config.RainbowBombMode == "Both" ||
                                               Config.RainbowBombMode == "Only Bombs")
+                                          && !NotePhysicalTweaks.UsesChroma
                     ? RainbowGradient.Color
                     : Config.BombColor * (1.0f + Config.BombColorBoost);
 
