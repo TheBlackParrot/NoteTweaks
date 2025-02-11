@@ -269,7 +269,7 @@ namespace NoteTweaks.Managers
         
         private static Cubemap _blankCubemap;
         private static readonly int EnvironmentReflectionCubeID = Shader.PropertyToID("_EnvironmentReflectionCube");
-        private static readonly int FinalColorMul = Shader.PropertyToID("_FinalColorMul");
+        internal static readonly int FinalColorMul = Shader.PropertyToID("_FinalColorMul");
 
         private static void UpdateOutlineMaterial()
         {

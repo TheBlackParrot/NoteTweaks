@@ -303,5 +303,9 @@ namespace NoteTweaks.Configuration
         public float RimCameraDistanceOffset { get; set; } = 5f;
         
         public string RainbowBombMode { get; set; } = "Both";
+        
+        public virtual float LeftOutlineFinalColorMultiplier { get; set; } = 1f;
+        public virtual float RightOutlineFinalColorMultiplier { get; set; } = 1f;
+        public virtual float BombOutlineFinalColorMultiplier { get; set; } = 1f;
     }
 }
