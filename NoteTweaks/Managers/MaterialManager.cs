@@ -282,10 +282,7 @@ namespace NoteTweaks.Managers
         {
             if (NoteMaterial != null)
             {
-                if (Textures.GetLoadedNoteTexture() != Config.NoteTexture)
-                {
-                    await Textures.LoadNoteTexture(Config.NoteTexture);
-                }
+                await Textures.LoadNoteTexture(Config.NoteTexture);
                 return;
             }
             Plugin.Log.Info("Creating new note material");
@@ -312,10 +309,7 @@ namespace NoteTweaks.Managers
                 Plugin.Log.Info($"{x} : {NoteMaterial.GetVector(x).ToString()}");
             });*/
             
-            if (Textures.GetLoadedNoteTexture() != Config.NoteTexture)
-            {
-                await Textures.LoadNoteTexture(Config.NoteTexture);
-            }
+            await Textures.LoadNoteTexture(Config.NoteTexture);
         }
         
         private static void UpdateDebrisMaterial()
@@ -337,10 +331,7 @@ namespace NoteTweaks.Managers
         {
             if (BombMaterial != null)
             {
-                if (Textures.GetLoadedBombTexture() != Config.BombTexture)
-                {
-                    await Textures.LoadNoteTexture(Config.BombTexture, true);
-                }
+                await Textures.LoadNoteTexture(Config.BombTexture, true);
                 return;
             }
             Plugin.Log.Info("Creating new bomb material");
@@ -350,10 +341,7 @@ namespace NoteTweaks.Managers
                 name = "NoteTweaks_BombMaterial"
             };
             
-            if (Textures.GetLoadedBombTexture() != Config.BombTexture)
-            {
-                await Textures.LoadNoteTexture(Config.BombTexture, true);
-            }
+            await Textures.LoadNoteTexture(Config.BombTexture, true);
         }
 
         private static void UpdateRenderQueues()

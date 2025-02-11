@@ -199,8 +199,19 @@ namespace NoteTweaks.Managers
             }
         }
 
-        internal static async Task LoadNoteTexture(string dirname, bool isBomb = false)
+        internal static async Task LoadNoteTexture(string dirname, bool isBomb = false, bool forceRefresh = false)
         {
+            if (!forceRefresh)
+            {
+                // wait... you can do that? thanks rider for teaching me things
+                switch (isBomb)
+                {
+                    case false when GetLoadedNoteTexture() == Config.NoteTexture:
+                    case true when GetLoadedBombTexture() == Config.BombTexture:
+                        return;
+                }
+            }
+
             if (dirname == "Default")
             {
                 Plugin.Log.Info("Using default note texture...");
