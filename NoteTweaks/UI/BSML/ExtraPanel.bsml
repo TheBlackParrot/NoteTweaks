@@ -7,7 +7,7 @@
                 <text text="~latestVersion" font-size="3" font-color="#FFDD99" rich-text="true" align="Left"/>
             </horizontal>
             <horizontal horizontal-fit="Unconstrained" pref-width="35" child-align="MiddleLeft">
-                <button text="Download from GitHub" local-scale="0.67" on-click="openNewReleaseTag" align="Left"/>
+                <button text="Download from GitHub" font-size="3" on-click="openNewReleaseTag" align="Left"/>
             </horizontal>
         </horizontal>
         

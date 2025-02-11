@@ -1,4 +1,5 @@
-﻿<settings-container xsi:noNamespaceSchemaLocation="https://monkeymanboy.github.io/BSML-Docs/BSMLSchema.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+﻿<vertical xsi:noNamespaceSchemaLocation="https://monkeymanboy.github.io/BSML-Docs/BSMLSchema.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          vertical-fit="PreferredSize" preferred-height="50">
     <toggle-setting apply-on-change="true" value="Enabled" text="Mod Enabled" bind-value="true"
                     hover-hint="Remember to drink water! Hydrate!"/>
 
@@ -24,8 +25,8 @@
             <text text="Update available!" font-size="3" font-color="#FFDD99" rich-text="true" align="Right"/>
             <text text="~LatestVersion" font-size="3" font-color="#FFDD99" rich-text="true" align="Left"/>
         </horizontal>
-        <horizontal vertical-fit="PreferredSize" pref-height="5" horizontal-fit="PreferredSize" pref-width="35" child-align="MiddleLeft">
-            <button text="Download from GitHub" local-scale="0.67" on-click="openNewReleaseTag" align="Left"/>
+        <horizontal vertical-fit="PreferredSize" pref-height="8" horizontal-fit="PreferredSize" pref-width="35" child-align="MiddleLeft">
+            <button text="Download from GitHub" font-size="3" on-click="openNewReleaseTag" align="Left"/>
         </horizontal>
     </horizontal>
-</settings-container>
+</vertical>
