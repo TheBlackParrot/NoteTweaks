@@ -959,9 +959,21 @@ namespace NoteTweaks.UI
             
             if (HasInitialized)
             {
+                UpdateColors();
+                UpdateBombColors();
+                UpdateBombScale();
                 Materials.UpdateNoteMaterial();
                 Materials.UpdateBombMaterial();
                 UpdateArrowMeshes();
+                UpdateArrowPosition();
+                UpdateArrowScale();
+                UpdateDotPosition();
+                UpdateDotScale();
+                UpdateDotRotation();
+                UpdateNoteScale();
+                UpdateOutlines();
+                UpdateVisibility();
+                
                 _ = CutoutFadeIn();
                 return;
             }

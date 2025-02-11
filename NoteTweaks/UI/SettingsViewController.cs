@@ -489,7 +489,7 @@ namespace NoteTweaks.UI
                 Config.NoteTexture = value;
                 if (LoadTextures)
                 {
-                    Textures.LoadNoteTexture(value);
+                    Textures.LoadNoteTexture(value, false, true);
                 }
             }
         }
@@ -522,7 +522,7 @@ namespace NoteTweaks.UI
                 Config.BombTexture = value;
                 if (LoadTextures)
                 {
-                    Textures.LoadNoteTexture(value, true);
+                    Textures.LoadNoteTexture(value, true, true);
                 }
             }
         }
@@ -545,7 +545,7 @@ namespace NoteTweaks.UI
                 Config.InvertBombTexture = value;
                 if (LoadTextures)
                 {
-                    Textures.LoadNoteTexture(Config.BombTexture, true);
+                    Textures.LoadNoteTexture(Config.BombTexture, true, true);
                 }
             }
         }
@@ -558,7 +558,7 @@ namespace NoteTweaks.UI
                 Config.InvertNoteTexture = value;
                 if (LoadTextures)
                 {
-                    Textures.LoadNoteTexture(Config.NoteTexture);
+                    Textures.LoadNoteTexture(Config.NoteTexture, false, true);
                 }
             }
         }
