@@ -13,6 +13,6 @@ namespace NoteTweaks.Managers
                 Config.RainbowBombSaturation,
                 Config.RainbowBombValue)
              * (1.0f + Config.BombColorBoost))
-            .ColorWithAlpha(Materials.SaneAlphaValue);
+            .ColorWithAlpha(1f);
     }
 }

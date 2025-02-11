@@ -468,7 +468,7 @@ namespace NoteTweaks.UI
                     controller.ApplyChanges();
                 }
                 
-                Transform noteOutline = bombObj.transform.FindChildRecursively("NoteOutline");
+                Transform noteOutline = bombObj.transform.GetChild(0).Find("NoteOutline");
                 if (noteOutline != null)
                 {
                     if (noteOutline.gameObject.TryGetComponent(out MaterialPropertyBlockController controller))
@@ -551,7 +551,7 @@ namespace NoteTweaks.UI
                     
                     if (noteOutline.gameObject.TryGetComponent(out MaterialPropertyBlockController controller))
                     {
-                        controller.materialPropertyBlock.SetColor(ColorNoteVisuals._colorId, outlineColor.ColorWithAlpha(Materials.SaneAlphaValue));
+                        controller.materialPropertyBlock.SetColor(ColorNoteVisuals._colorId, outlineColor.ColorWithAlpha(1f));
                         controller.ApplyChanges();
                     }
                 }
@@ -620,7 +620,7 @@ namespace NoteTweaks.UI
                     newGlowMeshRenderer.sharedMaterial = Materials.DotGlowMaterial;
                 }
                 
-                GameObject arrowObj = NoteContainer.transform.FindChildRecursively("NoteArrow").gameObject;
+                GameObject arrowObj = NoteContainer.transform.GetChild(0).Find("NoteArrow").gameObject;
                 GameObject dotObj = originalDot.gameObject;
                 
                 if (arrowObj.transform.TryGetComponent(out CutoutEffect parentCutoutEffect))
