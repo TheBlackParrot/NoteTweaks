@@ -200,6 +200,9 @@
                                         hover-hint="Skew outline colors towards the note color"/>
                         <toggle-setting apply-on-change="true" value="NormalizeLeftOutlineColor" text="Normalize Color Brightness"
                                         hover-hint="Normalizes the brightness of the outline color by the highest RGB component"/>
+                        <slider-setting apply-on-change="true" value="LeftOutlineFinalColorMultiplier" text="(!!) Multiplier"
+                                        min="-2.5" max="2.5" increment="0.05" show-buttons="true" formatter="PercentageFormatter"
+                                        hover-hint="This setting is only here to fix color issues in versions older than 1.37.1, it will not be present in newer game versions."/>
                     </scroll-view>
                 </tab>
                 
@@ -212,6 +215,9 @@
                                         hover-hint="Skew outline colors towards the note color"/>
                         <toggle-setting apply-on-change="true" value="NormalizeRightOutlineColor" text="Normalize Color Brightness"
                                         hover-hint="Normalizes the brightness of the outline color by the highest RGB component"/>
+                        <slider-setting apply-on-change="true" value="RightOutlineFinalColorMultiplier" text="(!!) Multiplier"
+                                        min="-2.5" max="2.5" increment="0.05" show-buttons="true" formatter="PercentageFormatter"
+                                        hover-hint="This setting is only here to fix color issues in versions older than 1.37.1, it will not be present in newer game versions."/>
                     </scroll-view>
                 </tab>
 
@@ -224,6 +230,9 @@
                                         hover-hint="Size of outlines around bombs"/>
                         <color-setting apply-on-change="true" value="BombOutlineColor" text="Outline Color"
                                        hover-hint="Color of the outline around bombs"/>
+                        <slider-setting apply-on-change="true" value="BombOutlineFinalColorMultiplier" text="(!!) Multiplier"
+                                        min="-2.5" max="2.5" increment="0.05" show-buttons="true" formatter="PercentageFormatter"
+                                        hover-hint="This setting is only here to fix color issues in versions older than 1.37.1, it will not be present in newer game versions."/>
                     </scroll-view>
                 </tab>
             </vertical>

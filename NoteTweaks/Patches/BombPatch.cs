@@ -57,6 +57,7 @@ namespace NoteTweaks.Patches
                             : Config.BombOutlineColor;
                     
                     controller.materialPropertyBlock.SetColor(ColorNoteVisuals._colorId, outlineColor.ColorWithAlpha(1f));
+                    controller.materialPropertyBlock.SetFloat(Materials.FinalColorMul, Config.BombOutlineFinalColorMultiplier);
                     controller.ApplyChanges();
                 }
             }
