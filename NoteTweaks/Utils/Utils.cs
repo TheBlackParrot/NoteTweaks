@@ -185,8 +185,8 @@ namespace NoteTweaks.Utils
         {
             Mesh[] meshes =
             {
-                GenerateRectangle(new Vector2(0.25f, 0.0933f) * 0.8f, new Vector2(0f, -0.07833f) * 0.8f, new Vector3(0f, 0f, 45f)),
-                GenerateRectangle(new Vector2(0.25f, 0.0933f) * 0.8f, new Vector2(0f, -0.07833f) * 0.8f, new Vector3(0f, 0f, -45f))
+                GenerateRectangle(new Vector2(0.2f, 0.075f), new Vector2(0.033f, -0.067f), new Vector3(0f, 0f, 22.5f)),
+                GenerateRectangle(new Vector2(0.2f, 0.075f), new Vector2(-0.033f, -0.067f), new Vector3(0f, 0f, -22.5f))
             };
 
             Vector3[] vertices = new Vector3[4 * meshes.Length];
@@ -208,6 +208,26 @@ namespace NoteTweaks.Utils
             {
                 vertices = vertices,
                 triangles = triangles
+            };
+            mesh.Optimize();
+
+            return mesh;
+        }
+
+        public static Mesh GeneratePointyMesh(Vector2 offset = default)
+        {
+            Vector3[] vertices =
+            {
+                new Vector3(0f + offset.x, -0.0333f + offset.y, 0f),
+                new Vector3(-0.15f + offset.x, 0.06f + offset.y, 0f),
+                new Vector3(0f + offset.x, 0.0333f + offset.y, 0f),
+                new Vector3(0.15f + offset.x, 0.06f + offset.y, 0f)
+            };
+            
+            Mesh mesh = new Mesh
+            {
+                vertices = vertices,
+                triangles = new[] { 0, 1, 2, 0, 2, 3 }
             };
             mesh.Optimize();
 

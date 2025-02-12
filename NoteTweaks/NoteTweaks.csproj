@@ -155,6 +155,9 @@
         <EmbeddedResource Include="Resources/Textures/ArrowChevronGlow.png"/>
         <EmbeddedResource Include="Resources/Textures/ArrowChevronGlowInterlaced.png"/>
         <EmbeddedResource Include="Resources/Textures/ArrowChevronSolid.png"/>
+        <EmbeddedResource Include="Resources/Textures/ArrowPointyGlow.png"/>
+        <EmbeddedResource Include="Resources/Textures/ArrowPointyGlowInterlaced.png"/>
+        <EmbeddedResource Include="Resources/Textures/ArrowPointySolid.png"/>
         <EmbeddedResource Include="Resources/Textures/CircleGlow.png"/>
         <EmbeddedResource Include="Resources/Textures/CircleGlowInterlaced.png"/>
         <EmbeddedResource Include="Resources/Textures/CircleSolid.png"/>
