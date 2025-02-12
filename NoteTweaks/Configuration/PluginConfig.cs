@@ -307,5 +307,11 @@ namespace NoteTweaks.Configuration
         public virtual float LeftOutlineFinalColorMultiplier { get; set; } = 1f;
         public virtual float RightOutlineFinalColorMultiplier { get; set; } = 1f;
         public virtual float BombOutlineFinalColorMultiplier { get; set; } = 1f;
+        
+        public bool AddBloomForOutlines { get; set; } = false;
+        public bool AddBloomForFaceSymbols { get; set; } = false;
+        
+        public float OutlineBloomAmount { get; set; } = 0.1f;
+        public float FaceSymbolBloomAmount { get; set; } = 0.1f;
     }
 }
