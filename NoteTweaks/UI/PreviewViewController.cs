@@ -473,7 +473,7 @@ namespace NoteTweaks.UI
                 {
                     if (noteOutline.gameObject.TryGetComponent(out MaterialPropertyBlockController controller))
                     {
-                        controller.materialPropertyBlock.SetColor(ColorNoteVisuals._colorId, outlineColor);
+                        controller.materialPropertyBlock.SetColor(ColorNoteVisuals._colorId, outlineColor.ColorWithAlpha(Materials.SaneAlphaValue));
                         controller.ApplyChanges();
                     }
                 }
