@@ -34,6 +34,7 @@ namespace NoteTweaks.Managers
         
         private static readonly int Color0 = Shader.PropertyToID("_Color");
         internal static readonly int BlendOpID = Shader.PropertyToID("_BlendOp");
+        private static readonly int CutoutTexScaleID = Shader.PropertyToID("_CutoutTexScale");
         internal static readonly int SrcFactorID = Shader.PropertyToID("_BlendSrcFactor");
         internal static int SrcFactor => 1;
         internal static readonly int DstFactorID = Shader.PropertyToID("_BlendDstFactor");
@@ -322,6 +323,7 @@ namespace NoteTweaks.Managers
             
             OutlineMaterial.SetInt(FinalColorMul, -1);
             OutlineMaterial.SetTexture(EnvironmentReflectionCubeID, _blankCubemap);
+            OutlineMaterial.SetFloat(CutoutTexScaleID, 0.5f);
         }
 
         internal static void UpdateNoteMaterial()
