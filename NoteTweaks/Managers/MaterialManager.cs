@@ -29,7 +29,8 @@ namespace NoteTweaks.Managers
         };
         internal static Material AccDotMaterial;
 
-        internal static readonly BoolSO MainEffectContainer = Resources.FindObjectsOfTypeAll<BoolSO>().First(x => x.name.StartsWith("MainEffectContainer"));
+        private static readonly int MainEffectContainerID = Resources.FindObjectsOfTypeAll<BoolSO>().First(x => x.name.StartsWith("MainEffectContainer.")).GetInstanceID();
+        internal static BoolSO MainEffectContainer => Resources.InstanceIDToObject(MainEffectContainerID) as BoolSO;
         internal static float SaneAlphaValue => MainEffectContainer.value ? 1f : 0f;
         private static string MaterialIdentifier => MainEffectContainer.value ? "HD" : "LW";
         
