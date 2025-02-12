@@ -402,7 +402,11 @@ namespace NoteTweaks.UI
                         {
                             if (childTransform.TryGetComponent(out MaterialPropertyBlockController childController))
                             {
-                                childController.materialPropertyBlock.SetColor(Color0, faceColor);
+                                int applyBloom = Config.AddBloomForFaceSymbols && Materials.MainEffectContainer.value ? 1 : 0;
+                                Materials.ReplacementArrowMaterial.SetInt(Materials.SrcFactorAlphaID, applyBloom);
+                                Materials.ReplacementDotMaterial.SetInt(Materials.SrcFactorAlphaID, applyBloom);
+
+                                childController.materialPropertyBlock.SetColor(Color0, applyBloom == 1 ? faceColor.ColorWithAlpha(Config.FaceSymbolBloomAmount) : faceColor);
                                 childController.ApplyChanges();
                             }   
                         }
@@ -557,8 +561,12 @@ namespace NoteTweaks.UI
                                 ? Config.LeftOutlineFinalColorMultiplier
                                 : Config.RightOutlineFinalColorMultiplier);
                         
-                        controller.materialPropertyBlock.SetColor(ColorNoteVisuals._colorId, outlineColor.ColorWithAlpha(1f));
+                        int applyBloom = Config.AddBloomForOutlines && Materials.MainEffectContainer.value ? 1 : 0;
+                        
+                        controller.materialPropertyBlock.SetColor(ColorNoteVisuals._colorId, outlineColor.ColorWithAlpha(applyBloom == 1 ? Config.OutlineBloomAmount : 1f));
                         controller.materialPropertyBlock.SetFloat(Materials.FinalColorMul, mult);
+                        Materials.OutlineMaterial.SetInt(Materials.SrcFactorAlphaID, applyBloom);
+                        
                         controller.ApplyChanges();
                     }
                 }
