@@ -185,8 +185,8 @@ namespace NoteTweaks.Utils
         { 
             Mesh[] meshes =
             {
-                GenerateRectangle(new Vector2(0.2f, 0.075f), new Vector2(0.033f, -0.067f), new Vector3(0f, 0f, 22.5f)),
-                GenerateRectangle(new Vector2(0.2f, 0.075f), new Vector2(-0.033f, -0.067f), new Vector3(0f, 0f, -22.5f))
+                GenerateRectangle(new Vector2(0.139f, 0.042f), new Vector2(0.033f, -0.067f), new Vector3(0f, 0f, 22.5f)),
+                GenerateRectangle(new Vector2(0.139f, 0.042f), new Vector2(-0.033f, -0.067f), new Vector3(0f, 0f, -22.5f))
             };
 
             Vector3[] vertices = new Vector3[4 * meshes.Length];
