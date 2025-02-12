@@ -34,6 +34,7 @@ namespace NoteTweaks.Managers
         
         private static readonly int Color0 = Shader.PropertyToID("_Color");
         internal static readonly int BlendOpID = Shader.PropertyToID("_BlendOp");
+        private static readonly int CutoutTexScaleID = Shader.PropertyToID("_CutoutTexScale");
         internal static readonly int SrcFactorID = Shader.PropertyToID("_BlendSrcFactor");
         internal static int SrcFactor => 1;
         internal static readonly int DstFactorID = Shader.PropertyToID("_BlendDstFactor");
@@ -152,9 +153,9 @@ namespace NoteTweaks.Managers
                 name = "NoteTweaks_ReplacementDotMaterial",
                 color = Color.white,
                 shaderKeywords = arrowMat.shaderKeywords
-                    .Where(x => x != "_ENABLE_COLOR_INSTANCING" || x != "_CUTOUT_NONE" || x != "_EMISSION").ToArray(),
+                    .Where(x => x != "_ENABLE_COLOR_INSTANCING" || x != "_CUTOUT_NONE").ToArray(),
                 enabledKeywords = arrowMat.enabledKeywords
-                    .Where(x => x.name != "_ENABLE_COLOR_INSTANCING" || x.name != "_CUTOUT_NONE" || x.name != "_EMISSION").ToArray()
+                    .Where(x => x.name != "_ENABLE_COLOR_INSTANCING" || x.name != "_CUTOUT_NONE").ToArray()
             };
             
             ReplacementDotMaterial.SetInt(SrcFactorID, SrcFactor);
@@ -177,9 +178,9 @@ namespace NoteTweaks.Managers
                 name = "NoteTweaks_ReplacementArrowMaterial",
                 color = Color.white,
                 shaderKeywords = arrowMat.shaderKeywords
-                    .Where(x => x != "_ENABLE_COLOR_INSTANCING" || x != "_CUTOUT_NONE" || x != "_EMISSION").ToArray(),
+                    .Where(x => x != "_ENABLE_COLOR_INSTANCING" || x != "_CUTOUT_NONE").ToArray(),
                 enabledKeywords = arrowMat.enabledKeywords
-                    .Where(x => x.name != "_ENABLE_COLOR_INSTANCING" || x.name != "_CUTOUT_NONE" || x.name != "_EMISSION").ToArray()
+                    .Where(x => x.name != "_ENABLE_COLOR_INSTANCING" || x.name != "_CUTOUT_NONE").ToArray()
             };
             
             ReplacementDotMaterial.SetInt(SrcFactorID, SrcFactor);
@@ -273,10 +274,11 @@ namespace NoteTweaks.Managers
                 color = Color.black,
                 renderQueue = 1990,
                 shaderKeywords = arrowMat.shaderKeywords
-                    .Where(x => x != "_ENABLE_COLOR_INSTANCING" || x != "_CUTOUT_NONE" || x != "_EMISSION").ToArray(),
+                    .Where(x => x != "_ENABLE_COLOR_INSTANCING" || x != "_CUTOUT_NONE").ToArray(),
                 enabledKeywords = arrowMat.enabledKeywords
-                    .Where(x => x.name != "_ENABLE_COLOR_INSTANCING" || x.name != "_CUTOUT_NONE" || x.name != "_EMISSION").ToArray()
+                    .Where(x => x.name != "_ENABLE_COLOR_INSTANCING" || x.name != "_CUTOUT_NONE").ToArray()
             };
+            OutlineMaterial.SetFloat(CutoutTexScaleID, 0.5f);
         }
         
         private static async Task UpdateNoteMaterial()
