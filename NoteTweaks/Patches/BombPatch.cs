@@ -73,7 +73,7 @@ namespace NoteTweaks.Patches
             {
                 if (__instance.gameObject.TryGetComponent(out MaterialPropertyBlockController materialPropertyBlockController))
                 {
-                    materialPropertyBlockController.materialPropertyBlock.SetColor(Color0, RainbowGradient.Color);
+                    materialPropertyBlockController.materialPropertyBlock.SetColor(Color0, RainbowGradient.Color.ColorWithAlpha(1f));
                     materialPropertyBlockController.ApplyChanges();   
                 }
             }
@@ -100,11 +100,11 @@ namespace NoteTweaks.Patches
             }
             
             Color bombColor =
-                Config.EnableRainbowBombs && (Config.RainbowBombMode == "Both" ||
+                (Config.EnableRainbowBombs && (Config.RainbowBombMode == "Both" ||
                                               Config.RainbowBombMode == "Only Bombs")
                                           && !NotePhysicalTweaks.UsesChroma
                     ? RainbowGradient.Color
-                    : Config.BombColor * (1.0f + Config.BombColorBoost);
+                    : Config.BombColor * (1.0f + Config.BombColorBoost)).ColorWithAlpha(1f);
 
             if (____bombNotePrefab.transform.GetChild(0).TryGetComponent(out ConditionalMaterialSwitcher switcher))
             {
