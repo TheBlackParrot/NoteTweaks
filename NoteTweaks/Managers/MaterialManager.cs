@@ -185,7 +185,7 @@ namespace NoteTweaks.Managers
             
             ReplacementDotMaterial.SetInt(SrcFactorID, SrcFactor);
             ReplacementDotMaterial.SetInt(DstFactorID, DstFactor);
-            ReplacementDotMaterial.SetInt(SrcFactorAlphaID, SrcFactorAlpha);
+            ReplacementDotMaterial.SetInt(SrcFactorAlphaID, MainEffectContainer.value && Config.AddBloomForOutlines ? 1 : SrcFactorAlpha);
             ReplacementDotMaterial.SetInt(DstFactorAlphaID, DstFactorAlpha);
         }
 
@@ -279,6 +279,7 @@ namespace NoteTweaks.Managers
                     .Where(x => x.name != "_ENABLE_COLOR_INSTANCING" || x.name != "_CUTOUT_NONE").ToArray()
             };
             OutlineMaterial.SetFloat(CutoutTexScaleID, 0.5f);
+            OutlineMaterial.SetInt(SrcFactorAlphaID, MainEffectContainer.value && Config.AddBloomForOutlines ? 1 : 0);
         }
         
         private static async Task UpdateNoteMaterial()

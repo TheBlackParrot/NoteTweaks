@@ -303,5 +303,11 @@ namespace NoteTweaks.Configuration
         public float RimCameraDistanceOffset { get; set; } = 5f;
         
         public string RainbowBombMode { get; set; } = "Both";
+        
+        public bool AddBloomForOutlines { get; set; } = false;
+        public bool AddBloomForFaceSymbols { get; set; } = false;
+        
+        public float OutlineBloomAmount { get; set; } = 0.1f;
+        public float FaceSymbolBloomAmount { get; set; } = 0.1f;
     }
 }

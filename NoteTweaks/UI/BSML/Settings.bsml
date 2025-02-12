@@ -420,4 +420,24 @@
             </scroll-view>
         </vertical>
     </tab>
+
+    <tab tags="tabs" tab-name="Bloom">
+        <vertical vertical-fit="PreferredSize" pref-height="70" pref-width="100" anchored-position-x="4">
+            <scroll-view spacing="0" pref-height="70" child-expand-width="true">
+                <toggle-setting apply-on-change="true" value="AddBloomForOutlines" text="Apply Bloom to Outlines"
+                                hover-hint="Apply a bloom effect to outlines"/>
+                <slider-setting apply-on-change="true" value="OutlineBloomAmount" text="Bloom Amount" formatter="PercentageFormatter"
+                                min="0.05" max="2" increment="0.05" show-buttons="true"
+                                hover-hint="Amount of bloom to apply to outlines"/>
+
+                <horizontal><text text="-----" font-size="4" color="#00000000"/></horizontal>
+                
+                <toggle-setting apply-on-change="true" value="AddBloomForFaceSymbols" text="Apply Bloom to Face Symbols"
+                                hover-hint="Apply a bloom effect to face symbols"/>
+                <slider-setting apply-on-change="true" value="FaceSymbolBloomAmount" text="Bloom Amount" formatter="PercentageFormatter"
+                                min="0.05" max="2" increment="0.05" show-buttons="true"
+                                hover-hint="Amount of bloom to apply to face symbols"/>
+            </scroll-view>
+        </vertical>
+    </tab>
 </vertical>

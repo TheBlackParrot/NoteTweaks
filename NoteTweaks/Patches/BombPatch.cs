@@ -56,7 +56,8 @@ namespace NoteTweaks.Patches
                             ? RainbowGradient.Color
                             : Config.BombOutlineColor;
                     
-                    controller.materialPropertyBlock.SetColor(ColorNoteVisuals._colorId, outlineColor.ColorWithAlpha(1f));
+                    int applyBloom = Config.AddBloomForOutlines && Materials.MainEffectContainer.value ? 1 : 0;
+                    controller.materialPropertyBlock.SetColor(ColorNoteVisuals._colorId, outlineColor.ColorWithAlpha(applyBloom == 1 ? Config.OutlineBloomAmount : 1f));
                     controller.ApplyChanges();
                 }
             }

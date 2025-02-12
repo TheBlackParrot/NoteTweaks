@@ -975,6 +975,46 @@ namespace NoteTweaks.UI
             }
         }
         
+        protected bool AddBloomForOutlines
+        {
+            get => Config.AddBloomForOutlines;
+            set
+            {
+                Config.AddBloomForOutlines = value;
+                NotePreviewViewController.UpdateOutlines();
+            }
+        }
+        
+        protected bool AddBloomForFaceSymbols
+        {
+            get => Config.AddBloomForFaceSymbols;
+            set
+            {
+                Config.AddBloomForFaceSymbols = value;
+                NotePreviewViewController.UpdateColors();
+            }
+        }
+        
+        protected float OutlineBloomAmount
+        {
+            get => Config.OutlineBloomAmount;
+            set
+            {
+                Config.OutlineBloomAmount = value;
+                NotePreviewViewController.UpdateOutlines();
+            }
+        }
+        
+        protected float FaceSymbolBloomAmount
+        {
+            get => Config.FaceSymbolBloomAmount;
+            set
+            {
+                Config.FaceSymbolBloomAmount = value;
+                NotePreviewViewController.UpdateColors();
+            }
+        }
+        
         [UIValue("rainbowBombModeChoices")]
         [UsedImplicitly]
         // ReSharper disable once InconsistentNaming
