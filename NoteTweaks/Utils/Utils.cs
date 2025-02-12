@@ -182,7 +182,7 @@ namespace NoteTweaks.Utils
         }
         
         public static Mesh GenerateChevronMesh()
-        {
+        { 
             Mesh[] meshes =
             {
                 GenerateRectangle(new Vector2(0.2f, 0.075f), new Vector2(0.033f, -0.067f), new Vector3(0f, 0f, 22.5f)),
