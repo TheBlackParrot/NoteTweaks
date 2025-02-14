@@ -539,7 +539,7 @@ namespace NoteTweaks.Patches
                             }
                         }
                         
-                        bool applyBloom = Config.AddBloomForOutlines && Materials.MainEffectContainer.value;
+                        bool applyBloom = Config.AddBloomForFaceSymbols && Materials.MainEffectContainer.value;
                         Color c = Color.LerpUnclamped(isLeft ? Config.LeftFaceColor : Config.RightFaceColor, faceColor, isLeft ? Config.LeftFaceColorNoteSkew : Config.RightFaceColorNoteSkew);
                         materialPropertyBlockController.materialPropertyBlock.SetColor(ColorNoteVisuals._colorId, c.ColorWithAlpha(applyBloom ? Config.FaceSymbolBloomAmount : Materials.SaneAlphaValue));
                         materialPropertyBlockController.ApplyChanges();
@@ -824,7 +824,7 @@ namespace NoteTweaks.Patches
                     if (glowTransform.TryGetComponent(out MaterialPropertyBlockController glowPropertyBlockController))
                     {
                         Color wantedGlowColor = glowPropertyBlockController.materialPropertyBlock.GetColor(ColorNoteVisuals._colorId);
-                        wantedGlowColor.a = originalAlpha * (gameNoteController._noteData.colorType == ColorType.ColorA ? Config.LeftGlowIntensity : Config.RightGlowIntensity);
+                        wantedGlowColor.a = wantedGlowColor.a * (gameNoteController._noteData.colorType == ColorType.ColorA ? Config.LeftGlowIntensity : Config.RightGlowIntensity);
                         glowPropertyBlockController.materialPropertyBlock.SetColor(ColorNoteVisuals._colorId, wantedGlowColor);
                         glowPropertyBlockController.ApplyChanges();
                     }
