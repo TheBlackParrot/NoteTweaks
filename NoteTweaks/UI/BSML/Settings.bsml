@@ -431,7 +431,7 @@
     </tab>
 
     <tab tags="tabs" tab-name="Bloom">
-        <vertical vertical-fit="PreferredSize" pref-height="70" pref-width="100" anchored-position-x="4">
+        <vertical vertical-fit="PreferredSize" pref-height="70" pref-width="110" anchored-position-x="4">
             <scroll-view spacing="0" pref-height="70" child-expand-width="true">
                 <horizontal child-align="MiddleCenter">
                     <text text="~wowIReallyHateOldGameVersions" font-size="4" rich-text="true" word-wrapping="true" font-align="Center"/>
