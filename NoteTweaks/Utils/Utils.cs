@@ -203,6 +203,14 @@ namespace NoteTweaks.Utils
                     triangles[i * meshes[i].triangles.Length + j] = meshes[i].triangles[j] + (i * 4);
                 }
             }
+
+            // getting sides and height equal. the quick and dirty way.
+            // which is fine, this should only ever run once lol
+            float diff = ((vertices[2].y * -1f) - vertices[0].y) / 2f;
+            vertices[0].x = vertices[1].x;
+            vertices[7].x = vertices[6].x;
+            vertices[2].y = (vertices[0].y * -1f) - diff;
+            vertices[5].y = (vertices[0].y * -1f) - diff;
             
             Mesh mesh = new Mesh
             {
