@@ -26,9 +26,8 @@ namespace NoteTweaks.Managers
             enableInstancing = true
         };
         internal static Material AccDotMaterial;
-
-        private static readonly int MainEffectContainerID = Resources.FindObjectsOfTypeAll<BoolSO>().First(x => x.name.StartsWith("MainEffectContainer.")).GetInstanceID();
-        internal static BoolSO MainEffectContainer => Resources.InstanceIDToObject(MainEffectContainerID) as BoolSO;
+        
+        internal static BoolSO MainEffectContainer = Resources.FindObjectsOfTypeAll<BoolSO>().First(x => x.name.StartsWith("MainEffectContainer."));
         internal static float SaneAlphaValue => MainEffectContainer.value ? 1f : 0f;
         private static string MaterialIdentifier => MainEffectContainer.value ? "HD" : "LW";
         
@@ -59,6 +58,12 @@ namespace NoteTweaks.Managers
             new KeyValuePair<string, int>("Smoothness", Shader.PropertyToID("_Smoothness")),
             new KeyValuePair<string, int>("RimCameraDistanceOffset", Shader.PropertyToID("_RimCameraDistanceOffset"))
         };
+
+        internal static void UpdateMainEffectContainerWorkaroundThing()
+        {
+            // Unity 2019 doesn't have Resources.InstanceIDToObject, so we just. do it this way. i guess
+            MainEffectContainer = Resources.FindObjectsOfTypeAll<BoolSO>().First(x => x.name.StartsWith("MainEffectContainer."));
+        }
 
         internal static void UpdateAll()
         {

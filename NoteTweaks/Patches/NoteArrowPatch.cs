@@ -118,6 +118,8 @@ namespace NoteTweaks.Patches
                     return;
                 }
                 
+                Materials.UpdateMainEffectContainerWorkaroundThing();
+                
                 Managers.Textures.SetDefaultTextures();
                 Materials.UpdateAll();
                 BombPatch.SetStaticBombColor();

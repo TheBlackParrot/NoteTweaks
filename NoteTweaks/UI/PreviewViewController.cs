@@ -972,6 +972,8 @@ namespace NoteTweaks.UI
                 DontDestroyOnLoad(NoteContainer);
             }
             
+            Materials.UpdateMainEffectContainerWorkaroundThing();
+            
             if (HasInitialized)
             {
                 UpdateColors();
