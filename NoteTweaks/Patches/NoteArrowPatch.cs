@@ -825,7 +825,7 @@ namespace NoteTweaks.Patches
                     {
                         Color wantedGlowColor = glowPropertyBlockController.materialPropertyBlock.GetColor(ColorNoteVisuals._colorId);
                         float fixedAlpha = Mathf.Approximately(originalAlpha, Config.FaceSymbolBloomAmount)
-                            ? originalAlpha / Config.FaceSymbolBloomAmount
+                            ? 1f
                             : originalAlpha;
                         wantedGlowColor.a = fixedAlpha * (gameNoteController._noteData.colorType == ColorType.ColorA ? Config.LeftGlowIntensity : Config.RightGlowIntensity);
                         glowPropertyBlockController.materialPropertyBlock.SetColor(ColorNoteVisuals._colorId, wantedGlowColor);
