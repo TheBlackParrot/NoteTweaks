@@ -433,6 +433,12 @@
     <tab tags="tabs" tab-name="Bloom">
         <vertical vertical-fit="PreferredSize" pref-height="70" pref-width="100" anchored-position-x="4">
             <scroll-view spacing="0" pref-height="70" child-expand-width="true">
+                <horizontal child-align="MiddleCenter">
+                    <text text="~wowIReallyHateOldGameVersions" font-size="4" rich-text="true" word-wrapping="true" font-align="Center"/>
+                </horizontal>
+
+                <horizontal><text text="-----" font-size="2" color="#00000000"/></horizontal>
+                
                 <toggle-setting apply-on-change="true" value="AddBloomForOutlines" text="Apply Bloom to Outlines"
                                 hover-hint="Apply a bloom effect to outlines"/>
                 <slider-setting apply-on-change="true" value="OutlineBloomAmount" text="Bloom Amount" formatter="PercentageFormatter"
