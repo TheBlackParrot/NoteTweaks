@@ -824,7 +824,10 @@ namespace NoteTweaks.Patches
                     if (glowTransform.TryGetComponent(out MaterialPropertyBlockController glowPropertyBlockController))
                     {
                         Color wantedGlowColor = glowPropertyBlockController.materialPropertyBlock.GetColor(ColorNoteVisuals._colorId);
-                        wantedGlowColor.a = wantedGlowColor.a * (gameNoteController._noteData.colorType == ColorType.ColorA ? Config.LeftGlowIntensity : Config.RightGlowIntensity);
+                        float fixedAlpha = Mathf.Approximately(originalAlpha, Config.FaceSymbolBloomAmount)
+                            ? originalAlpha / Config.FaceSymbolBloomAmount
+                            : originalAlpha;
+                        wantedGlowColor.a = fixedAlpha * (gameNoteController._noteData.colorType == ColorType.ColorA ? Config.LeftGlowIntensity : Config.RightGlowIntensity);
                         glowPropertyBlockController.materialPropertyBlock.SetColor(ColorNoteVisuals._colorId, wantedGlowColor);
                         glowPropertyBlockController.ApplyChanges();
                     }
