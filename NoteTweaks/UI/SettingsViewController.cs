@@ -1041,6 +1041,10 @@ namespace NoteTweaks.UI
                 NotePreviewViewController.UpdateColors();
             }
         }
+
+        [UIValue("wowIReallyHateOldGameVersions")]
+        [UsedImplicitly]
+        private string GuhMoment => "<size=85%><color=#FFEE99FF><b>NOTE</b>: <color=#FFFFFFAA>Bloom will not work for outlines on game versions older than 1.37.1.";
         
         [UIValue("rainbowBombModeChoices")]
         [UsedImplicitly]
