@@ -11,6 +11,7 @@ namespace NoteTweaks.Managers
         private static readonly Mesh LineArrowMesh = Utils.Meshes.GenerateBasicLineMesh();
         private static readonly Mesh ChevronArrowMesh = Utils.Meshes.GenerateChevronMesh();
         private static readonly Mesh PointyMesh = Utils.Meshes.GeneratePointyMesh(new Vector2(0f, -0.0165f));
+        private static readonly Mesh PentagonArrowMesh = Utils.Meshes.GeneratePentagonMesh();
         private static Mesh _defaultArrowMesh;
 
         public static Mesh CurrentArrowMesh
@@ -27,6 +28,8 @@ namespace NoteTweaks.Managers
                         return ChevronArrowMesh;
                     case "Pointy":
                         return PointyMesh;
+                    case "Pentagon":
+                        return PentagonArrowMesh;
                     default:
                         return _defaultArrowMesh;
                 }

@@ -241,6 +241,52 @@ namespace NoteTweaks.Utils
 
             return mesh;
         }
+
+        public static Mesh GeneratePentagonMesh()
+        {
+            Mesh[] meshes =
+            {
+                GenerateRectangle(new Vector2(0.3f, 0.03f), new Vector2(0f, 0.025f)),
+                GenerateTriangleMesh(new Vector2(0.3f, 0.06f), new Vector2(0f, 0.02f), new Vector3(0f, 0f, 180f))
+            };
+            
+            foreach (Vector3 vert in meshes[0].vertices)
+            {
+                Plugin.Log.Info($"{vert.x}\t{vert.y}");
+            }
+            
+            Vector3[] vertices = new Vector3[7];
+            int[] triangles = new int[9];
+            for (int i = 0; i < meshes[0].vertices.Length; i++)
+            {
+                vertices[i] = meshes[0].vertices[i];
+            }
+            for (int i = 0; i < meshes[0].triangles.Length; i++)
+            {
+                triangles[i] = meshes[0].triangles[i];
+            }
+            
+            for (int i = 0; i < meshes[1].vertices.Length; i++)
+            {
+                vertices[i + meshes[0].vertices.Length] = meshes[1].vertices[i];
+            }
+            for (int i = 0; i < meshes[1].triangles.Length; i++)
+            {
+                triangles[i + meshes[0].triangles.Length] = meshes[1].triangles[i] + meshes[0].vertices.Length;
+            }
+            
+            vertices[0].x /= 1.67f;
+            vertices[3].x /= 1.67f;
+            
+            Mesh mesh = new Mesh
+            {
+                vertices = vertices,
+                triangles = triangles
+            };
+            mesh.Optimize();
+
+            return mesh;
+        }
     }
 
     internal static class Vectors
