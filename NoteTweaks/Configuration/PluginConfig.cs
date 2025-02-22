@@ -304,9 +304,9 @@ namespace NoteTweaks.Configuration
         
         public string RainbowBombMode { get; set; } = "Both";
         
-        public virtual float LeftOutlineFinalColorMultiplier { get; set; } = 1f;
-        public virtual float RightOutlineFinalColorMultiplier { get; set; } = 1f;
-        public virtual float BombOutlineFinalColorMultiplier { get; set; } = 1f;
+        public float LeftOutlineFinalColorMultiplier { get; set; } = 1f;
+        public float RightOutlineFinalColorMultiplier { get; set; } = 1f;
+        public float BombOutlineFinalColorMultiplier { get; set; } = 1f;
         
         public bool AddBloomForOutlines { get; set; } = false;
         public bool AddBloomForFaceSymbols { get; set; } = false;
