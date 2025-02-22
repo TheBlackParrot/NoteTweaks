@@ -158,7 +158,7 @@ namespace NoteTweaks.Patches
             [SuppressMessage("ReSharper", "InconsistentNaming")]
             internal static void Postfix(ref BurstSliderGameNoteController __instance, ref BoxCuttableBySaber[] ____bigCuttableBySaberList, ref BoxCuttableBySaber[] ____smallCuttableBySaberList)
             {
-                if (!Config.Enabled || !IsAllowedToScaleNotes || AutoDisable)
+                if (!Config.Enabled || AutoDisable)
                 {
                     return;
                 }
@@ -253,6 +253,11 @@ namespace NoteTweaks.Patches
                         dotController.materialPropertyBlock.SetColor(ColorNoteVisuals._colorId, c);
                         dotController.ApplyChanges();
                     }
+                }
+
+                if (!IsAllowedToScaleNotes)
+                {
+                    return;
                 }
                 
                 Vector3 scale = Vectors.Max(Config.NoteScale * Config.LinkScale, 0.1f);
