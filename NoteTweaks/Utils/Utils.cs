@@ -250,11 +250,6 @@ namespace NoteTweaks.Utils
                 GenerateTriangleMesh(new Vector2(0.3f, 0.06f), new Vector2(0f, 0.02f), new Vector3(0f, 0f, 180f))
             };
             
-            foreach (Vector3 vert in meshes[0].vertices)
-            {
-                Plugin.Log.Info($"{vert.x}\t{vert.y}");
-            }
-            
             Vector3[] vertices = new Vector3[7];
             int[] triangles = new int[9];
             for (int i = 0; i < meshes[0].vertices.Length; i++)
