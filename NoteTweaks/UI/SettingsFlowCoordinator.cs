@@ -1,5 +1,6 @@
 ﻿using HMUI;
 using JetBrains.Annotations;
+using NoteTweaks.Configuration;
 using UnityEngine;
 using Zenject;
 
@@ -11,6 +12,8 @@ namespace NoteTweaks.UI
         private SettingsViewController _settingsViewController;
         private NotePreviewViewController _notePreviewViewController;
         private ExtraPanelViewController _extraPanelViewController;
+        
+        private static PluginConfig Config => PluginConfig.Instance;
         
         [Inject]
         [UsedImplicitly]
@@ -51,6 +54,7 @@ namespace NoteTweaks.UI
         protected override void BackButtonWasPressed(ViewController topViewController)
         {
             _mainFlowCoordinator.DismissFlowCoordinator(this);
+            Config.Changed();
             
             _ = NotePreviewViewController.CutoutFadeOut();
         }

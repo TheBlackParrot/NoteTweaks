@@ -14,11 +14,11 @@ namespace NoteTweaks.Configuration
     {
         public static PluginConfig Instance { get; set; }
         
-        public virtual bool Enabled { get; set; } = true;
+        public bool Enabled { get; set; } = true;
         
-        public virtual bool EnableFaceGlow { get; set; } = true;
+        public bool EnableFaceGlow { get; set; } = true;
 
-        public virtual Vector2 ArrowScale { get; set; } = Vector2.one;
+        public Vector2 ArrowScale { get; set; } = Vector2.one;
         [Ignore] public virtual float ArrowScaleX
         {
             get => ArrowScale.x;
@@ -40,7 +40,7 @@ namespace NoteTweaks.Configuration
             }
         }
 
-        public virtual Vector2 ArrowPosition { get; set; } = Vector2.zero;
+        public Vector2 ArrowPosition { get; set; } = Vector2.zero;
         [Ignore] public virtual float ArrowPositionX
         {
             get => ArrowPosition.x;
@@ -62,8 +62,8 @@ namespace NoteTweaks.Configuration
             }
         }
         
-        public virtual bool EnableDots { get; set; } = true;
-        public virtual Vector2 DotScale { get; set; } = Vector2.one;
+        public bool EnableDots { get; set; } = true;
+        public Vector2 DotScale { get; set; } = Vector2.one;
         [Ignore] public virtual float DotScaleX
         {
             get => DotScale.x;
@@ -84,7 +84,7 @@ namespace NoteTweaks.Configuration
                 DotScale = vec;
             }
         }
-        public virtual Vector2 DotPosition { get; set; } = Vector2.zero;
+        public Vector2 DotPosition { get; set; } = Vector2.zero;
         [Ignore] public virtual float DotPositionX
         {
             get => DotPosition.x;
@@ -106,7 +106,7 @@ namespace NoteTweaks.Configuration
             }
         }
         
-        public virtual Vector3 NoteScale { get; set; } = Vector3.one;
+        public Vector3 NoteScale { get; set; } = Vector3.one;
         [Ignore] public virtual float NoteScaleX
         {
             get => NoteScale.x;
@@ -138,17 +138,17 @@ namespace NoteTweaks.Configuration
             }
         }
         
-        public virtual float LinkScale { get; set; } = 1.0f;
+        public float LinkScale { get; set; } = 1.0f;
 
-        public virtual float ColorBoostLeft { get; set; } = 0.0f;
-        public virtual float ColorBoostRight { get; set; } = 0.0f;
+        public float ColorBoostLeft { get; set; } = 0.0f;
+        public float ColorBoostRight { get; set; } = 0.0f;
 
-        public virtual float LeftGlowIntensity { get; set; } = 1.0f;
-        public virtual float RightGlowIntensity { get; set; } = 1.0f;
-        public virtual float ArrowGlowScale { get; set; } = 1.0f;
-        public virtual float DotGlowScale { get; set; } = 1.0f;
-        public virtual bool EnableChainDots { get; set; } = true;
-        public virtual Vector2 ChainDotScale { get; set; } = Vector2.one;
+        public float LeftGlowIntensity { get; set; } = 1.0f;
+        public float RightGlowIntensity { get; set; } = 1.0f;
+        public float ArrowGlowScale { get; set; } = 1.0f;
+        public float DotGlowScale { get; set; } = 1.0f;
+        public bool EnableChainDots { get; set; } = true;
+        public Vector2 ChainDotScale { get; set; } = Vector2.one;
         [Ignore] public virtual float ChainDotScaleX
         {
             get => ChainDotScale.x;
@@ -169,69 +169,69 @@ namespace NoteTweaks.Configuration
                 ChainDotScale = vec;
             }
         }
-        public virtual bool EnableChainDotGlow { get; set; } = true;
+        public bool EnableChainDotGlow { get; set; } = true;
         
         [UseConverter(typeof(HexColorConverter))]
-        public virtual Color LeftFaceColor { get; set; } = new Color(1f, 1f, 1f, 1f);
+        public Color LeftFaceColor { get; set; } = new Color(1f, 1f, 1f, 1f);
         [UseConverter(typeof(HexColorConverter))]
-        public virtual Color RightFaceColor { get; set; } = new Color(1f, 1f, 1f, 1f);
+        public Color RightFaceColor { get; set; } = new Color(1f, 1f, 1f, 1f);
         
-        public virtual bool EnableAccDot { get; set; } = false;
-        public virtual int AccDotSize { get; set; } = 15;
+        public bool EnableAccDot { get; set; } = false;
+        public int AccDotSize { get; set; } = 15;
         [UseConverter(typeof(HexColorConverter))]
-        public virtual Color AccDotColor { get; set; } = new Color(1f, 1f, 1f, 1f);
-        public virtual bool RenderAccDotsAboveSymbols { get; set; } = false;
+        public Color AccDotColor { get; set; } = new Color(1f, 1f, 1f, 1f);
+        public bool RenderAccDotsAboveSymbols { get; set; } = false;
         
-        public virtual int DotMeshSides { get; set; } = 16;
+        public int DotMeshSides { get; set; } = 16;
 
-        public virtual float LeftFaceColorNoteSkew { get; set; } = 0.04f;
-        public virtual float RightFaceColorNoteSkew { get; set; } = 0.04f;
-        public virtual bool DisableIfNoodle { get; set; } = false;
-        public virtual bool DisableIfVivify { get; set; } = false;
-        public virtual float RotateDot { get; set; } = 0.0f;
+        public float LeftFaceColorNoteSkew { get; set; } = 0.04f;
+        public float RightFaceColorNoteSkew { get; set; } = 0.04f;
+        public bool DisableIfNoodle { get; set; } = false;
+        public bool DisableIfVivify { get; set; } = false;
+        public float RotateDot { get; set; } = 0.0f;
         
         public bool NormalizeLeftFaceColor { get; set; } = false;
         public bool NormalizeRightFaceColor { get; set; } = false;
         
         [UseConverter(typeof(HexColorConverter))]
-        public virtual Color LeftFaceGlowColor { get; set; } = new Color(1f, 1f, 1f, 1f);
-        public virtual float LeftFaceGlowColorNoteSkew { get; set; } = 1.0f;
-        public virtual bool NormalizeLeftFaceGlowColor { get; set; } = false;
+        public Color LeftFaceGlowColor { get; set; } = new Color(1f, 1f, 1f, 1f);
+        public float LeftFaceGlowColorNoteSkew { get; set; } = 1.0f;
+        public bool NormalizeLeftFaceGlowColor { get; set; } = false;
         [UseConverter(typeof(HexColorConverter))]
-        public virtual Color RightFaceGlowColor { get; set; } = new Color(1f, 1f, 1f, 1f);
-        public virtual float RightFaceGlowColorNoteSkew { get; set; } = 1.0f;
-        public virtual bool NormalizeRightFaceGlowColor { get; set; } = false;
+        public Color RightFaceGlowColor { get; set; } = new Color(1f, 1f, 1f, 1f);
+        public float RightFaceGlowColorNoteSkew { get; set; } = 1.0f;
+        public bool NormalizeRightFaceGlowColor { get; set; } = false;
         
-        public virtual string NoteTexture { get; set; } = "Default";
-        public virtual bool InvertNoteTexture { get; set; } = false;
+        public string NoteTexture { get; set; } = "Default";
+        public bool InvertNoteTexture { get; set; } = false;
         
         [UseConverter(typeof(HexColorConverter))]
-        public virtual Color BombColor { get; set; } = new Color(0.251f, 0.251f, 0.251f, 1.0f);
-        public virtual float BombColorBoost { get; set; } = 0.0f;
-        public virtual string BombTexture { get; set; } = "Default";
-        public virtual float BombScale { get; set; } = 1.0f;
-        public virtual bool InvertBombTexture { get; set; } = false;
+        public Color BombColor { get; set; } = new Color(0.251f, 0.251f, 0.251f, 1.0f);
+        public float BombColorBoost { get; set; } = 0.0f;
+        public string BombTexture { get; set; } = "Default";
+        public float BombScale { get; set; } = 1.0f;
+        public bool InvertBombTexture { get; set; } = false;
         
-        public virtual bool EnableRainbowBombs { get; set; } = false;
-        public virtual float RainbowBombTimeScale { get; set; } = 6.0f;
-        public virtual float RainbowBombSaturation { get; set; } = 0.67f;
-        public virtual float RainbowBombValue { get; set; } = 0.9f;
+        public bool EnableRainbowBombs { get; set; } = false;
+        public float RainbowBombTimeScale { get; set; } = 6.0f;
+        public float RainbowBombSaturation { get; set; } = 0.67f;
+        public float RainbowBombValue { get; set; } = 0.9f;
         
-        public virtual string GlowTexture { get; set; } = "Glow";
+        public string GlowTexture { get; set; } = "Glow";
         
-        public virtual string ArrowMesh { get; set; } = "Default";
+        public string ArrowMesh { get; set; } = "Default";
         
-        public virtual bool FixDotsIfNoodle { get; set; } = true;
+        public bool FixDotsIfNoodle { get; set; } = true;
 
-        public virtual float LeftMinBrightness { get; set; } = 0.0f;
-        public virtual float LeftMaxBrightness { get; set; } = 1.0f;
-        public virtual float RightMinBrightness { get; set; } = 0.0f;
-        public virtual float RightMaxBrightness { get; set; } = 1.0f;
+        public float LeftMinBrightness { get; set; } = 0.0f;
+        public float LeftMaxBrightness { get; set; } = 1.0f;
+        public float RightMinBrightness { get; set; } = 0.0f;
+        public float RightMaxBrightness { get; set; } = 1.0f;
         
-        public virtual string LeftGlowBlendOp { get; set; } = "Add";
-        public virtual string RightGlowBlendOp { get; set; } = "Add";
+        public string LeftGlowBlendOp { get; set; } = "Add";
+        public string RightGlowBlendOp { get; set; } = "Add";
         
-        public virtual Vector2 LeftGlowOffset { get; set; } = Vector2.zero;
+        public Vector2 LeftGlowOffset { get; set; } = Vector2.zero;
         [Ignore] public virtual float LeftGlowOffsetX
         {
             get => LeftGlowOffset.x;
@@ -252,7 +252,7 @@ namespace NoteTweaks.Configuration
                 LeftGlowOffset = vec;
             }
         }
-        public virtual Vector2 RightGlowOffset { get; set; } = Vector2.zero;
+        public Vector2 RightGlowOffset { get; set; } = Vector2.zero;
         [Ignore] public virtual float RightGlowOffsetX
         {
             get => RightGlowOffset.x;
@@ -309,5 +309,9 @@ namespace NoteTweaks.Configuration
         
         public float OutlineBloomAmount { get; set; } = 0.1f;
         public float FaceSymbolBloomAmount { get; set; } = 0.1f;
+
+        public virtual void Changed()
+        {
+        }
     }
 }
