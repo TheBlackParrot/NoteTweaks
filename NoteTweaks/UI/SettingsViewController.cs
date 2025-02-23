@@ -30,6 +30,8 @@ namespace NoteTweaks.UI
             base.DidActivate(firstActivation, addedToHierarchy, screenSystemEnabling);
             
             NotifyPropertyChanged(nameof(EnableAccDot));
+            NotifyPropertyChanged(nameof(PresetNames));
+            NotifyPropertyChanged(nameof(SelectedPreset));
         }
         
         [UIValue("EnableFaceGlow")]
@@ -1123,6 +1125,42 @@ namespace NoteTweaks.UI
             Plugin.Log.Info("Set texture filenames");
 
             return choices;
+        }
+
+        [UIValue("PresetNames")]
+        private List<object> PresetNames => Config.Presets.Keys.Cast<object>().ToList();
+
+        [UIValue("SelectedPreset")]
+        private string SelectedPreset
+        {
+            get => _selectedPreset;
+            set
+            {
+                _selectedPreset = value;
+                NotifyPropertyChanged();
+            }
+        }
+        private string _selectedPreset;
+
+        [UIAction("SavePreset")]
+        private void SavePreset(string presetName)
+        {
+            Config.SavePreset(presetName);
+            NotifyPropertyChanged(nameof(PresetNames));
+        }
+
+        [UIAction("LoadPreset")]
+        private void LoadPreset(string presetName)
+        {
+            Config.LoadPreset(presetName);
+            NotifyPropertyChanged(nameof(SelectedPreset));
+        }
+
+        [UIAction("DeletePreset")]
+        private void DeletePreset(string presetName)
+        {
+            Config.DeletePreset(presetName);
+            NotifyPropertyChanged(nameof(PresetNames));
         }
     }
 }

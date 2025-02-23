@@ -440,4 +440,19 @@
             </scroll-view>
         </vertical>
     </tab>
+
+    <tab tags="tabs" tab-name="Presets">
+        <vertical vertical-fit="PreferredSize" pref-height="70" pref-width="100" anchored-position-x="4">
+            <scroll-view spacing="0" pref-height="70" child-expand-width="true">
+                <dropdown-list-setting apply-on-change="true" value="SelectedPreset" text="Select Preset" choices="PresetNames"
+                                       hover-hint="Select a preset to load"/>
+                <horizontal>
+                    <text-field-setting id="presetName" text="Preset Name" placeholder="Enter preset name" hover-hint="Enter a name for the preset"/>
+                    <button-setting text="Save" click-event="SavePreset(presetName)" hover-hint="Save the current settings as a preset"/>
+                    <button-setting text="Load" click-event="LoadPreset(SelectedPreset)" hover-hint="Load the selected preset"/>
+                    <button-setting text="Delete" click-event="DeletePreset(SelectedPreset)" hover-hint="Delete the selected preset"/>
+                </horizontal>
+            </scroll-view>
+        </vertical>
+    </tab>
 </vertical>
