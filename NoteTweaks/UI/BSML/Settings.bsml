@@ -2,7 +2,7 @@
           xsi:noNamespaceSchemaLocation="https://monkeymanboy.github.io/BSML-Docs/BSMLSchema.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <horizontal vertical-fit="Unconstrained" horizontal-fit="PreferredSize" pref-width="120" child-expand-width="true" size-delta="-6 6">
         <page-button pref-width="4" pref-height="4" tags="LeftButton" direction="Left"/>
-        <tab-selector child-expand-width="true" child-control-width="true" tab-tag="tabs" id="tabSelector" page-count="5" left-button-tag="LeftButton" right-button-tag="RightButton"/>
+        <tab-selector child-expand-width="true" child-control-width="true" tab-tag="tabs" id="tabSelector" page-count="4" left-button-tag="LeftButton" right-button-tag="RightButton"/>
         <page-button pref-width="4" pref-height="4" tags="RightButton" direction="Right"/>
     </horizontal>
     
@@ -109,25 +109,6 @@
                                        hover-hint="Cubemap images in UserData/NoteTweaks/Textures/Notes"/>
                 <toggle-setting apply-on-change="true" value="InvertBombTexture" text="Invert Bomb Texture"
                                 hover-hint="Invert the colors of the cubemap texture"/>
-            </scroll-view>
-        </vertical>
-    </tab>
-    
-    <tab tags="tabs" tab-name="Acc Dots">
-        <vertical vertical-fit="PreferredSize" pref-height="70" pref-width="100" anchored-position-x="4">
-            <scroll-view spacing="0" pref-height="70" child-expand-width="true">
-                <toggle-setting apply-on-change="true" value="EnableAccDot" text="Enable Acc Dots" bind-value="true"
-                                hover-hint="Enable small dots in the center of notes to help show where to swing for accuracy"/>
-
-                <horizontal><text text="-----" font-size="4" color="#00000000"/></horizontal>
-
-                <toggle-setting apply-on-change="true" value="RenderAccDotsAboveSymbols" text="Render Above Symbols"
-                                hover-hint="Render acc dots on top of symbols, rather than beneath them"/>
-                <slider-setting apply-on-change="true" value="AccDotSize" text="Acc Dot Size"
-                                min="15" max="5" increment="1" integer-only="true" show-buttons="true" formatter="AccFormatter"
-                                hover-hint="Size of the acc dot relative to where to score for that accuracy value"/>
-                <color-setting apply-on-change="true" value="AccDotColor" text="Acc Dot Color"
-                               hover-hint="Color of the acc dots"/>
             </scroll-view>
         </vertical>
     </tab>
@@ -390,6 +371,25 @@
                 <slider-setting apply-on-change="true" value="DotGlowScale" text="Dot Glow Scale"
                                 min="0.01" max="2.0" increment="0.01" show-buttons="true" formatter="PercentageFormatter"
                                 hover-hint="Scale of glow on dots"/>
+            </scroll-view>
+        </vertical>
+    </tab>
+
+    <tab tags="tabs" tab-name="Acc Dots">
+        <vertical vertical-fit="PreferredSize" pref-height="70" pref-width="100" anchored-position-x="4">
+            <scroll-view spacing="0" pref-height="70" child-expand-width="true">
+                <toggle-setting apply-on-change="true" value="EnableAccDot" text="Enable Acc Dots" bind-value="true"
+                                hover-hint="Enable small dots in the center of notes to help show where to swing for accuracy"/>
+
+                <horizontal><text text="-----" font-size="4" color="#00000000"/></horizontal>
+
+                <toggle-setting apply-on-change="true" value="RenderAccDotsAboveSymbols" text="Render Above Symbols"
+                                hover-hint="Render acc dots on top of symbols, rather than beneath them"/>
+                <slider-setting apply-on-change="true" value="AccDotSize" text="Acc Dot Size"
+                                min="15" max="5" increment="1" integer-only="true" show-buttons="true" formatter="AccFormatter"
+                                hover-hint="Size of the acc dot relative to where to score for that accuracy value"/>
+                <color-setting apply-on-change="true" value="AccDotColor" text="Acc Dot Color"
+                               hover-hint="Color of the acc dots"/>
             </scroll-view>
         </vertical>
     </tab>
