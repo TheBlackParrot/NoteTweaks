@@ -213,7 +213,7 @@ namespace NoteTweaks.Patches
                     }
                 }
 
-                if (Config.EnableNoteOutlines)
+                if (Config.EnableNoteOutlines && !IsUsingHiddenTypeModifier)
                 {
                     Outlines.AddOutlineObject(chainRoot, Outlines.InvertedChainMesh);
                     Transform noteOutline = chainRoot.Find("NoteOutline");
@@ -404,7 +404,7 @@ namespace NoteTweaks.Patches
                     }   
                 }
                 
-                if (Config.EnableNoteOutlines)
+                if (Config.EnableNoteOutlines && !IsUsingHiddenTypeModifier)
                 {
                     Outlines.AddOutlineObject(noteRoot, __instance.gameplayType == NoteData.GameplayType.BurstSliderHead ? Outlines.InvertedChainHeadMesh : Outlines.InvertedNoteMesh);
                     Transform noteOutline = noteRoot.Find("NoteOutline");
@@ -781,7 +781,7 @@ namespace NoteTweaks.Patches
                     return;
                 }
                 
-                if (__instance.transform.name == "NoteCube" && Config.EnableNoteOutlines)
+                if (__instance.transform.name == "NoteCube" && Config.EnableNoteOutlines && !IsUsingHiddenTypeModifier)
                 {
                     Transform noteOutlineTransform = __instance.transform.Find("NoteOutline");
                     if (!noteOutlineTransform)
