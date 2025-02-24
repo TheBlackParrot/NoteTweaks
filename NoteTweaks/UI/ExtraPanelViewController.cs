@@ -240,10 +240,19 @@ namespace NoteTweaks.UI
                 return VersionManager.LatestVersion > VersionData.ModVersion;
             }
         }
-        
+
         [UIValue("PresetNames")]
-        private List<object> PresetNames => ConfigurationPresetManager.Presets.Keys.Cast<object>().ToList();
-        
+        private List<object> PresetNames
+        {
+            get
+            {
+                string[] files = Directory.GetFiles(ConfigurationPresetManager.PresetPath, "*.json");
+                Plugin.Log.Info($"Found {files.Length} presets");
+
+                return files.Select(Path.GetFileNameWithoutExtension).Cast<object>().ToList();
+            }
+        }
+
         [UIValue("SelectedPreset")]
         private string SelectedPreset = "";
 
