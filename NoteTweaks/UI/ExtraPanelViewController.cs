@@ -255,7 +255,7 @@ namespace NoteTweaks.UI
         }
 
         [UIValue("SelectedPreset")]
-        private string SelectedPreset = "";
+        private string SelectedPreset = "Default";
 
         [UIValue("presetNameField")]
         private string PresetNameField = "Preset";
