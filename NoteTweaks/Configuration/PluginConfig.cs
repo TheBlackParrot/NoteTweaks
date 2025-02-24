@@ -2,8 +2,10 @@
 using IPA.Config.Stores;
 using IPA.Config.Stores.Attributes;
 using IPA.Config.Stores.Converters;
+using JetBrains.Annotations;
+using Newtonsoft.Json;
 using UnityEngine;
-using System.Collections.Generic;
+
 // ReSharper disable RedundantDefaultMemberInitializer
 
 [assembly: InternalsVisibleTo(GeneratedStore.AssemblyVisibilityTarget)]
@@ -13,14 +15,18 @@ namespace NoteTweaks.Configuration
     // ReSharper disable once ClassNeverInstantiated.Global
     internal class PluginConfig
     {
+        [JsonIgnore]
         public static PluginConfig Instance { get; set; }
+
+        [JsonIgnore, Ignore]
+        public static ConfigurationPresetManager PresetManager { get; set; } = new ConfigurationPresetManager();
         
         public bool Enabled { get; set; } = true;
         
         public bool EnableFaceGlow { get; set; } = true;
 
         public Vector2 ArrowScale { get; set; } = Vector2.one;
-        [Ignore] public virtual float ArrowScaleX
+        [JsonIgnore, Ignore] public virtual float ArrowScaleX
         {
             get => ArrowScale.x;
             set
@@ -30,7 +36,7 @@ namespace NoteTweaks.Configuration
                 ArrowScale = vec;
             }
         }
-        [Ignore] public virtual float ArrowScaleY
+        [JsonIgnore, Ignore] public virtual float ArrowScaleY
         {
             get => ArrowScale.y;
             set
@@ -42,7 +48,7 @@ namespace NoteTweaks.Configuration
         }
 
         public Vector2 ArrowPosition { get; set; } = Vector2.zero;
-        [Ignore] public virtual float ArrowPositionX
+        [JsonIgnore, Ignore] public virtual float ArrowPositionX
         {
             get => ArrowPosition.x;
             set
@@ -52,7 +58,7 @@ namespace NoteTweaks.Configuration
                 ArrowPosition = vec;
             }
         }
-        [Ignore] public virtual float ArrowPositionY
+        [JsonIgnore, Ignore] public virtual float ArrowPositionY
         {
             get => ArrowPosition.y;
             set
@@ -65,7 +71,7 @@ namespace NoteTweaks.Configuration
         
         public bool EnableDots { get; set; } = true;
         public Vector2 DotScale { get; set; } = Vector2.one;
-        [Ignore] public virtual float DotScaleX
+        [JsonIgnore, Ignore] public virtual float DotScaleX
         {
             get => DotScale.x;
             set
@@ -75,7 +81,7 @@ namespace NoteTweaks.Configuration
                 DotScale = vec;
             }
         }
-        [Ignore] public virtual float DotScaleY
+        [JsonIgnore, Ignore] public virtual float DotScaleY
         {
             get => DotScale.y;
             set
@@ -86,7 +92,7 @@ namespace NoteTweaks.Configuration
             }
         }
         public Vector2 DotPosition { get; set; } = Vector2.zero;
-        [Ignore] public virtual float DotPositionX
+        [JsonIgnore, Ignore] public virtual float DotPositionX
         {
             get => DotPosition.x;
             set
@@ -96,7 +102,7 @@ namespace NoteTweaks.Configuration
                 DotPosition = vec;
             }
         }
-        [Ignore] public virtual float DotPositionY
+        [JsonIgnore, Ignore] public virtual float DotPositionY
         {
             get => DotPosition.y;
             set
@@ -108,7 +114,7 @@ namespace NoteTweaks.Configuration
         }
         
         public Vector3 NoteScale { get; set; } = Vector3.one;
-        [Ignore] public virtual float NoteScaleX
+        [JsonIgnore, Ignore] public virtual float NoteScaleX
         {
             get => NoteScale.x;
             set
@@ -118,7 +124,7 @@ namespace NoteTweaks.Configuration
                 NoteScale = vec;
             }
         }
-        [Ignore] public virtual float NoteScaleY
+        [JsonIgnore, Ignore] public virtual float NoteScaleY
         {
             get => NoteScale.y;
             set
@@ -128,7 +134,7 @@ namespace NoteTweaks.Configuration
                 NoteScale = vec;
             }
         }
-        [Ignore] public virtual float NoteScaleZ
+        [JsonIgnore, Ignore] public virtual float NoteScaleZ
         {
             get => NoteScale.z;
             set
@@ -150,7 +156,7 @@ namespace NoteTweaks.Configuration
         public float DotGlowScale { get; set; } = 1.0f;
         public bool EnableChainDots { get; set; } = true;
         public Vector2 ChainDotScale { get; set; } = Vector2.one;
-        [Ignore] public virtual float ChainDotScaleX
+        [JsonIgnore, Ignore] public virtual float ChainDotScaleX
         {
             get => ChainDotScale.x;
             set
@@ -160,7 +166,7 @@ namespace NoteTweaks.Configuration
                 ChainDotScale = vec;
             }
         }
-        [Ignore] public virtual float ChainDotScaleY
+        [JsonIgnore, Ignore] public virtual float ChainDotScaleY
         {
             get => ChainDotScale.y;
             set
@@ -233,7 +239,7 @@ namespace NoteTweaks.Configuration
         public string RightGlowBlendOp { get; set; } = "Add";
         
         public Vector2 LeftGlowOffset { get; set; } = Vector2.zero;
-        [Ignore] public virtual float LeftGlowOffsetX
+        [JsonIgnore, Ignore] public virtual float LeftGlowOffsetX
         {
             get => LeftGlowOffset.x;
             set
@@ -243,7 +249,7 @@ namespace NoteTweaks.Configuration
                 LeftGlowOffset = vec;
             }
         }
-        [Ignore] public virtual float LeftGlowOffsetY
+        [JsonIgnore, Ignore] public virtual float LeftGlowOffsetY
         {
             get => LeftGlowOffset.y;
             set
@@ -254,7 +260,7 @@ namespace NoteTweaks.Configuration
             }
         }
         public Vector2 RightGlowOffset { get; set; } = Vector2.zero;
-        [Ignore] public virtual float RightGlowOffsetX
+        [JsonIgnore, Ignore] public virtual float RightGlowOffsetX
         {
             get => RightGlowOffset.x;
             set
@@ -264,7 +270,7 @@ namespace NoteTweaks.Configuration
                 RightGlowOffset = vec;
             }
         }
-        [Ignore] public virtual float RightGlowOffsetY
+        [JsonIgnore, Ignore] public virtual float RightGlowOffsetY
         {
             get => RightGlowOffset.y;
             set
@@ -311,31 +317,17 @@ namespace NoteTweaks.Configuration
         public float OutlineBloomAmount { get; set; } = 0.1f;
         public float FaceSymbolBloomAmount { get; set; } = 0.1f;
 
-        public virtual Dictionary<string, PluginConfig> Presets { get; set; } = new Dictionary<string, PluginConfig>();
-
-        public void SavePreset(string presetName)
+        internal PluginConfig ShallowCopy()
         {
-            Presets[presetName] = (PluginConfig)MemberwiseClone();
+            return (PluginConfig)MemberwiseClone();
+        }
+        
+        internal string GetSerializedJson([CanBeNull] JsonSerializerSettings settings)
+        {
+            return JsonConvert.SerializeObject(this, settings);
         }
 
-        public void LoadPreset(string presetName)
-        {
-            if (Presets.TryGetValue(presetName, out var preset))
-            {
-                foreach (var property in GetType().GetProperties())
-                {
-                    if (property.CanWrite)
-                    {
-                        property.SetValue(this, property.GetValue(preset));
-                    }
-                }
-            }
-        }
-
-        public void DeletePreset(string presetName)
-        {
-            Presets.Remove(presetName);
-        public virtual void Changed()
+        public void Changed()
         {
         }
     }

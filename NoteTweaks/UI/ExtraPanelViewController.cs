@@ -66,6 +66,9 @@ namespace NoteTweaks.UI
             NotifyPropertyChanged(nameof(DisableIfNoodle));
             NotifyPropertyChanged(nameof(DisableIfVivify));
             NotifyPropertyChanged(nameof(FixDotsIfNoodle));
+            
+            NotifyPropertyChanged(nameof(PresetNames));
+            NotifyPropertyChanged(nameof(SelectedPreset));
 
             if (VersionManager.LatestVersion != null)
             {
@@ -74,10 +77,6 @@ namespace NoteTweaks.UI
                     gameVersionText.text = gameVersion;
                 }
             }
-
-            // P2628
-            NotifyPropertyChanged(nameof(PresetNames));
-            NotifyPropertyChanged(nameof(SelectedPreset));
         }
 
         [UIAction("openProjectHome")]
@@ -241,42 +240,32 @@ namespace NoteTweaks.UI
                 return VersionManager.LatestVersion > VersionData.ModVersion;
             }
         }
-
-        // P8b82
+        
         [UIValue("PresetNames")]
-        private List<object> PresetNames => Config.Presets.Keys.Cast<object>().ToList();
+        private List<object> PresetNames => ConfigurationPresetManager.Presets.Keys.Cast<object>().ToList();
 
         [UIValue("SelectedPreset")]
-        private string SelectedPreset
-        {
-            get => _selectedPreset;
-            set
-            {
-                _selectedPreset = value;
-                NotifyPropertyChanged();
-            }
-        }
-        private string _selectedPreset;
+        private string SelectedPreset = "";
+
+        [UIValue("presetNameField")]
+        // ReSharper disable once FieldCanBeMadeReadOnly.Local
+        // ReSharper disable once ConvertToConstant.Local
+        private string PresetNameField = "Preset";
 
         [UIAction("SavePreset")]
-        private void SavePreset(string presetName)
+        private void SavePreset()
         {
-            Config.SavePreset(presetName);
+            NotifyPropertyChanged(nameof(PresetNameField));
+            ConfigurationPresetManager.SavePreset(PresetNameField);
+            
             NotifyPropertyChanged(nameof(PresetNames));
         }
 
         [UIAction("LoadPreset")]
-        private void LoadPreset(string presetName)
+        private void LoadPreset()
         {
-            Config.LoadPreset(presetName);
+            ConfigurationPresetManager.LoadPreset(SelectedPreset);
             NotifyPropertyChanged(nameof(SelectedPreset));
-        }
-
-        [UIAction("DeletePreset")]
-        private void DeletePreset(string presetName)
-        {
-            Config.DeletePreset(presetName);
-            NotifyPropertyChanged(nameof(PresetNames));
         }
     }
 }

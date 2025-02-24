@@ -117,21 +117,5 @@ namespace NoteTweaks.Configuration
         {
             SettableSettings.ForEach(x => x.SetTemporary(null));
         }
-
-        // P24b5
-        public void SavePreset(string presetName)
-        {
-            PluginConfig.Instance.SavePreset(presetName);
-        }
-
-        public void LoadPreset(string presetName)
-        {
-            PluginConfig.Instance.LoadPreset(presetName);
-        }
-
-        public void DeletePreset(string presetName)
-        {
-            PluginConfig.Instance.DeletePreset(presetName);
-        }
     }
 }

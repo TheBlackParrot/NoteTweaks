@@ -1,0 +1,170 @@
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Reflection;
+using IPA.Config.Data;
+using IPA.Config.Stores.Converters;
+using IPA.Utilities;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using UnityEngine;
+
+namespace NoteTweaks.Configuration
+{
+    // https://github.com/kinsi55/CS_BeatSaber_Camera2/blob/6b6807d60da8e7c922bba0c74800f9095d93c247/Utils/JsonConverters.cs#L85
+    // was going to just convert these to JArray objects but it looked ugly and i hated it
+    class Vector2Converter : JsonConverter<Vector2> {
+        public override void WriteJson(JsonWriter writer, Vector2 vec, JsonSerializer serializer) {
+            writer.WriteStartObject();
+            writer.WritePropertyName("x");
+            writer.WriteValue(vec.x);
+            writer.WritePropertyName("y");
+            writer.WriteValue(vec.y);
+            writer.WriteEndObject();
+        }
+
+        public override Vector2 ReadJson(JsonReader reader, Type objectType, Vector2 existingValue, bool hasExistingValue, JsonSerializer serializer) {
+            Vector2 vec = new Vector2();
+
+            while (reader.TokenType != JsonToken.EndObject)
+            {
+                reader.Read();
+                
+                if(reader.TokenType == JsonToken.PropertyName) {
+                    string property = reader.Value?.ToString();
+                    float val = (float)reader.ReadAsDecimal().GetValueOrDefault();
+                    switch (property)
+                    {
+                        case "x": vec.x = val; break;
+                        case "y": vec.y = val; break;
+                    }
+                }
+            }
+            
+            return vec;
+        }
+    }
+    class Vector3Converter : JsonConverter<Vector3> {
+        public override void WriteJson(JsonWriter writer, Vector3 vec, JsonSerializer serializer) {
+            writer.WriteStartObject();
+            writer.WritePropertyName("x");
+            writer.WriteValue(vec.x);
+            writer.WritePropertyName("y");
+            writer.WriteValue(vec.y);
+            writer.WritePropertyName("z");
+            writer.WriteValue(vec.z);
+            writer.WriteEndObject();
+        }
+
+        public override Vector3 ReadJson(JsonReader reader, Type objectType, Vector3 existingValue, bool hasExistingValue, JsonSerializer serializer) {
+            Vector3 vec = new Vector3();
+
+            while (reader.TokenType != JsonToken.EndObject)
+            {
+                reader.Read();
+                
+                if(reader.TokenType == JsonToken.PropertyName) {
+                    string property = reader.Value?.ToString();
+                    float val = (float)reader.ReadAsDecimal().GetValueOrDefault();
+                    switch (property)
+                    {
+                        case "x": vec.x = val; break;
+                        case "y": vec.y = val; break;
+                        case "z": vec.z = val; break;
+                    }
+                }
+            }
+            
+            return vec;
+        }
+    }
+    
+    public class ColorConverter : JsonConverter<Color>
+    {
+        private static readonly HexColorConverter Converter = new HexColorConverter();
+        
+        public override void WriteJson(JsonWriter writer, Color value, JsonSerializer serializer)
+        {
+            JToken val = new JValue(Converter.ToValue(value, new object()).ToString().Replace("\"", ""));
+            val.WriteTo(writer);
+        }
+
+        public override Color ReadJson(JsonReader reader, Type objectType, Color existingValue, bool hasExistingValue, JsonSerializer serializer)
+        {
+            JToken val = JToken.Load(reader);
+            return Converter.FromValue(val.Value<Value>(), new object());
+        }
+    }
+    
+    internal class ConfigurationPresetManager
+    {
+        private static PluginConfig Config => PluginConfig.Instance;
+        internal static Dictionary<string, PluginConfig> Presets { get; set; } = new Dictionary<string, PluginConfig>();
+        private static readonly string PresetPath = Path.Combine(UnityGame.UserDataPath, "NoteTweaks", "Presets");
+        
+        private static readonly JsonSerializerSettings SerializerSettings = new JsonSerializerSettings();
+        
+        public ConfigurationPresetManager()
+        {
+            if (!Directory.Exists(PresetPath))
+            {
+                Directory.CreateDirectory(PresetPath);
+            }
+            
+            SerializerSettings.Converters.Add(new Vector2Converter());
+            SerializerSettings.Converters.Add(new Vector3Converter());
+            SerializerSettings.Converters.Add(new ColorConverter());
+            SerializerSettings.Formatting = Formatting.Indented;
+            SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
+            SerializerSettings.MetadataPropertyHandling = MetadataPropertyHandling.Ignore;
+
+            string[] files = Directory.GetFiles(PresetPath, "*.json");
+            Plugin.Log.Info($"Found {files.Length} presets");
+
+            foreach (string file in files)
+            {
+                LoadPreset(Path.GetFileNameWithoutExtension(file), true);
+            }
+        }
+
+        public static void SavePreset(string presetName)
+        {
+            Presets[presetName] = Config.ShallowCopy();
+            
+            string path = Path.Combine(PresetPath, presetName + ".json");
+            
+            File.WriteAllText(path, Config.GetSerializedJson(SerializerSettings));
+        }
+
+        public static void LoadPreset(string presetName, bool shallow = false)
+        {
+            if (!Presets.TryGetValue(presetName, out PluginConfig preset))
+            {
+                string path = Path.Combine(PresetPath, presetName + ".json");
+                if (!File.Exists(path))
+                {
+                    return;
+                }
+                
+                Presets[presetName] = JsonConvert.DeserializeObject(File.ReadAllText(path), typeof(PluginConfig)) as PluginConfig;
+                preset = Presets[presetName];
+            }
+
+            // just loading into the object, don't actually overwrite values
+            if (shallow)
+            {
+                return;
+            }
+
+            foreach (PropertyInfo property in typeof(PluginConfig).GetProperties())
+            {
+                if (property.CanWrite)
+                {
+                    property.SetValue(Config, property.GetValue(preset));
+                }
+            }
+            
+            Plugin.ClampSettings();
+        }
+    }
+}

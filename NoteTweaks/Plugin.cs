@@ -61,49 +61,6 @@ namespace NoteTweaks
             
             PluginConfig.Instance.FogScale = Mathf.Max(PluginConfig.Instance.FogScale, 0.0f);
             PluginConfig.Instance.FogHeightScale = Mathf.Max(PluginConfig.Instance.FogHeightScale, 0.0f);
-
-            // P1b5e
-            foreach (var preset in PluginConfig.Instance.Presets.Values)
-            {
-                preset.NoteScale = Vectors.Max(Vectors.Min(preset.NoteScale, 2.0f), 0.1f);
-                preset.BombScale = Mathf.Max(Mathf.Min(preset.BombScale, 2.0f), 0.1f);
-                preset.LinkScale = Mathf.Max(Mathf.Min(preset.LinkScale, 2.0f), 0.1f);
-                
-                preset.ColorBoostLeft = Mathf.Max(preset.ColorBoostLeft, -0.95f);
-                preset.ColorBoostRight = Mathf.Max(preset.ColorBoostRight, -0.95f);
-                preset.BombColorBoost = Mathf.Max(preset.BombColorBoost, -0.95f);
-                
-                preset.DotMeshSides = Math.Max(Math.Min(preset.DotMeshSides, 48), 4);
-                
-                preset.LeftFaceColorNoteSkew = Mathf.Max(0f, Mathf.Min(preset.LeftFaceColorNoteSkew, 1.0f));
-                preset.RightFaceColorNoteSkew = Mathf.Max(0f, Mathf.Min(preset.RightFaceColorNoteSkew, 1.0f));
-                preset.LeftFaceGlowColorNoteSkew = Mathf.Max(0f, Mathf.Min(preset.LeftFaceGlowColorNoteSkew, 1.0f));
-                preset.RightFaceGlowColorNoteSkew = Mathf.Max(0f, Mathf.Min(preset.RightFaceGlowColorNoteSkew, 1.0f));
-                
-                preset.AccDotSize = Math.Max(Math.Min(preset.AccDotSize, 15), 5);
-
-                preset.RainbowBombTimeScale = Mathf.Max(0.1f, preset.RainbowBombTimeScale);
-                preset.RainbowBombSaturation = Mathf.Max(0f, preset.RainbowBombSaturation);
-                preset.RainbowBombValue = Mathf.Max(0f, preset.RainbowBombValue);
-                
-                preset.LeftMinBrightness = Mathf.Max(Mathf.Min(preset.LeftMinBrightness, 1.0f), 0.0f);
-                preset.LeftMaxBrightness = Mathf.Max(Mathf.Min(preset.LeftMaxBrightness, 1.0f), 0.0f);
-                preset.RightMinBrightness = Mathf.Max(Mathf.Min(preset.RightMinBrightness, 1.0f), 0.0f);
-                preset.RightMaxBrightness = Mathf.Max(Mathf.Min(preset.RightMaxBrightness, 1.0f), 0.0f);
-                
-                preset.ArrowPosition = Vectors.Max(Vectors.Min(preset.ArrowPosition, 0.2f), -0.2f);
-                preset.DotPosition = Vectors.Max(Vectors.Min(preset.DotPosition, 0.2f), -0.2f);
-                preset.LeftGlowOffset = Vectors.Max(Vectors.Min(preset.LeftGlowOffset, 0.2f), -0.2f);
-                preset.RightGlowOffset = Vectors.Max(Vectors.Min(preset.RightGlowOffset, 0.2f), -0.2f);
-                
-                preset.NoteOutlineLeftColorSkew = Mathf.Max(0f, Mathf.Min(preset.NoteOutlineLeftColorSkew, 1.0f));
-                preset.NoteOutlineRightColorSkew = Mathf.Max(0f, Mathf.Min(preset.NoteOutlineRightColorSkew, 1.0f));
-                preset.NoteOutlineScale = Math.Max(preset.NoteOutlineScale, 0);
-                preset.BombOutlineScale = Math.Max(preset.BombOutlineScale, 0);
-                
-                preset.FogScale = Mathf.Max(preset.FogScale, 0.0f);
-                preset.FogHeightScale = Mathf.Max(preset.FogHeightScale, 0.0f);
-            }
         }
 
         [Init]
@@ -125,49 +82,6 @@ namespace NoteTweaks
             
             _harmony = new Harmony("TheBlackParrot.NoteTweaks");
             _harmony.PatchAll(Assembly.GetExecutingAssembly());
-
-            // P73c1
-            foreach (var preset in PluginConfig.Instance.Presets.Values)
-            {
-                preset.NoteScale = Vectors.Max(Vectors.Min(preset.NoteScale, 2.0f), 0.1f);
-                preset.BombScale = Mathf.Max(Mathf.Min(preset.BombScale, 2.0f), 0.1f);
-                preset.LinkScale = Mathf.Max(Mathf.Min(preset.LinkScale, 2.0f), 0.1f);
-                
-                preset.ColorBoostLeft = Mathf.Max(preset.ColorBoostLeft, -0.95f);
-                preset.ColorBoostRight = Mathf.Max(preset.ColorBoostRight, -0.95f);
-                preset.BombColorBoost = Mathf.Max(preset.BombColorBoost, -0.95f);
-                
-                preset.DotMeshSides = Math.Max(Math.Min(preset.DotMeshSides, 48), 4);
-                
-                preset.LeftFaceColorNoteSkew = Mathf.Max(0f, Mathf.Min(preset.LeftFaceColorNoteSkew, 1.0f));
-                preset.RightFaceColorNoteSkew = Mathf.Max(0f, Mathf.Min(preset.RightFaceColorNoteSkew, 1.0f));
-                preset.LeftFaceGlowColorNoteSkew = Mathf.Max(0f, Mathf.Min(preset.LeftFaceGlowColorNoteSkew, 1.0f));
-                preset.RightFaceGlowColorNoteSkew = Mathf.Max(0f, Mathf.Min(preset.RightFaceGlowColorNoteSkew, 1.0f));
-                
-                preset.AccDotSize = Math.Max(Math.Min(preset.AccDotSize, 15), 5);
-
-                preset.RainbowBombTimeScale = Mathf.Max(0.1f, preset.RainbowBombTimeScale);
-                preset.RainbowBombSaturation = Mathf.Max(0f, preset.RainbowBombSaturation);
-                preset.RainbowBombValue = Mathf.Max(0f, preset.RainbowBombValue);
-                
-                preset.LeftMinBrightness = Mathf.Max(Mathf.Min(preset.LeftMinBrightness, 1.0f), 0.0f);
-                preset.LeftMaxBrightness = Mathf.Max(Mathf.Min(preset.LeftMaxBrightness, 1.0f), 0.0f);
-                preset.RightMinBrightness = Mathf.Max(Mathf.Min(preset.RightMinBrightness, 1.0f), 0.0f);
-                preset.RightMaxBrightness = Mathf.Max(Mathf.Min(preset.RightMaxBrightness, 1.0f), 0.0f);
-                
-                preset.ArrowPosition = Vectors.Max(Vectors.Min(preset.ArrowPosition, 0.2f), -0.2f);
-                preset.DotPosition = Vectors.Max(Vectors.Min(preset.DotPosition, 0.2f), -0.2f);
-                preset.LeftGlowOffset = Vectors.Max(Vectors.Min(preset.LeftGlowOffset, 0.2f), -0.2f);
-                preset.RightGlowOffset = Vectors.Max(Vectors.Min(preset.RightGlowOffset, 0.2f), -0.2f);
-                
-                preset.NoteOutlineLeftColorSkew = Mathf.Max(0f, Mathf.Min(preset.NoteOutlineLeftColorSkew, 1.0f));
-                preset.NoteOutlineRightColorSkew = Mathf.Max(0f, Mathf.Min(preset.NoteOutlineRightColorSkew, 1.0f));
-                preset.NoteOutlineScale = Math.Max(preset.NoteOutlineScale, 0);
-                preset.BombOutlineScale = Math.Max(preset.BombOutlineScale, 0);
-                
-                preset.FogScale = Mathf.Max(preset.FogScale, 0.0f);
-                preset.FogHeightScale = Mathf.Max(preset.FogHeightScale, 0.0f);
-            }
         }
 
         [OnDisable]
