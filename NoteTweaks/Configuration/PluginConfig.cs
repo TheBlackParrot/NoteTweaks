@@ -3,6 +3,7 @@ using IPA.Config.Stores;
 using IPA.Config.Stores.Attributes;
 using IPA.Config.Stores.Converters;
 using UnityEngine;
+using System.Collections.Generic;
 // ReSharper disable RedundantDefaultMemberInitializer
 
 [assembly: InternalsVisibleTo(GeneratedStore.AssemblyVisibilityTarget)]
@@ -310,6 +311,30 @@ namespace NoteTweaks.Configuration
         public float OutlineBloomAmount { get; set; } = 0.1f;
         public float FaceSymbolBloomAmount { get; set; } = 0.1f;
 
+        public virtual Dictionary<string, PluginConfig> Presets { get; set; } = new Dictionary<string, PluginConfig>();
+
+        public void SavePreset(string presetName)
+        {
+            Presets[presetName] = (PluginConfig)MemberwiseClone();
+        }
+
+        public void LoadPreset(string presetName)
+        {
+            if (Presets.TryGetValue(presetName, out var preset))
+            {
+                foreach (var property in GetType().GetProperties())
+                {
+                    if (property.CanWrite)
+                    {
+                        property.SetValue(this, property.GetValue(preset));
+                    }
+                }
+            }
+        }
+
+        public void DeletePreset(string presetName)
+        {
+            Presets.Remove(presetName);
         public virtual void Changed()
         {
         }

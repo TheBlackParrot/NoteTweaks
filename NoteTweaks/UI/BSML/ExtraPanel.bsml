@@ -1,4 +1,4 @@
-﻿<vertical child-control-height="true"
+<vertical child-control-height="true"
           xsi:noNamespaceSchemaLocation="https://monkeymanboy.github.io/BSML-Docs/BSMLSchema.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <modifier-container vertical-fit="Unconstrained" pref-height="6" child-alignment="UpperCenter">
         <horizontal horizontal-fit="Unconstrained" pref-width="70" child-align="MiddleCenter" active="~UpdateIsAvailable" child-control-width="true">
@@ -66,4 +66,18 @@
         </tab>
     </modifier-container>
     
+    <modifier-container vertical-fit="Unconstrained" child-alignment="UpperCenter">
+        <tab tags="tabs" tab-name="Presets">
+            <vertical vertical-fit="PreferredSize" pref-height="65" pref-width="100" anchored-position-x="4">
+                <scroll-view spacing="0" pref-height="65" child-expand-width="true">
+                    <dropdown-list-setting id="presetDropdown" text="Select Preset" value="SelectedPreset" list="PresetNames" on-change="LoadPreset"/>
+                    <horizontal>
+                        <text-field-setting id="presetNameField" text="Preset Name" on-change="SavePreset"/>
+                        <button text="Save" on-click="SavePreset(presetNameField.text)"/>
+                        <button text="Delete" on-click="DeletePreset(presetDropdown.value)"/>
+                    </horizontal>
+                </scroll-view>
+            </vertical>
+        </tab>
+    </modifier-container>
 </vertical>
