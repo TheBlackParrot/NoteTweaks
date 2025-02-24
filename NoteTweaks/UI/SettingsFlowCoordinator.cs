@@ -9,7 +9,7 @@ namespace NoteTweaks.UI
     internal class SettingsFlowCoordinator : FlowCoordinator
     {
         private MainFlowCoordinator _mainFlowCoordinator;
-        private SettingsViewController _settingsViewController;
+        internal static SettingsViewController _settingsViewController;
         private NotePreviewViewController _notePreviewViewController;
         private ExtraPanelViewController _extraPanelViewController;
         

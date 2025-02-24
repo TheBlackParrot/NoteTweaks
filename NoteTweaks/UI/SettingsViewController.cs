@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using BeatSaberMarkupLanguage.Attributes;
 using BeatSaberMarkupLanguage.Components.Settings;
@@ -1123,6 +1124,19 @@ namespace NoteTweaks.UI
             Plugin.Log.Info("Set texture filenames");
 
             return choices;
+        }
+
+        internal async Task RefreshAll()
+        {
+            foreach (PropertyInfo propertyInfo in GetType()
+                         .GetProperties(BindingFlags.Instance | BindingFlags.NonPublic)
+                         .Where(c => c.GetMethod != null && c.GetMethod.IsFamily || c.SetMethod != null && c.SetMethod.IsFamily))
+            {
+                Plugin.Log.Info($"Calling changed event on {propertyInfo.Name}");
+                NotifyPropertyChanged(propertyInfo.Name);
+            }
+            
+            await NotePreviewViewController.RefreshEverything();
         }
     }
 }
