@@ -964,6 +964,24 @@ namespace NoteTweaks.UI
             }
         }
         
+        internal static void RefreshEverything()
+        {
+            Materials.UpdateAll();
+                
+            UpdateColors();
+            UpdateBombColors();
+            UpdateBombScale();
+            UpdateArrowMeshes();
+            UpdateArrowPosition();
+            UpdateArrowScale();
+            UpdateDotPosition();
+            UpdateDotScale();
+            UpdateDotRotation();
+            UpdateNoteScale();
+            UpdateOutlines();
+            UpdateVisibility();
+        }
+
         protected void OnEnable()
         {
             if (NoteContainer == null)
@@ -976,21 +994,7 @@ namespace NoteTweaks.UI
             
             if (HasInitialized)
             {
-                UpdateColors();
-                UpdateBombColors();
-                UpdateBombScale();
-                Materials.UpdateNoteMaterial();
-                Materials.UpdateBombMaterial();
-                UpdateArrowMeshes();
-                UpdateArrowPosition();
-                UpdateArrowScale();
-                UpdateDotPosition();
-                UpdateDotScale();
-                UpdateDotRotation();
-                UpdateNoteScale();
-                UpdateOutlines();
-                UpdateVisibility();
-                
+                RefreshEverything();
                 _ = CutoutFadeIn();
                 return;
             }
