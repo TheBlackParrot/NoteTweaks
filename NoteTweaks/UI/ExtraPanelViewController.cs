@@ -66,6 +66,9 @@ namespace NoteTweaks.UI
             NotifyPropertyChanged(nameof(DisableIfNoodle));
             NotifyPropertyChanged(nameof(DisableIfVivify));
             NotifyPropertyChanged(nameof(FixDotsIfNoodle));
+            
+            NotifyPropertyChanged(nameof(PresetNames));
+            NotifyPropertyChanged(nameof(SelectedPreset));
 
             if (VersionManager.LatestVersion != null)
             {
@@ -236,6 +239,33 @@ namespace NoteTweaks.UI
 
                 return VersionManager.LatestVersion > VersionData.ModVersion;
             }
+        }
+        
+        [UIValue("PresetNames")]
+        private List<object> PresetNames => ConfigurationPresetManager.Presets.Keys.Cast<object>().ToList();
+
+        [UIValue("SelectedPreset")]
+        private string SelectedPreset = "";
+
+        [UIValue("presetNameField")]
+        // ReSharper disable once FieldCanBeMadeReadOnly.Local
+        // ReSharper disable once ConvertToConstant.Local
+        private string PresetNameField = "Preset";
+
+        [UIAction("SavePreset")]
+        private void SavePreset()
+        {
+            NotifyPropertyChanged(nameof(PresetNameField));
+            ConfigurationPresetManager.SavePreset(PresetNameField);
+            
+            NotifyPropertyChanged(nameof(PresetNames));
+        }
+
+        [UIAction("LoadPreset")]
+        private void LoadPreset()
+        {
+            ConfigurationPresetManager.LoadPreset(SelectedPreset);
+            NotifyPropertyChanged(nameof(SelectedPreset));
         }
     }
 }
