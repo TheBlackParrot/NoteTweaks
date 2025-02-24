@@ -968,6 +968,24 @@ namespace NoteTweaks.UI
                 await Task.Yield();
             }
         }
+
+        internal static async Task RefreshEverything()
+        {
+            await Materials.UpdateAll();
+                
+            UpdateColors();
+            UpdateBombColors();
+            UpdateBombScale();
+            UpdateArrowMeshes();
+            UpdateArrowPosition();
+            UpdateArrowScale();
+            UpdateDotPosition();
+            UpdateDotScale();
+            UpdateDotRotation();
+            UpdateNoteScale();
+            UpdateOutlines();
+            UpdateVisibility();
+        }
         
         protected void OnEnable()
         {
@@ -979,21 +997,7 @@ namespace NoteTweaks.UI
             
             if (HasInitialized)
             {
-                _ = Materials.UpdateAll();
-                
-                UpdateColors();
-                UpdateBombColors();
-                UpdateBombScale();
-                UpdateArrowMeshes();
-                UpdateArrowPosition();
-                UpdateArrowScale();
-                UpdateDotPosition();
-                UpdateDotScale();
-                UpdateDotRotation();
-                UpdateNoteScale();
-                UpdateOutlines();
-                UpdateVisibility();
-                
+                _ = RefreshEverything();
                 _ = CutoutFadeIn();
                 return;
             }
