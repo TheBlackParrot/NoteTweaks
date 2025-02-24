@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Reflection;
 using IPA.Config.Data;
 using IPA.Config.Stores.Converters;
 using IPA.Utilities;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using Newtonsoft.Json.Serialization;
 using UnityEngine;
 
 namespace NoteTweaks.Configuration
@@ -102,7 +100,7 @@ namespace NoteTweaks.Configuration
     {
         private static PluginConfig Config => PluginConfig.Instance;
         internal static Dictionary<string, PluginConfig> Presets { get; set; } = new Dictionary<string, PluginConfig>();
-        private static readonly string PresetPath = Path.Combine(UnityGame.UserDataPath, "NoteTweaks", "Presets");
+        internal static readonly string PresetPath = Path.Combine(UnityGame.UserDataPath, "NoteTweaks", "Presets");
         
         private static readonly JsonSerializerSettings SerializerSettings = new JsonSerializerSettings();
         
@@ -119,49 +117,26 @@ namespace NoteTweaks.Configuration
             SerializerSettings.Formatting = Formatting.Indented;
             SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
             SerializerSettings.MetadataPropertyHandling = MetadataPropertyHandling.Ignore;
-
-            string[] files = Directory.GetFiles(PresetPath, "*.json");
-            Plugin.Log.Info($"Found {files.Length} presets");
-
-            foreach (string file in files)
-            {
-                LoadPreset(Path.GetFileNameWithoutExtension(file), true);
-            }
         }
 
         public static void SavePreset(string presetName)
         {
-            Presets[presetName] = Config.ShallowCopy();
-            
             string path = Path.Combine(PresetPath, presetName + ".json");
             
             File.WriteAllText(path, Config.GetSerializedJson(SerializerSettings));
         }
 
-        public static void LoadPreset(string presetName, bool shallow = false)
+        public static void LoadPreset(string presetName)
         {
-            Plugin.Log.Info($"Loading preset {presetName}...");
-            if (!Presets.TryGetValue(presetName, out PluginConfig preset))
+            string path = Path.Combine(PresetPath, presetName + ".json");
+            if (!File.Exists(path))
             {
-                Plugin.Log.Info($"No preset cached for {presetName}, trying from file");
-                string path = Path.Combine(PresetPath, presetName + ".json");
-                if (!File.Exists(path))
-                {
-                    Plugin.Log.Info("Preset file doesn't exist");
-                    return;
-                }
-                
-                Presets[presetName] = JsonConvert.DeserializeObject(File.ReadAllText(path), typeof(PluginConfig)) as PluginConfig;
-                preset = Presets[presetName];
-                Plugin.Log.Info($"Deserialized preset {presetName}");
-            }
-
-            // just loading into the object, don't actually overwrite values
-            if (shallow)
-            {
-                Plugin.Log.Info($"Shallow copy of {presetName}, stopping");
+                Plugin.Log.Info("Preset file doesn't exist");
                 return;
             }
+                
+            PluginConfig preset = JsonConvert.DeserializeObject(File.ReadAllText(path), typeof(PluginConfig)) as PluginConfig;
+            Plugin.Log.Info($"Deserialized preset {presetName}");
 
             foreach (PropertyInfo property in typeof(PluginConfig).GetProperties())
             {
