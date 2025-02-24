@@ -177,4 +177,28 @@
         <EmbeddedResource Include="Resources/Textures/CubemapSingles/Soft Metallic A.png" />
         <EmbeddedResource Include="Resources/Textures/CubemapSingles/Soft Metallic B.png" />
     </ItemGroup>
+    <ItemGroup>
+        <None Include="Resources\Presets\Default.json">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Include="Resources\Presets\Outlines.json">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Include="Resources\Presets\Shimmer.json">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Include="Resources\Presets\Smooth.json">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Include="Resources\Presets\High Contrast.json">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+    </ItemGroup>
+    <ItemGroup>
+        <OutputCopy Include="$(OutputPath)Resources\Presets\Default.json" OutputPath="UserData\NoteTweaks\Presets\Default.json" />
+        <OutputCopy Include="$(OutputPath)Resources\Presets\Outlines.json" OutputPath="UserData\NoteTweaks\Presets\Outlines.json" />
+        <OutputCopy Include="$(OutputPath)Resources\Presets\Shimmer.json" OutputPath="UserData\NoteTweaks\Presets\Shimmer.json" />
+        <OutputCopy Include="$(OutputPath)Resources\Presets\Smooth.json" OutputPath="UserData\NoteTweaks\Presets\Smooth.json" />
+        <OutputCopy Include="$(OutputPath)Resources\Presets\High Contrast.json" OutputPath="UserData\NoteTweaks\Presets\High Contrast.json" />
+    </ItemGroup>
 </Project>
