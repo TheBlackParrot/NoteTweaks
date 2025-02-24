@@ -5,6 +5,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 using BeatSaberMarkupLanguage.Attributes;
 using BeatSaberMarkupLanguage.ViewControllers;
 using IPA.Config.Stores.Converters;
@@ -257,8 +258,6 @@ namespace NoteTweaks.UI
         private string SelectedPreset = "";
 
         [UIValue("presetNameField")]
-        // ReSharper disable once FieldCanBeMadeReadOnly.Local
-        // ReSharper disable once ConvertToConstant.Local
         private string PresetNameField = "Preset";
 
         [UIAction("SavePreset")]
@@ -271,10 +270,10 @@ namespace NoteTweaks.UI
         }
 
         [UIAction("LoadPreset")]
-        private void LoadPreset()
+        private async Task LoadPreset()
         {
             NotifyPropertyChanged(nameof(SelectedPreset));
-            ConfigurationPresetManager.LoadPreset(SelectedPreset);
+            await ConfigurationPresetManager.LoadPreset(SelectedPreset);
         }
     }
 }
