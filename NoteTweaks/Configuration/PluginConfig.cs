@@ -13,20 +13,20 @@ using UnityEngine;
 namespace NoteTweaks.Configuration
 {
     // ReSharper disable once ClassNeverInstantiated.Global
+    [JsonObject(MemberSerialization.OptIn)]
     internal class PluginConfig
     {
-        [JsonIgnore]
         public static PluginConfig Instance { get; set; }
 
-        [JsonIgnore, Ignore]
+        [Ignore]
         public static ConfigurationPresetManager PresetManager { get; set; } = new ConfigurationPresetManager();
         
         public bool Enabled { get; set; } = true;
         
-        public bool EnableFaceGlow { get; set; } = true;
+        [JsonProperty] public bool EnableFaceGlow { get; set; } = true;
 
-        public Vector2 ArrowScale { get; set; } = Vector2.one;
-        [JsonIgnore, Ignore] public virtual float ArrowScaleX
+        [JsonProperty] public Vector2 ArrowScale { get; set; } = Vector2.one;
+        [Ignore] public virtual float ArrowScaleX
         {
             get => ArrowScale.x;
             set
@@ -36,7 +36,7 @@ namespace NoteTweaks.Configuration
                 ArrowScale = vec;
             }
         }
-        [JsonIgnore, Ignore] public virtual float ArrowScaleY
+        [Ignore] public virtual float ArrowScaleY
         {
             get => ArrowScale.y;
             set
@@ -47,8 +47,8 @@ namespace NoteTweaks.Configuration
             }
         }
 
-        public Vector2 ArrowPosition { get; set; } = Vector2.zero;
-        [JsonIgnore, Ignore] public virtual float ArrowPositionX
+        [JsonProperty] public Vector2 ArrowPosition { get; set; } = Vector2.zero;
+        [Ignore] public virtual float ArrowPositionX
         {
             get => ArrowPosition.x;
             set
@@ -58,7 +58,7 @@ namespace NoteTweaks.Configuration
                 ArrowPosition = vec;
             }
         }
-        [JsonIgnore, Ignore] public virtual float ArrowPositionY
+        [Ignore] public virtual float ArrowPositionY
         {
             get => ArrowPosition.y;
             set
@@ -69,9 +69,9 @@ namespace NoteTweaks.Configuration
             }
         }
         
-        public bool EnableDots { get; set; } = true;
-        public Vector2 DotScale { get; set; } = Vector2.one;
-        [JsonIgnore, Ignore] public virtual float DotScaleX
+        [JsonProperty] public bool EnableDots { get; set; } = true;
+        [JsonProperty] public Vector2 DotScale { get; set; } = Vector2.one;
+        [Ignore] public virtual float DotScaleX
         {
             get => DotScale.x;
             set
@@ -81,7 +81,7 @@ namespace NoteTweaks.Configuration
                 DotScale = vec;
             }
         }
-        [JsonIgnore, Ignore] public virtual float DotScaleY
+        [Ignore] public virtual float DotScaleY
         {
             get => DotScale.y;
             set
@@ -91,8 +91,8 @@ namespace NoteTweaks.Configuration
                 DotScale = vec;
             }
         }
-        public Vector2 DotPosition { get; set; } = Vector2.zero;
-        [JsonIgnore, Ignore] public virtual float DotPositionX
+        [JsonProperty] public Vector2 DotPosition { get; set; } = Vector2.zero;
+        [Ignore] public virtual float DotPositionX
         {
             get => DotPosition.x;
             set
@@ -102,7 +102,7 @@ namespace NoteTweaks.Configuration
                 DotPosition = vec;
             }
         }
-        [JsonIgnore, Ignore] public virtual float DotPositionY
+        [Ignore] public virtual float DotPositionY
         {
             get => DotPosition.y;
             set
@@ -113,8 +113,8 @@ namespace NoteTweaks.Configuration
             }
         }
         
-        public Vector3 NoteScale { get; set; } = Vector3.one;
-        [JsonIgnore, Ignore] public virtual float NoteScaleX
+        [JsonProperty] public Vector3 NoteScale { get; set; } = Vector3.one;
+        [Ignore] public virtual float NoteScaleX
         {
             get => NoteScale.x;
             set
@@ -124,7 +124,7 @@ namespace NoteTweaks.Configuration
                 NoteScale = vec;
             }
         }
-        [JsonIgnore, Ignore] public virtual float NoteScaleY
+        [Ignore] public virtual float NoteScaleY
         {
             get => NoteScale.y;
             set
@@ -134,7 +134,7 @@ namespace NoteTweaks.Configuration
                 NoteScale = vec;
             }
         }
-        [JsonIgnore, Ignore] public virtual float NoteScaleZ
+        [Ignore] public virtual float NoteScaleZ
         {
             get => NoteScale.z;
             set
@@ -145,18 +145,18 @@ namespace NoteTweaks.Configuration
             }
         }
         
-        public float LinkScale { get; set; } = 1.0f;
+        [JsonProperty] public float LinkScale { get; set; } = 1.0f;
 
-        public float ColorBoostLeft { get; set; } = 0.0f;
-        public float ColorBoostRight { get; set; } = 0.0f;
+        [JsonProperty] public float ColorBoostLeft { get; set; } = 0.0f;
+        [JsonProperty] public float ColorBoostRight { get; set; } = 0.0f;
 
-        public float LeftGlowIntensity { get; set; } = 1.0f;
-        public float RightGlowIntensity { get; set; } = 1.0f;
-        public float ArrowGlowScale { get; set; } = 1.0f;
-        public float DotGlowScale { get; set; } = 1.0f;
-        public bool EnableChainDots { get; set; } = true;
-        public Vector2 ChainDotScale { get; set; } = Vector2.one;
-        [JsonIgnore, Ignore] public virtual float ChainDotScaleX
+        [JsonProperty] public float LeftGlowIntensity { get; set; } = 1.0f;
+        [JsonProperty] public float RightGlowIntensity { get; set; } = 1.0f;
+        [JsonProperty] public float ArrowGlowScale { get; set; } = 1.0f;
+        [JsonProperty] public float DotGlowScale { get; set; } = 1.0f;
+        [JsonProperty] public bool EnableChainDots { get; set; } = true;
+        [JsonProperty] public Vector2 ChainDotScale { get; set; } = Vector2.one;
+        [Ignore] public virtual float ChainDotScaleX
         {
             get => ChainDotScale.x;
             set
@@ -166,7 +166,7 @@ namespace NoteTweaks.Configuration
                 ChainDotScale = vec;
             }
         }
-        [JsonIgnore, Ignore] public virtual float ChainDotScaleY
+        [Ignore] public virtual float ChainDotScaleY
         {
             get => ChainDotScale.y;
             set
@@ -176,70 +176,70 @@ namespace NoteTweaks.Configuration
                 ChainDotScale = vec;
             }
         }
-        public bool EnableChainDotGlow { get; set; } = true;
+        [JsonProperty] public bool EnableChainDotGlow { get; set; } = true;
         
         [UseConverter(typeof(HexColorConverter))]
-        public Color LeftFaceColor { get; set; } = new Color(1f, 1f, 1f, 1f);
+        [JsonProperty, JsonConverter(typeof(ColorConverter))] public Color LeftFaceColor { get; set; } = new Color(1f, 1f, 1f, 1f);
         [UseConverter(typeof(HexColorConverter))]
-        public Color RightFaceColor { get; set; } = new Color(1f, 1f, 1f, 1f);
+        [JsonProperty, JsonConverter(typeof(ColorConverter))] public Color RightFaceColor { get; set; } = new Color(1f, 1f, 1f, 1f);
         
-        public bool EnableAccDot { get; set; } = false;
-        public int AccDotSize { get; set; } = 15;
+        [JsonProperty] public bool EnableAccDot { get; set; } = false;
+        [JsonProperty] public int AccDotSize { get; set; } = 15;
         [UseConverter(typeof(HexColorConverter))]
-        public Color AccDotColor { get; set; } = new Color(1f, 1f, 1f, 1f);
-        public bool RenderAccDotsAboveSymbols { get; set; } = false;
+        [JsonProperty, JsonConverter(typeof(ColorConverter))] public Color AccDotColor { get; set; } = new Color(1f, 1f, 1f, 1f);
+        [JsonProperty] public bool RenderAccDotsAboveSymbols { get; set; } = false;
         
-        public int DotMeshSides { get; set; } = 16;
+        [JsonProperty] public int DotMeshSides { get; set; } = 16;
 
-        public float LeftFaceColorNoteSkew { get; set; } = 0.04f;
-        public float RightFaceColorNoteSkew { get; set; } = 0.04f;
+        [JsonProperty] public float LeftFaceColorNoteSkew { get; set; } = 0.04f;
+        [JsonProperty] public float RightFaceColorNoteSkew { get; set; } = 0.04f;
         public bool DisableIfNoodle { get; set; } = false;
         public bool DisableIfVivify { get; set; } = false;
-        public float RotateDot { get; set; } = 0.0f;
+        [JsonProperty] public float RotateDot { get; set; } = 0.0f;
         
-        public bool NormalizeLeftFaceColor { get; set; } = false;
-        public bool NormalizeRightFaceColor { get; set; } = false;
-        
-        [UseConverter(typeof(HexColorConverter))]
-        public Color LeftFaceGlowColor { get; set; } = new Color(1f, 1f, 1f, 1f);
-        public float LeftFaceGlowColorNoteSkew { get; set; } = 1.0f;
-        public bool NormalizeLeftFaceGlowColor { get; set; } = false;
-        [UseConverter(typeof(HexColorConverter))]
-        public Color RightFaceGlowColor { get; set; } = new Color(1f, 1f, 1f, 1f);
-        public float RightFaceGlowColorNoteSkew { get; set; } = 1.0f;
-        public bool NormalizeRightFaceGlowColor { get; set; } = false;
-        
-        public string NoteTexture { get; set; } = "Default";
-        public bool InvertNoteTexture { get; set; } = false;
+        [JsonProperty] public bool NormalizeLeftFaceColor { get; set; } = false;
+        [JsonProperty] public bool NormalizeRightFaceColor { get; set; } = false;
         
         [UseConverter(typeof(HexColorConverter))]
-        public Color BombColor { get; set; } = new Color(0.251f, 0.251f, 0.251f, 1.0f);
-        public float BombColorBoost { get; set; } = 0.0f;
-        public string BombTexture { get; set; } = "Default";
-        public float BombScale { get; set; } = 1.0f;
-        public bool InvertBombTexture { get; set; } = false;
+        [JsonProperty, JsonConverter(typeof(ColorConverter))] public Color LeftFaceGlowColor { get; set; } = new Color(1f, 1f, 1f, 1f);
+        [JsonProperty] public float LeftFaceGlowColorNoteSkew { get; set; } = 1.0f;
+        [JsonProperty] public bool NormalizeLeftFaceGlowColor { get; set; } = false;
+        [UseConverter(typeof(HexColorConverter))]
+        [JsonProperty, JsonConverter(typeof(ColorConverter))] public Color RightFaceGlowColor { get; set; } = new Color(1f, 1f, 1f, 1f);
+        [JsonProperty] public float RightFaceGlowColorNoteSkew { get; set; } = 1.0f;
+        [JsonProperty] public bool NormalizeRightFaceGlowColor { get; set; } = false;
         
-        public bool EnableRainbowBombs { get; set; } = false;
-        public float RainbowBombTimeScale { get; set; } = 6.0f;
-        public float RainbowBombSaturation { get; set; } = 0.67f;
-        public float RainbowBombValue { get; set; } = 0.9f;
+        [JsonProperty] public string NoteTexture { get; set; } = "Default";
+        [JsonProperty] public bool InvertNoteTexture { get; set; } = false;
         
-        public string GlowTexture { get; set; } = "Glow";
+        [UseConverter(typeof(HexColorConverter))]
+        [JsonProperty, JsonConverter(typeof(ColorConverter))] public Color BombColor { get; set; } = new Color(0.251f, 0.251f, 0.251f, 1.0f);
+        [JsonProperty] public float BombColorBoost { get; set; } = 0.0f;
+        [JsonProperty] public string BombTexture { get; set; } = "Default";
+        [JsonProperty] public float BombScale { get; set; } = 1.0f;
+        [JsonProperty] public bool InvertBombTexture { get; set; } = false;
         
-        public string ArrowMesh { get; set; } = "Default";
+        [JsonProperty] public bool EnableRainbowBombs { get; set; } = false;
+        [JsonProperty] public float RainbowBombTimeScale { get; set; } = 6.0f;
+        [JsonProperty] public float RainbowBombSaturation { get; set; } = 0.67f;
+        [JsonProperty] public float RainbowBombValue { get; set; } = 0.9f;
+        
+        [JsonProperty] public string GlowTexture { get; set; } = "Glow";
+        
+        [JsonProperty] public string ArrowMesh { get; set; } = "Default";
         
         public bool FixDotsIfNoodle { get; set; } = true;
 
-        public float LeftMinBrightness { get; set; } = 0.0f;
-        public float LeftMaxBrightness { get; set; } = 1.0f;
-        public float RightMinBrightness { get; set; } = 0.0f;
-        public float RightMaxBrightness { get; set; } = 1.0f;
+        [JsonProperty] public float LeftMinBrightness { get; set; } = 0.0f;
+        [JsonProperty] public float LeftMaxBrightness { get; set; } = 1.0f;
+        [JsonProperty] public float RightMinBrightness { get; set; } = 0.0f;
+        [JsonProperty] public float RightMaxBrightness { get; set; } = 1.0f;
         
-        public string LeftGlowBlendOp { get; set; } = "Add";
-        public string RightGlowBlendOp { get; set; } = "Add";
+        [JsonProperty] public string LeftGlowBlendOp { get; set; } = "Add";
+        [JsonProperty] public string RightGlowBlendOp { get; set; } = "Add";
         
-        public Vector2 LeftGlowOffset { get; set; } = Vector2.zero;
-        [JsonIgnore, Ignore] public virtual float LeftGlowOffsetX
+        [JsonProperty] public Vector2 LeftGlowOffset { get; set; } = Vector2.zero;
+        [Ignore] public virtual float LeftGlowOffsetX
         {
             get => LeftGlowOffset.x;
             set
@@ -249,7 +249,7 @@ namespace NoteTweaks.Configuration
                 LeftGlowOffset = vec;
             }
         }
-        [JsonIgnore, Ignore] public virtual float LeftGlowOffsetY
+        [Ignore] public virtual float LeftGlowOffsetY
         {
             get => LeftGlowOffset.y;
             set
@@ -259,8 +259,8 @@ namespace NoteTweaks.Configuration
                 LeftGlowOffset = vec;
             }
         }
-        public Vector2 RightGlowOffset { get; set; } = Vector2.zero;
-        [JsonIgnore, Ignore] public virtual float RightGlowOffsetX
+        [JsonProperty] public Vector2 RightGlowOffset { get; set; } = Vector2.zero;
+        [Ignore] public virtual float RightGlowOffsetX
         {
             get => RightGlowOffset.x;
             set
@@ -270,7 +270,7 @@ namespace NoteTweaks.Configuration
                 RightGlowOffset = vec;
             }
         }
-        [JsonIgnore, Ignore] public virtual float RightGlowOffsetY
+        [Ignore] public virtual float RightGlowOffsetY
         {
             get => RightGlowOffset.y;
             set
@@ -281,21 +281,22 @@ namespace NoteTweaks.Configuration
             }
         }
         
-        public bool EnableNoteOutlines { get; set; } = false;
-        public bool EnableBombOutlines { get; set; } = false;
-        public int NoteOutlineScale { get; set; } = 5;
-        public int BombOutlineScale { get; set; } = 5;
+        [JsonProperty] public bool EnableNoteOutlines { get; set; } = false;
+        [JsonProperty] public bool EnableBombOutlines { get; set; } = false;
+        [JsonProperty] public int NoteOutlineScale { get; set; } = 5;
+        [JsonProperty] public int BombOutlineScale { get; set; } = 5;
         [UseConverter(typeof(HexColorConverter))]
-        public Color NoteOutlineLeftColor { get; set; } = Color.black;
-        public float NoteOutlineLeftColorSkew { get; set; } = 0.1f;
-        public bool NormalizeLeftOutlineColor { get; set; } = false;
-        public bool NormalizeRightOutlineColor { get; set; } = false;
+        [JsonProperty, JsonConverter(typeof(ColorConverter))] public Color NoteOutlineLeftColor { get; set; } = Color.black;
+        [JsonProperty] public float NoteOutlineLeftColorSkew { get; set; } = 0.1f;
+        [JsonProperty] public bool NormalizeLeftOutlineColor { get; set; } = false;
+        [JsonProperty] public bool NormalizeRightOutlineColor { get; set; } = false;
         [UseConverter(typeof(HexColorConverter))]
-        public Color NoteOutlineRightColor { get; set; } = Color.black;
-        public float NoteOutlineRightColorSkew { get; set; } = 0.1f;
+        [JsonProperty, JsonConverter(typeof(ColorConverter))] public Color NoteOutlineRightColor { get; set; } = Color.black;
+        [JsonProperty] public float NoteOutlineRightColorSkew { get; set; } = 0.1f;
         [UseConverter(typeof(HexColorConverter))]
-        public Color BombOutlineColor { get; set; } = Color.white;
+        [JsonProperty, JsonConverter(typeof(ColorConverter))] public Color BombOutlineColor { get; set; } = Color.white;
         
+        // leaving fog out of presets, think this should *always* be up to the user
         public bool EnableFog { get; set; } = true;
         public bool EnableHeightFog { get; set; } = true;
         public float FogStartOffset { get; set; } = 100f;
@@ -303,19 +304,19 @@ namespace NoteTweaks.Configuration
         public float FogHeightOffset { get; set; } = 0f;
         public float FogHeightScale { get; set; } = 2.5f;
         
-        public float RimDarkening { get; set; } = 0.2f;
-        public float RimOffset { get; set; } = -0.1f;
-        public float RimScale { get; set; } = 2f;
-        public float Smoothness { get; set; } = 0.95f;
-        public float RimCameraDistanceOffset { get; set; } = 5f;
+        [JsonProperty] public float RimDarkening { get; set; } = 0.2f;
+        [JsonProperty] public float RimOffset { get; set; } = -0.1f;
+        [JsonProperty] public float RimScale { get; set; } = 2f;
+        [JsonProperty] public float Smoothness { get; set; } = 0.95f;
+        [JsonProperty] public float RimCameraDistanceOffset { get; set; } = 5f;
         
-        public string RainbowBombMode { get; set; } = "Both";
+        [JsonProperty] public string RainbowBombMode { get; set; } = "Both";
         
-        public bool AddBloomForOutlines { get; set; } = false;
-        public bool AddBloomForFaceSymbols { get; set; } = false;
+        [JsonProperty] public bool AddBloomForOutlines { get; set; } = false;
+        [JsonProperty] public bool AddBloomForFaceSymbols { get; set; } = false;
         
-        public float OutlineBloomAmount { get; set; } = 0.1f;
-        public float FaceSymbolBloomAmount { get; set; } = 0.1f;
+        [JsonProperty] public float OutlineBloomAmount { get; set; } = 0.1f;
+        [JsonProperty] public float FaceSymbolBloomAmount { get; set; } = 0.1f;
 
         internal PluginConfig ShallowCopy()
         {

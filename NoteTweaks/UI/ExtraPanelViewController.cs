@@ -243,7 +243,7 @@ namespace NoteTweaks.UI
         
         [UIValue("PresetNames")]
         private List<object> PresetNames => ConfigurationPresetManager.Presets.Keys.Cast<object>().ToList();
-
+        
         [UIValue("SelectedPreset")]
         private string SelectedPreset = "";
 
@@ -264,8 +264,8 @@ namespace NoteTweaks.UI
         [UIAction("LoadPreset")]
         private void LoadPreset()
         {
-            ConfigurationPresetManager.LoadPreset(SelectedPreset);
             NotifyPropertyChanged(nameof(SelectedPreset));
+            ConfigurationPresetManager.LoadPreset(SelectedPreset);
         }
     }
 }

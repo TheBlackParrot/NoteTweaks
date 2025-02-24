@@ -1,19 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using IPA.Config.Data;
 using IPA.Config.Stores.Converters;
 using IPA.Utilities;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Newtonsoft.Json.Serialization;
 using UnityEngine;
 
 namespace NoteTweaks.Configuration
 {
     // https://github.com/kinsi55/CS_BeatSaber_Camera2/blob/6b6807d60da8e7c922bba0c74800f9095d93c247/Utils/JsonConverters.cs#L85
     // was going to just convert these to JArray objects but it looked ugly and i hated it
-    class Vector2Converter : JsonConverter<Vector2> {
+    public class Vector2Converter : JsonConverter<Vector2> {
         public override void WriteJson(JsonWriter writer, Vector2 vec, JsonSerializer serializer) {
             writer.WriteStartObject();
             writer.WritePropertyName("x");
@@ -44,7 +46,7 @@ namespace NoteTweaks.Configuration
             return vec;
         }
     }
-    class Vector3Converter : JsonConverter<Vector3> {
+    public class Vector3Converter : JsonConverter<Vector3> {
         public override void WriteJson(JsonWriter writer, Vector3 vec, JsonSerializer serializer) {
             writer.WriteStartObject();
             writer.WritePropertyName("x");
@@ -92,7 +94,7 @@ namespace NoteTweaks.Configuration
         public override Color ReadJson(JsonReader reader, Type objectType, Color existingValue, bool hasExistingValue, JsonSerializer serializer)
         {
             JToken val = JToken.Load(reader);
-            return Converter.FromValue(val.Value<Value>(), new object());
+            return Converter.FromValue(Value.Text(val.Value<string>()), new object());
         }
     }
     
@@ -138,29 +140,49 @@ namespace NoteTweaks.Configuration
 
         public static void LoadPreset(string presetName, bool shallow = false)
         {
+            Plugin.Log.Info($"Loading preset {presetName}...");
             if (!Presets.TryGetValue(presetName, out PluginConfig preset))
             {
+                Plugin.Log.Info($"No preset cached for {presetName}, trying from file");
                 string path = Path.Combine(PresetPath, presetName + ".json");
                 if (!File.Exists(path))
                 {
+                    Plugin.Log.Info("Preset file doesn't exist");
                     return;
                 }
                 
                 Presets[presetName] = JsonConvert.DeserializeObject(File.ReadAllText(path), typeof(PluginConfig)) as PluginConfig;
                 preset = Presets[presetName];
+                Plugin.Log.Info($"Deserialized preset {presetName}");
             }
 
             // just loading into the object, don't actually overwrite values
             if (shallow)
             {
+                Plugin.Log.Info($"Shallow copy of {presetName}, stopping");
                 return;
             }
 
             foreach (PropertyInfo property in typeof(PluginConfig).GetProperties())
             {
-                if (property.CanWrite)
+                if (property.CanWrite && (property.MemberType & MemberTypes.Property) == MemberTypes.Property)
                 {
+                    bool keepGoing = false;
+                    foreach (CustomAttributeData attributeData in property.CustomAttributes)
+                    {
+                        if (attributeData.AttributeType == typeof(JsonPropertyAttribute))
+                        {
+                            keepGoing = true;
+                        }
+                    }
+
+                    if (!keepGoing)
+                    {
+                        continue;
+                    }
+                    
                     property.SetValue(Config, property.GetValue(preset));
+                    Plugin.Log.Info($"Set {property.Name} to {property.GetValue(Config)} (expected: {property.GetValue(preset)})");
                 }
             }
             
