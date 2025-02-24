@@ -68,7 +68,7 @@
         <tab tags="tabs" tab-name="Presets">
             <vertical vertical-fit="PreferredSize" pref-height="65" pref-width="100" anchored-position-x="4" child-alignment="UpperCenter">
                 <horizontal>
-                    <dropdown-list-setting text="Select Preset" value="SelectedPreset" choices="PresetNames" bind-value="true"/>
+                    <dropdown-list-setting text="" value="SelectedPreset" choices="PresetNames" bind-value="true" apply-on-change="true"/>
                     <button text="Load" on-click="LoadPreset"/>
                 </horizontal>
                 
