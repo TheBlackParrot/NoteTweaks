@@ -183,11 +183,11 @@ namespace NoteTweaks.Configuration
         [UseConverter(typeof(HexColorConverter))]
         [JsonProperty, JsonConverter(typeof(ColorConverter))] public Color RightFaceColor { get; set; } = new Color(1f, 1f, 1f, 1f);
         
-        [JsonProperty] public bool EnableAccDot { get; set; } = false;
-        [JsonProperty] public int AccDotSize { get; set; } = 15;
+        public bool EnableAccDot { get; set; } = false;
+        public int AccDotSize { get; set; } = 15;
         [UseConverter(typeof(HexColorConverter))]
-        [JsonProperty, JsonConverter(typeof(ColorConverter))] public Color AccDotColor { get; set; } = new Color(1f, 1f, 1f, 1f);
-        [JsonProperty] public bool RenderAccDotsAboveSymbols { get; set; } = false;
+        public Color AccDotColor { get; set; } = new Color(1f, 1f, 1f, 1f);
+        public bool RenderAccDotsAboveSymbols { get; set; } = false;
         
         [JsonProperty] public int DotMeshSides { get; set; } = 16;
 
