@@ -293,6 +293,10 @@ namespace NoteTweaks.Patches
                 }
                 
                 Transform noteRoot = __instance.transform.GetChild(0);
+                
+                __instance.gameObject.TryGetComponent(out ColorNoteVisuals colorNoteVisuals);
+                ColorType colorType = __instance._noteData.colorType;
+                bool isLeft = colorType == ColorType.ColorA;
 
                 if (Config.EnableAccDot && __instance.gameplayType != NoteData.GameplayType.BurstSliderHead && !IsUsingHiddenTypeModifier)
                 {
@@ -326,6 +330,22 @@ namespace NoteTweaks.Patches
                                 originalAccDotMeshRenderer.renderingLayerMask = saberBoxMeshRenderer.renderingLayerMask;
                                 
                                 originalAccDotMeshRenderer.sharedMaterial = Materials.AccDotMaterial;
+                                
+                                Color accDotColor = colorNoteVisuals._noteColor;
+                                                
+                                if (isLeft ? Config.NormalizeLeftAccDotColor : Config.NormalizeRightAccDotColor)
+                                {
+                                    float colorScalar = accDotColor.maxColorComponent;
+                                    if (colorScalar != 0)
+                                    {
+                                        accDotColor /= colorScalar;
+                                    }
+                                }
+                                                    
+                                originalAccDotMeshRenderer.material.color =
+                                    Color.LerpUnclamped(isLeft ? Config.LeftAccDotColor : Config.RightAccDotColor,
+                                        accDotColor,
+                                        isLeft ? Config.LeftAccDotColorNoteSkew : Config.RightAccDotColorNoteSkew).ColorWithAlpha(0f);
                             }
                             originalAccDotObject.SetActive(true);
                             
@@ -345,12 +365,8 @@ namespace NoteTweaks.Patches
                 }
                 
                 List<string> objs = new List<string> { "NoteArrowGlow", "AddedNoteCircleGlow" };
-                
-                ColorType colorType = __instance._noteData.colorType;
-                bool isLeft = colorType == ColorType.ColorA;
 
                 // ok buddy, ok pal
-                GameNoteController instance = __instance;
                 objs.Do(objName =>
                 {
                     Transform glowTransform = noteRoot.Find(objName);
@@ -362,7 +378,7 @@ namespace NoteTweaks.Patches
                             glowRenderer.material.SetInt(Materials.BlendOpID, (int)operation);
                         }
                         
-                        if(glowTransform.gameObject.TryGetComponent(out MaterialPropertyBlockController materialPropertyBlockController) && instance.gameObject.TryGetComponent(out ColorNoteVisuals colorNoteVisuals))
+                        if(glowTransform.gameObject.TryGetComponent(out MaterialPropertyBlockController materialPropertyBlockController) && colorNoteVisuals != null)
                         {
                             Color glowColor = colorNoteVisuals._noteColor;
                             
@@ -524,6 +540,9 @@ namespace NoteTweaks.Patches
                     return;
                 }
                 
+                ColorType colorType = __instance._noteController.noteData.colorType;
+                bool isLeft = colorType == ColorType.ColorA;
+                
                 foreach (MeshRenderer meshRenderer in ____arrowMeshRenderers)
                 {
                     Transform arrowTransform = meshRenderer.gameObject.transform;
@@ -535,9 +554,6 @@ namespace NoteTweaks.Patches
                     arrowTransform.localPosition = position;
                     
                     meshRenderer.sharedMaterial = Materials.ReplacementArrowMaterial;
-                    
-                    ColorType colorType = __instance._noteController.noteData.colorType;
-                    bool isLeft = colorType == ColorType.ColorA;
 
                     if (meshRenderer.gameObject.name != "NoteArrowGlow")
                     {
@@ -604,9 +620,6 @@ namespace NoteTweaks.Patches
                     {
                         _dotGlowMesh = meshRenderer.GetComponent<MeshFilter>().mesh;
                     }
-                    
-                    ColorType colorType = __instance._noteController.noteData.colorType;
-                    bool isLeft = colorType == ColorType.ColorA;
 
                     Vector3 dotPosition;
                     Vector3 glowPosition;
@@ -760,6 +773,29 @@ namespace NoteTweaks.Patches
                         {
                             newGlowMeshRenderer.sharedMaterial = Materials.DotGlowMaterial;
                         }
+                    }
+                }
+                
+                if (Config.EnableAccDot)
+                {
+                    Transform accDotObject = __instance.transform.GetChild(0).Find("AccDotObject");
+                    if (accDotObject != null)
+                    {
+                        Color accDotColor = __instance._noteColor;
+                                                
+                        if (isLeft ? Config.NormalizeLeftAccDotColor : Config.NormalizeRightAccDotColor)
+                        {
+                            float colorScalar = accDotColor.maxColorComponent;
+                            if (colorScalar != 0)
+                            {
+                                accDotColor /= colorScalar;
+                            }
+                        }
+                                                    
+                        accDotObject.gameObject.GetComponent<Renderer>().material.color =
+                            Color.LerpUnclamped(isLeft ? Config.LeftAccDotColor : Config.RightAccDotColor,
+                                accDotColor,
+                                isLeft ? Config.LeftAccDotColorNoteSkew : Config.RightAccDotColorNoteSkew).ColorWithAlpha(0f);
                     }
                 }
             }

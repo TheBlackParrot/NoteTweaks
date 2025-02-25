@@ -351,10 +351,37 @@ namespace NoteTweaks.UI
             set => Config.AccDotSize = value;
         }
 
-        protected Color AccDotColor
+        protected Color LeftAccDotColor
         {
-            get => Config.AccDotColor;
-            set => Config.AccDotColor = value;
+            get => Config.LeftAccDotColor;
+            set => Config.LeftAccDotColor = value;
+        }
+        protected Color RightAccDotColor
+        {
+            get => Config.RightAccDotColor;
+            set => Config.RightAccDotColor = value;
+        }
+
+        protected float LeftAccDotColorNoteSkew
+        {
+            get => Config.LeftAccDotColorNoteSkew;
+            set => Config.LeftAccDotColorNoteSkew = value;
+        }
+        protected float RightAccDotColorNoteSkew
+        {
+            get => Config.RightAccDotColorNoteSkew;
+            set => Config.RightAccDotColorNoteSkew = value;
+        }
+
+        protected bool NormalizeLeftAccDotColor
+        {
+            get => Config.NormalizeLeftAccDotColor;
+            set => Config.NormalizeLeftAccDotColor = value;
+        }
+        protected bool NormalizeRightAccDotColor
+        {
+            get => Config.NormalizeRightAccDotColor;
+            set => Config.NormalizeRightAccDotColor = value;
         }
 
         protected bool RenderAccDotsAboveSymbols

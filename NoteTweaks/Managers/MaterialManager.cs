@@ -34,7 +34,6 @@ namespace NoteTweaks.Managers
         internal static float SaneAlphaValue => MainEffectContainer.value ? 1f : 0f;
         private static string MaterialIdentifier => MainEffectContainer.value ? "HD" : "LW";
         
-        private static readonly int Color0 = Shader.PropertyToID("_Color");
         internal static readonly int BlendOpID = Shader.PropertyToID("_BlendOp");
         private static readonly int CutoutTexScaleID = Shader.PropertyToID("_CutoutTexScale");
         internal static readonly int SrcFactorID = Shader.PropertyToID("_BlendSrcFactor");
@@ -251,7 +250,6 @@ namespace NoteTweaks.Managers
         {
             if (AccDotMaterial != null)
             {
-                AccDotMaterial.SetColor(Color0, Config.AccDotColor.ColorWithAlpha(0f));
                 return;
             }
 
@@ -265,7 +263,6 @@ namespace NoteTweaks.Managers
                 shaderKeywords = arrowMat.shaderKeywords.Where(x => x != "_ENABLE_COLOR_INSTANCING").ToArray(),
                 enabledKeywords = arrowMat.enabledKeywords.Where(x => x.name != "_ENABLE_COLOR_INSTANCING").ToArray()
             };
-            AccDotMaterial.SetColor(Color0, Config.AccDotColor.ColorWithAlpha(0f));
 
             // uncomment later maybe
             // Utils.Materials.RepairShader(AccDotDepthMaterial);
