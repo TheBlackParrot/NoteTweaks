@@ -69,7 +69,8 @@
             <vertical vertical-fit="PreferredSize" pref-height="65" pref-width="100" anchored-position-x="4">
                 <scroll-view spacing="0" pref-height="65" child-expand-width="true">
                     <horizontal spacing="3">
-                        <dropdown-list-setting text="Preset" value="SelectedPreset" choices="PresetNames" bind-value="true" apply-on-change="true" pref-width="70"/>
+                        <dropdown-list-setting id="PresetDropdown" text="Preset" value="SelectedPreset" choices="PresetNames"
+                                               bind-value="true" apply-on-change="true" pref-width="70"/>
                         <action-button text="Load" on-click="LoadPreset"/>
                     </horizontal>
                     
