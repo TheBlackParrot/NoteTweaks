@@ -134,46 +134,52 @@
         <None Include="Directory.Build.props" Condition="Exists('Directory.Build.props')"/>
         <None Include="Directory.Build.targets" Condition="Exists('Directory.Build.targets')"/>
         <None Include="NoteTweaks.csproj.user" Condition="Exists('NoteTweaks.csproj.user')"/>
+        <None Remove="bin\**" />
     </ItemGroup>
     <ItemGroup>
-        <EmbeddedResource Include="UI/BSML/Settings.bsml"/>
-        <EmbeddedResource Include="UI/BSML/Empty.bsml"/>
-        <EmbeddedResource Include="UI/BSML/ExtraPanel.bsml"/>
-        <EmbeddedResource Include="UI/BSML/SideSettings.bsml"/>
+        <EmbeddedResource Include="UI/BSML/Settings.bsml" />
+        <EmbeddedResource Include="UI/BSML/Empty.bsml" />
+        <EmbeddedResource Include="UI/BSML/ExtraPanel.bsml" />
+        <EmbeddedResource Include="UI/BSML/SideSettings.bsml" />
+        <EmbeddedResource Remove="bin\**" />
     </ItemGroup>
     <ItemGroup>
         <Folder Include="Resources/Textures/" />
-        <EmbeddedResource Include="Resources/Textures/ArrowDefaultGlow.png"/>
-        <EmbeddedResource Include="Resources/Textures/ArrowDefaultGlowInterlaced.png"/>
-        <EmbeddedResource Include="Resources/Textures/ArrowDefaultSolid.png"/>
-        <EmbeddedResource Include="Resources/Textures/ArrowLineGlow.png"/>
-        <EmbeddedResource Include="Resources/Textures/ArrowLineGlowInterlaced.png"/>
-        <EmbeddedResource Include="Resources/Textures/ArrowLineSolid.png"/>
-        <EmbeddedResource Include="Resources/Textures/ArrowTriangleGlow.png"/>
-        <EmbeddedResource Include="Resources/Textures/ArrowTriangleGlowInterlaced.png"/>
-        <EmbeddedResource Include="Resources/Textures/ArrowTriangleSolid.png"/>
-        <EmbeddedResource Include="Resources/Textures/ArrowChevronGlow.png"/>
-        <EmbeddedResource Include="Resources/Textures/ArrowChevronGlowInterlaced.png"/>
-        <EmbeddedResource Include="Resources/Textures/ArrowChevronSolid.png"/>
-        <EmbeddedResource Include="Resources/Textures/ArrowPointyGlow.png"/>
-        <EmbeddedResource Include="Resources/Textures/ArrowPointyGlowInterlaced.png"/>
-        <EmbeddedResource Include="Resources/Textures/ArrowPointySolid.png"/>
-        <EmbeddedResource Include="Resources/Textures/ArrowPentagonGlow.png"/>
-        <EmbeddedResource Include="Resources/Textures/ArrowPentagonGlowInterlaced.png"/>
-        <EmbeddedResource Include="Resources/Textures/ArrowPentagonSolid.png"/>
-        <EmbeddedResource Include="Resources/Textures/CircleGlow.png"/>
-        <EmbeddedResource Include="Resources/Textures/CircleGlowInterlaced.png"/>
-        <EmbeddedResource Include="Resources/Textures/CircleSolid.png"/>
-        <EmbeddedResource Include="Resources/Textures/CubemapSingles/Flat.png"/>
-        <EmbeddedResource Include="Resources/Textures/CubemapSingles/Flat Black.png"/>
-        <EmbeddedResource Include="Resources/Textures/CubemapSingles/Flat Dark.png"/>
-        <EmbeddedResource Include="Resources/Textures/CubemapSingles/Radials A.png"/>
-        <EmbeddedResource Include="Resources/Textures/CubemapSingles/Radials B.png"/>
-        <EmbeddedResource Include="Resources/Textures/CubemapSingles/Radials C.png"/>
-        <EmbeddedResource Include="Resources/Textures/CubemapSingles/Radials D.png"/>
-        <EmbeddedResource Include="Resources/Textures/CubemapSingles/Ripple A.png"/>
-        <EmbeddedResource Include="Resources/Textures/CubemapSingles/Ripple B.png"/>
-        <EmbeddedResource Include="Resources/Textures/CubemapSingles/Ripple C.png"/>
+        <EmbeddedResource Include="Resources/Textures/ArrowDefaultGlow.png" />
+        <EmbeddedResource Include="Resources/Textures/ArrowDefaultGlowInterlaced.png" />
+        <EmbeddedResource Include="Resources/Textures/ArrowDefaultSolid.png" />
+        <EmbeddedResource Include="Resources/Textures/ArrowLineGlow.png" />
+        <EmbeddedResource Include="Resources/Textures/ArrowLineGlowInterlaced.png" />
+        <EmbeddedResource Include="Resources/Textures/ArrowLineSolid.png" />
+        <EmbeddedResource Include="Resources/Textures/ArrowTriangleGlow.png" />
+        <EmbeddedResource Include="Resources/Textures/ArrowTriangleGlowInterlaced.png" />
+        <EmbeddedResource Include="Resources/Textures/ArrowTriangleSolid.png" />
+        <EmbeddedResource Include="Resources/Textures/ArrowChevronGlow.png" />
+        <EmbeddedResource Include="Resources/Textures/ArrowChevronGlowInterlaced.png" />
+        <EmbeddedResource Include="Resources/Textures/ArrowChevronSolid.png" />
+        <EmbeddedResource Include="Resources/Textures/ArrowPointyGlow.png" />
+        <EmbeddedResource Include="Resources/Textures/ArrowPointyGlowInterlaced.png" />
+        <EmbeddedResource Include="Resources/Textures/ArrowPointySolid.png" />
+        <EmbeddedResource Include="Resources/Textures/ArrowPentagonGlow.png" />
+        <EmbeddedResource Include="Resources/Textures/ArrowPentagonGlowInterlaced.png" />
+        <EmbeddedResource Include="Resources/Textures/ArrowPentagonSolid.png" />
+        <EmbeddedResource Include="Resources/Textures/CircleGlow.png" />
+        <EmbeddedResource Include="Resources/Textures/CircleGlowInterlaced.png" />
+        <EmbeddedResource Include="Resources/Textures/CircleSolid.png" />
+        <EmbeddedResource Include="Resources/Textures/CubemapSingles/Dimple A.png" />
+        <EmbeddedResource Include="Resources/Textures/CubemapSingles/Dimple B.png" />
+        <EmbeddedResource Include="Resources/Textures/CubemapSingles/Dimple C.png" />
+        <EmbeddedResource Include="Resources/Textures/CubemapSingles/Flat.png" />
+        <EmbeddedResource Include="Resources/Textures/CubemapSingles/Flat Black.png" />
+        <EmbeddedResource Include="Resources/Textures/CubemapSingles/Flat Dark.png" />
+        <EmbeddedResource Include="Resources/Textures/CubemapSingles/Flat Mid.png" />
+        <EmbeddedResource Include="Resources/Textures/CubemapSingles/Radials A.png" />
+        <EmbeddedResource Include="Resources/Textures/CubemapSingles/Radials B.png" />
+        <EmbeddedResource Include="Resources/Textures/CubemapSingles/Radials C.png" />
+        <EmbeddedResource Include="Resources/Textures/CubemapSingles/Radials D.png" />
+        <EmbeddedResource Include="Resources/Textures/CubemapSingles/Ripple A.png" />
+        <EmbeddedResource Include="Resources/Textures/CubemapSingles/Ripple B.png" />
+        <EmbeddedResource Include="Resources/Textures/CubemapSingles/Ripple C.png" />
         <EmbeddedResource Include="Resources/Textures/CubemapSingles/Soft Metallic A.png" />
         <EmbeddedResource Include="Resources/Textures/CubemapSingles/Soft Metallic B.png" />
     </ItemGroup>
@@ -193,6 +199,15 @@
         <None Include="Resources\Presets\High Contrast.json">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
+        <None Include="Resources\Presets\Neon.json">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Include="Resources\Presets\Presence.json">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Include="Resources\Presets\Visible.json">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
     </ItemGroup>
     <ItemGroup>
         <OutputCopy Include="$(OutputPath)Resources\Presets\Default.json" OutputPath="UserData\NoteTweaks\Presets\Default.json" />
@@ -200,5 +215,11 @@
         <OutputCopy Include="$(OutputPath)Resources\Presets\Shimmer.json" OutputPath="UserData\NoteTweaks\Presets\Shimmer.json" />
         <OutputCopy Include="$(OutputPath)Resources\Presets\Smooth.json" OutputPath="UserData\NoteTweaks\Presets\Smooth.json" />
         <OutputCopy Include="$(OutputPath)Resources\Presets\High Contrast.json" OutputPath="UserData\NoteTweaks\Presets\High Contrast.json" />
+        <OutputCopy Include="$(OutputPath)Resources\Presets\Neon.json" OutputPath="UserData\NoteTweaks\Presets\Neon.json" />
+        <OutputCopy Include="$(OutputPath)Resources\Presets\Presence.json" OutputPath="UserData\NoteTweaks\Presets\Presence.json" />
+        <OutputCopy Include="$(OutputPath)Resources\Presets\Visible.json" OutputPath="UserData\NoteTweaks\Presets\Visible.json" />
+    </ItemGroup>
+    <ItemGroup>
+      <Compile Remove="bin\**" />
     </ItemGroup>
 </Project>
