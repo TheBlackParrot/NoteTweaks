@@ -48,6 +48,8 @@ namespace NoteTweaks.UI
             NotePreviewViewController.UpdateColors();
             NotePreviewViewController.UpdateOutlines();
             NotePreviewViewController.NoteContainer.SetActive(true);
+            
+            _extraPanelViewController.UpdatePresetDropdown();
         }
 
         // ReSharper disable once ParameterHidesMember

@@ -158,7 +158,6 @@ namespace NoteTweaks.Configuration
                     }
                     
                     property.SetValue(Config, property.GetValue(preset));
-                    Plugin.Log.Info($"Set {property.Name} to {property.GetValue(Config)} (expected: {property.GetValue(preset)})");
                 }
             }
             
