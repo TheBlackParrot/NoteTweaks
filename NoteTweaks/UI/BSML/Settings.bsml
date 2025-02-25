@@ -386,20 +386,45 @@
 
     <tab tags="tabs" tab-name="Acc Dots">
         <vertical vertical-fit="PreferredSize" pref-height="70" pref-width="100" anchored-position-x="4">
-            <scroll-view spacing="0" pref-height="70" child-expand-width="true">
+            <vertical vertical-fit="PreferredSize" pad-left="1" pad-right="1" pref-width="100" child-control-height="false">
                 <toggle-setting apply-on-change="true" value="EnableAccDot" text="Enable Acc Dots" bind-value="true"
                                 hover-hint="Enable small dots in the center of notes to help show where to swing for accuracy"/>
-
-                <horizontal><text text="-----" font-size="4" color="#00000000"/></horizontal>
-
                 <toggle-setting apply-on-change="true" value="RenderAccDotsAboveSymbols" text="Render Above Symbols" bind-value="true"
                                 hover-hint="Render acc dots on top of symbols, rather than beneath them"/>
                 <slider-setting apply-on-change="true" value="AccDotSize" text="Acc Dot Size" bind-value="true"
                                 min="15" max="5" increment="1" integer-only="true" show-buttons="true" formatter="AccFormatter"
                                 hover-hint="Size of the acc dot relative to where to score for that accuracy value"/>
-                <color-setting apply-on-change="true" value="AccDotColor" text="Acc Dot Color" bind-value="true"
-                               hover-hint="Color of the acc dots"/>
-            </scroll-view>
+
+                <horizontal><text text="-----" font-size="2" color="#00000000"/></horizontal>
+
+                <tab-selector tab-tag="accDotTabs" id="accDotTabSelector"/>
+            </vertical>
+
+            <vertical vertical-fit="PreferredSize" pref-height="28" pref-width="100">
+                <tab tags="accDotTabs" tab-name="Left">
+                    <scroll-view spacing="0" pref-height="50" child-expand-width="true">
+                        <color-setting apply-on-change="true" value="LeftAccDotColor" text="Acc Dot Color" bind-value="true"
+                                       hover-hint="Color of the left hand acc dots"/>
+                        <slider-setting apply-on-change="true" value="LeftAccDotColorNoteSkew" text="Skew Towards Note Color" bind-value="true"
+                                        min="0.0" max="1.0" increment="0.01" show-buttons="true" formatter="PercentageFormatter"
+                                        hover-hint="Skew acc dot colors towards the note color"/>
+                        <toggle-setting apply-on-change="true" value="NormalizeLeftAccDotColor" text="Normalize Color Brightness" bind-value="true"
+                                        hover-hint="Normalizes the brightness of the acc dot color by the highest RGB component"/>
+                    </scroll-view>
+                </tab>
+
+                <tab tags="accDotTabs" tab-name="Right">
+                    <scroll-view spacing="0" pref-height="50" child-expand-width="true">
+                        <color-setting apply-on-change="true" value="RightAccDotColor" text="Acc Dot Color" bind-value="true"
+                                       hover-hint="Color of the right hand acc dots"/>
+                        <slider-setting apply-on-change="true" value="RightAccDotColorNoteSkew" text="Skew Towards Note Color" bind-value="true"
+                                        min="0.0" max="1.0" increment="0.01" show-buttons="true" formatter="PercentageFormatter"
+                                        hover-hint="Skew acc dot colors towards the note color"/>
+                        <toggle-setting apply-on-change="true" value="NormalizeRightAccDotColor" text="Normalize Color Brightness" bind-value="true"
+                                        hover-hint="Normalizes the brightness of the acc dot color by the highest RGB component"/>
+                    </scroll-view>
+                </tab>
+            </vertical>
         </vertical>
     </tab>
 

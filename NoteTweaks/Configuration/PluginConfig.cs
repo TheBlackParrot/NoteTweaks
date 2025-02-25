@@ -186,7 +186,13 @@ namespace NoteTweaks.Configuration
         public bool EnableAccDot { get; set; } = false;
         public int AccDotSize { get; set; } = 15;
         [UseConverter(typeof(HexColorConverter))]
-        public Color AccDotColor { get; set; } = new Color(1f, 1f, 1f, 1f);
+        public Color LeftAccDotColor { get; set; } = new Color(1f, 1f, 1f, 1f);
+        [UseConverter(typeof(HexColorConverter))]
+        public Color RightAccDotColor { get; set; } = new Color(1f, 1f, 1f, 1f);
+        public float LeftAccDotColorNoteSkew { get; set; } = 0.0f;
+        public float RightAccDotColorNoteSkew { get; set; } = 0.0f;
+        public bool NormalizeLeftAccDotColor { get; set; } = false;
+        public bool NormalizeRightAccDotColor { get; set; } = false;
         public bool RenderAccDotsAboveSymbols { get; set; } = false;
         
         [JsonProperty] public int DotMeshSides { get; set; } = 16;
