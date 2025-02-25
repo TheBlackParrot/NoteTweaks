@@ -7,6 +7,7 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using BeatSaberMarkupLanguage.Attributes;
+using BeatSaberMarkupLanguage.Components.Settings;
 using BeatSaberMarkupLanguage.ViewControllers;
 using IPA.Config.Stores.Converters;
 using IPA.Utilities;
@@ -241,18 +242,36 @@ namespace NoteTweaks.UI
                 return VersionManager.LatestVersion > VersionData.ModVersion;
             }
         }
+        
+        [UIComponent("PresetDropdown")]
+        #pragma warning disable CS0649
+        public DropDownListSetting PresetDropDown;
+        #pragma warning restore CS0649
+
+        internal void UpdatePresetDropdown()
+        {
+            if (PresetDropDown == null)
+            {
+                return;
+            }
+
+            PresetNames = GetPresetNames();
+            
+            PresetDropDown.Values = PresetNames;
+            PresetDropDown.UpdateChoices();
+        }
+
+        private static List<object> GetPresetNames()
+        {
+            List<string> files = Directory.GetFiles(ConfigurationPresetManager.PresetPath, "*.json").ToList();
+            files.Sort();
+            Plugin.Log.Info($"Found {files.Count} presets");
+
+            return files.Select(Path.GetFileNameWithoutExtension).Cast<object>().ToList();
+        }
 
         [UIValue("PresetNames")]
-        private List<object> PresetNames
-        {
-            get
-            {
-                string[] files = Directory.GetFiles(ConfigurationPresetManager.PresetPath, "*.json");
-                Plugin.Log.Info($"Found {files.Length} presets");
-
-                return files.Select(Path.GetFileNameWithoutExtension).Cast<object>().ToList();
-            }
-        }
+        private List<object> PresetNames = GetPresetNames();
 
         [UIValue("SelectedPreset")]
         private string SelectedPreset = "Default";
@@ -266,7 +285,8 @@ namespace NoteTweaks.UI
             NotifyPropertyChanged(nameof(PresetNameField));
             ConfigurationPresetManager.SavePreset(PresetNameField);
             
-            NotifyPropertyChanged(nameof(PresetNames));
+            UpdatePresetDropdown();
+            PresetDropDown.Value = PresetNames.Find(x => (string)x == PresetNameField);
         }
 
         [UIAction("LoadPreset")]
