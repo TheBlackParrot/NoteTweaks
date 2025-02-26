@@ -39,7 +39,6 @@
         <tab tags="tabs" tab-name="Tools">
             <vertical vertical-fit="PreferredSize" pref-height="65" pref-width="100" anchored-position-x="4" child-alignment="UpperCenter">
                 <button text="Export Settings for Settings Setter" on-click="export-settings-setter"/>
-                <text text="" font-size="2" font-color="#FFFFFF" rich-text="true" align="Left" id="export-text"/>
             </vertical>
         </tab>
     
@@ -81,5 +80,16 @@
                 </scroll-view>
             </vertical>
         </tab>
+        
+        <!-- click-events can use show-event/hide-event in parent modal wrappers, in case you ever look for this information -->
+        <modal move-to-center="true" clickerino-offerino-closerino="true" id="SaveStatusModal" size-delta="70 25"
+               show-event="ShowSaveStatus" hide-event="HideSaveStatus">
+            <vertical pad="3" spacing="3" horizontal-fit="PreferredSize" preferred-width="70" vertical-fit="Unconstrained" child-control-height="true"
+                      child-align="MiddleCenter"
+                      background="round-rect-panel" bg-color="#FFFFFF">
+                <text id="SaveStatusValue" text="" word-wrapping="true" font-align="Center" font-size="3" rich-text="true"/>
+                <primary-button text="Close" click-event="HideSaveStatus"/>
+            </vertical>
+        </modal>
     </modifier-container>
 </vertical>

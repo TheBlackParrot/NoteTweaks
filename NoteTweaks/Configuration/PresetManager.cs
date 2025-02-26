@@ -120,11 +120,22 @@ namespace NoteTweaks.Configuration
             SerializerSettings.MetadataPropertyHandling = MetadataPropertyHandling.Ignore;
         }
 
-        public static void SavePreset(string presetName)
+        public static string SavePreset(string presetName)
         {
             string path = Path.Combine(PresetPath, presetName + ".json");
-            
-            File.WriteAllText(path, Config.GetSerializedJson(SerializerSettings));
+            string[] dirs = path.Split(Path.DirectorySeparatorChar);
+            string safePath = String.Join(Path.DirectorySeparatorChar.ToString(), dirs.GetRange(dirs.Length - 4, 4).ToArray());
+
+            try
+            {
+                File.WriteAllText(path, Config.GetSerializedJson(SerializerSettings));
+                return $"<color=#FFFFFFCC>Saved preset to<color=#FFFFFFFF>\n{safePath}";
+            }
+            catch (Exception e)
+            {
+                Plugin.Log.Error(e);
+                return $"<color=#FFCCCCCC>Error with saving {safePath}<color=#FFCCCCFF>\n{e.GetType().Name}";
+            }
         }
 
         public static async Task LoadPreset(string presetName)

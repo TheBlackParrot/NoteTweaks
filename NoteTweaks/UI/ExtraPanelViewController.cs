@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using BeatSaberMarkupLanguage.Attributes;
 using BeatSaberMarkupLanguage.Components.Settings;
 using BeatSaberMarkupLanguage.ViewControllers;
+using HMUI;
 using IPA.Config.Stores.Converters;
 using IPA.Utilities;
 using JetBrains.Annotations;
@@ -92,11 +93,6 @@ namespace NoteTweaks.UI
         {
             Application.OpenURL($"https://github.com/TheBlackParrot/NoteTweaks/releases/tag/{VersionManager.LatestVersion.ToString(3)}");
         }
-        
-        [UIComponent("export-text")]
-        #pragma warning disable CS0649
-        private TextMeshProUGUI exportText;
-        #pragma warning restore CS0649
 
         private const BindingFlags BindingFlags = System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance;
         [UIAction("export-settings-setter")]
@@ -175,18 +171,22 @@ namespace NoteTweaks.UI
                     exports.Add($"_{propName[0].ToString().ToLower() + propName.Substring(1)}", value);
                 }
             }
+            
+            string[] dirs = filepath.Split(Path.DirectorySeparatorChar);
+            string safePath = String.Join(Path.DirectorySeparatorChar.ToString(), dirs.GetRange(dirs.Length - 4, 4).ToArray());
 
             try
             {
                 File.WriteAllText(filepath, JsonConvert.SerializeObject(exports, Formatting.Indented));
+                SaveStatusValue.text = $"<color=#FFFFFFCC>Exported settings to<color=#FFFFFFFF>\n{safePath}";
             }
             catch (Exception e)
             {
-                exportText.text = $"<color=#FF7777>Error while exporting: \n<color=#FFCCCC>{e.GetType().Name}";
-                return;
+                Plugin.Log.Error(e);
+                SaveStatusValue.text = $"<color=#FFCCCCCC>Error while exporting settings<color=#FFCCCCFF>\n{e.GetType().Name}";
             }
             
-            exportText.text = $"<color=#77FF77>Exported settings to: \n<color=#CCFFCC>{filepath}";
+            SaveStatusModal.Show(true, true);
         }
 
         protected bool Enabled
@@ -278,15 +278,24 @@ namespace NoteTweaks.UI
 
         [UIValue("presetNameField")]
         private string PresetNameField = "Preset";
+        
+        #pragma warning disable CS0649
+        [UIComponent("SaveStatusModal")]
+        private ModalView SaveStatusModal;
+        [UIComponent("SaveStatusValue")]
+        private TextMeshProUGUI SaveStatusValue;
+        #pragma warning restore CS0649
 
         [UIAction("SavePreset")]
         private void SavePreset()
         {
             NotifyPropertyChanged(nameof(PresetNameField));
-            ConfigurationPresetManager.SavePreset(PresetNameField);
+            SaveStatusValue.text = ConfigurationPresetManager.SavePreset(PresetNameField);
             
             UpdatePresetDropdown();
             PresetDropDown.Value = PresetNames.Find(x => (string)x == PresetNameField);
+            
+            SaveStatusModal.Show(true, true);
         }
 
         [UIAction("LoadPreset")]
