@@ -64,7 +64,7 @@
     <ItemGroup>
       <OldZips Include="$(DestinationDirectory)$(AssemblyName)*.zip"/>
     </ItemGroup>
-    <CreateItem Include="Resources\*.json">
+    <CreateItem Include="Resources\Presets\*.json">
       <Output TaskParameter="Include" ItemName="PresetsToCopy" />
     </CreateItem>
     <Copy SourceFiles="$(OutputAssemblyName).dll" DestinationFiles="$(ArtifactDestination)\Plugins\$(AssemblyName).dll" />
