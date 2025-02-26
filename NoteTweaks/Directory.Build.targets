@@ -68,6 +68,7 @@
       <Output TaskParameter="Include" ItemName="PresetsToCopy" />
     </CreateItem>
     <Copy SourceFiles="$(OutputAssemblyName).dll" DestinationFiles="$(ArtifactDestination)\Plugins\$(AssemblyName).dll" />
+    <Copy SourceFiles="$(OutputAssemblyName).pdb" DestinationFiles="$(ArtifactDestination)\Plugins\$(AssemblyName).pdb" />
     <Copy SourceFiles="@(PresetsToCopy)" DestinationFolder="$(ArtifactDestination)\UserData\NoteTweaks\Presets" />
     <Message Text="Version: $(Version), GameVersion: $(GameVersion)" Importance="high" />
     <Delete Files="@(OldZips)" TreatErrorsAsWarnings="true" ContinueOnError="true" />
