@@ -9,6 +9,7 @@ using IPA.Utilities;
 using JetBrains.Annotations;
 using NoteTweaks.Configuration;
 using NoteTweaks.Managers;
+using NoteTweaks.Patches;
 using NoteTweaks.Utils;
 using UnityEngine;
 using UnityEngine.Rendering;
@@ -368,27 +369,29 @@ namespace NoteTweaks.UI
                     continue;
                 }
 
+                bool isLeft = i % 2 == 0;
+
                 // scaling is intentionally done here
-                Color noteColor = (i % 2 == 0) ? leftColor * leftScale : rightColor * rightScale;
+                Color noteColor = isLeft ? leftColor * leftScale : rightColor * rightScale;
                 Color faceColor = noteColor;
 
                 float colorScalar = noteColor.maxColorComponent;
 
-                if (colorScalar != 0 && i % 2 == 0 ? Config.NormalizeLeftFaceColor : Config.NormalizeRightFaceColor)
+                if (colorScalar != 0 && isLeft ? Config.NormalizeLeftFaceColor : Config.NormalizeRightFaceColor)
                 {
                     faceColor /= colorScalar;
                 }
 
-                faceColor = Color.LerpUnclamped(i % 2 == 0 ? Config.LeftFaceColor : Config.RightFaceColor, faceColor, i % 2 == 0 ? Config.LeftFaceColorNoteSkew : Config.RightFaceColorNoteSkew).ColorWithAlpha(Materials.SaneAlphaValue);
+                faceColor = Color.LerpUnclamped(isLeft ? Config.LeftFaceColor : Config.RightFaceColor, faceColor, isLeft ? Config.LeftFaceColorNoteSkew : Config.RightFaceColorNoteSkew).ColorWithAlpha(Materials.SaneAlphaValue);
                 
-                Color glowColor = Color.LerpUnclamped(i % 2 == 0 ? Config.LeftFaceGlowColor : Config.RightFaceGlowColor, noteColor, i % 2 == 0 ? Config.LeftFaceGlowColorNoteSkew : Config.RightFaceGlowColorNoteSkew);
+                Color glowColor = Color.LerpUnclamped(isLeft ? Config.LeftFaceGlowColor : Config.RightFaceGlowColor, noteColor, isLeft ? Config.LeftFaceGlowColorNoteSkew : Config.RightFaceGlowColorNoteSkew);
                 
-                if (colorScalar != 0 && i % 2 == 0 ? Config.NormalizeLeftFaceGlowColor : Config.NormalizeRightFaceGlowColor)
+                if (colorScalar != 0 && isLeft ? Config.NormalizeLeftFaceGlowColor : Config.NormalizeRightFaceGlowColor)
                 {
                     glowColor /= colorScalar;
                 }
                 
-                glowColor.a = i % 2 == 0 ? Config.LeftGlowIntensity : Config.RightGlowIntensity;
+                glowColor.a = isLeft ? Config.LeftGlowIntensity : Config.RightGlowIntensity;
                 
                 foreach (MaterialPropertyBlockController controller in noteCube.GetComponents<MaterialPropertyBlockController>())
                 {
@@ -417,7 +420,7 @@ namespace NoteTweaks.UI
                         Transform childTransform = controller.transform.Find(childName);
                         if (childTransform)
                         {
-                            Enum.TryParse(i % 2 == 0 ? Config.LeftGlowBlendOp : Config.RightGlowBlendOp, out BlendOp operation);
+                            Enum.TryParse(isLeft ? Config.LeftGlowBlendOp : Config.RightGlowBlendOp, out BlendOp operation);
                             
                             if (childTransform.TryGetComponent(out MaterialPropertyBlockController childController))
                             {
@@ -439,6 +442,30 @@ namespace NoteTweaks.UI
                             }   
                         }
                     });
+                }
+                
+                Transform accDotObject = noteCube.transform.Find("AccDotObject");
+                if (accDotObject)
+                {
+                    if (accDotObject.TryGetComponent(out MeshRenderer accDotRenderer))
+                    {
+                        Color accDotColor = noteColor;
+                        
+                        if (isLeft ? Config.NormalizeLeftAccDotColor : Config.NormalizeRightAccDotColor)
+                        {
+                            float accDotColorScalar = accDotColor.maxColorComponent;
+                            if (accDotColorScalar != 0)
+                            {
+                                accDotColor /= accDotColorScalar;
+                            }
+                        }
+                        
+                        accDotRenderer.material.color =
+                            Color.LerpUnclamped(isLeft ? Config.LeftAccDotColor : Config.RightAccDotColor,
+                                    accDotColor,
+                                    isLeft ? Config.LeftAccDotColorNoteSkew : Config.RightAccDotColorNoteSkew)
+                                .ColorWithAlpha(0f);
+                    }
                 }
             }
         }
@@ -559,6 +586,36 @@ namespace NoteTweaks.UI
                 }
             }
         }
+        
+        private static GameObject AccDotObject => NotePhysicalTweaks.AccDotObject;
+        private static Vector3 AccDotObjectScale => Vector3.one * (NotePhysicalTweaks.AccDotSizeStep * (Mathf.Abs(Config.AccDotSize - 15) + 1));
+
+        public static void UpdateAccDots()
+        {
+            for (int i = 0; i < NoteContainer.transform.childCount; i++)
+            {
+                GameObject noteCube = NoteContainer.transform.GetChild(i).gameObject;
+                if (noteCube.name.Contains("_Chain_") || noteCube.name.Contains("_Bomb_"))
+                {
+                    continue;
+                }
+                
+                Transform accDotObject = noteCube.transform.Find("AccDotObject");
+                Transform accDotObjectDepthClear = noteCube.transform.Find("AccDotObjectDepthClear");
+                if (accDotObject)
+                {
+                    accDotObject.gameObject.SetActive(Config.EnableAccDot);
+                    accDotObjectDepthClear.gameObject.SetActive(Config.EnableAccDot);
+                    
+                    Vector3 scale = AccDotObjectScale * (_colliderSize.x / _colliderSize.y);
+                    accDotObject.localScale = scale;
+                    accDotObjectDepthClear.localScale = scale;
+
+                    accDotObjectDepthClear.GetComponent<Renderer>().material.renderQueue = Materials.AccDotDepthMaterial.renderQueue;
+                    accDotObject.GetComponent<Renderer>().material.renderQueue = Materials.AccDotMaterial.renderQueue; // wtf
+                }
+            }
+        }
 
         private static void CreateChainNote(BurstSliderGameNoteController chainPrefab, string extraName, int cell, int linkNum)
         {
@@ -640,6 +697,8 @@ namespace NoteTweaks.UI
             
             chainNote.gameObject.SetActive(true);
         }
+        
+        private static Vector3 _colliderSize = Vector3.zero;
 
         private static void CreateNote(GameNoteController notePrefab, string extraName, int cell)
         {
@@ -647,6 +706,11 @@ namespace NoteTweaks.UI
             noteCube.gameObject.SetActive(false);
             
             noteCube.name = "_NoteTweaks_PreviewNote_" + extraName;
+            if (_colliderSize == Vector3.zero)
+            {
+                _colliderSize = noteCube.transform.Find("BigCuttable")
+                    .GetComponent<NoteBigCuttableColliderSize>()._defaultColliderSize;
+            }
             DestroyImmediate(noteCube.transform.Find("BigCuttable").gameObject);
             DestroyImmediate(noteCube.transform.Find("SmallCuttable").gameObject);
             
@@ -754,6 +818,28 @@ namespace NoteTweaks.UI
                 noteCube.transform.Find("NoteCircleGlow").GetComponent<Renderer>().enabled = true;
                 noteCube.transform.Find("AddedNoteCircleGlow").GetComponent<Renderer>().enabled = true;
             }
+            
+            GameObject originalAccDotClearDepthObject = Instantiate(AccDotObject, noteCube.transform);
+            originalAccDotClearDepthObject.name = "AccDotObjectDepthClear";
+            if (originalAccDotClearDepthObject.TryGetComponent(out MeshRenderer originalAccDotClearDepthMeshRenderer))
+            {
+                originalAccDotClearDepthMeshRenderer.material = Materials.AccDotDepthMaterial;
+                originalAccDotClearDepthMeshRenderer.allowOcclusionWhenDynamic = false;
+                originalAccDotClearDepthMeshRenderer.renderingLayerMask = noteMeshRenderer.renderingLayerMask;
+            }
+            originalAccDotClearDepthObject.SetActive(Config.EnableAccDot);
+
+            GameObject originalAccDotObject = Instantiate(AccDotObject, noteCube.transform);
+            originalAccDotObject.name = "AccDotObject";
+            if (originalAccDotObject.TryGetComponent(out MeshRenderer originalAccDotMeshRenderer))
+            {
+                originalAccDotMeshRenderer.sharedMaterial = Materials.AccDotMaterial;
+                originalAccDotMeshRenderer.allowOcclusionWhenDynamic = false;
+                originalAccDotMeshRenderer.renderingLayerMask = noteMeshRenderer.renderingLayerMask;
+            }
+            originalAccDotObject.SetActive(Config.EnableAccDot);
+            
+            // i set acc dot object activeness in its own update function but it, needs to be here, too? idk
             
             noteCube.gameObject.SetActive(true);
         }
@@ -959,7 +1045,8 @@ namespace NoteTweaks.UI
         internal static async Task RefreshEverything()
         {
             await Materials.UpdateAll();
-                
+
+            UpdateAccDots();
             UpdateColors();
             UpdateBombColors();
             UpdateBombScale();
@@ -1034,6 +1121,7 @@ namespace NoteTweaks.UI
                                 CreateBomb(bombPrefab, i.ToString(), i);
                             }
                             
+                            UpdateAccDots();
                             UpdateColors();
                             UpdateBombColors();
                             UpdateBombScale();

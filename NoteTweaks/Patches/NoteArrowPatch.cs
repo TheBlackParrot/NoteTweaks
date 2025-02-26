@@ -48,8 +48,20 @@ namespace NoteTweaks.Patches
             return obj;
         }
 
-        private static GameObject _accDotObject = CreateAccDotObject();
-        private const float AccDotSizeStep = ScoreModel.kMaxDistanceForDistanceToCenterScore / ScoreModel.kMaxCenterDistanceCutScore;
+        private static GameObject _accDotObject;
+        internal static GameObject AccDotObject
+        {
+            get
+            {
+                if (_accDotObject == null)
+                {
+                    _accDotObject = CreateAccDotObject();
+                }
+                return _accDotObject;
+            }
+        }
+
+        internal const float AccDotSizeStep = ScoreModel.kMaxDistanceForDistanceToCenterScore / ScoreModel.kMaxCenterDistanceCutScore;
 
         internal static bool AutoDisable;
         private static bool _fixDots = true;
@@ -296,19 +308,14 @@ namespace NoteTweaks.Patches
 
                 if (Config.EnableAccDot && __instance.gameplayType != NoteData.GameplayType.BurstSliderHead && !IsUsingHiddenTypeModifier)
                 {
-                    if (!_accDotObject)
-                    {
-                        _accDotObject = CreateAccDotObject();
-                    }
-                    
-                    _accDotObject.transform.localScale = Vector3.one * (AccDotSizeStep * (Mathf.Abs(Config.AccDotSize - 15) + 1));
+                    AccDotObject.transform.localScale = Vector3.one * (AccDotSizeStep * (Mathf.Abs(Config.AccDotSize - 15) + 1));
                     
                     foreach (BoxCuttableBySaber saberBox in ____bigCuttableBySaberList)
                     {
                         Transform originalAccDot = saberBox.transform.parent.Find("AccDotObject");
                         if (!originalAccDot && saberBox.transform.parent.TryGetComponent(out MeshRenderer saberBoxMeshRenderer))
                         {
-                            GameObject originalAccDotClearDepthObject = Object.Instantiate(_accDotObject, saberBox.transform.parent);
+                            GameObject originalAccDotClearDepthObject = Object.Instantiate(AccDotObject, saberBox.transform.parent);
                             originalAccDotClearDepthObject.name = "AccDotObjectDepthClear";
                             if (originalAccDotClearDepthObject.TryGetComponent(out MeshRenderer originalAccDotClearDepthMeshRenderer))
                             {
@@ -318,7 +325,7 @@ namespace NoteTweaks.Patches
                             }
                             originalAccDotClearDepthObject.SetActive(true);
 
-                            GameObject originalAccDotObject = Object.Instantiate(_accDotObject, saberBox.transform.parent);
+                            GameObject originalAccDotObject = Object.Instantiate(AccDotObject, saberBox.transform.parent);
                             originalAccDotObject.name = "AccDotObject";
                             if (originalAccDotObject.TryGetComponent(out MeshRenderer originalAccDotMeshRenderer))
                             {
