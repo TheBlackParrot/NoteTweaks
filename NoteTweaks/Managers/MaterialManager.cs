@@ -415,7 +415,7 @@ namespace NoteTweaks.Managers
             Textures.LoadNoteTexture(Config.BombTexture, true);
         }
 
-        private static void UpdateRenderQueues()
+        internal static void UpdateRenderQueues()
         {
             if (Config.EnableAccDot)
             {
