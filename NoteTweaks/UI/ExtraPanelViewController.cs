@@ -293,6 +293,7 @@ namespace NoteTweaks.UI
         {
             NotifyPropertyChanged(nameof(PresetNameField));
             SaveStatusValue.text = ConfigurationPresetManager.SavePreset(PresetNameField);
+            SaveStatusValue.lineSpacing = -17;
             
             UpdatePresetDropdown();
             PresetDropDown.Value = PresetNames.Find(x => (string)x == PresetNameField);
@@ -306,6 +307,7 @@ namespace NoteTweaks.UI
         private void ShowLoadConfirmation()
         {
             NotifyPropertyChanged(nameof(SelectedPreset));
+            LoadConfirmationText.lineSpacing = -17; // rider didn't like it in the constructor >:(
             LoadConfirmationText.text = $"Are you sure you want to load <color=#FFFFCC>{SelectedPreset}<color=#FFFFFF>?\n<color=#FFCCCC>This <color=#FF9999><b>WILL OVERWRITE</b> <color=#FFCCCC>your current settings!";
         }
         
