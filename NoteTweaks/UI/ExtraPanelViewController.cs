@@ -284,6 +284,8 @@ namespace NoteTweaks.UI
         private ModalView SaveStatusModal;
         [UIComponent("SaveStatusValue")]
         private TextMeshProUGUI SaveStatusValue;
+        [UIComponent("LoadConfirmationText")]
+        private TextMeshProUGUI LoadConfirmationText;
         #pragma warning restore CS0649
 
         [UIAction("SavePreset")]
@@ -298,6 +300,13 @@ namespace NoteTweaks.UI
             SaveStatusModal.Show(true, true);
         }
 
+        [UIAction("ShowLoadConfirmation")]
+        private void ShowLoadConfirmation()
+        {
+            NotifyPropertyChanged(nameof(SelectedPreset));
+            LoadConfirmationText.text = $"Are you sure you want to load <color=#FFFFCC>{SelectedPreset}<color=#FFFFFF>?\n<color=#FFCCCC>This <color=#FF9999><b>WILL OVERWRITE</b> <color=#FFCCCC>your current settings!";
+        }
+        
         [UIAction("LoadPreset")]
         private async Task LoadPreset()
         {
