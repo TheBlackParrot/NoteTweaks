@@ -64,7 +64,11 @@
     <ItemGroup>
       <OldZips Include="$(DestinationDirectory)$(AssemblyName)*.zip"/>
     </ItemGroup>
+    <CreateItem Include="Resources\*.json">
+      <Output TaskParameter="Include" ItemName="PresetsToCopy" />
+    </CreateItem>
     <Copy SourceFiles="$(OutputAssemblyName).dll" DestinationFiles="$(ArtifactDestination)\Plugins\$(AssemblyName).dll" />
+    <Copy SourceFiles="@(PresetsToCopy)" DestinationFolder="$(ArtifactDestination)\UserData\NoteTweaks\Presets" />
     <Message Text="Version: $(Version), GameVersion: $(GameVersion)" Importance="high" />
     <Delete Files="@(OldZips)" TreatErrorsAsWarnings="true" ContinueOnError="true" />
     <ZipDir SourceDirectory="$(ArtifactDestination)" DestinationFile="$(DestinationDirectory)$(ArtifactName).zip" />
