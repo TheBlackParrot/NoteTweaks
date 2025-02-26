@@ -86,7 +86,8 @@ namespace NoteTweaks.Managers
         {
             "Dimple A", "Dimple B", "Dimple C",
             "Flat", "Flat Black", "Flat Dark", "Flat Mid",
-            "Radials A", "Radials B", "Radials C", "Radials D",
+            "Kaleido A", "Kaleido B", "Kaleido C", "Kaleido D", "Kaleido E", "Kaleido F", "Kaleido G", "Kaleido H",
+            "Radials A", "Radials B", "Radials C", "Radials D", "Radials E", "Radials F", "Radials G", "Radials H", "Radials I", "Radials J", "Radials K",
             "Ripple A", "Ripple B", "Ripple C",
             "Soft Metallic A", "Soft Metallic B"
         };
