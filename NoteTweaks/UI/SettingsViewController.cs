@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -422,7 +423,16 @@ namespace NoteTweaks.UI
             set
             {
                 Config.RenderAccDotsAboveSymbols = value;
-                Materials.UpdateRenderQueues();
+                
+                try
+                {
+                    Materials.UpdateRenderQueues();
+                }
+                catch
+                {
+                    // i... ok??
+                }
+
                 NotePreviewViewController.UpdateAccDots();
             }
         }
