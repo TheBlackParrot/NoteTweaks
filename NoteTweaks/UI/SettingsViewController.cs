@@ -341,6 +341,7 @@ namespace NoteTweaks.UI
             set
             {
                 Config.EnableAccDot = value;
+                NotePreviewViewController.UpdateAccDots();
                 NotifyPropertyChanged();
             }
         }
@@ -348,46 +349,82 @@ namespace NoteTweaks.UI
         protected int AccDotSize
         {
             get => Config.AccDotSize;
-            set => Config.AccDotSize = value;
+            set
+            {
+                Config.AccDotSize = value;
+                NotePreviewViewController.UpdateAccDots();
+            }
         }
 
         protected Color LeftAccDotColor
         {
             get => Config.LeftAccDotColor;
-            set => Config.LeftAccDotColor = value;
+            set
+            {
+                Config.LeftAccDotColor = value;
+                NotePreviewViewController.UpdateColors();
+            }
         }
+
         protected Color RightAccDotColor
         {
             get => Config.RightAccDotColor;
-            set => Config.RightAccDotColor = value;
+            set
+            {
+                Config.RightAccDotColor = value;
+                NotePreviewViewController.UpdateColors();
+            }
         }
 
         protected float LeftAccDotColorNoteSkew
         {
             get => Config.LeftAccDotColorNoteSkew;
-            set => Config.LeftAccDotColorNoteSkew = value;
+            set
+            {
+                Config.LeftAccDotColorNoteSkew = value;
+                NotePreviewViewController.UpdateColors();
+            }
         }
+
         protected float RightAccDotColorNoteSkew
         {
             get => Config.RightAccDotColorNoteSkew;
-            set => Config.RightAccDotColorNoteSkew = value;
+            set
+            {
+                Config.RightAccDotColorNoteSkew = value;
+                NotePreviewViewController.UpdateColors();
+            }
         }
 
         protected bool NormalizeLeftAccDotColor
         {
             get => Config.NormalizeLeftAccDotColor;
-            set => Config.NormalizeLeftAccDotColor = value;
+            set
+            {
+                Config.NormalizeLeftAccDotColor = value;
+                NotePreviewViewController.UpdateColors();
+            }
         }
+
         protected bool NormalizeRightAccDotColor
         {
             get => Config.NormalizeRightAccDotColor;
-            set => Config.NormalizeRightAccDotColor = value;
+            set
+            {
+                Config.NormalizeRightAccDotColor = value;
+                NotePreviewViewController.UpdateColors();
+            }
         }
 
         protected bool RenderAccDotsAboveSymbols
         {
             get => Config.RenderAccDotsAboveSymbols;
-            set => Config.RenderAccDotsAboveSymbols = value;
+            set
+            {
+                Config.RenderAccDotsAboveSymbols = value;
+                Materials.UpdateRenderQueues();
+                NotePreviewViewController.UpdateAccDots();
+            }
         }
 
         protected int DotMeshSides
