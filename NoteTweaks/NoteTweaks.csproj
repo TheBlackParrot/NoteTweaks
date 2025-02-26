@@ -210,14 +210,14 @@
         </None>
     </ItemGroup>
     <ItemGroup>
-        <OutputCopy Include="$(OutputPath)Resources\Presets\Default.json" OutputPath="UserData\NoteTweaks\Presets\Default.json" />
-        <OutputCopy Include="$(OutputPath)Resources\Presets\Outlines.json" OutputPath="UserData\NoteTweaks\Presets\Outlines.json" />
-        <OutputCopy Include="$(OutputPath)Resources\Presets\Shimmer.json" OutputPath="UserData\NoteTweaks\Presets\Shimmer.json" />
-        <OutputCopy Include="$(OutputPath)Resources\Presets\Smooth.json" OutputPath="UserData\NoteTweaks\Presets\Smooth.json" />
-        <OutputCopy Include="$(OutputPath)Resources\Presets\High Contrast.json" OutputPath="UserData\NoteTweaks\Presets\High Contrast.json" />
-        <OutputCopy Include="$(OutputPath)Resources\Presets\Neon.json" OutputPath="UserData\NoteTweaks\Presets\Neon.json" />
-        <OutputCopy Include="$(OutputPath)Resources\Presets\Presence.json" OutputPath="UserData\NoteTweaks\Presets\Presence.json" />
-        <OutputCopy Include="$(OutputPath)Resources\Presets\Visible.json" OutputPath="UserData\NoteTweaks\Presets\Visible.json" />
+        <OutputCopy Include="Resources\Presets\Default.json" OutputPath="UserData\NoteTweaks\Presets\Default.json" />
+        <OutputCopy Include="Resources\Presets\Outlines.json" OutputPath="UserData\NoteTweaks\Presets\Outlines.json" />
+        <OutputCopy Include="Resources\Presets\Shimmer.json" OutputPath="UserData\NoteTweaks\Presets\Shimmer.json" />
+        <OutputCopy Include="Resources\Presets\Smooth.json" OutputPath="UserData\NoteTweaks\Presets\Smooth.json" />
+        <OutputCopy Include="Resources\Presets\High Contrast.json" OutputPath="UserData\NoteTweaks\Presets\High Contrast.json" />
+        <OutputCopy Include="Resources\Presets\Neon.json" OutputPath="UserData\NoteTweaks\Presets\Neon.json" />
+        <OutputCopy Include="Resources\Presets\Presence.json" OutputPath="UserData\NoteTweaks\Presets\Presence.json" />
+        <OutputCopy Include="Resources\Presets\Visible.json" OutputPath="UserData\NoteTweaks\Presets\Visible.json" />
     </ItemGroup>
     <ItemGroup>
       <Compile Remove="bin\**" />
