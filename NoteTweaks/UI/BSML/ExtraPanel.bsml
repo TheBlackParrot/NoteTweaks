@@ -98,9 +98,9 @@
                       child-align="MiddleCenter"
                       background="round-rect-panel" bg-color="#FFFFFF">
                 <text id="LoadConfirmationText" text="" word-wrapping="true" font-align="Center" font-size="3" rich-text="true"/>
-                <horizontal spacing="2">
+                <horizontal>
                     <primary-button text="Load" on-click="LoadPreset" click-event="HideLoadConfirmation"/>
-                    <primary-button text="Cancel" click-event="HideLoadConfirmation"/>
+                    <button text="Cancel" click-event="HideLoadConfirmation"/>
                 </horizontal>
             </vertical>
         </modal>
