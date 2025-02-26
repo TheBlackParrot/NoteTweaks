@@ -296,6 +296,8 @@ namespace NoteTweaks.UI
             
             UpdatePresetDropdown();
             PresetDropDown.Value = PresetNames.Find(x => (string)x == PresetNameField);
+            SelectedPreset = PresetDropDown.Value.ToString();
+            NotifyPropertyChanged(nameof(SelectedPreset));
             
             SaveStatusModal.Show(true, true);
         }
