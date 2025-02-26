@@ -70,7 +70,7 @@
                     <horizontal spacing="3">
                         <dropdown-list-setting id="PresetDropdown" text="Preset" value="SelectedPreset" choices="PresetNames"
                                                bind-value="true" apply-on-change="true" pref-width="70"/>
-                        <action-button text="Load" on-click="LoadPreset"/>
+                        <action-button text="Load" on-click="ShowLoadConfirmation" click-event="ShowLoadConfirmation"/>
                     </horizontal>
                     
                     <horizontal spacing="3">
@@ -89,6 +89,19 @@
                       background="round-rect-panel" bg-color="#FFFFFF">
                 <text id="SaveStatusValue" text="" word-wrapping="true" font-align="Center" font-size="3" rich-text="true"/>
                 <primary-button text="Close" click-event="HideSaveStatus"/>
+            </vertical>
+        </modal>
+
+        <modal move-to-center="true" clickerino-offerino-closerino="true" id="LoadConfirmationModal" size-delta="70 25"
+               show-event="ShowLoadConfirmation" hide-event="HideLoadConfirmation">
+            <vertical pad="3" spacing="3" horizontal-fit="PreferredSize" preferred-width="70" vertical-fit="Unconstrained" child-control-height="true"
+                      child-align="MiddleCenter"
+                      background="round-rect-panel" bg-color="#FFFFFF">
+                <text id="LoadConfirmationText" text="" word-wrapping="true" font-align="Center" font-size="3" rich-text="true"/>
+                <horizontal spacing="2">
+                    <primary-button text="Load" on-click="LoadPreset" click-event="HideLoadConfirmation"/>
+                    <primary-button text="Cancel" click-event="HideLoadConfirmation"/>
+                </horizontal>
             </vertical>
         </modal>
     </modifier-container>
