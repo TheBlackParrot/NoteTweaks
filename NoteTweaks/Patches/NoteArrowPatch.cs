@@ -128,6 +128,8 @@ namespace NoteTweaks.Patches
                     return true;
                 }
                 
+                Managers.Meshes.UpdateSphereMesh(Config.BombMeshSlices, Config.BombMeshStacks, Config.BombMeshSmoothNormals, Config.BombMeshWorldNormals);
+                
                 UnityMainThreadTaskScheduler.Factory.StartNew(async () =>
                 {
                     await Materials.UpdateAll();
