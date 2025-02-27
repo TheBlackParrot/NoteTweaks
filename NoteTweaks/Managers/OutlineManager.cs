@@ -43,9 +43,9 @@ namespace NoteTweaks.Managers
                 InvertedChainHeadMesh = _defaultChainHeadMesh;
             }
         }
-        public static void UpdateDefaultBombMesh(Mesh mesh)
+        public static void UpdateDefaultBombMesh(Mesh mesh, bool force = false)
         {
-            if (_defaultBombMesh == null)
+            if (_defaultBombMesh == null || force)
             {
                 _defaultBombMesh = mesh;
                 InvertedBombMesh = _defaultBombMesh;

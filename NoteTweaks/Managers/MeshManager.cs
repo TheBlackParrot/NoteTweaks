@@ -14,6 +14,28 @@ namespace NoteTweaks.Managers
         private static readonly Mesh PentagonArrowMesh = Utils.Meshes.GeneratePentagonMesh();
         private static Mesh _defaultArrowMesh;
 
+        private static int _sphereSlices = Config.BombMeshSlices;
+        private static int _sphereStacks = Config.BombMeshStacks;
+        private static bool _sphereNormalsRelative = Config.BombMeshSmoothNormals;
+        private static bool _sphereNormalsWorld = Config.BombMeshWorldNormals;
+        private const float SphereRadius = 0.225f;
+        private static Mesh _sphereMesh = Utils.MeshExtensions.CreateSphere(SphereRadius, _sphereSlices, _sphereStacks, _sphereNormalsWorld);
+        private static Mesh _defaultBombMesh;
+
+        public static Mesh CurrentBombMesh
+        {
+            get
+            {
+                switch (Config.BombMesh)
+                {
+                    case "Sphere":
+                        return _sphereMesh;
+                    default:
+                        return _defaultBombMesh;
+                }
+            }
+        }
+
         public static Mesh CurrentArrowMesh
         {
             get
@@ -44,6 +66,28 @@ namespace NoteTweaks.Managers
             {
                 _defaultArrowMesh = mesh;
             }
+        }
+        
+        public static void UpdateDefaultBombMesh(Mesh mesh)
+        {
+            if (_defaultBombMesh == null)
+            {
+                _defaultBombMesh = mesh;
+            }
+        }
+
+        public static void UpdateSphereMesh(int slices, int stacks, bool relativeNormals = false, bool worldNormals = false)
+        {
+            if (slices == _sphereSlices && stacks == _sphereStacks && relativeNormals == _sphereNormalsRelative && worldNormals == _sphereNormalsWorld)
+            {
+                return;
+            }
+            
+            _sphereSlices = slices;
+            _sphereStacks = stacks;
+            _sphereNormalsRelative = relativeNormals;
+            _sphereNormalsWorld = worldNormals;
+            _sphereMesh = Utils.MeshExtensions.CreateSphere(SphereRadius, _sphereSlices, _sphereStacks, _sphereNormalsWorld);
         }
     }
 }
