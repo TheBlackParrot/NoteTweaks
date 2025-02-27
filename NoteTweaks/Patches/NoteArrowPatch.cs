@@ -133,6 +133,7 @@ namespace NoteTweaks.Patches
                 Materials.UpdateMainEffectContainerWorkaroundThing();
                 
                 Managers.Textures.SetDefaultTextures();
+                Managers.Meshes.UpdateSphereMesh(Config.BombMeshSlices, Config.BombMeshStacks, Config.BombMeshSmoothNormals, Config.BombMeshWorldNormals);
                 Materials.UpdateAll();
                 BombPatch.SetStaticBombColor();
             }

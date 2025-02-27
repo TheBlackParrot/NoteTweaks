@@ -16,7 +16,7 @@ namespace NoteTweaks.Managers
 
         private static int _sphereSlices = Config.BombMeshSlices;
         private static int _sphereStacks = Config.BombMeshStacks;
-        private static bool _sphereNormalsRelative = Config.BombMeshSmoothNormals;
+        private static bool _sphereNormalsSmooth = Config.BombMeshSmoothNormals;
         private static bool _sphereNormalsWorld = Config.BombMeshWorldNormals;
         private const float SphereRadius = 0.225f;
         private static Mesh _sphereMesh = Utils.MeshExtensions.CreateSphere(SphereRadius, _sphereSlices, _sphereStacks, _sphereNormalsWorld);
@@ -76,16 +76,18 @@ namespace NoteTweaks.Managers
             }
         }
 
-        public static void UpdateSphereMesh(int slices, int stacks, bool relativeNormals = false, bool worldNormals = false)
+        public static void UpdateSphereMesh(int slices, int stacks, bool smoothNormals = false, bool worldNormals = false)
         {
-            if (slices == _sphereSlices && stacks == _sphereStacks && relativeNormals == _sphereNormalsRelative && worldNormals == _sphereNormalsWorld)
+            if (slices == _sphereSlices && stacks == _sphereStacks && smoothNormals == _sphereNormalsSmooth && worldNormals == _sphereNormalsWorld)
             {
                 return;
             }
             
+            Plugin.Log.Info($"Wants a sphere mesh: {slices} slices, {stacks} stacks, smooth: {smoothNormals}, world: {worldNormals}");
+            
             _sphereSlices = slices;
             _sphereStacks = stacks;
-            _sphereNormalsRelative = relativeNormals;
+            _sphereNormalsSmooth = smoothNormals;
             _sphereNormalsWorld = worldNormals;
             _sphereMesh = Utils.MeshExtensions.CreateSphere(SphereRadius, _sphereSlices, _sphereStacks, _sphereNormalsWorld);
         }

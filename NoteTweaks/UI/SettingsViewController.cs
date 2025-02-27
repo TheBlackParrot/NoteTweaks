@@ -1303,6 +1303,8 @@ namespace NoteTweaks.UI
                 NotifyPropertyChanged(propertyInfo.Name);
             }
             
+            NotifyPropertyChanged(nameof(BombMeshIsSphere));
+            
             NotePreviewViewController.RefreshEverything();
         }
     }
