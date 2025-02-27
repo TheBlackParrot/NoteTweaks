@@ -32,12 +32,18 @@ namespace NoteTweaks.Patches
 
             Transform bombRoot = __instance.transform;
             
+            if (!bombRoot.GetChild(0).TryGetComponent(out MeshFilter bombMeshFilter))
+            {
+                // erm
+                return;
+            }
+            Meshes.UpdateDefaultBombMesh(bombMeshFilter.sharedMesh);
+            
+            bombMeshFilter.sharedMesh = Meshes.CurrentBombMesh;
+            
             if (Outlines.InvertedBombMesh == null)
             {
-                if (bombRoot.GetChild(0).TryGetComponent(out MeshFilter bombMeshFilter))
-                {
-                    Outlines.UpdateDefaultBombMesh(bombMeshFilter.sharedMesh);
-                }
+                Outlines.UpdateDefaultBombMesh(bombMeshFilter.sharedMesh);
             }
             
             if (Config.EnableBombOutlines)
