@@ -97,9 +97,9 @@
   "AddBloomForFaceSymbols": true,
   "OutlineBloomAmount": 0.25,
   "FaceSymbolBloomAmount": 0.25,
-  "BombMesh": "Default",
-  "BombMeshStacks": 6,
-  "BombMeshSlices": 8,
+  "BombMesh": "Sphere",
+  "BombMeshStacks": 3,
+  "BombMeshSlices": 10,
   "BombMeshSmoothNormals": false,
   "BombMeshWorldNormals": false
 }
