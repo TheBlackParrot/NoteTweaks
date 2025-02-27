@@ -133,6 +133,8 @@ namespace NoteTweaks.Patches
                 
                 Managers.Textures.SetDefaultTextures();
                 
+                Managers.Meshes.UpdateSphereMesh(Config.BombMeshSlices, Config.BombMeshStacks, Config.BombMeshSmoothNormals, Config.BombMeshWorldNormals);
+                
                 UnityMainThreadTaskScheduler.Factory.StartNew(async () =>
                 {
                     await Materials.UpdateAll();

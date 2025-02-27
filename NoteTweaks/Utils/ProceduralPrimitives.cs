@@ -75,14 +75,11 @@ namespace NoteTweaks.Utils
         [UsedImplicitly]
         public static Mesh CreateSphere(float radius, int slices, int stacks, bool worldNormals = true)
         {
+            Plugin.Log.Info($"Generating a sphere mesh: {slices} slices, {stacks} stacks, smooth: {Config.BombMeshSmoothNormals}, world: {worldNormals}");
+            
             Mesh mesh = new Mesh
             {
                 name = "SphereMesh"
-            };
-            
-            Quaternion rotation = new Quaternion
-            {
-                eulerAngles = new Vector3(-90f, 0f, 0f)
             };
 
             float sliceStep = (float) Math.PI*2.0f/slices;
@@ -96,8 +93,8 @@ namespace NoteTweaks.Utils
             //Vector2[] sphereUVs = new Vector2[vertexCount];
 
             int currentVertex = 0;
-            sphereVertices[currentVertex] = rotation * new Vector3(0, -radius, 0);
-            sphereNormals[currentVertex] = worldNormals ? rotation * Vector3.down : Vector3.one;
+            sphereVertices[currentVertex] = new Vector3(0, -radius, 0);
+            sphereNormals[currentVertex] = worldNormals ? Vector3.down : Vector3.one;
             currentVertex++;
             float stackAngle = (float) Math.PI - stackStep;
             for (int i = 0; i < stacks - 1; i++)
@@ -111,7 +108,7 @@ namespace NoteTweaks.Utils
                     float y = (float) (radius*Math.Cos(stackAngle));
                     float z = (float) (radius*Math.Sin(stackAngle)*Math.Sin(sliceAngle));
 
-                    Vector3 position = rotation * new Vector3(x, y, z);
+                    Vector3 position = new Vector3(x, y, z);
                     
                     sphereVertices[currentVertex] = position;
                     sphereNormals[currentVertex] = worldNormals ? Vector3.Normalize(position) : Vector3.one;
@@ -126,8 +123,8 @@ namespace NoteTweaks.Utils
                 
                 stackAngle -= stackStep;
             }
-            sphereVertices[currentVertex] = rotation * new Vector3(0, radius, 0);
-            sphereNormals[currentVertex] = worldNormals ? rotation * Vector3.up : Vector3.one;
+            sphereVertices[currentVertex] = new Vector3(0, radius, 0);
+            sphereNormals[currentVertex] = worldNormals ? Vector3.up : Vector3.one;
 
             /*mesh.vertices = sphereVertices;
             mesh.normals = sphereNormals;
@@ -157,6 +154,8 @@ namespace NoteTweaks.Utils
             {
                 mesh.RecalculateNormals();
             }
+            
+            Plugin.Log.Info($"Generated sphere mesh");
 
             return mesh;
         }
