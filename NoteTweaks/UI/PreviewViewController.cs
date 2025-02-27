@@ -473,6 +473,7 @@ namespace NoteTweaks.UI
         public static void UpdateBombColors()
         {
             float scale = 1.0f + Config.BombColorBoost;
+            int applyBloom = Config.AddBloomForOutlines && Materials.MainEffectContainer.value ? 1 : 0;
 
             for (int i = 0; i < NoteContainer.transform.childCount; i++)
             {
@@ -504,7 +505,7 @@ namespace NoteTweaks.UI
                 {
                     if (noteOutline.gameObject.TryGetComponent(out MaterialPropertyBlockController controller))
                     {
-                        controller.materialPropertyBlock.SetColor(ColorNoteVisuals._colorId, outlineColor.ColorWithAlpha(Materials.SaneAlphaValue));
+                        controller.materialPropertyBlock.SetColor(ColorNoteVisuals._colorId, outlineColor.ColorWithAlpha(applyBloom == 1 ? Config.OutlineBloomAmount : Materials.SaneAlphaValue));
                         controller.ApplyChanges();
                     }
                 }
