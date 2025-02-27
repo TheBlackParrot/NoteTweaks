@@ -1,0 +1,100 @@
+{
+  "EnableFaceGlow": true,
+  "ArrowScale": {
+    "x": 0.95,
+    "y": 1.9
+  },
+  "ArrowPosition": {
+    "x": 0.0,
+    "y": -0.054999996
+  },
+  "EnableDots": true,
+  "DotScale": {
+    "x": 0.65,
+    "y": 0.65
+  },
+  "DotPosition": {
+    "x": 0.0,
+    "y": 0.0
+  },
+  "NoteScale": {
+    "x": 1.0,
+    "y": 1.0,
+    "z": 1.0
+  },
+  "LinkScale": 1.0,
+  "ColorBoostLeft": 0.0,
+  "ColorBoostRight": 0.0,
+  "LeftGlowIntensity": 1.5,
+  "RightGlowIntensity": 1.5,
+  "ArrowGlowScale": 1.05,
+  "DotGlowScale": 1.0999999,
+  "EnableChainDots": true,
+  "ChainDotScale": {
+    "x": 1.5,
+    "y": 0.6
+  },
+  "EnableChainDotGlow": true,
+  "LeftFaceColor": "#000000",
+  "RightFaceColor": "#000000",
+  "DotMeshSides": 20,
+  "LeftFaceColorNoteSkew": 0.0,
+  "RightFaceColorNoteSkew": 0.0,
+  "RotateDot": 0.0,
+  "NormalizeLeftFaceColor": false,
+  "NormalizeRightFaceColor": false,
+  "LeftFaceGlowColor": "#FFFFFF",
+  "LeftFaceGlowColorNoteSkew": 1.0,
+  "NormalizeLeftFaceGlowColor": true,
+  "RightFaceGlowColor": "#FFFFFF",
+  "RightFaceGlowColorNoteSkew": 1.0,
+  "NormalizeRightFaceGlowColor": true,
+  "NoteTexture": "Kaleido H",
+  "InvertNoteTexture": false,
+  "BombColor": "#5A5A5A",
+  "BombColorBoost": 0.0,
+  "BombTexture": "Radials J",
+  "BombScale": 1.0,
+  "InvertBombTexture": false,
+  "EnableRainbowBombs": false,
+  "RainbowBombTimeScale": 6.0,
+  "RainbowBombSaturation": 0.67,
+  "RainbowBombValue": 0.9,
+  "GlowTexture": "Glow",
+  "ArrowMesh": "Pointy",
+  "LeftMinBrightness": 0.1,
+  "LeftMaxBrightness": 1.0,
+  "RightMinBrightness": 0.1,
+  "RightMaxBrightness": 1.0,
+  "LeftGlowBlendOp": "Add",
+  "RightGlowBlendOp": "Add",
+  "LeftGlowOffset": {
+    "x": 0.0,
+    "y": 0.0
+  },
+  "RightGlowOffset": {
+    "x": 0.0,
+    "y": 0.0
+  },
+  "EnableNoteOutlines": false,
+  "EnableBombOutlines": true,
+  "NoteOutlineScale": 5,
+  "BombOutlineScale": 7,
+  "NoteOutlineLeftColor": "#FFFFFF",
+  "NoteOutlineLeftColorSkew": 1.0,
+  "NormalizeLeftOutlineColor": true,
+  "NormalizeRightOutlineColor": true,
+  "NoteOutlineRightColor": "#FFFFFF",
+  "NoteOutlineRightColorSkew": 1.0,
+  "BombOutlineColor": "#7B7B7B",
+  "RimDarkening": -1.0,
+  "RimOffset": 0.1500001,
+  "RimScale": 0.499999523,
+  "Smoothness": 1.0,
+  "RimCameraDistanceOffset": 2.5,
+  "RainbowBombMode": "Both",
+  "AddBloomForOutlines": false,
+  "AddBloomForFaceSymbols": false,
+  "OutlineBloomAmount": 0.1,
+  "FaceSymbolBloomAmount": 0.900000036
+}
