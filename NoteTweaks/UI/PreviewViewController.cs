@@ -618,6 +618,35 @@ namespace NoteTweaks.UI
             }
         }
 
+        public static void UpdateBombMeshes()
+        {
+            Managers.Meshes.UpdateSphereMesh(Config.BombMeshSlices, Config.BombMeshStacks, Config.BombMeshSmoothNormals, Config.BombMeshWorldNormals);
+
+            bool hasSeenBomb = false;
+            for (int i = 0; i < NoteContainer.transform.childCount; i++)
+            {
+                GameObject bombObj = NoteContainer.transform.GetChild(i).gameObject;
+                if (!bombObj.name.Contains("_Bomb_"))
+                {
+                    continue;
+                }
+                
+                bombObj.transform.GetChild(0).GetComponent<MeshFilter>().sharedMesh = Managers.Meshes.CurrentBombMesh;
+                
+                if (!hasSeenBomb)
+                {
+                    hasSeenBomb = true;
+                    Outlines.UpdateDefaultBombMesh(Managers.Meshes.CurrentBombMesh, true);
+                }
+                
+                Transform noteOutline = bombObj.transform.FindChildRecursively("NoteOutline");
+                if (noteOutline)
+                {
+                    noteOutline.GetComponent<MeshFilter>().sharedMesh = Outlines.InvertedBombMesh;
+                }
+            }
+        }
+
         private static void CreateChainNote(BurstSliderGameNoteController chainPrefab, string extraName, int cell, int linkNum)
         {
             GameObject chainNote = Instantiate(chainPrefab.transform.GetChild(0).gameObject, NoteContainer.transform);
@@ -866,10 +895,14 @@ namespace NoteTweaks.UI
             
             DestroyImmediate(bombObject.GetComponent<SphereCollider>());
             DestroyImmediate(bombObject.GetComponent<SphereCuttableBySaber>());
-            
-            if (Outlines.InvertedBombMesh == null)
+
+            if (bombObject.TryGetComponent(out MeshFilter bombMeshFilter))
             {
-                if (bombObject.TryGetComponent(out MeshFilter bombMeshFilter))
+                Managers.Meshes.UpdateDefaultBombMesh(bombMeshFilter.sharedMesh);
+                
+                bombMeshFilter.sharedMesh = Managers.Meshes.CurrentBombMesh;
+                
+                if (Outlines.InvertedBombMesh == null)
                 {
                     Outlines.UpdateDefaultBombMesh(bombMeshFilter.sharedMesh);
                 }

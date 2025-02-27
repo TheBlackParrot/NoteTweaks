@@ -323,6 +323,12 @@ namespace NoteTweaks.Configuration
         
         [JsonProperty] public float OutlineBloomAmount { get; set; } = 0.1f;
         [JsonProperty] public float FaceSymbolBloomAmount { get; set; } = 0.1f;
+        
+        [JsonProperty] public string BombMesh { get; set; } = "Default";
+        [JsonProperty] public int BombMeshStacks { get; set; } = 6;
+        [JsonProperty] public int BombMeshSlices { get; set; } = 8;
+        [JsonProperty] public bool BombMeshSmoothNormals { get; set; } = false;
+        [JsonProperty] public bool BombMeshWorldNormals { get; set; } = false;
 
         internal PluginConfig ShallowCopy()
         {

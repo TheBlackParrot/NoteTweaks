@@ -82,6 +82,21 @@
 
                 <horizontal><text text="-----" font-size="4" color="#00000000"/></horizontal>
 
+                <dropdown-list-setting apply-on-change="true" value="BombMesh" text="Bomb Mesh" bind-value="true" choices="bombMeshChoices"
+                                       hover-hint="Changed the mesh used for bombs"/>
+                <slider-setting apply-on-change="true" value="BombMeshSlices" text="Mesh Slices" bind-value="true"
+                                min="1" max="32" increment="1" integer-only="true" show-buttons="true" active="~BombMeshIsSphere"
+                                hover-hint="Number of slices around the Y axis"/>
+                <slider-setting apply-on-change="true" value="BombMeshStacks" text="Mesh Stacks" bind-value="true"
+                                min="1" max="32" increment="1" integer-only="true" show-buttons="true" active="~BombMeshIsSphere"
+                                hover-hint="Number of stacks along the Y axis"/>
+                <toggle-setting apply-on-change="true" value="BombMeshSmoothNormals" text="Smooth Normals" bind-value="true" active="~BombMeshIsSphere"
+                                hover-hint="Smooth normals/faces"/>
+                <toggle-setting apply-on-change="true" value="BombMeshWorldNormals" text="World-relative Normals" bind-value="true" active="~BombMeshIsSphere"
+                                hover-hint="Normals/faces use world-relative positioning, rather than the vertex origin"/>
+
+                <horizontal><text text="-----" font-size="4" color="#00000000"/></horizontal>
+
                 <toggle-setting apply-on-change="true" value="EnableRainbowBombs" text="Enable Rainbow Bombs" bind-value="true"
                                 hover-hint="love wins!!!!"/>
                 <dropdown-list-setting apply-on-change="true" value="RainbowBombMode" text="Rainbow Bomb Mode" bind-value="true"

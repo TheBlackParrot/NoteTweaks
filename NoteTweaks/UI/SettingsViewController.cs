@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -1089,6 +1088,62 @@ namespace NoteTweaks.UI
                 NotePreviewViewController.UpdateColors();
             }
         }
+
+        protected string BombMesh
+        {
+            get => Config.BombMesh;
+            set
+            {
+                Config.BombMesh = value;
+                
+                NotePreviewViewController.UpdateBombMeshes();
+                NotifyPropertyChanged(nameof(BombMeshIsSphere));
+            }
+        }
+
+        protected int BombMeshSlices
+        {
+            get => Config.BombMeshSlices;
+            set
+            {
+                Config.BombMeshSlices = value;
+                NotePreviewViewController.UpdateBombMeshes();
+            }
+        }
+        
+        protected int BombMeshStacks
+        {
+            get => Config.BombMeshStacks;
+            set
+            {
+                Config.BombMeshStacks = value;
+                NotePreviewViewController.UpdateBombMeshes();
+            }
+        }
+        
+        protected bool BombMeshSmoothNormals
+        {
+            get => Config.BombMeshSmoothNormals;
+            set
+            {
+                Config.BombMeshSmoothNormals = value;
+                NotePreviewViewController.UpdateBombMeshes();
+            }
+        }
+
+        protected bool BombMeshWorldNormals
+        {
+            get => Config.BombMeshWorldNormals;
+            set
+            {
+                Config.BombMeshWorldNormals = value;
+                NotePreviewViewController.UpdateBombMeshes();
+            }
+        }
+
+        [UIValue("BombMeshIsSphere")]
+        [UsedImplicitly]
+        private bool BombMeshIsSphere => BombMesh == "Sphere";
         
         [UIValue("rainbowBombModeChoices")]
         [UsedImplicitly]
@@ -1109,6 +1164,11 @@ namespace NoteTweaks.UI
         [UsedImplicitly]
         // ReSharper disable once InconsistentNaming
         private List<object> ArrowMeshChoices = new List<object> { "Default", "Chevron", "Line", "Pentagon", "Pointy", "Triangle" };
+        
+        [UIValue("bombMeshChoices")]
+        [UsedImplicitly]
+        // ReSharper disable once InconsistentNaming
+        private List<object> BombMeshChoices = new List<object> { "Default", "Sphere" };
 
         [UIComponent("selectedNoteTexture")]
         #pragma warning disable CS0649
