@@ -902,7 +902,7 @@ namespace NoteTweaks.UI
             
             Vector3 position = new Vector3(-NoteSize + ((NoteSize * 1.25f) * cell) - 0.1f, 1.333f, 0);
             bombContainer.transform.localPosition = position;
-            bombContainer.transform.Rotate(90f, 0f, 0f);
+            //bombContainer.transform.Rotate(90f, 0f, 0f);
             
             GameObject bombObject = bombContainer.transform.GetChild(0).gameObject;
             
@@ -1106,6 +1106,7 @@ namespace NoteTweaks.UI
             UpdateNoteScale();
             UpdateOutlines();
             UpdateVisibility();
+            UpdateBombMeshes();
         }
         
         protected void OnEnable()
@@ -1182,6 +1183,7 @@ namespace NoteTweaks.UI
                             UpdateNoteScale();
                             UpdateOutlines();
                             UpdateVisibility();
+                            UpdateBombMeshes();
 
                             NoteContainer.SetActive(true);
 
