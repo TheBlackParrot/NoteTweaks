@@ -276,7 +276,7 @@ namespace NoteTweaks.UI
         [UIValue("SelectedPreset")]
         private string SelectedPreset = "Default";
 
-        [UIValue("presetNameField")]
+        [UIValue("PresetNameField")]
         private string PresetNameField = "Preset";
         
         #pragma warning disable CS0649
@@ -286,6 +286,8 @@ namespace NoteTweaks.UI
         private TextMeshProUGUI SaveStatusValue;
         [UIComponent("LoadConfirmationText")]
         private TextMeshProUGUI LoadConfirmationText;
+        [UIComponent(("PresetNameInput"))]
+        private StringSetting PresetNameInput;
         #pragma warning restore CS0649
 
         [UIAction("SavePreset")]
@@ -315,6 +317,11 @@ namespace NoteTweaks.UI
         private async Task LoadPreset()
         {
             NotifyPropertyChanged(nameof(SelectedPreset));
+            
+            PresetNameField = SelectedPreset;
+            NotifyPropertyChanged(nameof(PresetNameField));
+            PresetNameInput.Text = SelectedPreset;
+            
             await ConfigurationPresetManager.LoadPreset(SelectedPreset);
         }
     }
