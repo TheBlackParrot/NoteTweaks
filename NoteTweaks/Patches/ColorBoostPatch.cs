@@ -70,7 +70,7 @@ namespace NoteTweaks.Patches
         // ReSharper disable once InconsistentNaming
         private static void InitColorInfoPatch(StandardLevelScenesTransitionSetupDataSO __instance)
         {
-            if (!Config.Enabled)
+            if (!Config.Enabled || NotePhysicalTweaks.AutoDisable)
             {
                 return;
             }
@@ -87,7 +87,7 @@ namespace NoteTweaks.Patches
         // ReSharper disable once InconsistentNaming
         private static void StandardLevelRestartControllerPatch(StandardLevelRestartController __instance)
         {
-            if (!Config.Enabled)
+            if (!Config.Enabled|| NotePhysicalTweaks.AutoDisable)
             {
                 return;
             }
