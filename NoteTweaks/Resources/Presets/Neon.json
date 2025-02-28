@@ -6,7 +6,7 @@
   },
   "ArrowPosition": {
     "x": 0.0,
-    "y": -0.0350000039
+    "y": -0.04
   },
   "EnableDots": true,
   "DotScale": {
@@ -87,9 +87,9 @@
   "NoteOutlineRightColor": "#000000",
   "NoteOutlineRightColorSkew": 1.0,
   "BombOutlineColor": "#FFFFFF",
-  "RimDarkening": 1.75,
-  "RimOffset": 0.190000057,
-  "RimScale": 2.94999957,
+  "RimDarkening": 1.69999981,
+  "RimOffset": 0.220000029,
+  "RimScale": 2.64999986,
   "Smoothness": 1.0,
   "RimCameraDistanceOffset": 5.0,
   "RainbowBombMode": "Both",
