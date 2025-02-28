@@ -18,9 +18,9 @@
     "y": 0.0
   },
   "NoteScale": {
-    "x": 0.98,
-    "y": 0.98,
-    "z": 0.98
+    "x": 1.0,
+    "y": 1.0,
+    "z": 1.0
   },
   "LinkScale": 1.0,
   "ColorBoostLeft": 0.0,
@@ -63,9 +63,9 @@
   "GlowTexture": "Glow",
   "ArrowMesh": "Default",
   "LeftMinBrightness": 0.2,
-  "LeftMaxBrightness": 1.0,
+  "LeftMaxBrightness": 0.8,
   "RightMinBrightness": 0.2,
-  "RightMaxBrightness": 1.0,
+  "RightMaxBrightness": 0.8,
   "LeftGlowBlendOp": "ReverseSubtract",
   "RightGlowBlendOp": "ReverseSubtract",
   "LeftGlowOffset": {

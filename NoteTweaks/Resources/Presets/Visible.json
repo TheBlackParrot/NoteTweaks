@@ -63,9 +63,9 @@
   "GlowTexture": "Glow",
   "ArrowMesh": "Default",
   "LeftMinBrightness": 0.15,
-  "LeftMaxBrightness": 1.0,
+  "LeftMaxBrightness": 0.64,
   "RightMinBrightness": 0.15,
-  "RightMaxBrightness": 1.0,
+  "RightMaxBrightness": 0.35,
   "LeftGlowBlendOp": "Add",
   "RightGlowBlendOp": "Add",
   "LeftGlowOffset": {
