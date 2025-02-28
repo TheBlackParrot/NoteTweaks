@@ -84,9 +84,12 @@ namespace NoteTweaks.Managers
         internal static readonly string ImagePath = Path.Combine(UnityGame.UserDataPath, "NoteTweaks", "Textures", "Notes");
         internal static readonly string[] IncludedCubemaps =
         {
+            "Abberation A", "Abberation B", "Abberation C", "Abberation D", "Abberation E", "Abberation F", "Abberation G", "Abberation H", "Abberation I",
             "Dimple A", "Dimple B", "Dimple C",
             "Flat", "Flat Black", "Flat Dark", "Flat Mid",
             "Kaleido A", "Kaleido B", "Kaleido C", "Kaleido D", "Kaleido E", "Kaleido F", "Kaleido G", "Kaleido H",
+            "Multicolor A", "Multicolor B", "Multicolor C", "Multicolor D", "Multicolor E",
+            "Noisy",
             "Radials A", "Radials B", "Radials C", "Radials D", "Radials E", "Radials F", "Radials G", "Radials H", "Radials I", "Radials J", "Radials K",
             "Ripple A", "Ripple B", "Ripple C",
             "Soft Metallic A", "Soft Metallic B"

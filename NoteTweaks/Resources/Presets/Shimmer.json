@@ -52,8 +52,8 @@
   "NoteTexture": "Radials C",
   "InvertNoteTexture": true,
   "BombColor": "#FFFFFF",
-  "BombColorBoost": 3.66210173E-08,
-  "BombTexture": "Default",
+  "BombColorBoost": 0.75,
+  "BombTexture": "Abberation F",
   "BombScale": 0.95,
   "InvertBombTexture": false,
   "EnableRainbowBombs": false,
@@ -98,8 +98,8 @@
   "OutlineBloomAmount": 0.25,
   "FaceSymbolBloomAmount": 1.0,
   "BombMesh": "Sphere",
-  "BombMeshStacks": 16,
-  "BombMeshSlices": 24,
+  "BombMeshStacks": 6,
+  "BombMeshSlices": 10,
   "BombMeshSmoothNormals": false,
   "BombMeshWorldNormals": false
 }
