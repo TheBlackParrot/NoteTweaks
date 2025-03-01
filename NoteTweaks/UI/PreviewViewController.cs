@@ -659,7 +659,7 @@ namespace NoteTweaks.UI
                     Outlines.UpdateDefaultBombMesh(Managers.Meshes.CurrentBombMesh, true);
                 }
                 
-                Transform noteOutline = bombObj.transform.FindChildRecursively("NoteOutline");
+                Transform noteOutline = bombObj.transform.GetChild(0).Find("NoteOutline");
                 if (noteOutline)
                 {
                     noteOutline.GetComponent<MeshFilter>().sharedMesh = Outlines.InvertedBombMesh;
