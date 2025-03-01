@@ -53,7 +53,7 @@
   "InvertNoteTexture": true,
   "BombColor": "#FFFFFF",
   "BombColorBoost": 0.75,
-  "BombTexture": "Abberation F",
+  "BombTexture": "Aberration F",
   "BombScale": 0.95,
   "InvertBombTexture": false,
   "EnableRainbowBombs": false,
