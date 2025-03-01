@@ -409,8 +409,8 @@
     </tab>
 
     <tab tags="tabs" tab-name="Acc Dots">
-        <vertical vertical-fit="PreferredSize" pref-height="70" pref-width="110" anchored-position-x="4">
-            <vertical vertical-fit="PreferredSize" pad-left="1" pad-right="1" pref-width="100" child-control-height="false">
+        <vertical vertical-fit="PreferredSize" pref-height="70" pref-width="110" anchored-position-x="4" spacing="0" pad-top="0" pad-bottom="0">
+            <vertical spacing="0" vertical-fit="PreferredSize" pad-left="1" pad-right="1" pad-top="3" pref-width="92" child-control-height="false">
                 <toggle-setting apply-on-change="true" value="EnableAccDot" text="Enable Acc Dots" bind-value="true"
                                 hover-hint="Enable small dots in the center of notes to help show where to swing for accuracy"/>
                 <toggle-setting apply-on-change="true" value="RenderAccDotsAboveSymbols" text="Render Above Symbols" bind-value="true"
@@ -424,9 +424,9 @@
                 <tab-selector tab-tag="accDotTabs" id="accDotTabSelector"/>
             </vertical>
 
-            <vertical vertical-fit="PreferredSize" pref-height="28" pref-width="100">
+            <vertical vertical-fit="PreferredSize" pref-height="50" pref-width="130">
                 <tab tags="accDotTabs" tab-name="Left">
-                    <scroll-view spacing="0" pref-height="50" child-expand-width="true">
+                    <scroll-view spacing="0" pref-height="60" child-expand-width="true">
                         <color-setting apply-on-change="true" value="LeftAccDotColor" text="Acc Dot Color" bind-value="true"
                                        hover-hint="Color of the left hand acc dots"/>
                         <slider-setting apply-on-change="true" value="LeftAccDotColorNoteSkew" text="Skew Towards Note Color" bind-value="true"
@@ -438,7 +438,7 @@
                 </tab>
 
                 <tab tags="accDotTabs" tab-name="Right">
-                    <scroll-view spacing="0" pref-height="50" child-expand-width="true">
+                    <scroll-view spacing="0" pref-height="60" child-expand-width="true">
                         <color-setting apply-on-change="true" value="RightAccDotColor" text="Acc Dot Color" bind-value="true"
                                        hover-hint="Color of the right hand acc dots"/>
                         <slider-setting apply-on-change="true" value="RightAccDotColorNoteSkew" text="Skew Towards Note Color" bind-value="true"

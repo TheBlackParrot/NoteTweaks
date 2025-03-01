@@ -82,7 +82,7 @@
         </tab>
         
         <!-- click-events can use show-event/hide-event in parent modal wrappers, in case you ever look for this information -->
-        <modal move-to-center="true" clickerino-offerino-closerino="true" id="SaveStatusModal" size-delta="80 25"
+        <modal move-to-center="true" clickerino-offerino-closerino="true" id="SaveStatusModal" size-delta-x="80" size-delta-y="25"
                show-event="ShowSaveStatus" hide-event="HideSaveStatus">
             <vertical pad="3" spacing="2" horizontal-fit="PreferredSize" preferred-width="70" vertical-fit="Unconstrained" child-control-height="true"
                       child-align="MiddleCenter"
@@ -92,7 +92,7 @@
             </vertical>
         </modal>
 
-        <modal move-to-center="true" clickerino-offerino-closerino="true" id="LoadConfirmationModal" size-delta="80 25"
+        <modal move-to-center="true" clickerino-offerino-closerino="true" id="LoadConfirmationModal" size-delta-x="80" size-delta-y="25"
                show-event="ShowLoadConfirmation" hide-event="HideLoadConfirmation">
             <vertical pad="3" spacing="2" horizontal-fit="PreferredSize" preferred-width="70" vertical-fit="Unconstrained" child-control-height="true"
                       child-align="MiddleCenter"
