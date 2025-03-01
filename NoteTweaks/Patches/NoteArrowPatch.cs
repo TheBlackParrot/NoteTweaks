@@ -230,7 +230,10 @@ namespace NoteTweaks.Patches
                     Transform noteOutline = chainRoot.Find("NoteOutline");
                     
                     noteOutline.gameObject.SetActive(Config.EnableNoteOutlines);
-                    noteOutline.localScale = (Vector3.one * (Config.NoteOutlineScale / 100f)) + Vector3.one;
+                    
+                    Vector3 chainScale = (Vector3.one * (Config.NoteOutlineScale / 100f)) + Vector3.one;
+                    chainScale.y = 1f + Config.NoteOutlineScale / 20f;
+                    noteOutline.localScale = chainScale;
 
                     if (noteOutline.gameObject.TryGetComponent(out MaterialPropertyBlockController controller))
                     {
@@ -307,8 +310,9 @@ namespace NoteTweaks.Patches
                 __instance.gameObject.TryGetComponent(out ColorNoteVisuals colorNoteVisuals);
                 ColorType colorType = __instance._noteData.colorType;
                 bool isLeft = colorType == ColorType.ColorA;
+                bool isChainHead = __instance.gameplayType == NoteData.GameplayType.BurstSliderHead;
 
-                if (Config.EnableAccDot && __instance.gameplayType != NoteData.GameplayType.BurstSliderHead && !IsUsingHiddenTypeModifier)
+                if (Config.EnableAccDot && !isChainHead && !IsUsingHiddenTypeModifier)
                 {
                     AccDotObject.transform.localScale = Vector3.one * (AccDotSizeStep * (Mathf.Abs(Config.AccDotSize - 15) + 1));
                     
@@ -404,7 +408,7 @@ namespace NoteTweaks.Patches
                     } 
                 });
 
-                if (__instance.gameplayType == NoteData.GameplayType.BurstSliderHead)
+                if (isChainHead)
                 {
                     if (Outlines.InvertedChainHeadMesh == null)
                     {
@@ -427,11 +431,22 @@ namespace NoteTweaks.Patches
                 
                 if (Config.EnableNoteOutlines && !IsUsingHiddenTypeModifier)
                 {
-                    Outlines.AddOutlineObject(noteRoot, __instance.gameplayType == NoteData.GameplayType.BurstSliderHead ? Outlines.InvertedChainHeadMesh : Outlines.InvertedNoteMesh);
+                    Outlines.AddOutlineObject(noteRoot, isChainHead ? Outlines.InvertedChainHeadMesh : Outlines.InvertedNoteMesh);
                     Transform noteOutline = noteRoot.Find("NoteOutline");
                     
                     noteOutline.gameObject.SetActive(Config.EnableNoteOutlines);
-                    noteOutline.localScale = (Vector3.one * (Config.NoteOutlineScale / 100f)) + Vector3.one;
+                    
+                    Vector3 noteScale = (Vector3.one * (Config.NoteOutlineScale / 100f)) + Vector3.one;
+                    if (isChainHead)
+                    {
+                        noteScale.y += Config.NoteOutlineScale / 100f;
+                        
+                        Vector3 pos = Vector3.zero;
+                        // why 4x? idk either
+                        pos.y = (Config.NoteOutlineScale / 400f) * -1f;
+                        noteOutline.localPosition = pos;
+                    }
+                    noteOutline.localScale = noteScale;
 
                     if (noteOutline.gameObject.TryGetComponent(out MaterialPropertyBlockController controller))
                     {

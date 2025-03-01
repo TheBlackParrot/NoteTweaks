@@ -550,6 +550,7 @@ namespace NoteTweaks.UI
                 
                 bool isLeft = noteCube.name.Contains("_L_");
                 bool isBomb = noteCube.name.Contains("_Bomb_");
+                bool isChain = noteCube.name.Contains("_Chain_");
                 
                 Color noteColor = Config.BombColor;
                 if (noteCube.TryGetComponent(out MaterialPropertyBlockController noteMaterialController))
@@ -574,7 +575,13 @@ namespace NoteTweaks.UI
                 if (noteOutline)
                 {
                     noteOutline.gameObject.SetActive(isBomb ? Config.EnableBombOutlines : Config.EnableNoteOutlines);
-                    noteOutline.localScale = (Vector3.one * ((isBomb ? Config.BombOutlineScale : Config.NoteOutlineScale) / 100f)) + Vector3.one;
+                    
+                    Vector3 scale = (Vector3.one * ((isBomb ? Config.BombOutlineScale : Config.NoteOutlineScale) / 100f)) + Vector3.one;
+                    if (isChain)
+                    {
+                        scale.y = 1f + Config.NoteOutlineScale / 20f;
+                    }
+                    noteOutline.localScale = scale;
                     
                     if (noteOutline.gameObject.TryGetComponent(out MaterialPropertyBlockController controller))
                     {
