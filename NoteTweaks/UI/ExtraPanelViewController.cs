@@ -173,7 +173,7 @@ namespace NoteTweaks.UI
             }
             
             string[] dirs = filepath.Split(Path.DirectorySeparatorChar);
-            string safePath = String.Join(Path.DirectorySeparatorChar.ToString(), dirs.GetRange(dirs.Length - 4, 4).ToArray());
+            string safePath = String.Join(Path.DirectorySeparatorChar.ToString(), dirs.ToList().GetRange(dirs.Length - 4, 4).ToArray());
 
             try
             {
@@ -257,7 +257,7 @@ namespace NoteTweaks.UI
 
             PresetNames = GetPresetNames();
             
-            PresetDropDown.Values = PresetNames;
+            PresetDropDown.values = PresetNames;
             PresetDropDown.UpdateChoices();
         }
 
