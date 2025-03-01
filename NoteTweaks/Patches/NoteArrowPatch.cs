@@ -442,8 +442,8 @@ namespace NoteTweaks.Patches
                         noteScale.y += Config.NoteOutlineScale / 100f;
                         
                         Vector3 pos = Vector3.zero;
-                        // why 4x? idk either
-                        pos.y = (Config.NoteOutlineScale / 400f) * -1f;
+                        // it's weird i know
+                        pos.y = (Config.NoteOutlineScale / 433f) * -1f;
                         noteOutline.localPosition = pos;
                     }
                     noteOutline.localScale = noteScale;
