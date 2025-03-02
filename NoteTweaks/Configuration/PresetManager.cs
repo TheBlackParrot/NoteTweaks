@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Threading.Tasks;
 using IPA.Config.Data;
 using IPA.Config.Stores.Converters;
 using IPA.Utilities;
@@ -139,7 +138,7 @@ namespace NoteTweaks.Configuration
             }
         }
 
-        public static async Task LoadPreset(string presetName)
+        public static void LoadPreset(string presetName)
         {
             string path = Path.Combine(PresetPath, presetName + ".json");
             if (!File.Exists(path))
@@ -174,7 +173,7 @@ namespace NoteTweaks.Configuration
             }
             
             Plugin.ClampSettings();
-            await UI.SettingsFlowCoordinator._settingsViewController.RefreshAll();
+            UI.SettingsFlowCoordinator._settingsViewController.RefreshAll();
         }
     }
 }
