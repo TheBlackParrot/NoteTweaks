@@ -3,9 +3,9 @@
   "id": "NoteTweaks",
   "name": "NoteTweaks",
   "author": "TheBlackParrot",
-  "version": "0.8.0",
+  "version": "0.8.1",
   "description": "Change various aspects of the default note",
-  "gameVersion": "1.39.1",
+  "gameVersion": "1.40.3",
   "dependsOn": {
     "BSIPA": "^4.3.5",
     "BeatSaberMarkupLanguage": "^1.12.3",

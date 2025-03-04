@@ -67,11 +67,11 @@ namespace NoteTweaks.Patches
         private static bool _fixDots = true;
         internal static bool UsesChroma;
 
-        private static bool MapHasRequirement(BeatmapLevel beatmapLevel, BeatmapKey beatmapKey, string requirement, bool alsoCheckSuggestions = false)
+        private static bool MapHasRequirement(BeatmapKey beatmapKey, string requirement, bool alsoCheckSuggestions = false)
         {
             bool hasRequirement = false;
             
-            ExtraSongData.DifficultyData diffData = RetrieveDifficultyData(beatmapLevel, beatmapKey);
+            SongData.DifficultyData diffData = GetCustomLevelSongDifficultyData(beatmapKey);
             if (diffData != null)
             {
                 hasRequirement = diffData.additionalDifficultyData._requirements.Any(x => x == requirement);
@@ -102,16 +102,16 @@ namespace NoteTweaks.Patches
                 }
                 
                 AutoDisable =
-                    (MapHasRequirement(__instance.beatmapLevel, __instance.beatmapKey, "Noodle Extensions") &&
+                    (MapHasRequirement(__instance.beatmapKey, "Noodle Extensions") &&
                      Config.DisableIfNoodle) ||
-                    (MapHasRequirement(__instance.beatmapLevel, __instance.beatmapKey, "Vivify") &&
+                    (MapHasRequirement(__instance.beatmapKey, "Vivify") &&
                      Config.DisableIfVivify);
                 
                 UsesChroma = PluginManager.GetPluginFromId("Chroma") != null &&
-                             MapHasRequirement(__instance.beatmapLevel, __instance.beatmapKey, "Chroma", true);
+                             MapHasRequirement(__instance.beatmapKey, "Chroma", true);
 
                 _fixDots = true;
-                if (MapHasRequirement(__instance.beatmapLevel, __instance.beatmapKey, "Noodle Extensions"))
+                if (MapHasRequirement(__instance.beatmapKey, "Noodle Extensions"))
                 {
                     _fixDots = Config.FixDotsIfNoodle;
                 }
