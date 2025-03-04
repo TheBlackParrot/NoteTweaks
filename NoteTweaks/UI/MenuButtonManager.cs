@@ -11,6 +11,7 @@ namespace NoteTweaks.UI
         private readonly SettingsFlowCoordinator _settingsFlowCoordinator;
         private readonly MenuButtons _menuButtons;
         private readonly MenuButton _menuButton;
+        private static MenuButton _instance;
 
         private MenuButtonManager(MainFlowCoordinator mainFlowCoordinator, SettingsFlowCoordinator settingsFlowCoordinator, MenuButtons menuButtons)
         {
@@ -18,6 +19,7 @@ namespace NoteTweaks.UI
             _settingsFlowCoordinator = settingsFlowCoordinator;
             _menuButtons = menuButtons;
             _menuButton = new MenuButton(nameof(NoteTweaks), null, HandleMenuButtonOnClick);
+            _instance = _menuButton;
         }
 
         public void Initialize()
@@ -33,6 +35,11 @@ namespace NoteTweaks.UI
         private void HandleMenuButtonOnClick()
         {
             _mainFlowCoordinator.PresentFlowCoordinator(_settingsFlowCoordinator);
+        }
+
+        public static void ColorizeButtonOnUpdateAvailable()
+        {
+            _instance.Text = $"<color=#AAFFAA>{nameof(NoteTweaks)}";
         }
     }
 }
