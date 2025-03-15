@@ -67,11 +67,19 @@ namespace NoteTweaks.Patches
         private static bool _fixDots = true;
         internal static bool UsesChroma;
 
+#if LATEST
         private static bool MapHasRequirement(BeatmapKey beatmapKey, string requirement, bool alsoCheckSuggestions = false)
+#else
+        private static bool MapHasRequirement(BeatmapLevel beatmapLevel, BeatmapKey beatmapKey, string requirement, bool alsoCheckSuggestions = false)
+#endif
         {
             bool hasRequirement = false;
             
+#if LATEST
             SongData.DifficultyData diffData = GetCustomLevelSongDifficultyData(beatmapKey);
+#else
+            ExtraSongData.DifficultyData diffData = RetrieveDifficultyData(beatmapLevel, beatmapKey);
+#endif
             if (diffData != null)
             {
                 hasRequirement = diffData.additionalDifficultyData._requirements.Any(x => x == requirement);
@@ -100,7 +108,8 @@ namespace NoteTweaks.Patches
                     UsesChroma = false;
                     return;
                 }
-                
+
+#if LATEST
                 AutoDisable =
                     (MapHasRequirement(__instance.beatmapKey, "Noodle Extensions") &&
                      Config.DisableIfNoodle) ||
@@ -115,6 +124,22 @@ namespace NoteTweaks.Patches
                 {
                     _fixDots = Config.FixDotsIfNoodle;
                 }
+#else
+                AutoDisable =
+                    (MapHasRequirement(__instance.beatmapLevel, __instance.beatmapKey, "Noodle Extensions") &&
+                     Config.DisableIfNoodle) ||
+                    (MapHasRequirement(__instance.beatmapLevel, __instance.beatmapKey, "Vivify") &&
+                     Config.DisableIfVivify);
+                
+                UsesChroma = PluginManager.GetPluginFromId("Chroma") != null &&
+                             MapHasRequirement(__instance.beatmapLevel, __instance.beatmapKey, "Chroma", true);
+
+                _fixDots = true;
+                if (MapHasRequirement(__instance.beatmapLevel, __instance.beatmapKey, "Noodle Extensions"))
+                {
+                    _fixDots = Config.FixDotsIfNoodle;
+                }
+#endif
                 
                 _gameplayModifiers = gameplayModifiers;
                 Plugin.ClampSettings();
