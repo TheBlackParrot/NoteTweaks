@@ -1,35 +1,73 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <!-- This file contains project properties used by the build. -->
 <Project>
+  <!-- Game version-dependent stuff -->
+  <PropertyGroup Condition="$(Configuration) == 'Release-1.29.1' Or $(Configuration) == 'Debug-1.29.1'">
+    <GameVersion>1.29.1</GameVersion>
+
+    <BSIPAVersion>4.2.2</BSIPAVersion>
+    <BSMLVersion>1.6.10</BSMLVersion>
+    <SiraUtilVersion>3.1.2</SiraUtilVersion>
+    <SongCoreVersion>3.11.1</SongCoreVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="$(Configuration) == 'Release-1.34.2' Or $(Configuration) == 'Debug-1.34.2'">
+    <GameVersion>1.34.2</GameVersion>
+
+    <BSIPAVersion>4.3.2</BSIPAVersion>
+    <BSMLVersion>1.8.1</BSMLVersion>
+    <SiraUtilVersion>3.1.6</SiraUtilVersion>
+    <SongCoreVersion>3.12.2</SongCoreVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="$(Configuration) == 'Release-1.37.1' Or $(Configuration) == 'Debug-1.37.1'">
+    <GameVersion>1.37.1</GameVersion>
+
+    <BSIPAVersion>4.3.4</BSIPAVersion>
+    <BSMLVersion>1.11.4</BSMLVersion>
+    <SiraUtilVersion>3.1.11</SiraUtilVersion>
+    <SongCoreVersion>3.14.11</SongCoreVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="$(Configuration) == 'Release-1.39.1' Or $(Configuration) == 'Debug-1.39.1'">
+    <GameVersion>1.39.1</GameVersion>
+
+    <BSIPAVersion>4.3.5</BSIPAVersion>
+    <BSMLVersion>1.12.4</BSMLVersion>
+    <SiraUtilVersion>3.1.14</SiraUtilVersion>
+    <SongCoreVersion>3.14.15</SongCoreVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="$(Configuration) == 'Release-1.40.3' Or $(Configuration) == 'Debug-1.40.3'">
+    <GameVersion>1.40.3</GameVersion>
+
+    <BSIPAVersion>4.3.5</BSIPAVersion>
+    <BSMLVersion>1.12.5</BSMLVersion>
+    <SiraUtilVersion>3.1.14</SiraUtilVersion>
+    <SongCoreVersion>3.15.3</SongCoreVersion>
+  </PropertyGroup>
+  
   <!-- Manifest -->
   <PropertyGroup>
+    <PluginId>NoteTweaks</PluginId>
+    <PluginName>NoteTweaks</PluginName>
     <AssemblyName>NoteTweaks</AssemblyName>
     <Authors>TheBlackParrot</Authors>
-    <Version>0.8.1</Version>
-    <GameVersion>1.40.3</GameVersion>
+    <Version>0.9.0+$(GameVersion)</Version>
     <Description>Change various aspects of the default note</Description>
     <ProjectHome>https://github.com/TheBlackParrot/NoteTweaks</ProjectHome>
     <ProjectSource>https://github.com/TheBlackParrot/NoteTweaks</ProjectSource>
-    <Donate></Donate>
+    <DonateUrl>https://ko-fi.com/septilateral</DonateUrl>
   </PropertyGroup>
+
+  <!-- Plugin Dependencies -->
   <ItemGroup>
-    <Dependency Include="BSIPA" Version="^4.1.3" />
-    <Dependency Include="BeatSaberMarkupLanguage" Version="^1.12.3" />
-    <Dependency Include="SiraUtil" Version="^3.1.14" />
-    <Dependency Include="SongCore" Version="^3.14.15" />
+    <DependsOn Include="BSIPA" Version="^$(BSIPAVersion)" />
+    <DependsOn Include="BeatSaberMarkupLanguage" Version="^$(BSMLVersion)" />
+    <DependsOn Include="SiraUtil" Version="^$(SiraUtilVersion)" />
+    <DependsOn Include="SongCore" Version="^$(SongCoreVersion)" />
   </ItemGroup>
-  <!-- End Manifest -->
-  <PropertyGroup Condition="'$(GITHUB_ACTIONS)' == 'true'">
-    <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
-    <DisableCopyToPlugins>true</DisableCopyToPlugins>
-    <DisableZipRelease>true</DisableZipRelease>
-  </PropertyGroup>
-  <ItemGroup Condition="'$(GITHUB_ACTIONS)' == 'true'">
-    <SourceRoot Include="$(MSBuildThisFileDirectory)/"/>
-  </ItemGroup>
-  <PropertyGroup Condition="'$(NCrunch)' == '1'">
-    <ContinuousIntegrationBuild>false</ContinuousIntegrationBuild>
-    <DisableCopyToPlugins>true</DisableCopyToPlugins>
-    <DisableZipRelease>true</DisableZipRelease>
+  
+  <!-- etc -->
+  <PropertyGroup>
+    <BSMTProjectType>BSIPA</BSMTProjectType>
+    <GenerateManifest>true</GenerateManifest>
+    <DisableZipRelease>false</DisableZipRelease>
   </PropertyGroup>
 </Project>

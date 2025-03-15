@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<!-- This file contains the build tasks and targets for verifying the manifest, zipping Release builds,
-     and copying the plugin to to your Beat Saber folder. Only edit this if you know what you are doing. -->
+        <!-- This file contains the build tasks and targets for verifying the manifest, zipping Release builds,
+             and copying the plugin to to your Beat Saber folder. Only edit this if you know what you are doing. -->
 <Project>
   <PropertyGroup>
     <BuildTargetsVersion>2.0</BuildTargetsVersion>
@@ -19,13 +19,6 @@
   </Target>
   <!--Runs a build task to get info about the project used by later targets.-->
   <Target Name="GetProjectInfo" AfterTargets="CheckBSMTInstalled" DependsOnTargets="CheckBSMTInstalled" Condition="'$(BSMTTaskAssembly)' != ''">
-    <GenerateManifest ID="$(AssemblyName)" Name="$(AssemblyName)" Author="$(Authors)" Description="$(Description)"
-                      Version="$(Version)" GameVersion="$(GameVersion)" DependsOn="@(Dependency)"
-                      ProjectHome="$(ProjectHome)" ProjectSource="$(ProjectSource)" Donate="$(Donate)"
-                      TargetPath="$(IntermediateOutputPath)manifest.json"/>
-    <ItemGroup>
-      <EmbeddedResource Include="$(IntermediateOutputPath)manifest.json" LogicalName="$(AssemblyName).manifest.json" />
-    </ItemGroup>
     <GetCommitInfo ProjectDir="$(ProjectDir)">
       <Output TaskParameter="CommitHash" PropertyName="CommitHash" />
       <Output TaskParameter="Branch" PropertyName="Branch" />
@@ -64,12 +57,8 @@
     <ItemGroup>
       <OldZips Include="$(DestinationDirectory)$(AssemblyName)*.zip"/>
     </ItemGroup>
-    <CreateItem Include="Resources\Presets\*.json">
-      <Output TaskParameter="Include" ItemName="PresetsToCopy" />
-    </CreateItem>
     <Copy SourceFiles="$(OutputAssemblyName).dll" DestinationFiles="$(ArtifactDestination)\Plugins\$(AssemblyName).dll" />
     <Copy SourceFiles="$(OutputAssemblyName).pdb" DestinationFiles="$(ArtifactDestination)\Plugins\$(AssemblyName).pdb" />
-    <Copy SourceFiles="@(PresetsToCopy)" DestinationFolder="$(ArtifactDestination)\UserData\NoteTweaks\Presets" />
     <Message Text="Version: $(Version), GameVersion: $(GameVersion)" Importance="high" />
     <Delete Files="@(OldZips)" TreatErrorsAsWarnings="true" ContinueOnError="true" />
     <ZipDir SourceDirectory="$(ArtifactDestination)" DestinationFile="$(DestinationDirectory)$(ArtifactName).zip" />

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project>
+  <PropertyGroup>
+    <BeatSaberDir>D:/bs-manager/BSManager/BSInstances/$(GameVersion)</BeatSaberDir>
+  </PropertyGroup>
+</Project>
