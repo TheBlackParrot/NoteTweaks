@@ -1,4 +1,7 @@
 ﻿using HarmonyLib;
+#if PRE_V1_37_1
+using IPA.Utilities;
+#endif
 using NoteTweaks.Configuration;
 using NoteTweaks.Utils;
 using UnityEngine;
@@ -12,6 +15,27 @@ namespace NoteTweaks.Patches
 
         private static ColorScheme _patchedScheme;
         
+#if PRE_V1_37_1
+        private static ColorScheme PatchColors(ColorScheme scheme)
+        {
+            _patchedScheme = new ColorScheme(
+                "NoteTweaksPatched",
+                "NoteTweaksPatched",
+                true,
+                "NoteTweaksPatched",
+                false,
+                scheme._saberAColor,
+                scheme._saberBColor,
+                scheme._environmentColor0,
+                scheme._environmentColor1,
+                scheme._environmentColorW,
+                scheme._supportsEnvironmentColorBoost,
+                scheme._environmentColor0Boost,
+                scheme._environmentColor1Boost,
+                scheme._environmentColorWBoost,
+                scheme._obstaclesColor
+            );
+#else
         private static ColorScheme PatchColors(ColorSchemeSO schemeObj)
         {
             _patchedScheme = new ColorScheme(schemeObj)
@@ -22,6 +46,7 @@ namespace NoteTweaks.Patches
                 _nonLocalizedName = "NoteTweaksPatched",
                 _isEditable = false
             };
+#endif
             
             float leftScale = 1.0f + Config.ColorBoostLeft;
             float rightScale = 1.0f + Config.ColorBoostRight;
@@ -57,7 +82,11 @@ namespace NoteTweaks.Patches
             return _patchedScheme;
         }
         
+#if PRE_V1_37_1
+        [HarmonyPatch(typeof(StandardLevelScenesTransitionSetupDataSO), "Init")]
+#else
         [HarmonyPatch(typeof(StandardLevelScenesTransitionSetupDataSO), "InitColorInfo")]
+#endif
         [HarmonyPostfix]
         // ReSharper disable once InconsistentNaming
         private static void InitColorInfoPatch(StandardLevelScenesTransitionSetupDataSO __instance)
@@ -66,14 +95,20 @@ namespace NoteTweaks.Patches
             {
                 return;
             }
-
+#if PRE_V1_37_1
+            ColorScheme patchedColors = PatchColors(__instance.colorScheme);
+#else
             ColorSchemeSO schemeObj = ScriptableObject.CreateInstance<ColorSchemeSO>();
             schemeObj._colorScheme = __instance.colorScheme;
 
             ColorScheme patchedColors = PatchColors(schemeObj);
+#endif
 
             __instance.usingOverrideColorScheme = true;
             __instance.colorScheme = patchedColors;
+#if PRE_V1_37_1
+            __instance.gameplayCoreSceneSetupData.SetField("colorScheme", patchedColors);
+#endif
         }
 
         [HarmonyPatch(typeof(StandardLevelRestartController), "RestartLevel")]
@@ -85,10 +120,13 @@ namespace NoteTweaks.Patches
             {
                 return;
             }
-            
+#if PRE_V1_37_1
+            ColorScheme patchedColors = PatchColors(__instance._standardLevelSceneSetupData.colorScheme);
+#else
             ColorSchemeSO schemeObj = ScriptableObject.CreateInstance<ColorSchemeSO>();
             schemeObj._colorScheme = __instance._standardLevelSceneSetupData.colorScheme;
             ColorScheme patchedColors = PatchColors(schemeObj);
+#endif
 
             __instance._standardLevelSceneSetupData.usingOverrideColorScheme = true;
             __instance._standardLevelSceneSetupData.colorScheme = patchedColors;

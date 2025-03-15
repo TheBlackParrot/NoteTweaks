@@ -1,0 +1,16 @@
+﻿<vertical vertical-fit="PreferredSize" pref-height="100" child-align="LowerCenter" anchor-pos-y="-35"
+          xsi:noNamespaceSchemaLocation="https://monkeymanboy.github.io/BSML-Docs/BSMLSchema.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <horizontal child-alignment="LowerCenter" pref-height="8" vertical-fit="PreferredSize" spacing="4">
+        <vertical child-align="LowerLeft" spacing="3">
+            <text text="Distance" font-size="3" font-align="Center"/>
+            <slider-setting text="" pref-width="50" apply-on-change="true" value="NoteContainerZPos" id="NoteContainerZPos" font-size="3" bind-value="true"
+                    min="1.0" max="12.0" increment="0.1" show-buttons="true"/>
+        </vertical>
+        
+        <vertical child-align="LowerRight" spacing="3">
+            <text text="Dissolve" font-size="3" font-align="Center"/>
+            <slider-setting text="" pref-width="50" apply-on-change="true" value="NoteContainerCutout" id="NoteContainerCutout" font-size="3" bind-value="true"
+                        min="0" max="1" increment="0.01" show-buttons="true" formatter="PercentageFormatter"/>
+        </vertical>
+    </horizontal>
+</vertical>
