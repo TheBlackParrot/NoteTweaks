@@ -1049,6 +1049,38 @@ namespace NoteTweaks.UI
             }
         }
         
+#if PRE_V1_39_1
+        protected float LeftOutlineFinalColorMultiplier
+        {
+            get => Config.LeftOutlineFinalColorMultiplier;
+            set
+            {
+                Config.LeftOutlineFinalColorMultiplier = value;
+                NotePreviewViewController.UpdateOutlines();
+            }
+        }
+        
+        protected float RightOutlineFinalColorMultiplier
+        {
+            get => Config.RightOutlineFinalColorMultiplier;
+            set
+            {
+                Config.RightOutlineFinalColorMultiplier = value;
+                NotePreviewViewController.UpdateOutlines();
+            }
+        }
+        
+        protected float BombOutlineFinalColorMultiplier
+        {
+            get => Config.BombOutlineFinalColorMultiplier;
+            set
+            {
+                Config.BombOutlineFinalColorMultiplier = value;
+                NotePreviewViewController.UpdateOutlines();
+            }
+        }
+#endif
+        
         protected bool AddBloomForOutlines
         {
             get => Config.AddBloomForOutlines;
@@ -1088,6 +1120,12 @@ namespace NoteTweaks.UI
                 NotePreviewViewController.UpdateColors();
             }
         }
+
+#if PRE_V1_39_1
+        [UIValue("wowIReallyHateOldGameVersions")]
+        [UsedImplicitly]
+        private string GuhMoment => "<size=85%><color=#FFEE99FF><b>NOTE</b>: <color=#FFFFFFAA>Bloom will not work for outlines on game versions older than 1.37.1.";  
+#endif
 
         protected string BombMesh
         {
@@ -1192,7 +1230,11 @@ namespace NoteTweaks.UI
                 return;
             }
             
+#if PRE_V1_39_1
+            noteTextureDropDown.values = NoteTextureChoices;
+#else
             noteTextureDropDown.Values = NoteTextureChoices;
+#endif
             noteTextureDropDown.UpdateChoices();
         }
 

@@ -499,8 +499,12 @@ namespace NoteTweaks.UI
                     controller.materialPropertyBlock.SetColor(Color1, bombColor);
                     controller.ApplyChanges();
                 }
-                
+
+#if PRE_V1_39_1
+                Transform noteOutline = bombObj.transform.GetChild(0).Find("NoteOutline");
+#else
                 Transform noteOutline = bombObj.transform.FindChildRecursively("NoteOutline");
+#endif
                 if (noteOutline != null)
                 {
                     if (noteOutline.gameObject.TryGetComponent(out MaterialPropertyBlockController controller))
@@ -570,8 +574,12 @@ namespace NoteTweaks.UI
                 {
                     outlineColor = Color.LerpUnclamped(isLeft ? Config.NoteOutlineLeftColor : Config.NoteOutlineRightColor, noteColor, isLeft ? Config.NoteOutlineLeftColorSkew : Config.NoteOutlineRightColorSkew);   
                 }
-                
+
+#if PRE_V1_39_1
+                Transform noteOutline = isBomb ? noteCube.transform.Find("Mesh").Find("NoteOutline") : noteCube.transform.Find("NoteOutline");
+#else
                 Transform noteOutline = noteCube.transform.FindChildRecursively("NoteOutline");
+#endif
                 if (noteOutline)
                 {
                     noteOutline.gameObject.SetActive(isBomb ? Config.EnableBombOutlines : Config.EnableNoteOutlines);
@@ -586,9 +594,20 @@ namespace NoteTweaks.UI
                     if (noteOutline.gameObject.TryGetComponent(out MaterialPropertyBlockController controller))
                     {
                         int applyBloom = Config.AddBloomForOutlines && Materials.MainEffectContainer.value ? 1 : 0;
-                        Materials.OutlineMaterial.SetInt(Materials.SrcFactorAlphaID, applyBloom);
+#if PRE_V1_39_1
+                        float mult = isBomb
+                            ? Config.BombOutlineFinalColorMultiplier
+                            : (isLeft
+                                ? Config.LeftOutlineFinalColorMultiplier
+                                : Config.RightOutlineFinalColorMultiplier);
                         
+                        controller.materialPropertyBlock.SetColor(ColorNoteVisuals._colorId, outlineColor.ColorWithAlpha(applyBloom == 1 ? Config.OutlineBloomAmount : 1f));
+                        controller.materialPropertyBlock.SetFloat(Materials.FinalColorMul, mult);
+                        Materials.OutlineMaterial.SetInt(Materials.SrcFactorAlphaID, applyBloom);
+#else
+                        Materials.OutlineMaterial.SetInt(Materials.SrcFactorAlphaID, applyBloom);
                         controller.materialPropertyBlock.SetColor(ColorNoteVisuals._colorId, outlineColor.ColorWithAlpha(applyBloom == 1 ? Config.OutlineBloomAmount : Materials.SaneAlphaValue));
+#endif
                         controller.ApplyChanges();
                     }
                 }
@@ -646,7 +665,11 @@ namespace NoteTweaks.UI
                     Outlines.UpdateDefaultBombMesh(Managers.Meshes.CurrentBombMesh, true);
                 }
                 
+#if PRE_V1_39_1
+                Transform noteOutline = bombObj.transform.GetChild(0).Find("NoteOutline");
+#else
                 Transform noteOutline = bombObj.transform.FindChildRecursively("NoteOutline");
+#endif
                 if (noteOutline)
                 {
                     noteOutline.GetComponent<MeshFilter>().sharedMesh = Outlines.InvertedBombMesh;
@@ -716,7 +739,11 @@ namespace NoteTweaks.UI
                     newGlowMeshRenderer.sharedMaterial = Materials.DotGlowMaterial;
                 }
                 
+#if PRE_V1_39_1
+                GameObject arrowObj = NoteContainer.transform.GetChild(0).Find("NoteArrow").gameObject;
+#else
                 GameObject arrowObj = NoteContainer.transform.FindChildRecursively("NoteArrow").gameObject;
+#endif
                 GameObject dotObj = originalDot.gameObject;
                 
                 if (arrowObj.transform.TryGetComponent(out CutoutEffect parentCutoutEffect))
@@ -1140,6 +1167,9 @@ namespace NoteTweaks.UI
                             // ReSharper restore PossibleNullReferenceException
                             
                             SettingsViewController.LoadTextures = true;
+#if PRE_V1_39_1
+                            Managers.Textures.SetDefaultTextures();
+#endif
                             await Materials.UpdateAll();
                             
                             List<String> noteNames = new List<string> { "L_Arrow", "R_Arrow", "L_Dot", "R_Dot" };

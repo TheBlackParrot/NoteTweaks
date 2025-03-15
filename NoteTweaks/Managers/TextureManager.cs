@@ -94,11 +94,20 @@ namespace NoteTweaks.Managers
             "Ripple A", "Ripple B", "Ripple C",
             "Soft Metallic A", "Soft Metallic B"
         };
+#if PRE_V1_39_1
+        private static Texture2D _originalArrowGlowTexture;
+        private static Texture2D _originalDotGlowTexture;
 
+        private static readonly int NoteCubeMapID = Shader.PropertyToID("_EnvironmentReflectionCube");
+        private static Cubemap _originalNoteTexture;
+        private static Cubemap _noteTexture;
+        private static Cubemap _bombTexture;
+#else
         private static readonly int NoteCubeMapID = Shader.PropertyToID("_EnvironmentReflectionCube");
         private static readonly Cubemap OriginalNoteTexture = Resources.FindObjectsOfTypeAll<Cubemap>().ToList().First(x => x.name == "NotesReflection");
         private static Cubemap _noteTexture = OriginalNoteTexture;
         private static Cubemap _bombTexture = OriginalNoteTexture;
+#endif
 
         internal static readonly List<KeyValuePair<string, CubemapFace>> FaceNames = new List<KeyValuePair<string, CubemapFace>>
         {
@@ -126,6 +135,21 @@ namespace NoteTweaks.Managers
                 Directory.CreateDirectory(ImagePath);
             }
         }
+
+#if PRE_V1_39_1
+        internal static void SetDefaultTextures()
+        {
+            _originalArrowGlowTexture = Resources.FindObjectsOfTypeAll<Texture2D>().ToList().First(x => x.name == "ArrowGlow");
+            ReplacementArrowGlowTexture = _originalArrowGlowTexture.PrepareTexture();
+            
+            _originalDotGlowTexture = Resources.FindObjectsOfTypeAll<Texture2D>().ToList().First(x => x.name == "NoteCircleBakedGlow");
+            ReplacementDotGlowTexture = _originalDotGlowTexture.PrepareTexture();
+            
+            _originalNoteTexture = Resources.FindObjectsOfTypeAll<Cubemap>().ToList().First(x => x.name == "NotesReflection");
+            _noteTexture = _originalNoteTexture;
+            _bombTexture = _originalNoteTexture;
+        }
+#endif
         
         private static void OnNoteImageLoaded(List<KeyValuePair<string, Texture2D>> textures)
         {
@@ -193,12 +217,20 @@ namespace NoteTweaks.Managers
         {
             if (isBomb)
             {
+#if PRE_V1_39_1
+                _bombTexture = _originalNoteTexture;
+#else
                 _bombTexture = OriginalNoteTexture;
+#endif
                 Materials.BombMaterial.SetTexture(NoteCubeMapID, _bombTexture);
             }
             else
             {
+#if PRE_V1_39_1
+                _noteTexture = _originalNoteTexture;
+#else
                 _noteTexture = OriginalNoteTexture;
+#endif
                 Materials.NoteMaterial.SetTexture(NoteCubeMapID, _noteTexture);
                 Materials.DebrisMaterial.SetTexture(NoteCubeMapID, _noteTexture);
             }

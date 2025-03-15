@@ -5,7 +5,9 @@ using System.Threading.Tasks;
 using IPA.Utilities.Async;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+#if !PRE_V1_39_1
 using NoteTweaks.UI;
+#endif
 
 namespace NoteTweaks.Managers
 {
@@ -77,10 +79,12 @@ namespace NoteTweaks.Managers
                 LatestVersion = await GetRemoteVersionData();
                 Plugin.Log.Info("Latest version is " + LatestVersion.ToString(3));
 
+#if !PRE_V1_39_1
                 if (LatestVersion > ModVersion)
                 {
                     MenuButtonManager.ColorizeButtonOnUpdateAvailable();
                 }
+#endif
             });
         }
     }

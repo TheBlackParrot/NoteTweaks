@@ -39,7 +39,7 @@ namespace NoteTweaks.UI
         [UsedImplicitly] private readonly string projectHome;
         [UsedImplicitly] private string latestVersion => $"(<alpha=#CC>{VersionData.ModVersion.ToString(3)} <alpha=#88>-> <alpha=#CC>{VersionManager.LatestVersion?.ToString(3)}<alpha=#FF>)";
         
-#if PREREL
+#if DEBUG
         private const string isPreRelease = " <alpha=#77><size=80%>(Pre-release)";
 #else
         private const string isPreRelease = "";
@@ -173,7 +173,11 @@ namespace NoteTweaks.UI
             }
             
             string[] dirs = filepath.Split(Path.DirectorySeparatorChar);
+#if PRE_V1_39_1
+            string safePath = String.Join(Path.DirectorySeparatorChar.ToString(), dirs.ToList().GetRange(dirs.Length - 4, 4).ToArray());
+#else
             string safePath = String.Join(Path.DirectorySeparatorChar.ToString(), dirs.GetRange(dirs.Length - 4, 4).ToArray());
+#endif
 
             try
             {
@@ -257,7 +261,11 @@ namespace NoteTweaks.UI
 
             PresetNames = GetPresetNames();
             
+#if PRE_V1_39_1
+            PresetDropDown.values = PresetNames;
+#else
             PresetDropDown.Values = PresetNames;
+#endif
             PresetDropDown.UpdateChoices();
         }
 

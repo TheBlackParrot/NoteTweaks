@@ -49,7 +49,11 @@ namespace NoteTweaks.Patches
             if (Config.EnableBombOutlines)
             {
                 Outlines.AddOutlineObject(bombRoot, Outlines.InvertedBombMesh);
+#if PRE_V1_39_1
+                Transform noteOutline = bombRoot.Find("Mesh").Find("NoteOutline");
+#else
                 Transform noteOutline = bombRoot.FindChildRecursively("NoteOutline");
+#endif
                     
                 noteOutline.gameObject.SetActive(true);
                 noteOutline.localScale = (Vector3.one * (Config.BombOutlineScale / 100f)) + Vector3.one;
@@ -64,6 +68,9 @@ namespace NoteTweaks.Patches
                     
                     int applyBloom = Config.AddBloomForOutlines && Materials.MainEffectContainer.value ? 1 : 0;
                     controller.materialPropertyBlock.SetColor(ColorNoteVisuals._colorId, outlineColor.ColorWithAlpha(applyBloom == 1 ? Config.OutlineBloomAmount : 1f));
+#if PRE_V1_39_1
+                    controller.materialPropertyBlock.SetFloat(Materials.FinalColorMul, Config.BombOutlineFinalColorMultiplier);
+#endif
                     controller.ApplyChanges();
                 }
             }

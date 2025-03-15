@@ -144,7 +144,30 @@ namespace NoteTweaks.Patches
                 _gameplayModifiers = gameplayModifiers;
                 Plugin.ClampSettings();
             }
-
+            
+#if PRE_V1_39_1
+            [HarmonyPatch(typeof(EnvironmentSceneSetup), "InstallBindings")]
+            internal class EnvironmentSceneSetupPatch
+            {
+                internal static void Postfix()
+                {
+                    if (!Config.Enabled)
+                    {
+                        return;
+                    }
+                
+                    Managers.Textures.SetDefaultTextures();
+                
+                    Managers.Meshes.UpdateSphereMesh(Config.BombMeshSlices, Config.BombMeshStacks, Config.BombMeshSmoothNormals, Config.BombMeshWorldNormals);
+                
+                    UnityMainThreadTaskScheduler.Factory.StartNew(async () =>
+                    {
+                        await Materials.UpdateAll();
+                        BombPatch.SetStaticBombColor();
+                    });
+                }
+            }
+#else
             // ReSharper disable once InconsistentNaming
             internal static bool Prefix(StandardLevelScenesTransitionSetupDataSO __instance)
             {
@@ -163,6 +186,7 @@ namespace NoteTweaks.Patches
                 
                 return true;
             }
+#endif
         }
 
         internal static bool IsAllowedToScaleNotes
@@ -278,7 +302,12 @@ namespace NoteTweaks.Patches
                         Color outlineColor = Color.LerpUnclamped(isLeft ? Config.NoteOutlineLeftColor : Config.NoteOutlineRightColor, noteColor, isLeft ? Config.NoteOutlineLeftColorSkew : Config.NoteOutlineRightColorSkew);
                         
                         bool applyBloom = Config.AddBloomForOutlines && Materials.MainEffectContainer.value;
+#if PRE_V1_39_1
+                        controller.materialPropertyBlock.SetColor(ColorNoteVisuals._colorId, outlineColor.ColorWithAlpha(applyBloom ? Config.OutlineBloomAmount : 1f));
+                        controller.materialPropertyBlock.SetFloat(Materials.FinalColorMul, isLeft ? Config.LeftOutlineFinalColorMultiplier : Config.RightOutlineFinalColorMultiplier);
+#else
                         controller.materialPropertyBlock.SetColor(ColorNoteVisuals._colorId, outlineColor.ColorWithAlpha(applyBloom ? Config.OutlineBloomAmount : Materials.SaneAlphaValue));
+#endif
                         controller.ApplyChanges();
                     }
                 }
@@ -491,14 +520,43 @@ namespace NoteTweaks.Patches
                         Color outlineColor = Color.LerpUnclamped(isLeft ? Config.NoteOutlineLeftColor : Config.NoteOutlineRightColor, noteColor, isLeft ? Config.NoteOutlineLeftColorSkew : Config.NoteOutlineRightColorSkew);
                         
                         bool applyBloom = Config.AddBloomForOutlines && Materials.MainEffectContainer.value;
+#if PRE_V1_39_1
+                        controller.materialPropertyBlock.SetColor(ColorNoteVisuals._colorId, outlineColor.ColorWithAlpha(applyBloom ? Config.OutlineBloomAmount : 1f));
+                        controller.materialPropertyBlock.SetFloat(Materials.FinalColorMul, isLeft ? Config.LeftOutlineFinalColorMultiplier : Config.RightOutlineFinalColorMultiplier);
+#else
                         controller.materialPropertyBlock.SetColor(ColorNoteVisuals._colorId, outlineColor.ColorWithAlpha(applyBloom ? Config.OutlineBloomAmount : Materials.SaneAlphaValue));
+#endif
                         controller.ApplyChanges();
                     }
                 }
                 
-                // alpha's being weird with dots
-                bool applyBloomToFace = Config.AddBloomForFaceSymbols && Materials.MainEffectContainer.value;
                 Transform dotRoot = noteRoot.Find("NoteCircleGlow");
+                bool applyBloomToFace = Config.AddBloomForFaceSymbols && Materials.MainEffectContainer.value;
+                
+#if PRE_V1_39_1
+                if (_fixDots && dotRoot != null)
+                {
+                    if (noteRoot.gameObject.TryGetComponent(out MaterialPropertyBlockController noteController) && dotRoot.gameObject.TryGetComponent(out MaterialPropertyBlockController dotController))
+                    {
+                        Color noteColor = noteController.materialPropertyBlock.GetColor(ColorNoteVisuals._colorId);
+                        Color faceColor = noteColor;
+                    
+                        if (isLeft ? Config.NormalizeLeftFaceColor : Config.NormalizeRightFaceColor)
+                        {
+                            float colorScalar = noteColor.maxColorComponent;
+                            if (colorScalar != 0)
+                            {
+                                faceColor /= colorScalar;
+                            }
+                        }
+                        
+                        Color c = Color.LerpUnclamped(isLeft ? Config.LeftFaceColor : Config.RightFaceColor, faceColor, isLeft ? Config.LeftFaceColorNoteSkew : Config.RightFaceColorNoteSkew);
+                        c.a = applyBloomToFace ? Config.FaceSymbolBloomAmount : Materials.SaneAlphaValue;
+                        dotController.materialPropertyBlock.SetColor(ColorNoteVisuals._colorId, c);
+                        dotController.ApplyChanges();
+                    }   
+                }
+#else
                 if (applyBloomToFace && dotRoot != null && _fixDots)
                 {
                     if (dotRoot.gameObject.TryGetComponent(out MaterialPropertyBlockController dotController))
@@ -509,6 +567,7 @@ namespace NoteTweaks.Patches
                         dotController.ApplyChanges();
                     }
                 }
+#endif
 
                 if (!IsAllowedToScaleNotes)
                 {

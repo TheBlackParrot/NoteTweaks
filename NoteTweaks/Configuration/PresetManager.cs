@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+#if PRE_V1_39_1
+using System.Linq;
+#endif
 using System.Reflection;
 using System.Threading.Tasks;
 using IPA.Config.Data;
@@ -124,7 +127,11 @@ namespace NoteTweaks.Configuration
         {
             string path = Path.Combine(PresetPath, presetName + ".json");
             string[] dirs = path.Split(Path.DirectorySeparatorChar);
+#if PRE_V1_39_1
+            string safePath = String.Join(Path.DirectorySeparatorChar.ToString(), dirs.ToList().GetRange(dirs.Length - 4, 4).ToArray());
+#else
             string safePath = String.Join(Path.DirectorySeparatorChar.ToString(), dirs.GetRange(dirs.Length - 4, 4).ToArray());
+#endif
 
             try
             {

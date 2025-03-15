@@ -318,6 +318,12 @@ namespace NoteTweaks.Configuration
         
         [JsonProperty] public string RainbowBombMode { get; set; } = "Both";
         
+#if PRE_V1_39_1
+        [JsonProperty] public float LeftOutlineFinalColorMultiplier { get; set; } = 1f;
+        [JsonProperty] public float RightOutlineFinalColorMultiplier { get; set; } = 1f;
+        [JsonProperty] public float BombOutlineFinalColorMultiplier { get; set; } = 1f;
+#endif
+        
         [JsonProperty] public bool AddBloomForOutlines { get; set; } = false;
         [JsonProperty] public bool AddBloomForFaceSymbols { get; set; } = false;
         

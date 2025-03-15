@@ -5,6 +5,9 @@ using System.Threading.Tasks;
 using HarmonyLib;
 using NoteTweaks.Configuration;
 using UnityEngine;
+#if PRE_V1_39_1
+using UnityEngine.Rendering;
+#endif
 
 namespace NoteTweaks.Managers
 {
@@ -31,6 +34,9 @@ namespace NoteTweaks.Managers
         private static readonly int MainEffectContainerID = Resources.FindObjectsOfTypeAll<BoolSO>().First(x => x.name.StartsWith("MainEffectContainer.")).GetInstanceID();
         internal static BoolSO MainEffectContainer => Resources.InstanceIDToObject(MainEffectContainerID) as BoolSO;
         internal static float SaneAlphaValue => MainEffectContainer.value ? 1f : 0f;
+#if PRE_V1_39_1
+        private static string MaterialIdentifier => MainEffectContainer.value ? "HD" : "LW";
+#endif
         
         internal static readonly int BlendOpID = Shader.PropertyToID("_BlendOp");
         private static readonly int CutoutTexScaleID = Shader.PropertyToID("_CutoutTexScale");
@@ -140,16 +146,37 @@ namespace NoteTweaks.Managers
 
         private static void UpdateReplacementDotMaterial()
         {
+#if PRE_V1_39_1
+            string wantedMaterialName = $"NoteTweaks_ReplacementDotMaterial{MaterialIdentifier}";
+            
+            if (ReplacementDotMaterial != null)
+            {
+                if (Resources.FindObjectsOfTypeAll<Material>().Any(x => x.name == wantedMaterialName))
+                {
+                    return;   
+                }
+            }
+#else
             if (ReplacementDotMaterial != null)
             {
                 return;
             }
+#endif
 
             Plugin.Log.Info("Creating replacement dot material");
+#if PRE_V1_39_1
+            Material arrowMat = Resources.FindObjectsOfTypeAll<Material>().ToList().Find(x => x.name == $"NoteArrow{MaterialIdentifier}");
+#else
             Material arrowMat = Resources.FindObjectsOfTypeAll<Material>().ToList().Find(x => x.name == "NoteArrowHD");
+#endif
+            
             ReplacementDotMaterial = new Material(arrowMat)
             {
+#if PRE_V1_39_1
+                name = wantedMaterialName,
+#else
                 name = "NoteTweaks_ReplacementDotMaterial",
+#endif
                 color = Color.white,
                 shaderKeywords = arrowMat.shaderKeywords
                     .Where(x => x != "_ENABLE_COLOR_INSTANCING" || x != "_CUTOUT_NONE").ToArray(),
@@ -165,16 +192,37 @@ namespace NoteTweaks.Managers
 
         private static void UpdateReplacementArrowMaterial()
         {
+#if PRE_V1_39_1
+            string wantedMaterialName = $"NoteTweaks_ReplacementArrowMaterial{MaterialIdentifier}";
+            
+            if (ReplacementArrowMaterial != null)
+            {
+                if (Resources.FindObjectsOfTypeAll<Material>().Any(x => x.name == wantedMaterialName))
+                {
+                    return;   
+                }
+            }
+#else
             if (ReplacementArrowMaterial != null)
             {
                 return;
             }
+#endif
 
             Plugin.Log.Info("Creating replacement arrow material");
+#if PRE_V1_39_1
+            Material arrowMat = Resources.FindObjectsOfTypeAll<Material>().ToList().Find(x => x.name == $"NoteArrow{MaterialIdentifier}");
+#else
             Material arrowMat = Resources.FindObjectsOfTypeAll<Material>().ToList().Find(x => x.name == "NoteArrowHD");
+#endif
+            
             ReplacementArrowMaterial = new Material(arrowMat)
             {
+#if PRE_V1_39_1
+                name = wantedMaterialName,
+#else
                 name = "NoteTweaks_ReplacementArrowMaterial",
+#endif
                 color = Color.white,
                 shaderKeywords = arrowMat.shaderKeywords
                     .Where(x => x != "_ENABLE_COLOR_INSTANCING" || x != "_CUTOUT_NONE").ToArray(),
@@ -256,8 +304,75 @@ namespace NoteTweaks.Managers
             // Utils.Materials.RepairShader(AccDotDepthMaterial);
         }
         
+#if PRE_V1_39_1
+        private static Cubemap _blankCubemap;
+        private static readonly int EnvironmentReflectionCubeID = Shader.PropertyToID("_EnvironmentReflectionCube");
+        internal static readonly int FinalColorMul = Shader.PropertyToID("_FinalColorMul");
+#endif
+
         private static void UpdateOutlineMaterial()
         {
+#if PRE_V1_39_1
+            string wantedMaterialName = $"NoteTweaks_OutlineMaterial{MaterialIdentifier}";
+            if (OutlineMaterial != null)
+            {
+                if (Resources.FindObjectsOfTypeAll<Material>().Any(x => x.name == wantedMaterialName))
+                {
+                    return;   
+                }
+            }
+            
+            if (_blankCubemap == null)
+            {
+                _blankCubemap = new Cubemap(512, TextureFormat.RGBA32, false);
+                
+                Color[] pixels = new Color[262144];
+                for (int i = 0; i < 262144; i++)
+                {
+                    pixels[i] = Color.white;
+                }
+                
+                for (int i = 0; i < 6; i++)
+                {
+                    _blankCubemap.SetPixels(pixels, (CubemapFace)i);
+                }
+                
+                _blankCubemap.Apply();
+            }
+
+            Plugin.Log.Info("Creating outline material");
+            
+            Material noteMat = Resources.FindObjectsOfTypeAll<Material>().ToList().Find(x => x.name == $"Note{MaterialIdentifier}");
+            string[] keywords = noteMat.shaderKeywords
+                .Where(x => x != "_CUTOUT_NONE" ||
+                            x != "_ENABLE_RIM_DIM" || x != "_ENABLE_RIM_COLOR").ToArray();
+            LocalKeyword[] enabledKeywords = noteMat.enabledKeywords
+                .Where(x => x.name != "_CUTOUT_NONE" ||
+                            x.name != "_ENABLE_RIM_DIM" || x.name != "_ENABLE_RIM_COLOR")
+                .ToArray();
+            
+            OutlineMaterial = new Material(noteMat)
+            {
+                name = wantedMaterialName,
+                color = Color.white,
+                shaderKeywords = keywords,
+                enabledKeywords = enabledKeywords,
+                renderQueue = 1990
+            };
+            
+            new List<KeyValuePair<string, float>>
+            {
+                new KeyValuePair<string, float>("_CullMode", 1),
+                new KeyValuePair<string, float>("_EnableRimDim", 0),
+                new KeyValuePair<string, float>("_RimDarkening", 0),
+                new KeyValuePair<string, float>("_RimScale", 0),
+                new KeyValuePair<string, float>("_Smoothness", 0),
+                new KeyValuePair<string, float>("_WhiteBoostType", 0)
+            }.Do(pair => OutlineMaterial.SetFloat(pair.Key, pair.Value));
+            
+            OutlineMaterial.SetInt(FinalColorMul, -1);
+            OutlineMaterial.SetTexture(EnvironmentReflectionCubeID, _blankCubemap);
+#else
             if (OutlineMaterial != null)
             {
                 return;
@@ -275,12 +390,34 @@ namespace NoteTweaks.Managers
                 enabledKeywords = arrowMat.enabledKeywords
                     .Where(x => x.name != "_ENABLE_COLOR_INSTANCING" || x.name != "_CUTOUT_NONE").ToArray()
             };
+#endif
+            
             OutlineMaterial.SetFloat(CutoutTexScaleID, 0.5f);
             OutlineMaterial.SetInt(SrcFactorAlphaID, MainEffectContainer.value && Config.AddBloomForOutlines ? 1 : 0);
         }
         
         private static async Task UpdateNoteMaterial()
         {
+#if PRE_V1_39_1
+            string wantedMaterialName = $"NoteTweaks_NoteMaterial{MaterialIdentifier}";
+            
+            if (NoteMaterial != null)
+            {
+                if (Resources.FindObjectsOfTypeAll<Material>().Any(x => x.name == wantedMaterialName))
+                {
+                    await Textures.LoadNoteTexture(Config.NoteTexture);
+                    return;   
+                }
+            }
+            
+            Plugin.Log.Info("Creating new note material");
+            Material noteMat = Resources.FindObjectsOfTypeAll<Material>().ToList().Find(x => x.name == $"Note{MaterialIdentifier}");
+            NoteMaterial = new Material(noteMat)
+            {
+                name = wantedMaterialName,
+                renderQueue = 1995
+            };
+#else
             if (NoteMaterial != null)
             {
                 await Textures.LoadNoteTexture(Config.NoteTexture);
@@ -293,22 +430,7 @@ namespace NoteTweaks.Managers
                 name = "NoteTweaks_NoteMaterial",
                 renderQueue = 1995
             };
-
-            /*Plugin.Log.Info("--- FLOATS ---");
-            NoteMaterial.GetPropertyNames(MaterialPropertyType.Float).Do(x =>
-            {
-                Plugin.Log.Info($"{x} : {NoteMaterial.GetFloat(x)}");
-            });
-            Plugin.Log.Info("--- INTS ---");
-            NoteMaterial.GetPropertyNames(MaterialPropertyType.Int).Do(x =>
-            {
-                Plugin.Log.Info($"{x} : {NoteMaterial.GetInt(x)}");
-            });
-            Plugin.Log.Info("--- VECTORS ---");
-            NoteMaterial.GetPropertyNames(MaterialPropertyType.Vector).Do(x =>
-            {
-                Plugin.Log.Info($"{x} : {NoteMaterial.GetVector(x).ToString()}");
-            });*/
+#endif
             
             await Textures.LoadNoteTexture(Config.NoteTexture);
         }
@@ -319,7 +441,10 @@ namespace NoteTweaks.Managers
             {
                 return;
             }
+            
             Plugin.Log.Info("Creating new debris material");
+            
+            // there's no NoteDebrisLW. nice one beat games
             Material debrisMat = Resources.FindObjectsOfTypeAll<Material>().ToList().Find(x => x.name == "NoteDebrisHD");
             DebrisMaterial = new Material(debrisMat)
             {
@@ -330,16 +455,39 @@ namespace NoteTweaks.Managers
         
         private static async Task UpdateBombMaterial()
         {
+#if PRE_V1_39_1
+            string wantedMaterialName = $"NoteTweaks_BombMaterial{MaterialIdentifier}";
+            
+            if (BombMaterial != null)
+            {
+                if (Resources.FindObjectsOfTypeAll<Material>().Any(x => x.name == wantedMaterialName))
+                {
+                    await Textures.LoadNoteTexture(Config.BombTexture, true);
+                    return;   
+                }
+            }
+#else
             if (BombMaterial != null)
             {
                 await Textures.LoadNoteTexture(Config.BombTexture, true);
                 return;
             }
+#endif
+            
             Plugin.Log.Info("Creating new bomb material");
+#if PRE_V1_39_1
+            Material bombMat = Resources.FindObjectsOfTypeAll<Material>().ToList().Find(x => x.name == $"BombNote{MaterialIdentifier}");
+#else
             Material bombMat = Resources.FindObjectsOfTypeAll<Material>().ToList().Find(x => x.name == "BombNoteHD");
+#endif
+            
             BombMaterial = new Material(bombMat)
             {
+#if PRE_V1_39_1
+                name = wantedMaterialName
+#else
                 name = "NoteTweaks_BombMaterial"
+#endif
             };
             
             await Textures.LoadNoteTexture(Config.BombTexture, true);

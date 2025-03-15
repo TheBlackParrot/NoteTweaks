@@ -2,11 +2,14 @@
 using IPA.Utilities;
 using NoteTweaks.Configuration;
 using UnityEngine;
+#if !PRE_V1_39_1
 using UnityEngine.Rendering;
+#endif
 #pragma warning disable CS0612
 
 namespace NoteTweaks.Managers
 {
+#if !PRE_V1_39_1
     internal static class MeshExtensions
     {
         internal static Mesh Invert(this Mesh mesh)
@@ -28,10 +31,13 @@ namespace NoteTweaks.Managers
             return mesh;
         }
     }
+#endif
+    
     internal abstract class Outlines
     {
         private static PluginConfig Config => PluginConfig.Instance;
         
+#if !PRE_V1_39_1
         // https://discussions.unity.com/t/reading-meshes-at-runtime-that-are-not-enabled-for-read-write/804189/8
         private static Mesh MakeReadableMeshCopy(Mesh nonReadableMesh)
         {
@@ -74,6 +80,7 @@ namespace NoteTweaks.Managers
 
             return meshCopy;
         }
+#endif
         
         private static Mesh _defaultNoteMesh;
         public static Mesh InvertedNoteMesh;
@@ -88,32 +95,52 @@ namespace NoteTweaks.Managers
         {
             if (_defaultNoteMesh == null)
             {
+#if PRE_V1_39_1
+                _defaultNoteMesh = mesh;
+                InvertedNoteMesh = _defaultNoteMesh;
+#else
                 _defaultNoteMesh = MakeReadableMeshCopy(mesh);
                 InvertedNoteMesh = _defaultNoteMesh.Invert();
+#endif
             }
         }
         public static void UpdateDefaultChainMesh(Mesh mesh)
         {
             if (_defaultChainMesh == null)
             {
+#if PRE_V1_39_1
+                _defaultChainMesh = mesh;
+                InvertedChainMesh = _defaultChainMesh;
+#else
                 _defaultChainMesh = MakeReadableMeshCopy(mesh);
                 InvertedChainMesh = _defaultChainMesh.Invert();
+#endif
             }
         }
         public static void UpdateDefaultChainHeadMesh(Mesh mesh)
         {
             if (_defaultChainHeadMesh == null)
             {
+#if PRE_V1_39_1
+                _defaultChainHeadMesh = mesh;
+                InvertedChainHeadMesh = _defaultChainHeadMesh;
+#else
                 _defaultChainHeadMesh = MakeReadableMeshCopy(mesh);
                 InvertedChainHeadMesh = _defaultChainHeadMesh.Invert();
+#endif
             }
         }
         public static void UpdateDefaultBombMesh(Mesh mesh, bool force = false)
         {
             if (_defaultBombMesh == null || force)
             {
+#if PRE_V1_39_1
+                _defaultBombMesh = mesh;
+                InvertedBombMesh = _defaultBombMesh;
+#else
                 _defaultBombMesh = MakeReadableMeshCopy(mesh);
                 InvertedBombMesh = _defaultBombMesh.Invert();
+#endif
             }
         }
 
