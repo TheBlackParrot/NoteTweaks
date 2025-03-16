@@ -226,16 +226,19 @@
         <EmbeddedResource Include="Resources/Textures/CubemapSingles/Soft Metallic B.png" />
     </ItemGroup>
     <ItemGroup>
+        <None Include="Resources\Presets\$(PresetsFolder)\Bold.json">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Include="Resources\Presets\$(PresetsFolder)\Border.json">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Include="Resources\Presets\$(PresetsFolder)\Defauln't.json">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
         <None Include="Resources\Presets\$(PresetsFolder)\Default.json">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
-        <None Include="Resources\Presets\$(PresetsFolder)\Outlines.json">
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </None>
-        <None Include="Resources\Presets\$(PresetsFolder)\Shimmer.json">
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </None>
-        <None Include="Resources\Presets\$(PresetsFolder)\Smooth.json">
+        <None Include="Resources\Presets\$(PresetsFolder)\Flat.json">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
         <None Include="Resources\Presets\$(PresetsFolder)\High Contrast.json">
@@ -244,7 +247,19 @@
         <None Include="Resources\Presets\$(PresetsFolder)\Neon.json">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
+        <None Include="Resources\Presets\$(PresetsFolder)\Outlines.json">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
         <None Include="Resources\Presets\$(PresetsFolder)\Presence.json">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Include="Resources\Presets\$(PresetsFolder)\Shimmer.json">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Include="Resources\Presets\$(PresetsFolder)\Sleek.json">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Include="Resources\Presets\$(PresetsFolder)\Smooth.json">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
         <None Include="Resources\Presets\$(PresetsFolder)\Visible.json">
@@ -252,29 +267,44 @@
         </None>
     </ItemGroup>
     <ItemGroup>
+        <OutputCopy Include="Resources\Presets\$(PresetsFolder)\Bold.json">
+            <OutputPath>UserData\NoteTweaks\Presets\Bold.json</OutputPath>
+        </OutputCopy>
+        <OutputCopy Include="Resources\Presets\$(PresetsFolder)\Border.json">
+            <OutputPath>UserData\NoteTweaks\Presets\Border.json</OutputPath>
+        </OutputCopy>
+        <OutputCopy Include="Resources\Presets\$(PresetsFolder)\Defauln't.json">
+            <OutputPath>UserData\NoteTweaks\Presets\Defauln't.json</OutputPath>
+        </OutputCopy>
         <OutputCopy Include="Resources\Presets\$(PresetsFolder)\Default.json">
-          <OutputPath>UserData\NoteTweaks\Presets\Default.json</OutputPath>
+            <OutputPath>UserData\NoteTweaks\Presets\Default.json</OutputPath>
+        </OutputCopy>
+        <OutputCopy Include="Resources\Presets\$(PresetsFolder)\Flat.json">
+            <OutputPath>UserData\NoteTweaks\Presets\Flat.json</OutputPath>
         </OutputCopy>
         <OutputCopy Include="Resources\Presets\$(PresetsFolder)\High Contrast.json">
-          <OutputPath>UserData\NoteTweaks\Presets\High Contrast.json</OutputPath>
+            <OutputPath>UserData\NoteTweaks\Presets\High Contrast.json</OutputPath>
         </OutputCopy>
         <OutputCopy Include="Resources\Presets\$(PresetsFolder)\Neon.json">
-          <OutputPath>UserData\NoteTweaks\Presets\Neon.json</OutputPath>
+            <OutputPath>UserData\NoteTweaks\Presets\Neon.json</OutputPath>
         </OutputCopy>
         <OutputCopy Include="Resources\Presets\$(PresetsFolder)\Outlines.json">
-          <OutputPath>UserData\NoteTweaks\Presets\Outlines.json</OutputPath>
+            <OutputPath>UserData\NoteTweaks\Presets\Outlines.json</OutputPath>
         </OutputCopy>
         <OutputCopy Include="Resources\Presets\$(PresetsFolder)\Presence.json">
-          <OutputPath>UserData\NoteTweaks\Presets\Presence.json</OutputPath>
+            <OutputPath>UserData\NoteTweaks\Presets\Presence.json</OutputPath>
         </OutputCopy>
         <OutputCopy Include="Resources\Presets\$(PresetsFolder)\Shimmer.json">
-          <OutputPath>UserData\NoteTweaks\Presets\Shimmer.json</OutputPath>
+            <OutputPath>UserData\NoteTweaks\Presets\Shimmer.json</OutputPath>
+        </OutputCopy>
+        <OutputCopy Include="Resources\Presets\$(PresetsFolder)\Sleek.json">
+            <OutputPath>UserData\NoteTweaks\Presets\Sleek.json</OutputPath>
         </OutputCopy>
         <OutputCopy Include="Resources\Presets\$(PresetsFolder)\Smooth.json">
-          <OutputPath>UserData\NoteTweaks\Presets\Smooth.json</OutputPath>
+            <OutputPath>UserData\NoteTweaks\Presets\Smooth.json</OutputPath>
         </OutputCopy>
         <OutputCopy Include="Resources\Presets\$(PresetsFolder)\Visible.json">
-          <OutputPath>UserData\NoteTweaks\Presets\Visible.json</OutputPath>
+            <OutputPath>UserData\NoteTweaks\Presets\Visible.json</OutputPath>
         </OutputCopy>
     </ItemGroup>
     <ItemGroup>
