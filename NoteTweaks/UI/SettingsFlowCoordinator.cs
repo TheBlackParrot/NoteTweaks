@@ -29,7 +29,11 @@ namespace NoteTweaks.UI
             _extraPanelViewController = extraPanelViewController;
         }
 
+#if V1_29_1
+        public override void DidActivate(bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling)
+#else
         protected override void DidActivate(bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling)
+#endif
         {
             SetTitle(nameof(NoteTweaks), ViewController.AnimationType.None);
             GameObject.Find("TitleViewController").GetComponent<RectTransform>().anchoredPosition = new Vector2(-137.5f, 0f);
@@ -47,13 +51,21 @@ namespace NoteTweaks.UI
             }
             NotePreviewViewController.UpdateColors();
             NotePreviewViewController.UpdateOutlines();
+#if V1_29_1
+            NotePreviewViewController.NoteContainer?.SetActive(true); // god rider shut UP
+#else
             NotePreviewViewController.NoteContainer.SetActive(true);
+#endif
             
             _extraPanelViewController.UpdatePresetDropdown();
         }
 
         // ReSharper disable once ParameterHidesMember
+#if V1_29_1
+        public override void BackButtonWasPressed(ViewController topViewController)
+#else
         protected override void BackButtonWasPressed(ViewController topViewController)
+#endif
         {
             _mainFlowCoordinator.DismissFlowCoordinator(this);
             Config.Changed();

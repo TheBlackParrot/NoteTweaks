@@ -28,11 +28,15 @@ namespace NoteTweaks.Patches
                 scheme._saberBColor,
                 scheme._environmentColor0,
                 scheme._environmentColor1,
+    #if !V1_29_1
                 scheme._environmentColorW,
+    #endif
                 scheme._supportsEnvironmentColorBoost,
                 scheme._environmentColor0Boost,
                 scheme._environmentColor1Boost,
+    #if !V1_29_1
                 scheme._environmentColorWBoost,
+    #endif
                 scheme._obstaclesColor
             );
 #else

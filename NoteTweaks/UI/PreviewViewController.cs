@@ -537,14 +537,21 @@ namespace NoteTweaks.UI
                 }
             }
 
+#if V1_29_1
+            GlowTextures.UpdateTextures();
+            UpdateColors();
+#else
             _ = ForceAsyncUpdateForGlowTexture();
+#endif
         }
         
+#if !V1_29_1
         private static async Task ForceAsyncUpdateForGlowTexture()
         {
             await GlowTextures.UpdateTextures();
             UpdateColors();
         }
+#endif
 
         public static void UpdateOutlines()
         {
@@ -1110,9 +1117,15 @@ namespace NoteTweaks.UI
             }
         }
 
+#if V1_29_1
+        internal static void RefreshEverything()
+        {
+            Materials.UpdateAll();
+#else
         internal static async Task RefreshEverything()
         {
             await Materials.UpdateAll();
+#endif
 
             UpdateAccDots();
             UpdateColors();
@@ -1138,9 +1151,17 @@ namespace NoteTweaks.UI
                 DontDestroyOnLoad(NoteContainer);
             }
             
+#if V1_29_1
+            Materials.UpdateMainEffectContainerWorkaroundThing();
+#endif
+            
             if (HasInitialized)
             {
+#if V1_29_1
+                RefreshEverything();
+#else
                 _ = RefreshEverything();
+#endif
                 _ = CutoutFadeIn();
                 return;
             }
@@ -1170,7 +1191,11 @@ namespace NoteTweaks.UI
 #if PRE_V1_39_1
                             Managers.Textures.SetDefaultTextures();
 #endif
+#if V1_29_1
+                            Materials.UpdateAll();
+#else
                             await Materials.UpdateAll();
+#endif
                             
                             List<String> noteNames = new List<string> { "L_Arrow", "R_Arrow", "L_Dot", "R_Dot" };
                             for (int i = 0; i < noteNames.Count; i++)

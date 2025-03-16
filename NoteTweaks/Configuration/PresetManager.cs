@@ -5,7 +5,9 @@ using System.IO;
 using System.Linq;
 #endif
 using System.Reflection;
+#if !V1_29_1
 using System.Threading.Tasks;
+#endif
 using IPA.Config.Data;
 using IPA.Config.Stores.Converters;
 using IPA.Utilities;
@@ -144,8 +146,12 @@ namespace NoteTweaks.Configuration
                 return $"<color=#FFCCCCCC>Error with saving {safePath}<color=#FFCCCCFF>\n{e.GetType().Name}";
             }
         }
-
+        
+#if V1_29_1
+        public static void LoadPreset(string presetName)
+#else
         public static async Task LoadPreset(string presetName)
+#endif
         {
             string path = Path.Combine(PresetPath, presetName + ".json");
             if (!File.Exists(path))
@@ -180,7 +186,11 @@ namespace NoteTweaks.Configuration
             }
             
             Plugin.ClampSettings();
+#if V1_29_1
+            UI.SettingsFlowCoordinator._settingsViewController.RefreshAll();
+#else
             await UI.SettingsFlowCoordinator._settingsViewController.RefreshAll();
+#endif
         }
     }
 }

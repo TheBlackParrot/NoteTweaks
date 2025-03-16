@@ -15,11 +15,19 @@ namespace NoteTweaks.UI
         private static MenuButton _instance;
 #endif
 
+#if V1_29_1
+        private MenuButtonManager(MainFlowCoordinator mainFlowCoordinator, SettingsFlowCoordinator settingsFlowCoordinator)
+#else
         private MenuButtonManager(MainFlowCoordinator mainFlowCoordinator, SettingsFlowCoordinator settingsFlowCoordinator, MenuButtons menuButtons)
+#endif
         {
             _mainFlowCoordinator = mainFlowCoordinator;
             _settingsFlowCoordinator = settingsFlowCoordinator;
+#if V1_29_1
+            _menuButtons = MenuButtons.instance;
+#else
             _menuButtons = menuButtons;
+#endif
             _menuButton = new MenuButton(nameof(NoteTweaks), null, HandleMenuButtonOnClick);
 #if !PRE_V1_37_1
             _instance = _menuButton;

@@ -5,7 +5,9 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+#if !V1_29_1
 using System.Threading.Tasks;
+#endif
 using BeatSaberMarkupLanguage.Attributes;
 using BeatSaberMarkupLanguage.Components.Settings;
 using BeatSaberMarkupLanguage.ViewControllers;
@@ -322,7 +324,11 @@ namespace NoteTweaks.UI
         }
         
         [UIAction("LoadPreset")]
+#if V1_29_1
+        private void LoadPreset()
+#else
         private async Task LoadPreset()
+#endif
         {
             NotifyPropertyChanged(nameof(SelectedPreset));
             
@@ -330,7 +336,11 @@ namespace NoteTweaks.UI
             NotifyPropertyChanged(nameof(PresetNameField));
             PresetNameInput.Text = SelectedPreset;
             
+#if V1_29_1
+            ConfigurationPresetManager.LoadPreset(SelectedPreset);
+#else
             await ConfigurationPresetManager.LoadPreset(SelectedPreset);
+#endif
         }
     }
 }

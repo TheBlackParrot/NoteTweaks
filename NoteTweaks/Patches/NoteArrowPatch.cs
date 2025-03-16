@@ -5,7 +5,9 @@ using System.Linq;
 using System.Reflection;
 using HarmonyLib;
 using IPA.Loader;
+#if !V1_29_1
 using IPA.Utilities.Async;
+#endif
 using JetBrains.Annotations;
 using NoteTweaks.Configuration;
 using NoteTweaks.Managers;
@@ -175,6 +177,14 @@ namespace NoteTweaks.Patches
                         return;
                     }
                 
+    #if V1_29_1
+                    Materials.UpdateMainEffectContainerWorkaroundThing();
+                
+                    Managers.Textures.SetDefaultTextures();
+                    Managers.Meshes.UpdateSphereMesh(Config.BombMeshSlices, Config.BombMeshStacks, Config.BombMeshSmoothNormals, Config.BombMeshWorldNormals);
+                    Materials.UpdateAll();
+                    BombPatch.SetStaticBombColor();
+    #else
                     Managers.Textures.SetDefaultTextures();
                 
                     Managers.Meshes.UpdateSphereMesh(Config.BombMeshSlices, Config.BombMeshStacks, Config.BombMeshSmoothNormals, Config.BombMeshWorldNormals);
@@ -184,6 +194,7 @@ namespace NoteTweaks.Patches
                         await Materials.UpdateAll();
                         BombPatch.SetStaticBombColor();
                     });
+    #endif
                 }
             }
 #else
