@@ -1,10 +1,11 @@
 # NoteTweaks
 This is a Beat Saber mod that lets you tweak various aspects of the default note.
 
-**This is currently actively maintained for Beat Saber versions 1.29.1, 1.34.2, 1.37.1, 1.39.1, and 1.40.0 *(currently through 1.39.1)*.**
+**This is currently actively maintained for Beat Saber versions 1.29.1, 1.34.2, 1.37.1, 1.39.1, and 1.40.3.** Other versions of the game *may* work, these are the ones I test.  
+*1.29.1 - 1.37.1 will only be maintained until leaderboard support for these game versions are dropped, or if a majority of the game's community moves on from legacy Unity 2019/2021 versions of the game.*
 
 ## Downloads
-See the [releases page](https://github.com/TheBlackParrot/NoteTweaks/releases) for mod downloads. *Pre-release* builds are subject to change, it is highly recommended to use the latest *Release* build.
+See the [releases page](https://github.com/TheBlackParrot/NoteTweaks/releases) for mod downloads. *Pre-release* builds are subject to change, it is highly recommended to use the latest *Release* build. You will not be notified of Pre-release -> Release updates, unless the version numbers differ.
 
 ## Heads up!
 - It is recommended to disable other mods that also change aspects of the default note if you want to use this mod, as conflicts *can* occur.
@@ -33,6 +34,9 @@ If any images are missing, or if an image is not any of the expected filetypes, 
 Individual images outside of folders can also be selected.
 
 I've provided [36 cubemap textures](https://github.com/TheBlackParrot/NoteTweaks/releases/download/0.5.0/Note.Cubemap.Textures.zip) that you can use with the mod, ready-to-go. If you want to convert a panoramic image, [Kyle Nguyen's Optifine Sky Generator](https://skybox-generator.vercel.app) is an easy online tool to split the image into 6 cube faces. *(use a 2048x1024 image to get 512x512 face textures, no post-resizing needed)*
+
+## Developers
+This project utilizes [LunaBSMod.Tasks](https://github.com/Aeroluna/LunaBSMod.Tasks) from [Aeroluna](https://github.com/Aeroluna) to better manage code for different versions of the game. You will need to compile this and install it as a local NuGet package.
 
 ## Dependencies
 - BSIPA
