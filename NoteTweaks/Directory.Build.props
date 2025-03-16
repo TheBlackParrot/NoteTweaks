@@ -33,7 +33,7 @@
     <SongCoreVersion>3.14.11</SongCoreVersion>
 
     <PresetsFolder>1.37.1</PresetsFolder>
-    <BSMLFolder>LATEST</BSMLFolder>
+    <BSMLFolder>1.37.1</BSMLFolder>
   </PropertyGroup>
   <PropertyGroup Condition="$(Configuration) == 'Release-1.39.1' Or $(Configuration) == 'Debug-1.39.1'">
     <GameVersion>1.39.1</GameVersion>
