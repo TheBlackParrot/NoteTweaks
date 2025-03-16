@@ -238,6 +238,9 @@
         <None Include="Resources\Presets\$(PresetsFolder)\Default.json">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
+        <None Include="Resources\Presets\$(PresetsFolder)\Expanse.json">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
         <None Include="Resources\Presets\$(PresetsFolder)\Flat.json">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
@@ -278,6 +281,9 @@
         </OutputCopy>
         <OutputCopy Include="Resources\Presets\$(PresetsFolder)\Default.json">
             <OutputPath>UserData\NoteTweaks\Presets\Default.json</OutputPath>
+        </OutputCopy>
+        <OutputCopy Include="Resources\Presets\$(PresetsFolder)\Expanse.json">
+            <OutputPath>UserData\NoteTweaks\Presets\Expanse.json</OutputPath>
         </OutputCopy>
         <OutputCopy Include="Resources\Presets\$(PresetsFolder)\Flat.json">
             <OutputPath>UserData\NoteTweaks\Presets\Flat.json</OutputPath>
