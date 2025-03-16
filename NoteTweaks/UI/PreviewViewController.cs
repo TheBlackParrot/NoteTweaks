@@ -1134,6 +1134,7 @@ namespace NoteTweaks.UI
             UpdateArrowMeshes();
             UpdateArrowPosition();
             UpdateArrowScale();
+            UpdateDotMesh();
             UpdateDotPosition();
             UpdateDotScale();
             UpdateDotRotation();
@@ -1225,6 +1226,7 @@ namespace NoteTweaks.UI
                             UpdateArrowMeshes();
                             UpdateArrowPosition();
                             UpdateArrowScale();
+                            UpdateDotMesh();
                             UpdateDotPosition();
                             UpdateDotScale();
                             UpdateDotRotation();
