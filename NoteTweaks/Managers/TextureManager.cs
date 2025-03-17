@@ -65,7 +65,7 @@ namespace NoteTweaks.Managers
 #else
             ReplacementArrowGlowTexture = await Utilities.LoadTextureFromAssemblyAsync($"NoteTweaks.Resources.Textures.Arrow{Config.ArrowMesh}{Config.GlowTexture}.png");
 #endif
-            ReplacementArrowGlowTexture.PrepareTexture();
+            ReplacementArrowGlowTexture = ReplacementArrowGlowTexture.PrepareTexture();
             if (Materials.ArrowGlowMaterial != null)
             {
                 Materials.ArrowGlowMaterial.mainTexture = ReplacementArrowGlowTexture;
@@ -77,7 +77,7 @@ namespace NoteTweaks.Managers
 #else
             ReplacementDotGlowTexture = await Utilities.LoadTextureFromAssemblyAsync($"NoteTweaks.Resources.Textures.Circle{Config.GlowTexture}.png");
 #endif
-            ReplacementDotGlowTexture.PrepareTexture();
+            ReplacementDotGlowTexture = ReplacementDotGlowTexture.PrepareTexture();
             if (Materials.DotGlowMaterial != null)
             {
                 Materials.DotGlowMaterial.mainTexture = ReplacementDotGlowTexture;

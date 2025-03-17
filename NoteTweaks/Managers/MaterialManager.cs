@@ -322,7 +322,6 @@ namespace NoteTweaks.Managers
             if (ArrowGlowMaterial != null)
             {
                 GlowTextures.UpdateTextures();
-                ArrowGlowMaterial.mainTexture = GlowTextures.ReplacementArrowGlowTexture;
                 return;
             }
 #else
@@ -336,7 +335,6 @@ namespace NoteTweaks.Managers
             if (ArrowGlowMaterial != null)
             {
                 await GlowTextures.UpdateTextures();
-                ArrowGlowMaterial.mainTexture = GlowTextures.ReplacementArrowGlowTexture;
                 return;
             }
 #endif

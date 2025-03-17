@@ -182,6 +182,7 @@ namespace NoteTweaks.Patches
                 
                     Managers.Textures.SetDefaultTextures();
                     Managers.Meshes.UpdateSphereMesh(Config.BombMeshSlices, Config.BombMeshStacks, Config.BombMeshSmoothNormals, Config.BombMeshWorldNormals);
+                    GlowTextures.LoadTextures(); // for some reason this needs to be explicitly called here in 1.29. idk
                     Materials.UpdateAll();
                     BombPatch.SetStaticBombColor();
     #else
@@ -718,6 +719,7 @@ namespace NoteTweaks.Patches
                     Transform arrowGlowObject = meshRenderer.transform.parent.Find("NoteArrowGlow");
                     if (arrowGlowObject)
                     {
+                        arrowGlowObject.GetComponent<MeshRenderer>().sharedMaterial = Materials.ArrowGlowMaterial;
                         arrowGlowObject.gameObject.SetActive(Config.EnableFaceGlow);
                         
                         Transform arrowGlowTransform = arrowGlowObject.transform;
@@ -728,8 +730,6 @@ namespace NoteTweaks.Patches
                         
                         arrowGlowTransform.localScale = glowScale;
                         arrowGlowTransform.localPosition = glowPosition;
-                        
-                        arrowGlowObject.GetComponent<MeshRenderer>().sharedMaterial = Materials.ArrowGlowMaterial;
                     }
                 }
 
