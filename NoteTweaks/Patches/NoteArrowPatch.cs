@@ -640,6 +640,23 @@ namespace NoteTweaks.Patches
             }
         }
 
+        [HarmonyPatch(typeof(NoteDebrisSpawner), "SpawnDebris")]
+        internal class DebrisSpawnerPatch
+        {
+            // ReSharper disable once InconsistentNaming
+            internal static bool Prefix(ref Vector3 noteScale)
+            {
+                if (!Config.Enabled || AutoDisable || !IsAllowedToScaleNotes)
+                {
+                    return true;
+                }
+
+                noteScale = Config.NoteScale;
+                
+                return true;
+            }
+        }
+
         [HarmonyPatch(typeof(ColorNoteVisuals), "HandleNoteControllerDidInit")]
         [HarmonyAfter("aeroluna.Chroma")]
         [HarmonyPriority(int.MinValue)]
