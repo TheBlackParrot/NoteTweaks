@@ -939,6 +939,53 @@ namespace NoteTweaks.Patches
             }
         }
 
+        [HarmonyPatch(typeof(BeatEffectSpawner), "HandleNoteDidStartJump")]
+        [HarmonyAfter("aeroluna.Chroma")]
+        [HarmonyPriority(int.MinValue)]
+        public static class BeatEffectSpawnerPatch
+        {
+            internal static void Postfix(BeatEffectSpawner __instance, NoteController noteController)
+            {
+                Transform noteRoot = noteController.transform.GetChild(0);
+                ColorType colorType = noteController._noteData.colorType;
+                bool isLeft = colorType == ColorType.ColorA;
+                
+                if (Config.EnableNoteOutlines && !IsUsingHiddenTypeModifier)
+                {
+                    Transform noteOutline = noteRoot.Find("NoteOutline");
+                    
+                    noteOutline.gameObject.SetActive(Config.EnableNoteOutlines);
+
+                    if (noteOutline.gameObject.TryGetComponent(out MaterialPropertyBlockController controller) && noteRoot.TryGetComponent(out MeshRenderer cubeRenderer))
+                    {
+                        Color noteColor = Config.BombColor;
+                        if (cubeRenderer.TryGetComponent(out MaterialPropertyBlockController noteMaterialController))
+                        {
+                            noteColor = noteMaterialController.materialPropertyBlock.GetColor(ColorNoteVisuals._colorId);
+                        }
+                
+                        float colorScalar = noteColor.maxColorComponent;
+
+                        if (colorScalar != 0 && isLeft ? Config.NormalizeLeftOutlineColor : Config.NormalizeRightOutlineColor)
+                        {
+                            noteColor /= colorScalar;
+                        }
+
+                        Color outlineColor = Color.LerpUnclamped(isLeft ? Config.NoteOutlineLeftColor : Config.NoteOutlineRightColor, noteColor, isLeft ? Config.NoteOutlineLeftColorSkew : Config.NoteOutlineRightColorSkew);
+                        
+                        bool applyBloom = Config.AddBloomForOutlines && Materials.MainEffectContainer.value;
+#if PRE_V1_39_1
+                        controller.materialPropertyBlock.SetColor(ColorNoteVisuals._colorId, outlineColor.ColorWithAlpha(applyBloom ? Config.OutlineBloomAmount : 1f));
+                        controller.materialPropertyBlock.SetFloat(Materials.FinalColorMul, isLeft ? Config.LeftOutlineFinalColorMultiplier : Config.RightOutlineFinalColorMultiplier);
+#else
+                        controller.materialPropertyBlock.SetColor(ColorNoteVisuals._colorId, outlineColor.ColorWithAlpha(applyBloom ? Config.OutlineBloomAmount : Materials.SaneAlphaValue));
+#endif
+                        controller.ApplyChanges();
+                    }
+                }
+            }
+        }
+
         [HarmonyPatch]
         public static class CutoutEffectForOutlinesPatch
         {
