@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using HarmonyLib;
 using IPA.Loader;
 #if !V1_29_1
@@ -458,40 +459,7 @@ namespace NoteTweaks.Patches
                     cubeRenderer.sharedMaterial = Materials.NoteMaterial;
                 }
                 
-                List<string> objs = new List<string> { "NoteArrowGlow", "AddedNoteCircleGlow" };
-
-                // ok buddy, ok pal
-                objs.Do(objName =>
-                {
-                    Transform glowTransform = noteRoot.Find(objName);
-                    if (glowTransform != null)
-                    {
-                        if (glowTransform.TryGetComponent(out MeshRenderer glowRenderer))
-                        {
-                            Enum.TryParse(isLeft ? Config.LeftGlowBlendOp : Config.RightGlowBlendOp, out BlendOp operation);
-                            glowRenderer.material.SetInt(Materials.BlendOpID, (int)operation);
-                        }
-                        
-                        if(glowTransform.gameObject.TryGetComponent(out MaterialPropertyBlockController materialPropertyBlockController) && colorNoteVisuals != null)
-                        {
-                            Color glowColor = colorNoteVisuals._noteColor;
-                            
-                            if (isLeft ? Config.NormalizeLeftFaceGlowColor : Config.NormalizeRightFaceGlowColor)
-                            {
-                                float colorScalar = colorNoteVisuals._noteColor.maxColorComponent;
-                                if (colorScalar != 0)
-                                {
-                                    glowColor /= colorScalar;
-                                }
-                            }
-                        
-                            Color c = Color.LerpUnclamped(isLeft ? Config.LeftFaceGlowColor : Config.RightFaceGlowColor, glowColor, isLeft ? Config.LeftFaceGlowColorNoteSkew : Config.RightFaceGlowColorNoteSkew);
-                            c.a = isLeft ? Config.LeftGlowIntensity : Config.RightGlowIntensity;
-                            materialPropertyBlockController.materialPropertyBlock.SetColor(ColorNoteVisuals._colorId, c);
-                            materialPropertyBlockController.ApplyChanges();
-                        }
-                    } 
-                });
+                ColorizeFaceSymbolGlow(colorNoteVisuals);
 
                 if (isChainHead)
                 {
@@ -654,8 +622,13 @@ namespace NoteTweaks.Patches
                     return;
                 }
                 
+                ColorizeFaceSymbols(__instance, ____arrowMeshRenderers, ____circleMeshRenderers);
+                ColorizeFaceSymbolGlow(__instance);
+                
                 ColorType colorType = __instance._noteController.noteData.colorType;
                 bool isLeft = colorType == ColorType.ColorA;
+                
+                bool applyBloom = Config.AddBloomForFaceSymbols && Materials.MainEffectContainer.value;
                 
                 foreach (MeshRenderer meshRenderer in ____arrowMeshRenderers)
                 {
@@ -677,30 +650,11 @@ namespace NoteTweaks.Patches
                             arrowMeshFilter.mesh = Managers.Meshes.CurrentArrowMesh;
                         }
                     }
-
-                    if (meshRenderer.TryGetComponent(out MaterialPropertyBlockController materialPropertyBlockController))
-                    {
-                        Color faceColor = __instance._noteColor;
-                            
-                        if (isLeft ? Config.NormalizeLeftFaceColor : Config.NormalizeRightFaceColor)
-                        {
-                            float colorScalar = __instance._noteColor.maxColorComponent;
-                            if (colorScalar != 0)
-                            {
-                                faceColor /= colorScalar;
-                            }
-                        }
-                        
-                        bool applyBloom = Config.AddBloomForFaceSymbols && Materials.MainEffectContainer.value;
-                        Color c = Color.LerpUnclamped(isLeft ? Config.LeftFaceColor : Config.RightFaceColor, faceColor, isLeft ? Config.LeftFaceColorNoteSkew : Config.RightFaceColorNoteSkew);
-                        materialPropertyBlockController.materialPropertyBlock.SetColor(ColorNoteVisuals._colorId, c.ColorWithAlpha(applyBloom ? Config.FaceSymbolBloomAmount : Materials.SaneAlphaValue));
-                        materialPropertyBlockController.ApplyChanges();
-                        
-                        meshRenderer.material.SetInt(Materials.SrcFactorID, Materials.SrcFactor);
-                        meshRenderer.material.SetInt(Materials.DstFactorID, Materials.DstFactor);
-                        meshRenderer.material.SetInt(Materials.SrcFactorAlphaID, applyBloom ? 1 : Materials.SrcFactorAlpha);
-                        meshRenderer.material.SetInt(Materials.DstFactorAlphaID, Materials.DstFactorAlpha);
-                    }
+                    
+                    meshRenderer.material.SetInt(Materials.SrcFactorID, Materials.SrcFactor);
+                    meshRenderer.material.SetInt(Materials.DstFactorID, Materials.DstFactor);
+                    meshRenderer.material.SetInt(Materials.SrcFactorAlphaID, applyBloom ? 1 : Materials.SrcFactorAlpha);
+                    meshRenderer.material.SetInt(Materials.DstFactorAlphaID, Materials.DstFactorAlpha);
 
                     if (meshRenderer.gameObject.TryGetComponent(out ConditionalMaterialSwitcher switcher))
                     {
@@ -808,28 +762,12 @@ namespace NoteTweaks.Patches
                                     }
                                 }
                             }
-                            Color faceColor = __instance._noteColor;
-                            
-                            if (isLeft ? Config.NormalizeLeftFaceColor : Config.NormalizeRightFaceColor)
-                            {
-                                float colorScalar = __instance._noteColor.maxColorComponent;
-                                if (colorScalar != 0)
-                                {
-                                    faceColor /= colorScalar;
-                                }
-                            }
-                            
-                            bool applyBloom = Config.AddBloomForFaceSymbols && Materials.MainEffectContainer.value;
-                            Color c = Color.LerpUnclamped(isLeft ? Config.LeftFaceColor : Config.RightFaceColor, faceColor, isLeft ? Config.LeftFaceColorNoteSkew : Config.RightFaceColorNoteSkew);
-                            c.a = _fixDots ? (applyBloom ? Config.FaceSymbolBloomAmount : Materials.SaneAlphaValue) : materialPropertyBlockController.materialPropertyBlock.GetColor(ColorNoteVisuals._colorId).a;
-                            materialPropertyBlockController.materialPropertyBlock.SetColor(ColorNoteVisuals._colorId, c);
-                            materialPropertyBlockController.ApplyChanges();
-                            
-                            meshRenderer.material.SetInt(Materials.SrcFactorID, Materials.SrcFactor);
-                            meshRenderer.material.SetInt(Materials.DstFactorID, Materials.DstFactor);
-                            meshRenderer.material.SetInt(Materials.SrcFactorAlphaID, applyBloom ? 1 : Materials.SrcFactorAlpha);
-                            meshRenderer.material.SetInt(Materials.DstFactorAlphaID, Materials.DstFactorAlpha);
                         }
+                        
+                        meshRenderer.material.SetInt(Materials.SrcFactorID, Materials.SrcFactor);
+                        meshRenderer.material.SetInt(Materials.DstFactorID, Materials.DstFactor);
+                        meshRenderer.material.SetInt(Materials.SrcFactorAlphaID, applyBloom ? 1 : Materials.SrcFactorAlpha);
+                        meshRenderer.material.SetInt(Materials.DstFactorAlphaID, Materials.DstFactorAlpha);
 
                         if (isChainLink)
                         {
@@ -914,7 +852,7 @@ namespace NoteTweaks.Patches
             }
         }
 
-        internal static void ColorizeOutlines(NoteController noteController)
+        private static void ColorizeOutlines(NoteController noteController)
         {
             Transform noteRoot = noteController.transform.GetChild(0);
                 
@@ -956,16 +894,112 @@ namespace NoteTweaks.Patches
             }
         }
 
+        private static void ColorizeFaceSymbols(ColorNoteVisuals colorNoteVisuals,
+            [CanBeNull, Optional] MeshRenderer[] arrowMeshRenderers,
+            [CanBeNull, Optional] MeshRenderer[] circleMeshRenderers)
+        {
+            ColorType colorType = colorNoteVisuals._noteController.noteData.colorType;
+            bool isLeft = colorType == ColorType.ColorA;
+            
+            bool applyBloom = Config.AddBloomForFaceSymbols && Materials.MainEffectContainer.value;
+            
+            Color faceColor = colorNoteVisuals._noteColor;
+                            
+            if (isLeft ? Config.NormalizeLeftFaceColor : Config.NormalizeRightFaceColor)
+            {
+                float colorScalar = colorNoteVisuals._noteColor.maxColorComponent;
+                if (colorScalar != 0)
+                {
+                    faceColor /= colorScalar;
+                }
+            }
+            
+            Color c = Color.LerpUnclamped(isLeft ? Config.LeftFaceColor : Config.RightFaceColor, faceColor, isLeft ? Config.LeftFaceColorNoteSkew : Config.RightFaceColorNoteSkew);
+            
+            if (arrowMeshRenderers == null)
+            {
+                arrowMeshRenderers = colorNoteVisuals._arrowMeshRenderers;
+            }
+            if (circleMeshRenderers == null)
+            {
+                circleMeshRenderers = colorNoteVisuals._circleMeshRenderers;
+            }
+
+            foreach (MeshRenderer meshRenderer in arrowMeshRenderers)
+            {
+                if (meshRenderer.TryGetComponent(out MaterialPropertyBlockController materialPropertyBlockController))
+                {
+                    materialPropertyBlockController.materialPropertyBlock.SetColor(ColorNoteVisuals._colorId, c.ColorWithAlpha(applyBloom ? Config.FaceSymbolBloomAmount : Materials.SaneAlphaValue));
+                    materialPropertyBlockController.ApplyChanges();
+                }
+            }
+
+            foreach (MeshRenderer meshRenderer in circleMeshRenderers)
+            {
+                if (meshRenderer.TryGetComponent(out MaterialPropertyBlockController materialPropertyBlockController))
+                {
+                    c.a = _fixDots ? (applyBloom ? Config.FaceSymbolBloomAmount : Materials.SaneAlphaValue) : materialPropertyBlockController.materialPropertyBlock.GetColor(ColorNoteVisuals._colorId).a;
+                    materialPropertyBlockController.materialPropertyBlock.SetColor(ColorNoteVisuals._colorId, c);
+                    materialPropertyBlockController.ApplyChanges();
+                }
+            }
+        }
+
+        private static void ColorizeFaceSymbolGlow(ColorNoteVisuals colorNoteVisuals)
+        {
+            ColorType colorType = colorNoteVisuals._noteController.noteData.colorType;
+            bool isLeft = colorType == ColorType.ColorA;
+            
+            Transform noteRoot = colorNoteVisuals.transform.GetChild(0);
+            List<string> objs = new List<string> { "NoteArrowGlow", "AddedNoteCircleGlow" };
+
+            // ok buddy, ok pal
+            objs.Do(objName =>
+            {
+                Transform glowTransform = noteRoot.Find(objName);
+                if (glowTransform != null)
+                {
+                    if (glowTransform.TryGetComponent(out MeshRenderer glowRenderer))
+                    {
+                        Enum.TryParse(isLeft ? Config.LeftGlowBlendOp : Config.RightGlowBlendOp, out BlendOp operation);
+                        glowRenderer.material.SetInt(Materials.BlendOpID, (int)operation);
+                    }
+                        
+                    if(glowTransform.gameObject.TryGetComponent(out MaterialPropertyBlockController materialPropertyBlockController) && colorNoteVisuals != null)
+                    {
+                        Color glowColor = colorNoteVisuals._noteColor;
+                            
+                        if (isLeft ? Config.NormalizeLeftFaceGlowColor : Config.NormalizeRightFaceGlowColor)
+                        {
+                            float colorScalar = colorNoteVisuals._noteColor.maxColorComponent;
+                            if (colorScalar != 0)
+                            {
+                                glowColor /= colorScalar;
+                            }
+                        }
+                        
+                        Color c = Color.LerpUnclamped(isLeft ? Config.LeftFaceGlowColor : Config.RightFaceGlowColor, glowColor, isLeft ? Config.LeftFaceGlowColorNoteSkew : Config.RightFaceGlowColorNoteSkew);
+                        c.a = isLeft ? Config.LeftGlowIntensity : Config.RightGlowIntensity;
+                        materialPropertyBlockController.materialPropertyBlock.SetColor(ColorNoteVisuals._colorId, c);
+                        materialPropertyBlockController.ApplyChanges();
+                    }
+                } 
+            });
+        }
+
         // reference: https://github.com/Aeroluna/Heck/blob/d93745fe69351bd3276c5525ad24a3761251bf99/Chroma/HarmonyPatches/Colorizer/NoteEffectsColorize.cs#L31
         [HarmonyPatch(typeof(BeatEffectSpawner), "HandleNoteDidStartJump")]
         [HarmonyAfter("aeroluna.Chroma")]
         [HarmonyPriority(int.MinValue)]
         public static class BeatEffectSpawnerPatch
         {
-            internal static void Postfix(BeatEffectSpawner __instance, NoteController noteController)
+            internal static void Postfix(NoteController noteController)
             {
-                ColorNoteVisuals colorNoteVisuals = noteController.GetComponent<ColorNoteVisuals>();
-                
+                if (noteController.TryGetComponent(out ColorNoteVisuals colorNoteVisuals))
+                {
+                    ColorizeFaceSymbols(colorNoteVisuals);
+                    ColorizeFaceSymbolGlow(colorNoteVisuals);
+                }
                 ColorizeOutlines(noteController);
             }
         }
