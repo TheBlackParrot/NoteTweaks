@@ -938,9 +938,29 @@ namespace NoteTweaks.Patches
             {
                 if (meshRenderer.TryGetComponent(out MaterialPropertyBlockController materialPropertyBlockController))
                 {
+                    Color originalColor = materialPropertyBlockController.materialPropertyBlock.GetColor(ColorNoteVisuals._colorId);
+                    float originalAlpha = originalColor.a;
+                
+                    float alphaScale = Config.AddBloomForFaceSymbols && Materials.MainEffectContainer.value ? Config.FaceSymbolBloomAmount : 1f;
+                    if (!Mathf.Approximately(originalAlpha, Config.FaceSymbolBloomAmount))
+                    {
+                        materialPropertyBlockController.materialPropertyBlock.SetColor(ColorNoteVisuals._colorId, originalColor.ColorWithAlpha(originalAlpha * alphaScale));
+                        materialPropertyBlockController.materialPropertyBlock.SetFloat(CutoutEffect._cutoutPropertyID, Mathf.Min(Mathf.Max(Mathf.Abs(originalAlpha - 1f), 0f), 1f));
+                    }
+                    
                     c.a = _fixDots ? (applyBloom ? Config.FaceSymbolBloomAmount : Materials.SaneAlphaValue) : materialPropertyBlockController.materialPropertyBlock.GetColor(ColorNoteVisuals._colorId).a;
                     materialPropertyBlockController.materialPropertyBlock.SetColor(ColorNoteVisuals._colorId, c);
                     materialPropertyBlockController.ApplyChanges();
+                
+                    if(_fixDots && materialPropertyBlockController.transform.name == "AddedNoteCircleGlow")
+                    {
+                        Color wantedGlowColor = materialPropertyBlockController.materialPropertyBlock.GetColor(ColorNoteVisuals._colorId);
+                        float fixedAlpha = Mathf.Approximately(originalAlpha, Config.FaceSymbolBloomAmount) ? 1f : originalAlpha;
+                        
+                        wantedGlowColor.a = fixedAlpha * (isLeft ? Config.LeftGlowIntensity : Config.RightGlowIntensity); 
+                        materialPropertyBlockController.materialPropertyBlock.SetColor(ColorNoteVisuals._colorId, wantedGlowColor); 
+                        materialPropertyBlockController.ApplyChanges();
+                    }
                 }
             }
         }
@@ -995,6 +1015,11 @@ namespace NoteTweaks.Patches
         {
             internal static void Postfix(NoteController noteController)
             {
+                if (!Config.Enabled || AutoDisable)
+                {
+                    return;
+                }
+                
                 if (noteController.TryGetComponent(out ColorNoteVisuals colorNoteVisuals))
                 {
                     ColorizeFaceSymbols(colorNoteVisuals);
@@ -1053,7 +1078,7 @@ namespace NoteTweaks.Patches
             }
         }
         
-        [HarmonyPatch]
+        /*[HarmonyPatch]
         public static class MaterialPropertyBlockControllerPatch
         {
             private static bool DoFacePatch(MaterialPropertyBlockController instance)
@@ -1147,7 +1172,7 @@ namespace NoteTweaks.Patches
 
                 return true;
             }
-        }
+        }*/
         
         /*[HarmonyPatch(typeof(SliderController), "Hide")]
         public static class SliderControllerPatch
