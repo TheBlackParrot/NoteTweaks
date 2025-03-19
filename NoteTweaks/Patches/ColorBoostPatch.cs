@@ -13,7 +13,7 @@ namespace NoteTweaks.Patches
     {
         private static PluginConfig Config => PluginConfig.Instance;
 
-        private static ColorScheme _patchedScheme;
+        internal static ColorScheme PatchedScheme;
         
 #if PRE_V1_37_1
         private static ColorScheme PatchColors(ColorScheme scheme)
@@ -42,7 +42,7 @@ namespace NoteTweaks.Patches
 #else
         private static ColorScheme PatchColors(ColorSchemeSO schemeObj)
         {
-            _patchedScheme = new ColorScheme(schemeObj)
+            PatchedScheme = new ColorScheme(schemeObj)
             {
                 _colorSchemeId = "NoteTweaksPatched",
                 _colorSchemeNameLocalizationKey = "NoteTweaksPatched",
@@ -55,9 +55,9 @@ namespace NoteTweaks.Patches
             float leftScale = 1.0f + Config.ColorBoostLeft;
             float rightScale = 1.0f + Config.ColorBoostRight;
             
-            Color leftColor = _patchedScheme._saberAColor;
+            Color leftColor = PatchedScheme._saberAColor;
             float leftBrightness = leftColor.Brightness();
-            Color rightColor = _patchedScheme._saberBColor;
+            Color rightColor = PatchedScheme._saberBColor;
             float rightBrightness = rightColor.Brightness();
 
             if (leftBrightness > Config.LeftMaxBrightness)
@@ -78,12 +78,12 @@ namespace NoteTweaks.Patches
                 rightColor = rightColor.LerpRGBUnclamped(Color.white, Mathf.InverseLerp(rightBrightness, 1.0f, Config.RightMinBrightness));
             }
             
-            _patchedScheme._saberAColor = leftColor * leftScale;
-            _patchedScheme._saberAColor.a = 1f;
-            _patchedScheme._saberBColor = rightColor * rightScale;
-            _patchedScheme._saberBColor.a = 1f;
+            PatchedScheme._saberAColor = leftColor * leftScale;
+            PatchedScheme._saberAColor.a = 1f;
+            PatchedScheme._saberBColor = rightColor * rightScale;
+            PatchedScheme._saberBColor.a = 1f;
 
-            return _patchedScheme;
+            return PatchedScheme;
         }
         
 #if PRE_V1_37_1

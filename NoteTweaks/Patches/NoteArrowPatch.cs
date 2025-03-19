@@ -22,6 +22,7 @@ using static SongCore.Collections;
 
 namespace NoteTweaks.Patches
 {
+    [UsedImplicitly]
     internal class NotePhysicalTweaks
     {
         private static PluginConfig Config => PluginConfig.Instance;
@@ -1106,8 +1107,38 @@ namespace NoteTweaks.Patches
             ColorType colorType = noteController._noteData.colorType;
             Color originalColor = colorNoteVisuals._colorManager.ColorForType(colorType);
             bool isLeft = colorType == ColorType.ColorA;
+
+            if (originalColor == (isLeft ? NoteColorTweaks.PatchedScheme._saberAColor : NoteColorTweaks.PatchedScheme._saberBColor))
+            {
+                // not chroma
+                Plugin.Log.Info("not a chroma note");
+                return true;
+            }
+            
+            float brightness = originalColor.Brightness();
+            
+            float maxBrightness = isLeft ? Config.LeftMaxBrightness : Config.RightMaxBrightness;
+            float minBrightness = isLeft ? Config.LeftMinBrightness : Config.RightMinBrightness;
+            
+            if (brightness > maxBrightness)
+            {
+                originalColor = originalColor.LerpRGBUnclamped(Color.black, Mathf.InverseLerp(brightness, 0.0f, maxBrightness));
+            }
+            else if (brightness < minBrightness)
+            {
+                originalColor = originalColor.LerpRGBUnclamped(Color.white, Mathf.InverseLerp(brightness, 1.0f, minBrightness));
+            }
+            float colorScale = 1.0f + (isLeft ? Config.ColorBoostLeft : Config.ColorBoostRight);
+            originalColor *= colorScale;
             
             Transform noteRoot = colorNoteVisuals.transform.GetChild(0);
+            
+            if(noteRoot.TryGetComponent(out MaterialPropertyBlockController noteMaterialPropertyBlockController))
+            {
+                noteMaterialPropertyBlockController.materialPropertyBlock.SetColor(ColorNoteVisuals._colorId, originalColor);
+                noteMaterialPropertyBlockController.ApplyChanges();
+            }
+            
             List<string> glowObjs = new List<string> { "NoteArrowGlow", "AddedNoteCircleGlow" };
             glowObjs.Do(objName =>
             {
@@ -1116,8 +1147,19 @@ namespace NoteTweaks.Patches
                 {
                     if (glowTransform.gameObject.TryGetComponent(out MaterialPropertyBlockController materialPropertyBlockController))
                     {
+                        Color glowColor = originalColor;
+                            
+                        if (isLeft ? Config.NormalizeLeftFaceGlowColor : Config.NormalizeRightFaceGlowColor)
+                        {
+                            float colorScalar = glowColor.maxColorComponent;
+                            if (colorScalar != 0)
+                            {
+                                glowColor /= colorScalar;
+                            }
+                        }
+                        
                         Color oldGlowColor = materialPropertyBlockController.materialPropertyBlock.GetColor(ColorNoteVisuals._colorId);
-                        Color fixedColor = originalColor.ColorWithAlpha(oldGlowColor.a);
+                        Color fixedColor = glowColor.ColorWithAlpha(oldGlowColor.a);
                             
                         materialPropertyBlockController.materialPropertyBlock.SetColor(ColorNoteVisuals._colorId, fixedColor);
                         materialPropertyBlockController.ApplyChanges();
@@ -1137,7 +1179,7 @@ namespace NoteTweaks.Patches
                             
                         if (isLeft ? Config.NormalizeLeftFaceColor : Config.NormalizeRightFaceColor)
                         {
-                            float colorScalar = colorNoteVisuals._noteColor.maxColorComponent;
+                            float colorScalar = faceColor.maxColorComponent;
                             if (colorScalar != 0)
                             {
                                 faceColor /= colorScalar;
@@ -1155,31 +1197,54 @@ namespace NoteTweaks.Patches
                 }
             });
 
-            if (!Config.EnableNoteOutlines)
+            if (Config.EnableAccDot)
             {
-                return true;
-            }
-                
-            Transform noteOutline = noteRoot.Find("NoteOutline");
-                
-            if (noteOutline.gameObject.TryGetComponent(out MaterialPropertyBlockController controller))
-            {
-                Color noteColor = originalColor;
-                
-                float colorScalar = noteColor.maxColorComponent;
+                Transform originalAccDotObject = noteRoot.Find("AccDotObject");
 
-                if (colorScalar != 0 && isLeft ? Config.NormalizeLeftOutlineColor : Config.NormalizeRightOutlineColor)
+                if (originalAccDotObject.TryGetComponent(out MeshRenderer originalAccDotMeshRenderer))
                 {
-                    noteColor /= colorScalar;
-                }
+                    Color accDotColor = originalColor;
 
-                Color outlineColor = Color.LerpUnclamped(isLeft ? Config.NoteOutlineLeftColor : Config.NoteOutlineRightColor, noteColor, isLeft ? Config.NoteOutlineLeftColorSkew : Config.NoteOutlineRightColorSkew);
+                    if (isLeft ? Config.NormalizeLeftAccDotColor : Config.NormalizeRightAccDotColor)
+                    {
+                        float colorScalar = accDotColor.maxColorComponent;
+                        if (colorScalar != 0)
+                        {
+                            accDotColor /= colorScalar;
+                        }
+                    }
+
+                    originalAccDotMeshRenderer.material.color =
+                        Color.LerpUnclamped(isLeft ? Config.LeftAccDotColor : Config.RightAccDotColor,
+                                accDotColor,
+                                isLeft ? Config.LeftAccDotColorNoteSkew : Config.RightAccDotColorNoteSkew)
+                            .ColorWithAlpha(0f);
+                }
+            }
+
+            if (Config.EnableNoteOutlines)
+            {
+                Transform noteOutline = noteRoot.Find("NoteOutline");
+                
+                if (noteOutline.gameObject.TryGetComponent(out MaterialPropertyBlockController controller))
+                {
+                    Color noteColor = originalColor;
+                
+                    float colorScalar = noteColor.maxColorComponent;
+
+                    if (colorScalar != 0 && isLeft ? Config.NormalizeLeftOutlineColor : Config.NormalizeRightOutlineColor)
+                    {
+                        noteColor /= colorScalar;
+                    }
+
+                    Color outlineColor = Color.LerpUnclamped(isLeft ? Config.NoteOutlineLeftColor : Config.NoteOutlineRightColor, noteColor, isLeft ? Config.NoteOutlineLeftColorSkew : Config.NoteOutlineRightColorSkew);
                         
-                Color oldOutlineColor = controller.materialPropertyBlock.GetColor(ColorNoteVisuals._colorId);
-                Color fixedColor = outlineColor.ColorWithAlpha(oldOutlineColor.a);
+                    Color oldOutlineColor = controller.materialPropertyBlock.GetColor(ColorNoteVisuals._colorId);
+                    Color fixedColor = outlineColor.ColorWithAlpha(oldOutlineColor.a);
                     
-                controller.materialPropertyBlock.SetColor(ColorNoteVisuals._colorId, fixedColor);
-                controller.ApplyChanges();
+                    controller.materialPropertyBlock.SetColor(ColorNoteVisuals._colorId, fixedColor);
+                    controller.ApplyChanges();
+                }
             }
 
             return true; 
