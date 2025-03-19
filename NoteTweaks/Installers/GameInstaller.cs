@@ -1,4 +1,5 @@
-﻿using Zenject;
+﻿using NoteTweaks.Patches;
+using Zenject;
 
 namespace NoteTweaks.Installers
 {
@@ -7,6 +8,7 @@ namespace NoteTweaks.Installers
     {
         public override void InstallBindings()
         {
+            Container.BindInterfacesTo<BeatEffectSpawnerPatch>().AsSingle();
         }
     }
 }
