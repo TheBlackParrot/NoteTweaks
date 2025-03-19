@@ -18,7 +18,7 @@ namespace NoteTweaks.Patches
 #if PRE_V1_37_1
         private static ColorScheme PatchColors(ColorScheme scheme)
         {
-            _patchedScheme = new ColorScheme(
+            PatchedScheme = new ColorScheme(
                 "NoteTweaksPatched",
                 "NoteTweaksPatched",
                 true,
