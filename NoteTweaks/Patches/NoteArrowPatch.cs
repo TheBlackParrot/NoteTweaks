@@ -1111,7 +1111,6 @@ namespace NoteTweaks.Patches
             if (originalColor == (isLeft ? NoteColorTweaks.PatchedScheme._saberAColor : NoteColorTweaks.PatchedScheme._saberBColor))
             {
                 // not chroma
-                Plugin.Log.Info("not a chroma note");
                 return true;
             }
             
