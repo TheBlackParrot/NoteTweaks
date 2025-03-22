@@ -571,7 +571,7 @@ namespace NoteTweaks.UI
                 
                 float colorScalar = noteColor.maxColorComponent;
 
-                if (colorScalar != 0 && !isBomb && isLeft ? Config.NormalizeLeftOutlineColor : Config.NormalizeRightOutlineColor)
+                if (colorScalar != 0 && !isBomb && (isLeft ? Config.NormalizeLeftOutlineColor : Config.NormalizeRightOutlineColor))
                 {
                     noteColor /= colorScalar;
                 }

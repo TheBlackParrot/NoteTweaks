@@ -218,6 +218,7 @@ namespace NoteTweaks.UI
             {
                 Config.ColorBoostLeft = value;
                 NotePreviewViewController.UpdateColors();
+                NotePreviewViewController.UpdateOutlines();
             }
         }
 
@@ -228,6 +229,7 @@ namespace NoteTweaks.UI
             {
                 Config.ColorBoostRight = value;
                 NotePreviewViewController.UpdateColors();
+                NotePreviewViewController.UpdateOutlines();
             }
         }
 
@@ -745,6 +747,7 @@ namespace NoteTweaks.UI
             {
                 Config.LeftMinBrightness = Mathf.Clamp(value, 0.0f, 1.0f);
                 NotePreviewViewController.UpdateColors();
+                NotePreviewViewController.UpdateOutlines();
             }
         }
         
@@ -755,6 +758,7 @@ namespace NoteTweaks.UI
             {
                 Config.LeftMaxBrightness = Mathf.Clamp(value, 0.0f, 1.0f);
                 NotePreviewViewController.UpdateColors();
+                NotePreviewViewController.UpdateOutlines();
             }
         }
         
@@ -765,6 +769,7 @@ namespace NoteTweaks.UI
             {
                 Config.RightMinBrightness = Mathf.Clamp(value, 0.0f, 1.0f);
                 NotePreviewViewController.UpdateColors();
+                NotePreviewViewController.UpdateOutlines();
             }
         }
         
@@ -775,6 +780,7 @@ namespace NoteTweaks.UI
             {
                 Config.RightMaxBrightness = Mathf.Clamp(value, 0.0f, 1.0f);
                 NotePreviewViewController.UpdateColors();
+                NotePreviewViewController.UpdateOutlines();
             }
         }
 
