@@ -28,6 +28,9 @@
                 <slider-setting apply-on-change="true" value="NoteTextureBrightness" text="Note Texture Brightness" bind-value="true"
                                 min="0" max="2" increment="0.01" show-buttons="true" formatter="PercentageFormatter"
                                 hover-hint="Brightness of the cubemap texture"/>
+                <horizontal child-control-width="false" child-align="MiddleRight">
+                    <icon-button icon="#RedoIcon" on-click="ReloadNoteTexture"/>
+                </horizontal>
 
                 <horizontal><text text="-----" font-size="4" color="#00000000"/></horizontal>
                 
@@ -133,6 +136,9 @@
                 <slider-setting apply-on-change="true" value="BombTextureBrightness" text="Bomb Texture Brightness" bind-value="true"
                                 min="0" max="2" increment="0.01" show-buttons="true" formatter="PercentageFormatter"
                                 hover-hint="Brightness of the cubemap texture"/>
+                <horizontal child-control-width="false" child-align="MiddleRight">
+                    <icon-button icon="#RedoIcon" on-click="ReloadBombTexture"/>
+                </horizontal>
             </scroll-view>
         </vertical>
     </tab>

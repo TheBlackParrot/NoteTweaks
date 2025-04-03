@@ -1228,34 +1228,38 @@ namespace NoteTweaks.UI
         protected float NoteTextureBrightness
         {
             get => Config.NoteTextureBrightness;
-            set
-            {
-                Config.NoteTextureBrightness = Mathf.Clamp(value, 0.0f, 2.0f);
-                if (LoadTextures)
-                {
-#if V1_29_1
-                    Textures.LoadNoteTexture(Config.NoteTexture, false, true);
-#else
-                    _ = Textures.LoadNoteTexture(Config.NoteTexture, false, true);
-#endif
-                }
-            }
+            set => Config.NoteTextureBrightness = Mathf.Clamp(value, 0.0f, 2.0f);
         }
 
         protected float BombTextureBrightness
         {
             get => Config.BombTextureBrightness;
-            set
+            set => Config.BombTextureBrightness = Mathf.Clamp(value, 0.0f, 2.0f);
+        }
+
+        [UIAction("ReloadNoteTexture")]
+        public void ReloadNoteTexture()
+        {
+            if (LoadTextures)
             {
-                Config.BombTextureBrightness = Mathf.Clamp(value, 0.0f, 2.0f);
-                if (LoadTextures)
-                {
+#if V1_29_1
+                    Textures.LoadNoteTexture(Config.NoteTexture, false, true);
+#else
+                _ = Textures.LoadNoteTexture(Config.NoteTexture, false, true);
+#endif
+            }
+        }
+        
+        [UIAction("ReloadBombTexture")]
+        public void ReloadBombTexture()
+        {
+            if (LoadTextures)
+            {
 #if V1_29_1
                     Textures.LoadNoteTexture(Config.BombTexture, true, true);
 #else
-                    _ = Textures.LoadNoteTexture(Config.BombTexture, true, true);
+                _ = Textures.LoadNoteTexture(Config.BombTexture, true, true);
 #endif
-                }
             }
         }
 
