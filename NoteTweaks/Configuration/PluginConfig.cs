@@ -336,6 +336,9 @@ namespace NoteTweaks.Configuration
         [JsonProperty] public bool BombMeshSmoothNormals { get; set; } = false;
         [JsonProperty] public bool BombMeshWorldNormals { get; set; } = false;
 
+        [JsonProperty] public float NoteTextureBrightness { get; set; } = 1.0f;
+        [JsonProperty] public float BombTextureBrightness { get; set; } = 1.0f;
+
         internal PluginConfig ShallowCopy()
         {
             return (PluginConfig)MemberwiseClone();

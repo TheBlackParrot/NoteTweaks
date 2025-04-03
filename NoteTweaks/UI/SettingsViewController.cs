@@ -1225,6 +1225,40 @@ namespace NoteTweaks.UI
             }
         }
 
+        protected float NoteTextureBrightness
+        {
+            get => Config.NoteTextureBrightness;
+            set
+            {
+                Config.NoteTextureBrightness = Mathf.Clamp(value, 0.0f, 2.0f);
+                if (LoadTextures)
+                {
+#if V1_29_1
+                    Textures.LoadNoteTexture(Config.NoteTexture, false, true);
+#else
+                    _ = Textures.LoadNoteTexture(Config.NoteTexture, false, true);
+#endif
+                }
+            }
+        }
+
+        protected float BombTextureBrightness
+        {
+            get => Config.BombTextureBrightness;
+            set
+            {
+                Config.BombTextureBrightness = Mathf.Clamp(value, 0.0f, 2.0f);
+                if (LoadTextures)
+                {
+#if V1_29_1
+                    Textures.LoadNoteTexture(Config.BombTexture, true, true);
+#else
+                    _ = Textures.LoadNoteTexture(Config.BombTexture, true, true);
+#endif
+                }
+            }
+        }
+
         [UIValue("BombMeshIsSphere")]
         [UsedImplicitly]
         private bool BombMeshIsSphere => BombMesh == "Sphere";

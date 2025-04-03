@@ -31,6 +31,20 @@ namespace NoteTweaks.Managers
 
             return color;
         }
+
+        public static Color ModifyBrightness(ref this Color color, float brightness)
+        {
+            if (Mathf.Approximately(brightness, 1.0f))
+            {
+                return color;
+            }
+
+            float alpha = color.a;
+            color = Color.Lerp(color, brightness > 1.0f ? Color.white : Color.black, Mathf.Abs(brightness - 1.0f))
+                .ColorWithAlpha(alpha);
+            
+            return color;
+        }
     }
 
     internal abstract class GlowTextures
@@ -189,7 +203,11 @@ namespace NoteTweaks.Managers
             if (textures.Any(x => x.Key == "all"))
             {
                 Color[] texture = textures.Find(x => x.Key == "all").Value.GetPixels();
-                texture = texture.Select(color => color.CheckForInversion()).Reverse().ToArray();
+                texture = texture.Select(color =>
+                {
+                    color = color.ModifyBrightness(Config.NoteTextureBrightness);
+                    return color.CheckForInversion();
+                }).Reverse().ToArray();
                 
                 FaceNames.Do(pair => _noteTexture.SetPixels(texture, pair.Value));
             }
@@ -198,7 +216,11 @@ namespace NoteTweaks.Managers
                 FaceNames.Do(pair =>
                 {
                     Color[] texture = textures.Find(x => x.Key == pair.Key).Value.GetPixels();
-                    texture = texture.Select(color => color.CheckForInversion()).Reverse().ToArray();
+                    texture = texture.Select(color =>
+                    {
+                        color = color.ModifyBrightness(Config.NoteTextureBrightness);
+                        return color.CheckForInversion();
+                    }).Reverse().ToArray();
 
                     _noteTexture.SetPixels(texture, pair.Value);
                 });
@@ -221,7 +243,11 @@ namespace NoteTweaks.Managers
             if (textures.Any(x => x.Key == "all"))
             {
                 Color[] texture = textures.Find(x => x.Key == "all").Value.GetPixels();
-                texture = texture.Select(color => color.CheckForInversion(true)).Reverse().ToArray();
+                texture = texture.Select(color =>
+                {
+                    color = color.ModifyBrightness(Config.BombTextureBrightness);
+                    return color.CheckForInversion(true);
+                }).Reverse().ToArray();
                 
                 FaceNames.Do(pair => _bombTexture.SetPixels(texture, pair.Value));
             }
@@ -230,7 +256,11 @@ namespace NoteTweaks.Managers
                 FaceNames.Do(pair =>
                 {
                     Color[] texture = textures.Find(x => x.Key == pair.Key).Value.GetPixels();
-                    texture = texture.Select(color => color.CheckForInversion(true)).Reverse().ToArray();
+                    texture = texture.Select(color =>
+                    {
+                        color = color.ModifyBrightness(Config.BombTextureBrightness);
+                        return color.CheckForInversion(true);
+                    }).Reverse().ToArray();
 
                     _bombTexture.SetPixels(texture, pair.Value);
                 });
