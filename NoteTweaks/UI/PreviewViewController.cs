@@ -41,7 +41,7 @@ namespace NoteTweaks.UI
         private static readonly List<string> GlowNames = new List<string> { "NoteArrowGlow", "AddedNoteCircleGlow" };
         
         private static float _cutoutAmount;
-        
+
         public string PercentageFormatter(float x) => x.ToString("0%");
 
         public NotePreviewViewController()
@@ -100,6 +100,9 @@ namespace NoteTweaks.UI
                 NotifyPropertyChanged();
             }
         }
+
+        [UIValue("NoteContainerIsFloating")]
+        private static bool NoteContainerIsFloating { get; set; } = true;
 
         public static void UpdateDotMesh()
         {
@@ -1093,6 +1096,11 @@ namespace NoteTweaks.UI
             Vector3 rotateAngle = new Vector3(0f, 1f, 0f);
 
             await AnimateForever(time => {
+                if (!NoteContainerIsFloating)
+                {
+                    return;
+                }
+                
                 Vector3 pos = _initialPosition;
                 pos.y = _initialPosition.y + (Mathf.Sin(time / bobTimeScale) * maxBob);
                 

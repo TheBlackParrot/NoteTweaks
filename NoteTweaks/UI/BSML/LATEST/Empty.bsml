@@ -7,6 +7,10 @@
                     min="1.0" max="12.0" increment="0.1" show-buttons="true"/>
         </vertical>
         
+        <vertical child-align="LowerCenter">
+            <toggle-setting text="Float" pref-width="35" local-scale="0.7 0.7 0.7" apply-on-change="true" value="NoteContainerIsFloating" bind-value="true"/>
+        </vertical>
+        
         <vertical child-align="LowerRight">
             <text text="Dissolve" local-scale="0.7 0.7 0.7" font-align="Center"/>
             <slider-setting text="" pref-width="50" apply-on-change="true" value="NoteContainerCutout" id="NoteContainerCutout" local-scale="0.7 0.7 0.7" bind-value="true"

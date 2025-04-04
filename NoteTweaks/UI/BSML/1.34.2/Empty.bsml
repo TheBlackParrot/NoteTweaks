@@ -6,6 +6,14 @@
             <slider-setting text="" pref-width="50" apply-on-change="true" value="NoteContainerZPos" id="NoteContainerZPos" font-size="3" bind-value="true"
                     min="1.0" max="12.0" increment="0.1" show-buttons="true"/>
         </vertical>
+
+        <vertical child-align="LowerCenter" spacing="3">
+            <!-- what teh fukc -->
+            <text text="Float" font-size="3" font-align="Center"/>
+            <horizontal preferred-width="19" child-control-width="false" horizontal-fit="PreferredSize" child-align="MiddleRight">
+                <toggle-setting text="" pref-width="30" apply-on-change="true" value="NoteContainerIsFloating" bind-value="true"/>
+            </horizontal>
+        </vertical>
         
         <vertical child-align="LowerRight" spacing="3">
             <text text="Dissolve" font-size="3" font-align="Center"/>
