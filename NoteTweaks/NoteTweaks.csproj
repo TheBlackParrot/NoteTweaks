@@ -187,6 +187,8 @@
         <EmbeddedResource Include="Resources/Textures/CubemapSingles/Aberration G.png" />
         <EmbeddedResource Include="Resources/Textures/CubemapSingles/Aberration H.png" />
         <EmbeddedResource Include="Resources/Textures/CubemapSingles/Aberration I.png" />
+        <EmbeddedResource Include="Resources/Textures/CubemapSingles/Aberration J.png" />
+        <EmbeddedResource Include="Resources/Textures/CubemapSingles/Aberration K.png" />
         <EmbeddedResource Include="Resources/Textures/CubemapSingles/Dimple A.png" />
         <EmbeddedResource Include="Resources/Textures/CubemapSingles/Dimple B.png" />
         <EmbeddedResource Include="Resources/Textures/CubemapSingles/Dimple C.png" />
@@ -219,6 +221,11 @@
         <EmbeddedResource Include="Resources/Textures/CubemapSingles/Radials I.png" />
         <EmbeddedResource Include="Resources/Textures/CubemapSingles/Radials J.png" />
         <EmbeddedResource Include="Resources/Textures/CubemapSingles/Radials K.png" />
+        <EmbeddedResource Include="Resources/Textures/CubemapSingles/Radials L.png" />
+        <EmbeddedResource Include="Resources/Textures/CubemapSingles/Radials M.png" />
+        <EmbeddedResource Include="Resources/Textures/CubemapSingles/Radials N.png" />
+        <EmbeddedResource Include="Resources/Textures/CubemapSingles/Radials O.png" />
+        <EmbeddedResource Include="Resources/Textures/CubemapSingles/Radials P.png" />
         <EmbeddedResource Include="Resources/Textures/CubemapSingles/Ripple A.png" />
         <EmbeddedResource Include="Resources/Textures/CubemapSingles/Ripple B.png" />
         <EmbeddedResource Include="Resources/Textures/CubemapSingles/Ripple C.png" />
