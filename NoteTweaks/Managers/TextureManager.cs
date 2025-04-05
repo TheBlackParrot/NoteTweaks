@@ -45,6 +45,19 @@ namespace NoteTweaks.Managers
             
             return color;
         }
+
+        // https://www.dfstudios.co.uk/articles/programming/image-programming-algorithms/image-processing-algorithms-part-5-contrast-adjustment/
+        public static Color ModifyContrast(ref this Color color, float contrast)
+        {
+            contrast = (contrast - 1.0f) * 255;
+            
+            float factor = (259 * (contrast + 255)) / (255 * (259 - contrast));
+            color.r = Mathf.Clamp(factor * (color.r - 0.5f) + 0.5f, 0f, 1f);
+            color.g = Mathf.Clamp(factor * (color.g - 0.5f) + 0.5f, 0f, 1f);
+            color.b = Mathf.Clamp(factor * (color.b - 0.5f) + 0.5f, 0f, 1f);
+            
+            return color;
+        }
     }
 
     internal abstract class GlowTextures
@@ -207,6 +220,7 @@ namespace NoteTweaks.Managers
                 Color[] texture = textures.Find(x => x.Key == "all").Value.GetPixels();
                 texture = texture.Select(color =>
                 {
+                    color = color.ModifyContrast(Config.NoteTextureContrast);
                     color = color.ModifyBrightness(Config.NoteTextureBrightness);
                     return color.CheckForInversion();
                 }).Reverse().ToArray();
@@ -220,6 +234,7 @@ namespace NoteTweaks.Managers
                     Color[] texture = textures.Find(x => x.Key == pair.Key).Value.GetPixels();
                     texture = texture.Select(color =>
                     {
+                        color = color.ModifyContrast(Config.NoteTextureContrast);
                         color = color.ModifyBrightness(Config.NoteTextureBrightness);
                         return color.CheckForInversion();
                     }).Reverse().ToArray();
@@ -247,6 +262,7 @@ namespace NoteTweaks.Managers
                 Color[] texture = textures.Find(x => x.Key == "all").Value.GetPixels();
                 texture = texture.Select(color =>
                 {
+                    color = color.ModifyContrast(Config.BombTextureContrast);
                     color = color.ModifyBrightness(Config.BombTextureBrightness);
                     return color.CheckForInversion(true);
                 }).Reverse().ToArray();
@@ -260,6 +276,7 @@ namespace NoteTweaks.Managers
                     Color[] texture = textures.Find(x => x.Key == pair.Key).Value.GetPixels();
                     texture = texture.Select(color =>
                     {
+                        color = color.ModifyContrast(Config.BombTextureContrast);
                         color = color.ModifyBrightness(Config.BombTextureBrightness);
                         return color.CheckForInversion(true);
                     }).Reverse().ToArray();

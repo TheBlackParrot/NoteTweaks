@@ -1236,6 +1236,18 @@ namespace NoteTweaks.UI
             get => Config.BombTextureBrightness;
             set => Config.BombTextureBrightness = Mathf.Clamp(value, 0.0f, 2.0f);
         }
+        
+        protected float NoteTextureContrast
+        {
+            get => Config.NoteTextureContrast;
+            set => Config.NoteTextureContrast = Mathf.Clamp(value, 0.0f, 2.0f);
+        }
+
+        protected float BombTextureContrast
+        {
+            get => Config.BombTextureContrast;
+            set => Config.BombTextureContrast = Mathf.Clamp(value, 0.0f, 2.0f);
+        }
 
         [UIAction("ReloadNoteTexture")]
         public void ReloadNoteTexture()

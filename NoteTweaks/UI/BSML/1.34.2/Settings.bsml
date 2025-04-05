@@ -25,6 +25,9 @@
                                        hover-hint="Cubemap images in UserData/NoteTweaks/Textures/Notes"/>
                 <toggle-setting apply-on-change="true" value="InvertNoteTexture" text="Invert Note Texture" bind-value="true"
                                 hover-hint="Invert the colors of the cubemap texture"/>
+                <slider-setting apply-on-change="true" value="NoteTextureContrast" text="Note Texture Contrast" bind-value="true"
+                                min="0" max="2" increment="0.01" show-buttons="true" formatter="PercentageFormatter"
+                                hover-hint="Contrast of the cubemap texture"/>
                 <slider-setting apply-on-change="true" value="NoteTextureBrightness" text="Note Texture Brightness" bind-value="true"
                                 min="0" max="2" increment="0.01" show-buttons="true" formatter="PercentageFormatter"
                                 hover-hint="Brightness of the cubemap texture"/>
@@ -133,6 +136,9 @@
                                        hover-hint="Cubemap images in UserData/NoteTweaks/Textures/Notes"/>
                 <toggle-setting apply-on-change="true" value="InvertBombTexture" text="Invert Bomb Texture" bind-value="true"
                                 hover-hint="Invert the colors of the cubemap texture"/>
+                <slider-setting apply-on-change="true" value="BombTextureContrast" text="Bomb Texture Contrast" bind-value="true"
+                                min="0" max="2" increment="0.01" show-buttons="true" formatter="PercentageFormatter"
+                                hover-hint="Contrast of the cubemap texture"/>
                 <slider-setting apply-on-change="true" value="BombTextureBrightness" text="Bomb Texture Brightness" bind-value="true"
                                 min="0" max="2" increment="0.01" show-buttons="true" formatter="PercentageFormatter"
                                 hover-hint="Brightness of the cubemap texture"/>
