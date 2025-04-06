@@ -47,7 +47,7 @@
                 <horizontal><text text="-----" font-size="4" color="#00000000"/></horizontal>
                 
                 <slider-setting apply-on-change="true" value="RimDarkening" text="Rim Darkening" formatter="PercentageFormatter" bind-value="true"
-                                min="-4" max="4" increment="0.05" show-buttons="true"
+                                min="-6" max="6" increment="0.05" show-buttons="true"
                                 hover-hint="Amount to darken objects outside of the rim light area (DEFAULT: 20%)"/>
                 <slider-setting apply-on-change="true" value="RimOffset" text="Rim Offset" formatter="PercentageFormatter" bind-value="true"
                                 min="-2" max="2" increment="0.01" show-buttons="true"
