@@ -272,6 +272,9 @@
         <None Include="Resources\Presets\$(PresetsFolder)\Sleek.json">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
+        <None Include="Resources\Presets\$(PresetsFolder)\Slim.json">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
         <None Include="Resources\Presets\$(PresetsFolder)\Smooth.json">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
@@ -318,6 +321,9 @@
         </OutputCopy>
         <OutputCopy Include="Resources\Presets\$(PresetsFolder)\Sleek.json">
             <OutputPath>UserData\NoteTweaks\Presets\Sleek.json</OutputPath>
+        </OutputCopy>
+        <OutputCopy Include="Resources\Presets\$(PresetsFolder)\Slim.json">
+            <OutputPath>UserData\NoteTweaks\Presets\Slim.json</OutputPath>
         </OutputCopy>
         <OutputCopy Include="Resources\Presets\$(PresetsFolder)\Smooth.json">
             <OutputPath>UserData\NoteTweaks\Presets\Smooth.json</OutputPath>
