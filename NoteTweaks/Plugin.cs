@@ -62,8 +62,8 @@ namespace NoteTweaks
             PluginConfig.Instance.FogScale = Mathf.Max(PluginConfig.Instance.FogScale, 0.0f);
             PluginConfig.Instance.FogHeightScale = Mathf.Max(PluginConfig.Instance.FogHeightScale, 0.0f);
 
-            PluginConfig.Instance.BombMeshStacks = Math.Max(Math.Min(PluginConfig.Instance.BombMeshStacks, 48), 1);
-            PluginConfig.Instance.BombMeshSlices = Math.Max(Math.Min(PluginConfig.Instance.BombMeshSlices, 48), 1);
+            PluginConfig.Instance.BombMeshStacks = Math.Max(Math.Min(PluginConfig.Instance.BombMeshStacks, 48), 2);
+            PluginConfig.Instance.BombMeshSlices = Math.Max(Math.Min(PluginConfig.Instance.BombMeshSlices, 48), 2);
         }
 
         [Init]

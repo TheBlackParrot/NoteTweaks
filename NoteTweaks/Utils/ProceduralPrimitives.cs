@@ -75,6 +75,9 @@ namespace NoteTweaks.Utils
         [UsedImplicitly]
         public static Mesh CreateSphere(float radius, int slices, int stacks, bool worldNormals = true)
         {
+            slices = Math.Max(Math.Min(slices, 48), 2);
+            stacks = Math.Max(Math.Min(stacks, 48), 2);
+            
             Plugin.Log.Info($"Generating a sphere mesh: {slices} slices, {stacks} stacks, smooth: {Config.BombMeshSmoothNormals}, world: {worldNormals}");
             
             Mesh mesh = new Mesh

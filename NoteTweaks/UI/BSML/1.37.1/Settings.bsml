@@ -97,10 +97,10 @@
                 <dropdown-list-setting apply-on-change="true" value="BombMesh" text="Bomb Mesh" bind-value="true" choices="bombMeshChoices"
                                        hover-hint="Changed the mesh used for bombs"/>
                 <slider-setting apply-on-change="true" value="BombMeshSlices" text="Mesh Slices" bind-value="true"
-                                min="1" max="48" increment="1" integer-only="true" show-buttons="true" active="~BombMeshIsSphere"
+                                min="2" max="48" increment="1" integer-only="true" show-buttons="true" active="~BombMeshIsSphere"
                                 hover-hint="Number of slices around the Y axis"/>
                 <slider-setting apply-on-change="true" value="BombMeshStacks" text="Mesh Stacks" bind-value="true"
-                                min="1" max="48" increment="1" integer-only="true" show-buttons="true" active="~BombMeshIsSphere"
+                                min="2" max="48" increment="1" integer-only="true" show-buttons="true" active="~BombMeshIsSphere"
                                 hover-hint="Number of stacks along the Y axis"/>
                 <toggle-setting apply-on-change="true" value="BombMeshSmoothNormals" text="Smooth Normals" bind-value="true" active="~BombMeshIsSphere"
                                 hover-hint="Smooth normals/faces"/>
