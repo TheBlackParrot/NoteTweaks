@@ -221,6 +221,126 @@ namespace NoteTweaks.Patches
 #endif
         }
 
+        [HarmonyPatch]
+        internal class MultiplayerLevelScenesTransitionSetupDataPatch
+        {
+            [UsedImplicitly]
+            [HarmonyPatch(typeof(MultiplayerLevelScenesTransitionSetupDataSO), "Init")]
+            // ReSharper disable once InconsistentNaming
+            internal static void Postfix(MultiplayerLevelScenesTransitionSetupDataSO __instance, in GameplayModifiers gameplayModifiers)
+            {
+                if (!Config.Enabled)
+                {
+                    UsesChroma = false;
+                    return;
+                }
+
+#if LATEST
+                AutoDisable =
+                    (MapHasRequirement(__instance.beatmapKey, "Noodle Extensions") &&
+                     Config.DisableIfNoodle) ||
+                    (MapHasRequirement(__instance.beatmapKey, "Vivify") &&
+                     Config.DisableIfVivify);
+                
+                UsesChroma = PluginManager.GetPluginFromId("Chroma") != null &&
+                             MapHasRequirement(__instance.beatmapKey, "Chroma", true);
+
+                _fixDots = true;
+                if (MapHasRequirement(__instance.beatmapKey, "Noodle Extensions"))
+                {
+                    _fixDots = Config.FixDotsIfNoodle;
+                }
+#elif !PRE_V1_37_1
+                AutoDisable =
+                    (MapHasRequirement(__instance.beatmapLevel, __instance.beatmapKey, "Noodle Extensions") &&
+                     Config.DisableIfNoodle) ||
+                    (MapHasRequirement(__instance.beatmapLevel, __instance.beatmapKey, "Vivify") &&
+                     Config.DisableIfVivify);
+                
+                UsesChroma = PluginManager.GetPluginFromId("Chroma") != null &&
+                             MapHasRequirement(__instance.beatmapLevel, __instance.beatmapKey, "Chroma", true);
+
+                _fixDots = true;
+                if (MapHasRequirement(__instance.beatmapLevel, __instance.beatmapKey, "Noodle Extensions"))
+                {
+                    _fixDots = Config.FixDotsIfNoodle;
+                }
+#else
+                AutoDisable =
+                    (MapHasRequirement(__instance.difficultyBeatmap, "Noodle Extensions") &&
+                     Config.DisableIfNoodle) ||
+                    (MapHasRequirement(__instance.difficultyBeatmap, "Vivify") &&
+                     Config.DisableIfVivify);
+                
+                UsesChroma = PluginManager.GetPluginFromId("Chroma") != null &&
+                             MapHasRequirement(__instance.difficultyBeatmap, "Chroma", true);
+
+                _fixDots = true;
+                if (MapHasRequirement(__instance.difficultyBeatmap, "Noodle Extensions"))
+                {
+                    _fixDots = Config.FixDotsIfNoodle;
+                }
+#endif
+                
+                _gameplayModifiers = gameplayModifiers;
+                Plugin.ClampSettings();
+            }
+            
+#if PRE_V1_39_1
+            [HarmonyPatch(typeof(EnvironmentSceneSetup), "InstallBindings")]
+            internal class EnvironmentSceneSetupPatch
+            {
+                internal static void Postfix()
+                {
+                    if (!Config.Enabled)
+                    {
+                        return;
+                    }
+                
+    #if V1_29_1
+                    Materials.UpdateMainEffectContainerWorkaroundThing();
+                
+                    Managers.Textures.SetDefaultTextures();
+                    Managers.Meshes.UpdateSphereMesh(Config.BombMeshSlices, Config.BombMeshStacks, Config.BombMeshSmoothNormals, Config.BombMeshWorldNormals);
+                    GlowTextures.LoadTextures(); // for some reason this needs to be explicitly called here in 1.29. idk
+                    Materials.UpdateAll();
+                    BombPatch.SetStaticBombColor();
+    #else
+                    Managers.Textures.SetDefaultTextures();
+                
+                    Managers.Meshes.UpdateSphereMesh(Config.BombMeshSlices, Config.BombMeshStacks, Config.BombMeshSmoothNormals, Config.BombMeshWorldNormals);
+                
+                    UnityMainThreadTaskScheduler.Factory.StartNew(async () =>
+                    {
+                        await Materials.UpdateAll();
+                        BombPatch.SetStaticBombColor();
+                    });
+    #endif
+                }
+            }
+#else
+            [HarmonyPatch(typeof(MultiplayerLevelScenesTransitionSetupDataSO), "Init")]
+            // ReSharper disable once InconsistentNaming
+            internal static bool Prefix(MultiplayerLevelScenesTransitionSetupDataSO __instance)
+            {
+                if (!Config.Enabled)
+                {
+                    return true;
+                }
+                
+                Managers.Meshes.UpdateSphereMesh(Config.BombMeshSlices, Config.BombMeshStacks, Config.BombMeshSmoothNormals, Config.BombMeshWorldNormals);
+                
+                UnityMainThreadTaskScheduler.Factory.StartNew(async () =>
+                {
+                    await Materials.UpdateAll();
+                    BombPatch.SetStaticBombColor();
+                });
+                
+                return true;
+            }
+#endif            
+        }
+
         internal static bool IsAllowedToScaleNotes
         {
             get
