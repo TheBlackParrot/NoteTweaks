@@ -1155,6 +1155,12 @@ namespace NoteTweaks.Patches
 
             private static bool DoNotePatch(MaterialPropertyBlockController instance)
             {
+                if (instance == null)
+                {
+                    // ...uh
+                    return true;
+                }
+                
                 if (!instance.transform.TryGetComponent(out CutoutEffect cutoutEffect))
                 {
                     return true;
