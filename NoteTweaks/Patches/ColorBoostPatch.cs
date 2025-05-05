@@ -114,6 +114,35 @@ namespace NoteTweaks.Patches
             __instance.gameplayCoreSceneSetupData.SetField("colorScheme", patchedColors);
 #endif
         }
+        
+#if PRE_V1_37_1
+        [HarmonyPatch(typeof(MultiplayerLevelScenesTransitionSetupDataSO), "Init")]
+#else
+        [HarmonyPatch(typeof(MultiplayerLevelScenesTransitionSetupDataSO), "InitColorInfo")]
+#endif
+        [HarmonyPostfix]
+        // ReSharper disable once InconsistentNaming
+        private static void InitColorInfoPatchMultiplayer(MultiplayerLevelScenesTransitionSetupDataSO __instance)
+        {
+            if (!Config.Enabled || NotePhysicalTweaks.AutoDisable)
+            {
+                return;
+            }
+#if PRE_V1_37_1
+            ColorScheme patchedColors = PatchColors(__instance.colorScheme);
+#else
+            ColorSchemeSO schemeObj = ScriptableObject.CreateInstance<ColorSchemeSO>();
+            schemeObj._colorScheme = __instance.colorScheme;
+
+            ColorScheme patchedColors = PatchColors(schemeObj);
+#endif
+
+            __instance.usingOverrideColorScheme = true;
+            __instance.colorScheme = patchedColors;
+#if PRE_V1_37_1
+            __instance.gameplayCoreSceneSetupData.SetField("colorScheme", patchedColors);
+#endif
+        }
 
         [HarmonyPatch(typeof(StandardLevelRestartController), "RestartLevel")]
         [HarmonyPostfix]
