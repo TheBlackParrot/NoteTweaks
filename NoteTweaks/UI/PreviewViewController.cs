@@ -1097,19 +1097,15 @@ namespace NoteTweaks.UI
 
             await AnimateForever(time =>
             {
-                if (!NoteContainerIsFloating)
-                {
-                    Vector3 currentPosition = NoteContainer.transform.localPosition;
-                    currentPosition.z = _initialPosition.z;
-                    NoteContainer.transform.localPosition = currentPosition;
-                    
-                    return;
-                }
-                
                 Vector3 pos = _initialPosition;
-                pos.y = _initialPosition.y + (Mathf.Sin(time / bobTimeScale) * maxBob);
                 
-                NoteContainer.transform.localRotation = Quaternion.AngleAxis((Mathf.Sin(time / rotateTimeScale) * maxRotate), rotateAngle);
+                if (NoteContainerIsFloating)
+                {
+                    pos.y = _initialPosition.y + (Mathf.Sin(time / bobTimeScale) * maxBob);
+                    NoteContainer.transform.localRotation =
+                        Quaternion.AngleAxis((Mathf.Sin(time / rotateTimeScale) * maxRotate), rotateAngle);
+                }
+
                 NoteContainer.transform.localPosition = pos;
             }, _floatTokenSource.Token);
         }
