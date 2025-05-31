@@ -23,8 +23,8 @@ namespace NoteTweaks.UI
         private static PluginConfig Config => PluginConfig.Instance;
         
         internal static GameObject NoteContainer = new GameObject("_NoteTweaks_NoteContainer");
-        
-        private static readonly float NoteSize = 0.5f;
+
+        private const float NoteSize = 0.5f;
         private static Vector3 _initialPosition = new Vector3(0f, 0.67f, 4.5f);
         
         internal static bool HasInitialized;
@@ -42,6 +42,7 @@ namespace NoteTweaks.UI
         
         private static float _cutoutAmount;
 
+        [UsedImplicitly]
         public string PercentageFormatter(float x) => x.ToString("0%");
 
         public NotePreviewViewController()
@@ -112,7 +113,6 @@ namespace NoteTweaks.UI
             }
 
             Managers.Meshes.DotMesh = Utils.Meshes.GenerateFaceMesh(Config.DotMeshSides);
-            //Managers.Meshes.DotMesh = Utils.Meshes.GenerateStarMesh(Config.DotMeshSides);
 
             for (int i = 0; i < NoteContainer.transform.childCount; i++)
             {
@@ -157,12 +157,14 @@ namespace NoteTweaks.UI
                     {
                         // is a dot note
                         Transform noteCircleGlowTransform = noteCube.transform.Find("NoteCircleGlow");
-                        if (noteCircleGlowTransform != null)
+                        if (noteCircleGlowTransform == null)
                         {
-                            GameObject dotObject = noteCircleGlowTransform.gameObject;
-                            dotObject.SetActive(Config.EnableDots);
-                            noteCube.transform.Find("AddedNoteCircleGlow").gameObject.SetActive(Config.EnableFaceGlow && Config.EnableDots);
+                            continue;
                         }
+                        
+                        GameObject dotObject = noteCircleGlowTransform.gameObject;
+                        dotObject.SetActive(Config.EnableDots);
+                        noteCube.transform.Find("AddedNoteCircleGlow").gameObject.SetActive(Config.EnableFaceGlow && Config.EnableDots);
                     }
                 }
                 else
@@ -194,13 +196,15 @@ namespace NoteTweaks.UI
                 }
                 
                 Transform noteCircleGlowTransform = noteCube.transform.Find("NoteCircleGlow");
-                if (noteCircleGlowTransform != null)
+                if (noteCircleGlowTransform == null)
                 {
-                    Vector3 dotGlowPosition = initialDotGlowPosition + (Vector3)(noteCube.name.Contains("_L_") ? Config.LeftGlowOffset : Config.RightGlowOffset);
-                    
-                    noteCircleGlowTransform.localPosition = dotPosition;
-                    noteCube.transform.Find("AddedNoteCircleGlow").localPosition = dotGlowPosition;
+                    continue;
                 }
+                
+                Vector3 dotGlowPosition = initialDotGlowPosition + (Vector3)(noteCube.name.Contains("_L_") ? Config.LeftGlowOffset : Config.RightGlowOffset);
+                    
+                noteCircleGlowTransform.localPosition = dotPosition;
+                noteCube.transform.Find("AddedNoteCircleGlow").localPosition = dotGlowPosition;
             }
         }
 
@@ -244,15 +248,20 @@ namespace NoteTweaks.UI
                 }
                 
                 Transform noteCircleGlowTransform = noteCube.transform.Find("NoteCircleGlow");
-                Transform addedNoteCircleGlowTransform = noteCube.transform.Find("AddedNoteCircleGlow");
-
-                if (noteCircleGlowTransform != null)
+                if (noteCircleGlowTransform == null)
                 {
-                    noteCircleGlowTransform.localRotation = Quaternion.identity;
-                    noteCircleGlowTransform.Rotate(0f, 0f, Config.RotateDot);
-                    addedNoteCircleGlowTransform.localRotation = Quaternion.identity;
-                    addedNoteCircleGlowTransform.Rotate(0f, 0f, Config.RotateDot);
+                    continue;
                 }
+                noteCircleGlowTransform.localRotation = Quaternion.identity;
+                noteCircleGlowTransform.Rotate(0f, 0f, Config.RotateDot);
+                
+                Transform addedNoteCircleGlowTransform = noteCube.transform.Find("AddedNoteCircleGlow");
+                if (addedNoteCircleGlowTransform == null)
+                {
+                    continue;
+                }
+                addedNoteCircleGlowTransform.localRotation = Quaternion.identity;
+                addedNoteCircleGlowTransform.Rotate(0f, 0f, Config.RotateDot);
             }            
         }
         
@@ -404,71 +413,77 @@ namespace NoteTweaks.UI
                     FaceNames.ForEach(childName =>
                     {
                         Transform childTransform = controller.transform.Find(childName);
-                        if (childTransform)
+                        if (!childTransform)
                         {
-                            if (childTransform.TryGetComponent(out MaterialPropertyBlockController childController))
-                            {
-                                int applyBloom = Config.AddBloomForFaceSymbols && Materials.MainEffectContainer.value ? 1 : 0;
-                                Materials.ReplacementArrowMaterial.SetInt(Materials.SrcFactorAlphaID, applyBloom);
-                                Materials.ReplacementDotMaterial.SetInt(Materials.SrcFactorAlphaID, applyBloom);
+                            return;
+                        }
+                        
+                        if (childTransform.TryGetComponent(out MaterialPropertyBlockController childController))
+                        {
+                            int applyBloom = Config.AddBloomForFaceSymbols && Materials.MainEffectContainer.value ? 1 : 0;
+                            Materials.ReplacementArrowMaterial.SetInt(Materials.SrcFactorAlphaID, applyBloom);
+                            Materials.ReplacementDotMaterial.SetInt(Materials.SrcFactorAlphaID, applyBloom);
 
-                                childController.materialPropertyBlock.SetColor(Color0, applyBloom == 1 ? faceColor.ColorWithAlpha(Config.FaceSymbolBloomAmount) : faceColor);
-                                childController.ApplyChanges();
-                            }   
+                            childController.materialPropertyBlock.SetColor(Color0, applyBloom == 1 ? faceColor.ColorWithAlpha(Config.FaceSymbolBloomAmount) : faceColor);
+                            childController.ApplyChanges();
                         }
                     });
                     
                     GlowNames.ForEach(childName =>
                     {
                         Transform childTransform = controller.transform.Find(childName);
-                        if (childTransform)
+                        if (!childTransform)
                         {
-                            Enum.TryParse(isLeft ? Config.LeftGlowBlendOp : Config.RightGlowBlendOp, out BlendOp operation);
+                            return;
+                        }
+                        
+                        Enum.TryParse(isLeft ? Config.LeftGlowBlendOp : Config.RightGlowBlendOp, out BlendOp operation);
                             
-                            if (childTransform.TryGetComponent(out MaterialPropertyBlockController childController))
+                        if (childTransform.TryGetComponent(out MaterialPropertyBlockController childController))
+                        {
+                            foreach (Renderer renderer in childController.renderers)
                             {
-                                foreach (Renderer renderer in childController.renderers)
-                                {
-                                    // doing this to force a refresh on .material specifically
-                                    // for some reason setting the _BlendOp property breaks material instancing
-                                    renderer.material = null;
-                                    renderer.sharedMaterial = null;
-                                    renderer.sharedMaterial = childName.Contains("Arrow") ? Materials.ArrowGlowMaterial : Materials.DotGlowMaterial;
-                                    renderer.material = renderer.sharedMaterial;
-                                    // (this will never be null, Rider is angy)
-                                    // ReSharper disable once PossibleNullReferenceException
-                                    renderer.material.SetInt(Materials.BlendOpID, (int)operation);
-                                }
+                                // doing this to force a refresh on .material specifically
+                                // for some reason setting the _BlendOp property breaks material instancing
+                                renderer.material = null;
+                                renderer.sharedMaterial = null;
+                                renderer.sharedMaterial = childName.Contains("Arrow") ? Materials.ArrowGlowMaterial : Materials.DotGlowMaterial;
+                                renderer.material = renderer.sharedMaterial;
+                                // (this will never be null, Rider is angy)
+                                // ReSharper disable once PossibleNullReferenceException
+                                renderer.material.SetInt(Materials.BlendOpID, (int)operation);
+                            }
                                 
-                                childController.materialPropertyBlock.SetColor(Color0, glowColor);
-                                childController.ApplyChanges();
-                            }   
+                            childController.materialPropertyBlock.SetColor(Color0, glowColor);
+                            childController.ApplyChanges();
                         }
                     });
                 }
                 
                 Transform accDotObject = noteCube.transform.Find("AccDotObject");
-                if (accDotObject)
+                if (!accDotObject)
                 {
-                    if (accDotObject.TryGetComponent(out MeshRenderer accDotRenderer))
+                    continue;
+                }
+                
+                if (accDotObject.TryGetComponent(out MeshRenderer accDotRenderer))
+                {
+                    Color accDotColor = noteColor;
+                        
+                    if (isLeft ? Config.NormalizeLeftAccDotColor : Config.NormalizeRightAccDotColor)
                     {
-                        Color accDotColor = noteColor;
-                        
-                        if (isLeft ? Config.NormalizeLeftAccDotColor : Config.NormalizeRightAccDotColor)
+                        float accDotColorScalar = accDotColor.maxColorComponent;
+                        if (accDotColorScalar != 0)
                         {
-                            float accDotColorScalar = accDotColor.maxColorComponent;
-                            if (accDotColorScalar != 0)
-                            {
-                                accDotColor /= accDotColorScalar;
-                            }
+                            accDotColor /= accDotColorScalar;
                         }
-                        
-                        accDotRenderer.material.color =
-                            Color.LerpUnclamped(isLeft ? Config.LeftAccDotColor : Config.RightAccDotColor,
-                                    accDotColor,
-                                    isLeft ? Config.LeftAccDotColorNoteSkew : Config.RightAccDotColorNoteSkew)
-                                .ColorWithAlpha(0f);
                     }
+                        
+                    accDotRenderer.material.color =
+                        Color.LerpUnclamped(isLeft ? Config.LeftAccDotColor : Config.RightAccDotColor,
+                                accDotColor,
+                                isLeft ? Config.LeftAccDotColorNoteSkew : Config.RightAccDotColorNoteSkew)
+                            .ColorWithAlpha(0f);
                 }
             }
         }
@@ -497,10 +512,10 @@ namespace NoteTweaks.UI
                         ? RainbowGradient.Color
                         : Config.BombOutlineColor;
                 
-                foreach (MaterialPropertyBlockController controller in bombObj.GetComponents<MaterialPropertyBlockController>())
+                foreach (MaterialPropertyBlockController bombMatController in bombObj.GetComponents<MaterialPropertyBlockController>())
                 {
-                    controller.materialPropertyBlock.SetColor(Color1, bombColor);
-                    controller.ApplyChanges();
+                    bombMatController.materialPropertyBlock.SetColor(Color1, bombColor);
+                    bombMatController.ApplyChanges();
                 }
 
 #if PRE_V1_39_1
@@ -508,13 +523,15 @@ namespace NoteTweaks.UI
 #else
                 Transform noteOutline = bombObj.transform.FindChildRecursively("NoteOutline");
 #endif
-                if (noteOutline != null)
+                if (noteOutline == null)
                 {
-                    if (noteOutline.gameObject.TryGetComponent(out MaterialPropertyBlockController controller))
-                    {
-                        controller.materialPropertyBlock.SetColor(ColorNoteVisuals._colorId, outlineColor.ColorWithAlpha(applyBloom == 1 ? Config.OutlineBloomAmount : Materials.SaneAlphaValue));
-                        controller.ApplyChanges();
-                    }
+                    continue;
+                }
+                
+                if (noteOutline.gameObject.TryGetComponent(out MaterialPropertyBlockController controller))
+                {
+                    controller.materialPropertyBlock.SetColor(ColorNoteVisuals._colorId, outlineColor.ColorWithAlpha(applyBloom == 1 ? Config.OutlineBloomAmount : Materials.SaneAlphaValue));
+                    controller.ApplyChanges();
                 }
             }
         }
@@ -530,13 +547,15 @@ namespace NoteTweaks.UI
                 }
                 
                 Transform originalArrow = noteCube.transform.Find("NoteArrow");
-                if (originalArrow)
+                if (!originalArrow)
                 {
-                    if (originalArrow.gameObject.TryGetComponent(out MeshFilter originalArrowMeshFilter))
-                    {
-                        Managers.Meshes.UpdateDefaultArrowMesh(originalArrowMeshFilter.mesh);
-                        originalArrowMeshFilter.mesh = Managers.Meshes.CurrentArrowMesh;
-                    }
+                    continue;
+                }
+                
+                if (originalArrow.gameObject.TryGetComponent(out MeshFilter originalArrowMeshFilter))
+                {
+                    Managers.Meshes.UpdateDefaultArrowMesh(originalArrowMeshFilter.mesh);
+                    originalArrowMeshFilter.mesh = Managers.Meshes.CurrentArrowMesh;
                 }
             }
 
@@ -590,20 +609,23 @@ namespace NoteTweaks.UI
 #else
                 Transform noteOutline = noteCube.transform.FindChildRecursively("NoteOutline");
 #endif
-                if (noteOutline)
+                if (!noteOutline)
                 {
-                    noteOutline.gameObject.SetActive(isBomb ? Config.EnableBombOutlines : Config.EnableNoteOutlines);
+                    continue;
+                }
+                
+                noteOutline.gameObject.SetActive(isBomb ? Config.EnableBombOutlines : Config.EnableNoteOutlines);
                     
-                    Vector3 scale = (Vector3.one * ((isBomb ? Config.BombOutlineScale : Config.NoteOutlineScale) / 100f)) + Vector3.one;
-                    if (isChain)
-                    {
-                        scale.y = 1f + Config.NoteOutlineScale / 20f;
-                    }
-                    noteOutline.localScale = scale;
+                Vector3 scale = (Vector3.one * ((isBomb ? Config.BombOutlineScale : Config.NoteOutlineScale) / 100f)) + Vector3.one;
+                if (isChain)
+                {
+                    scale.y = 1f + Config.NoteOutlineScale / 20f;
+                }
+                noteOutline.localScale = scale;
                     
-                    if (noteOutline.gameObject.TryGetComponent(out MaterialPropertyBlockController controller))
-                    {
-                        int applyBloom = Config.AddBloomForOutlines && Materials.MainEffectContainer.value ? 1 : 0;
+                if (noteOutline.gameObject.TryGetComponent(out MaterialPropertyBlockController controller))
+                {
+                    int applyBloom = Config.AddBloomForOutlines && Materials.MainEffectContainer.value ? 1 : 0;
 #if PRE_V1_39_1
                         float mult = isBomb
                             ? Config.BombOutlineFinalColorMultiplier
@@ -615,11 +637,10 @@ namespace NoteTweaks.UI
                         controller.materialPropertyBlock.SetFloat(Materials.FinalColorMul, mult);
                         Materials.OutlineMaterial.SetInt(Materials.SrcFactorAlphaID, applyBloom);
 #else
-                        Materials.OutlineMaterial.SetInt(Materials.SrcFactorAlphaID, applyBloom);
-                        controller.materialPropertyBlock.SetColor(ColorNoteVisuals._colorId, outlineColor.ColorWithAlpha(applyBloom == 1 ? Config.OutlineBloomAmount : Materials.SaneAlphaValue));
+                    Materials.OutlineMaterial.SetInt(Materials.SrcFactorAlphaID, applyBloom);
+                    controller.materialPropertyBlock.SetColor(ColorNoteVisuals._colorId, outlineColor.ColorWithAlpha(applyBloom == 1 ? Config.OutlineBloomAmount : Materials.SaneAlphaValue));
 #endif
-                        controller.ApplyChanges();
-                    }
+                    controller.ApplyChanges();
                 }
             }
         }
@@ -639,18 +660,20 @@ namespace NoteTweaks.UI
                 
                 Transform accDotObject = noteCube.transform.Find("AccDotObject");
                 Transform accDotObjectDepthClear = noteCube.transform.Find("AccDotObjectDepthClear");
-                if (accDotObject)
+                if (!accDotObject || !accDotObjectDepthClear)
                 {
-                    accDotObject.gameObject.SetActive(Config.EnableAccDot);
-                    accDotObjectDepthClear.gameObject.SetActive(Config.EnableAccDot);
-                    
-                    Vector3 scale = AccDotObjectScale * (_colliderSize.x / _colliderSize.y);
-                    accDotObject.localScale = scale;
-                    accDotObjectDepthClear.localScale = scale;
-
-                    accDotObjectDepthClear.GetComponent<Renderer>().material.renderQueue = Materials.AccDotDepthMaterial.renderQueue;
-                    accDotObject.GetComponent<Renderer>().material.renderQueue = Materials.AccDotMaterial.renderQueue; // wtf
+                    continue;
                 }
+                
+                accDotObject.gameObject.SetActive(Config.EnableAccDot);
+                accDotObjectDepthClear.gameObject.SetActive(Config.EnableAccDot);
+                    
+                Vector3 scale = AccDotObjectScale * (_colliderSize.x / _colliderSize.y);
+                accDotObject.localScale = scale;
+                accDotObjectDepthClear.localScale = scale;
+
+                accDotObjectDepthClear.GetComponent<Renderer>().material.renderQueue = Materials.AccDotDepthMaterial.renderQueue;
+                accDotObject.GetComponent<Renderer>().material.renderQueue = Materials.AccDotMaterial.renderQueue; // wtf
             }
         }
 
@@ -1088,10 +1111,10 @@ namespace NoteTweaks.UI
 
             _floatTokenSource = new CancellationTokenSource();
 
-            float maxRotate = 5.0f;
-            float maxBob = 0.05f;
-            float rotateTimeScale = 2f;
-            float bobTimeScale = 1f;
+            const float maxRotate = 5.0f;
+            const float maxBob = 0.05f;
+            const float rotateTimeScale = 2f;
+            const float bobTimeScale = 1f;
             
             Vector3 rotateAngle = new Vector3(0f, 1f, 0f);
 
@@ -1207,14 +1230,14 @@ namespace NoteTweaks.UI
                             await Materials.UpdateAll();
 #endif
                             
-                            List<String> noteNames = new List<string> { "L_Arrow", "R_Arrow", "L_Dot", "R_Dot" };
+                            List<string> noteNames = new List<string> { "L_Arrow", "R_Arrow", "L_Dot", "R_Dot" };
                             for (int i = 0; i < noteNames.Count; i++)
                             {
                                 CreateNote(notePrefab, noteNames[i], i);
                             }
                             
-                            List<String> chainNames = new List<string> { "L_Chain", "R_Chain" };
-                            int chainLinkCount = 6;
+                            List<string> chainNames = new List<string> { "L_Chain", "R_Chain" };
+                            const int chainLinkCount = 6;
                             for (int j = 0; j < chainLinkCount; j++)
                             {
                                 for (int i = 0; i < chainNames.Count; i++)
