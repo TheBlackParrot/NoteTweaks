@@ -1097,12 +1097,12 @@ namespace NoteTweaks.UI
 
             await AnimateForever(time =>
             {
-                Vector3 currentPosition = NoteContainer.transform.localPosition;
-                currentPosition.z = _initialPosition.z;
-                NoteContainer.transform.localPosition = currentPosition;
-                
                 if (!NoteContainerIsFloating)
                 {
+                    Vector3 currentPosition = NoteContainer.transform.localPosition;
+                    currentPosition.z = _initialPosition.z;
+                    NoteContainer.transform.localPosition = currentPosition;
+                    
                     return;
                 }
                 
