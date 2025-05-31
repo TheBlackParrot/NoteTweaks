@@ -1095,7 +1095,12 @@ namespace NoteTweaks.UI
             
             Vector3 rotateAngle = new Vector3(0f, 1f, 0f);
 
-            await AnimateForever(time => {
+            await AnimateForever(time =>
+            {
+                Vector3 currentPosition = NoteContainer.transform.localPosition;
+                currentPosition.z = _initialPosition.z;
+                NoteContainer.transform.localPosition = currentPosition;
+                
                 if (!NoteContainerIsFloating)
                 {
                     return;
