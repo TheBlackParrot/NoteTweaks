@@ -103,7 +103,7 @@ namespace NoteTweaks.UI
         }
 
         [UIValue("NoteContainerIsFloating")]
-        private static bool NoteContainerIsFloating { get; set; } = true;
+        private bool NoteContainerIsFloating { get; set; } = true;
 
         public static void UpdateDotMesh()
         {
@@ -1104,7 +1104,7 @@ namespace NoteTweaks.UI
         }
 
         private static CancellationTokenSource _floatTokenSource;
-        private static async Task MakeNotesFloat()
+        private async Task MakeNotesFloat()
         {
             _floatTokenSource?.Cancel();
             _floatTokenSource?.Dispose();
