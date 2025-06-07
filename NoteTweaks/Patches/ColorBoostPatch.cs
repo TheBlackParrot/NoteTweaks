@@ -9,6 +9,7 @@ using UnityEngine;
 namespace NoteTweaks.Patches
 {
     [HarmonyPatch]
+    [HarmonyPriority(Priority.LowerThanNormal)]
     internal class NoteColorTweaks
     {
         private static PluginConfig Config => PluginConfig.Instance;
@@ -91,7 +92,7 @@ namespace NoteTweaks.Patches
 #else
         [HarmonyPatch(typeof(StandardLevelScenesTransitionSetupDataSO), "InitColorInfo")]
 #endif
-        [HarmonyPriority(Priority.Low)]
+        [HarmonyPriority(Priority.LowerThanNormal)]
         [HarmonyPostfix]
         // ReSharper disable once InconsistentNaming
         private static void InitColorInfoPatch(StandardLevelScenesTransitionSetupDataSO __instance)
@@ -121,7 +122,7 @@ namespace NoteTweaks.Patches
 #else
         [HarmonyPatch(typeof(MultiplayerLevelScenesTransitionSetupDataSO), "InitColorInfo")]
 #endif
-        [HarmonyPriority(Priority.Low)]
+        [HarmonyPriority(Priority.LowerThanNormal)]
         [HarmonyPostfix]
         // ReSharper disable once InconsistentNaming
         private static void InitColorInfoPatchMultiplayer(MultiplayerLevelScenesTransitionSetupDataSO __instance)
@@ -148,7 +149,7 @@ namespace NoteTweaks.Patches
 
         [HarmonyPatch(typeof(StandardLevelRestartController), "RestartLevel")]
         [HarmonyPostfix]
-        [HarmonyPriority(Priority.Low)]
+        [HarmonyPriority(Priority.LowerThanNormal)]
         // ReSharper disable once InconsistentNaming
         private static void StandardLevelRestartControllerPatch(StandardLevelRestartController __instance)
         {
