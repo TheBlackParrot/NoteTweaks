@@ -91,6 +91,7 @@ namespace NoteTweaks.Patches
 #else
         [HarmonyPatch(typeof(StandardLevelScenesTransitionSetupDataSO), "InitColorInfo")]
 #endif
+        [HarmonyPriority(Priority.Low)]
         [HarmonyPostfix]
         // ReSharper disable once InconsistentNaming
         private static void InitColorInfoPatch(StandardLevelScenesTransitionSetupDataSO __instance)
@@ -120,6 +121,7 @@ namespace NoteTweaks.Patches
 #else
         [HarmonyPatch(typeof(MultiplayerLevelScenesTransitionSetupDataSO), "InitColorInfo")]
 #endif
+        [HarmonyPriority(Priority.Low)]
         [HarmonyPostfix]
         // ReSharper disable once InconsistentNaming
         private static void InitColorInfoPatchMultiplayer(MultiplayerLevelScenesTransitionSetupDataSO __instance)
@@ -146,6 +148,7 @@ namespace NoteTweaks.Patches
 
         [HarmonyPatch(typeof(StandardLevelRestartController), "RestartLevel")]
         [HarmonyPostfix]
+        [HarmonyPriority(Priority.Low)]
         // ReSharper disable once InconsistentNaming
         private static void StandardLevelRestartControllerPatch(StandardLevelRestartController __instance)
         {
