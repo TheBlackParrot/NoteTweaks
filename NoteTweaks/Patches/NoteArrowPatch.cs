@@ -164,6 +164,8 @@ namespace NoteTweaks.Patches
 #endif
                 
                 _gameplayModifiers = gameplayModifiers;
+                _fixDots = (_fixDots && !gameplayModifiers.ghostNotes);
+                
                 Plugin.ClampSettings();
             }
             
@@ -354,19 +356,6 @@ namespace NoteTweaks.Patches
             }
         }
 
-        private static bool IsUsingHiddenTypeModifier
-        {
-            get
-            {
-                if (_gameplayModifiers == null)
-                {
-                    return false;
-                }
-
-                return _gameplayModifiers.disappearingArrows || _gameplayModifiers.ghostNotes;
-            }
-        }
-
         [HarmonyPatch(typeof(BurstSliderGameNoteController), "Init")]
         internal class BurstSliderPatch
         {
@@ -425,7 +414,7 @@ namespace NoteTweaks.Patches
                     }
                 }
 
-                if (Config.EnableNoteOutlines && !IsUsingHiddenTypeModifier)
+                if (Config.EnableNoteOutlines && !_gameplayModifiers.ghostNotes)
                 {
                     Outlines.AddOutlineObject(chainRoot, Outlines.InvertedChainMesh);
                     Transform noteOutline = chainRoot.Find("NoteOutline");
@@ -518,7 +507,7 @@ namespace NoteTweaks.Patches
                 bool isLeft = colorType == ColorType.ColorA;
                 bool isChainHead = __instance.gameplayType == NoteData.GameplayType.BurstSliderHead;
 
-                if (Config.EnableAccDot && !isChainHead && !IsUsingHiddenTypeModifier)
+                if (Config.EnableAccDot && !isChainHead && !(_gameplayModifiers.ghostNotes || _gameplayModifiers.disappearingArrows))
                 {
                     AccDotObject.transform.localScale = Vector3.one * (AccDotSizeStep * (Mathf.Abs(Config.AccDotSize - 15) + 1));
                     
@@ -635,7 +624,7 @@ namespace NoteTweaks.Patches
                     }   
                 }
                 
-                if (Config.EnableNoteOutlines && !IsUsingHiddenTypeModifier)
+                if (Config.EnableNoteOutlines && !_gameplayModifiers.ghostNotes)
                 {
                     Outlines.AddOutlineObject(noteRoot, isChainHead ? Outlines.InvertedChainHeadMesh : Outlines.InvertedNoteMesh);
                     Transform noteOutline = noteRoot.Find("NoteOutline");
@@ -789,7 +778,7 @@ namespace NoteTweaks.Patches
             [SuppressMessage("ReSharper", "InconsistentNaming")]
             internal static void Postfix(ColorNoteVisuals __instance, ref MeshRenderer[] ____arrowMeshRenderers, ref MeshRenderer[] ____circleMeshRenderers)
             {
-                if (!Config.Enabled || AutoDisable || IsUsingHiddenTypeModifier)
+                if (!Config.Enabled || AutoDisable)
                 {
                     return;
                 }
@@ -824,8 +813,10 @@ namespace NoteTweaks.Patches
                         }
                     }
 
-                    if (meshRenderer.TryGetComponent(out MaterialPropertyBlockController materialPropertyBlockController))
+                    if (meshRenderer.TryGetComponent(out MaterialPropertyBlockController materialPropertyBlockController) && !_gameplayModifiers.ghostNotes)
                     {
+                        // worried coloring symbols might be seen as advantageous in GN (ghostNotes check)
+                        
                         Color faceColor = __instance._colorManager.ColorForType(colorType);
                             
                         if (isLeft ? Config.NormalizeLeftFaceColor : Config.NormalizeRightFaceColor)
@@ -954,27 +945,33 @@ namespace NoteTweaks.Patches
                                     }
                                 }
                             }
-                            Color faceColor = __instance._colorManager.ColorForType(colorType);
                             
-                            if (isLeft ? Config.NormalizeLeftFaceColor : Config.NormalizeRightFaceColor)
+                            if (!_gameplayModifiers.ghostNotes)
                             {
-                                float colorScalar = faceColor.maxColorComponent;
-                                if (colorScalar != 0)
+                                // worried coloring symbols might be seen as advantageous in GN
+                                
+                                Color faceColor = __instance._colorManager.ColorForType(colorType);
+                            
+                                if (isLeft ? Config.NormalizeLeftFaceColor : Config.NormalizeRightFaceColor)
                                 {
-                                    faceColor /= colorScalar;
+                                    float colorScalar = faceColor.maxColorComponent;
+                                    if (colorScalar != 0)
+                                    {
+                                        faceColor /= colorScalar;
+                                    }
                                 }
+                            
+                                bool applyBloom = Config.AddBloomForFaceSymbols && Materials.MainEffectContainer.value;
+                                Color c = Color.LerpUnclamped(isLeft ? Config.LeftFaceColor : Config.RightFaceColor, faceColor, isLeft ? Config.LeftFaceColorNoteSkew : Config.RightFaceColorNoteSkew);
+                                c.a = _fixDots ? (applyBloom ? Config.FaceSymbolBloomAmount : Materials.SaneAlphaValue) : materialPropertyBlockController.materialPropertyBlock.GetColor(ColorNoteVisuals._colorId).a;
+                                materialPropertyBlockController.materialPropertyBlock.SetColor(ColorNoteVisuals._colorId, c);
+                                materialPropertyBlockController.ApplyChanges();
+                            
+                                meshRenderer.material.SetInt(Materials.SrcFactorID, Materials.SrcFactor);
+                                meshRenderer.material.SetInt(Materials.DstFactorID, Materials.DstFactor);
+                                meshRenderer.material.SetInt(Materials.SrcFactorAlphaID, applyBloom ? 1 : Materials.SrcFactorAlpha);
+                                meshRenderer.material.SetInt(Materials.DstFactorAlphaID, Materials.DstFactorAlpha);
                             }
-                            
-                            bool applyBloom = Config.AddBloomForFaceSymbols && Materials.MainEffectContainer.value;
-                            Color c = Color.LerpUnclamped(isLeft ? Config.LeftFaceColor : Config.RightFaceColor, faceColor, isLeft ? Config.LeftFaceColorNoteSkew : Config.RightFaceColorNoteSkew);
-                            c.a = _fixDots ? (applyBloom ? Config.FaceSymbolBloomAmount : Materials.SaneAlphaValue) : materialPropertyBlockController.materialPropertyBlock.GetColor(ColorNoteVisuals._colorId).a;
-                            materialPropertyBlockController.materialPropertyBlock.SetColor(ColorNoteVisuals._colorId, c);
-                            materialPropertyBlockController.ApplyChanges();
-                            
-                            meshRenderer.material.SetInt(Materials.SrcFactorID, Materials.SrcFactor);
-                            meshRenderer.material.SetInt(Materials.DstFactorID, Materials.DstFactor);
-                            meshRenderer.material.SetInt(Materials.SrcFactorAlphaID, applyBloom ? 1 : Materials.SrcFactorAlpha);
-                            meshRenderer.material.SetInt(Materials.DstFactorAlphaID, Materials.DstFactorAlpha);
                         }
 
                         if (isChainLink)
@@ -1075,8 +1072,14 @@ namespace NoteTweaks.Patches
                 {
                     return;
                 }
+
+                bool ghostNotesWorkaround = true;
+                if (_gameplayModifiers != null)
+                {
+                    ghostNotesWorkaround = !_gameplayModifiers.ghostNotes;
+                }
                 
-                if (__instance.transform.name == "NoteCube" && Config.EnableNoteOutlines && !IsUsingHiddenTypeModifier)
+                if (__instance.transform.name == "NoteCube" && Config.EnableNoteOutlines && ghostNotesWorkaround)
                 {
                     Transform noteOutlineTransform = __instance.transform.Find("NoteOutline");
                     if (!noteOutlineTransform)
