@@ -402,6 +402,11 @@ namespace NoteTweaks.Patches
                 {
                     if (noteRoot.TryGetComponent(out MeshFilter meshFilter))
                     {
+                        if (Managers.Meshes.DefaultNoteMesh == null)
+                        {
+                            Managers.Meshes.DefaultNoteMesh = meshFilter.sharedMesh;
+                        }
+                        
                         meshFilter.sharedMesh = Managers.Meshes.CurrentNoteMesh;
                     }
                 }
