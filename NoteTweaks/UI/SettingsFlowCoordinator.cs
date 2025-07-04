@@ -9,6 +9,7 @@ namespace NoteTweaks.UI
     internal class SettingsFlowCoordinator : FlowCoordinator
     {
         private MainFlowCoordinator _mainFlowCoordinator;
+        // ReSharper disable once InconsistentNaming
         internal static SettingsViewController _settingsViewController;
         private NotePreviewViewController _notePreviewViewController;
         private ExtraPanelViewController _extraPanelViewController;

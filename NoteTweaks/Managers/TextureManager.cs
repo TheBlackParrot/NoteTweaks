@@ -176,11 +176,12 @@ namespace NoteTweaks.Managers
             new KeyValuePair<string, CubemapFace>("pz", CubemapFace.NegativeZ),
         };
 
-        public static string GetLoadedNoteTexture()
+        private static string GetLoadedNoteTexture()
         {
             return _noteTexture.name.Split("_"[0]).Last();
         }
-        public static string GetLoadedBombTexture()
+
+        private static string GetLoadedBombTexture()
         {
             return _bombTexture.name.Split("_"[0]).Last();
         }

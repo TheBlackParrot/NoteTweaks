@@ -64,7 +64,7 @@ namespace NoteTweaks.Patches
             }
         }
 
-        internal const float AccDotSizeStep = ScoreModel.kMaxDistanceForDistanceToCenterScore / ScoreModel.kMaxCenterDistanceCutScore;
+        internal const float ACC_DOT_SIZE_STEP = ScoreModel.kMaxDistanceForDistanceToCenterScore / ScoreModel.kMaxCenterDistanceCutScore;
 
         internal static bool AutoDisable;
         private static bool _fixDots = true;
@@ -509,7 +509,7 @@ namespace NoteTweaks.Patches
 
                 if (Config.EnableAccDot && !isChainHead && !(_gameplayModifiers.ghostNotes || _gameplayModifiers.disappearingArrows))
                 {
-                    AccDotObject.transform.localScale = Vector3.one * (AccDotSizeStep * (Mathf.Abs(Config.AccDotSize - 15) + 1));
+                    AccDotObject.transform.localScale = Vector3.one * (ACC_DOT_SIZE_STEP * (Mathf.Abs(Config.AccDotSize - 15) + 1));
                     
                     foreach (BoxCuttableBySaber saberBox in ____bigCuttableBySaberList)
                     {
@@ -1182,8 +1182,8 @@ namespace NoteTweaks.Patches
                 {
                     float ratio = colliderSize._defaultColliderSize.x / colliderSize._defaultColliderSize.y;
                     float cutoutAmount = Mathf.Pow(Mathf.Abs(cutoutEffect._cutout - 1.0f), 1.5f);
-                    accDotTransform.transform.localScale = Vector3.one * (AccDotSizeStep * (Mathf.Abs(Config.AccDotSize - 15) + 1)) * ratio * cutoutAmount;
-                    accDotClearTransform.transform.localScale = Vector3.one * (AccDotSizeStep * (Mathf.Abs(Config.AccDotSize - 15) + 1)) * ratio * cutoutAmount;
+                    accDotTransform.transform.localScale = Vector3.one * (ACC_DOT_SIZE_STEP * (Mathf.Abs(Config.AccDotSize - 15) + 1)) * ratio * cutoutAmount;
+                    accDotClearTransform.transform.localScale = Vector3.one * (ACC_DOT_SIZE_STEP * (Mathf.Abs(Config.AccDotSize - 15) + 1)) * ratio * cutoutAmount;
                 }
 
                 return true;

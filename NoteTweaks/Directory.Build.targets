@@ -47,6 +47,12 @@
     <Copy SourceFiles="$(OutputAssemblyName).dll" DestinationFiles="$(ProjectDir)$(ArtifactDestination)\Plugins\$(AssemblyName).dll" />
     <Copy SourceFiles="$(OutputAssemblyName).pdb" DestinationFiles="$(ProjectDir)$(ArtifactDestination)\Plugins\$(AssemblyName).pdb" />
   </Target>
+  <Target Name="SpitOutInformation" AfterTargets="Build">
+    <Message Text="-- Configuration: $(Configuration)" Importance="high" />
+    <Message Text="-- Version: $(Version) for $(GameVersion)" Importance="high" />
+    <Message Text="-- Debug symbols: $(DebugSymbols)" Importance="high" />
+    <Message Text="-- Optimized: $(Optimize)" Importance="high" />
+  </Target>
   <!--Creates a BeatMods compliant zip file with the release.-->
   <Target Name="ZipRelease" AfterTargets="Build" Condition="'$(BSMTTaskAssembly)' != ''">
     <PropertyGroup>

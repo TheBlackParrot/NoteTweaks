@@ -1,4 +1,5 @@
 ﻿using NoteTweaks.Configuration;
+using NoteTweaks.Utils;
 using UnityEngine;
 
 namespace NoteTweaks.Managers
@@ -18,9 +19,11 @@ namespace NoteTweaks.Managers
         private static int _sphereStacks = Config.BombMeshStacks;
         private static bool _sphereNormalsSmooth = Config.BombMeshSmoothNormals;
         private static bool _sphereNormalsWorld = Config.BombMeshWorldNormals;
-        private const float SphereRadius = 0.225f;
-        private static Mesh _sphereMesh = Utils.MeshExtensions.CreateSphere(SphereRadius, _sphereSlices, _sphereStacks, _sphereNormalsWorld);
+        private const float SPHERE_RADIUS = 0.225f;
+        private static Mesh _sphereMesh = MeshExtensions.CreateSphere(SPHERE_RADIUS, _sphereSlices, _sphereStacks, _sphereNormalsWorld);
         private static Mesh _defaultBombMesh;
+
+        public static Mesh DefaultCubeMesh;
 
         public static Mesh CurrentBombMesh
         {
@@ -89,7 +92,7 @@ namespace NoteTweaks.Managers
             _sphereStacks = stacks;
             _sphereNormalsSmooth = smoothNormals;
             _sphereNormalsWorld = worldNormals;
-            _sphereMesh = Utils.MeshExtensions.CreateSphere(SphereRadius, _sphereSlices, _sphereStacks, _sphereNormalsWorld);
+            _sphereMesh = MeshExtensions.CreateSphere(SPHERE_RADIUS, _sphereSlices, _sphereStacks, _sphereNormalsWorld);
         }
     }
 }

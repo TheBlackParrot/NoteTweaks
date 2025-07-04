@@ -3,9 +3,6 @@ using IPA.Utilities;
 using NoteTweaks.Configuration;
 using NoteTweaks.Utils;
 using UnityEngine;
-#if !PRE_V1_39_1
-using UnityEngine.Rendering;
-#endif
 #pragma warning disable CS0612
 
 namespace NoteTweaks.Managers

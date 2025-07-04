@@ -73,8 +73,8 @@ namespace NoteTweaks.Configuration
     internal class NoteTweaksSettableSettings : IDisposable
     {
         private static bool HasRunBefore { get; set; }
-        private const string GroupIdentifier = "_noteTweaks";
-        private const BindingFlags BindingFlags = System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance;
+        private const string GROUP_IDENTIFIER = "_noteTweaks";
+        private const BindingFlags BINDING_FLAGS = BindingFlags.Public | BindingFlags.Instance;
         private static readonly List<ISettableSetting> SettableSettings = new List<ISettableSetting>();
         internal static readonly string[] BlockedSettings = { "Instance", "DisableIfNoodle" };
         
@@ -87,7 +87,7 @@ namespace NoteTweaks.Configuration
             HasRunBefore = true;
 
             Type settableSettingType = typeof(NoteTweaksWrapperSetting);
-            PropertyInfo[] properties = typeof(PluginConfig).GetProperties(BindingFlags)
+            PropertyInfo[] properties = typeof(PluginConfig).GetProperties(BINDING_FLAGS)
                 .Where(x => x.CanWrite && x.CanRead && (x.PropertyType != typeof(Vector2) || x.PropertyType != typeof(Vector3))).ToArray();
             
             foreach (PropertyInfo property in properties)
@@ -107,7 +107,7 @@ namespace NoteTweaks.Configuration
                 string heckFieldName = $"_{propName[0].ToString().ToLower() + propName.Substring(1)}";
                 if (setting != null)
                 {
-                    SettingSetterSettableSettingsManager.RegisterSettableSetting(GroupIdentifier, heckFieldName, setting);
+                    SettingSetterSettableSettingsManager.RegisterSettableSetting(GROUP_IDENTIFIER, heckFieldName, setting);
                     //Plugin.Log.Info($"NoteTweaks settable setting: {heckFieldName} as {property.PropertyType.Name}");
                 }
             }

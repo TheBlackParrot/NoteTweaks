@@ -24,7 +24,7 @@ namespace NoteTweaks.UI
         
         internal static GameObject NoteContainer = new GameObject("_NoteTweaks_NoteContainer");
 
-        private const float NoteSize = 0.5f;
+        private const float NOTE_SIZE = 0.5f;
         private static Vector3 _initialPosition = new Vector3(0f, 0.67f, 4.5f);
         
         internal static bool HasInitialized;
@@ -646,7 +646,7 @@ namespace NoteTweaks.UI
         }
         
         private static GameObject AccDotObject => NotePhysicalTweaks.AccDotObject;
-        private static Vector3 AccDotObjectScale => Vector3.one * (NotePhysicalTweaks.AccDotSizeStep * (Mathf.Abs(Config.AccDotSize - 15) + 1));
+        private static Vector3 AccDotObjectScale => Vector3.one * (NotePhysicalTweaks.ACC_DOT_SIZE_STEP * (Mathf.Abs(Config.AccDotSize - 15) + 1));
 
         public static void UpdateAccDots()
         {
@@ -729,7 +729,7 @@ namespace NoteTweaks.UI
 
             Outlines.AddOutlineObject(chainNote.transform, Outlines.InvertedChainMesh);
             
-            Vector3 position = new Vector3(((-NoteSize / 2) + (cell - (NoteSize * 2)) * NoteSize) - 0.1f, linkNum / 6.667f, linkNum * -0.05f);
+            Vector3 position = new Vector3(((-NOTE_SIZE / 2) + (cell - (NOTE_SIZE * 2)) * NOTE_SIZE) - 0.1f, linkNum / 6.667f, linkNum * -0.05f);
             chainNote.transform.localPosition = position;
             chainNote.transform.Rotate(90f, 0f, 0f);
             
@@ -815,13 +815,19 @@ namespace NoteTweaks.UI
             {
                 if (noteCube.TryGetComponent(out MeshFilter cubeMeshFilter))
                 {
+                    // this too is probably null, just check it here
+                    if (Managers.Meshes.DefaultCubeMesh == null)
+                    {
+                        Managers.Meshes.DefaultCubeMesh = cubeMeshFilter.sharedMesh;
+                    }
+                    
                     Outlines.UpdateDefaultNoteMesh(cubeMeshFilter.sharedMesh);
                 }
             }
 
             Outlines.AddOutlineObject(noteCube.transform, Outlines.InvertedNoteMesh);
             
-            Vector3 position = new Vector3(((NoteSize / 2) + (cell % 2) * NoteSize) + 0.1f, (-(int)Math.Floor((float)cell / 2) * NoteSize) + NoteSize + 0.15f, 0);
+            Vector3 position = new Vector3(((NOTE_SIZE / 2) + (cell % 2) * NOTE_SIZE) + 0.1f, (-(int)Math.Floor((float)cell / 2) * NOTE_SIZE) + NOTE_SIZE + 0.15f, 0);
             noteCube.transform.localPosition = position;
             noteCube.transform.Rotate(90f, 0f, 0f);
             
@@ -954,7 +960,7 @@ namespace NoteTweaks.UI
             
             bombContainer.name = "_NoteTweaks_Bomb_" + extraName;
             
-            Vector3 position = new Vector3(-NoteSize + ((NoteSize * 1.25f) * cell) - 0.1f, 1.333f, 0);
+            Vector3 position = new Vector3(-NOTE_SIZE + ((NOTE_SIZE * 1.25f) * cell) - 0.1f, 1.333f, 0);
             bombContainer.transform.localPosition = position;
             //bombContainer.transform.Rotate(90f, 0f, 0f);
             
