@@ -1,8 +1,10 @@
 # NoteTweaks
 This is a Beat Saber mod that lets you tweak various aspects of the default note.
 
-**This is currently actively maintained for Beat Saber versions 1.29.1, 1.34.2, 1.37.1, 1.39.1, and 1.40.3.** Other versions of the game *may* work, these are the ones I test.  
-*1.29.1 - 1.37.1 will only be maintained until leaderboard support for these game versions are dropped, or if a majority of the game's community moves on from legacy Unity 2019/2021 versions of the game.*
+> [!WARNING]
+> This is an older version of the mod for versions of the game using Unity 2019 or Unity 2021 *(namely 1.29.1, 1.34.2, and 1.37.1).*
+> 
+> No new features will be added to this branch.
 
 ## Downloads
 See the [releases page](https://github.com/TheBlackParrot/NoteTweaks/releases) for mod downloads. *Pre-release* builds are subject to change, it is highly recommended to use the latest *Release* build. You will not be notified of Pre-release -> Release updates, unless the version numbers differ.
