@@ -77,6 +77,12 @@
                         <string-setting text="Preset Name" value="PresetNameField" id="PresetNameInput" bind-value="true" apply-on-change="true" pref-width="70"/>
                         <action-button text="Save" on-click="SavePreset"/>
                     </horizontal>
+                    
+                    <horizontal>
+                        <dropdown-list-setting id="MeshDropdown" text="Note Mesh" value="NoteMesh"
+                                               choices="MeshNames"
+                                               apply-on-change="true"/>
+                    </horizontal>
                 </scroll-view>
             </vertical>
         </tab>

@@ -810,17 +810,19 @@ namespace NoteTweaks.UI
             }
             DestroyImmediate(noteCube.transform.Find("BigCuttable").gameObject);
             DestroyImmediate(noteCube.transform.Find("SmallCuttable").gameObject);
-            
-            if (Outlines.InvertedNoteMesh == null)
+
+            if (noteCube.TryGetComponent(out MeshFilter cubeMeshFilter))
             {
-                if (noteCube.TryGetComponent(out MeshFilter cubeMeshFilter))
+                cubeMeshFilter.sharedMesh = Managers.Meshes.CurrentNoteMesh;
+                
+                if (Outlines.InvertedNoteMesh == null)
                 {
                     // this too is probably null, just check it here
-                    if (Managers.Meshes.DefaultCubeMesh == null)
+                    if (Managers.Meshes.DefaultNoteMesh == null)
                     {
-                        Managers.Meshes.DefaultCubeMesh = cubeMeshFilter.sharedMesh;
+                        Managers.Meshes.DefaultNoteMesh = cubeMeshFilter.sharedMesh;
                     }
-                    
+
                     Outlines.UpdateDefaultNoteMesh(cubeMeshFilter.sharedMesh);
                 }
             }

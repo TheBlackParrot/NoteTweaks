@@ -280,6 +280,31 @@
         <None Include="Resources\Presets\$(PresetsFolder)\Visible.json">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
+
+        <None Include="Resources\Meshes\Notes\Bliss.obj">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Include="Resources\Meshes\Notes\Cylinder.obj">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Include="Resources\Meshes\Notes\Flat.obj">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Include="Resources\Meshes\Notes\Flatter.obj">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Include="Resources\Meshes\Notes\Icosahedron.obj">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Include="Resources\Meshes\Notes\Pointy.obj">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Include="Resources\Meshes\Notes\Sphere.obj">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Include="Resources\Meshes\Notes\Suzanne.obj">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
     </ItemGroup>
     <ItemGroup>
         <OutputCopy Include="Resources\Presets\$(PresetsFolder)\Bold.json">
@@ -329,6 +354,31 @@
         </OutputCopy>
         <OutputCopy Include="Resources\Presets\$(PresetsFolder)\Visible.json">
             <OutputPath>UserData\NoteTweaks\Presets\Visible.json</OutputPath>
+        </OutputCopy>
+
+        <OutputCopy Include="Resources\Meshes\Notes\Bliss.obj">
+            <OutputPath>UserData\NoteTweaks\Meshes\Notes\Bliss.obj</OutputPath>
+        </OutputCopy>
+        <OutputCopy Include="Resources\Meshes\Notes\Cylinder.obj">
+            <OutputPath>UserData\NoteTweaks\Meshes\Notes\Cylinder.obj</OutputPath>
+        </OutputCopy>
+        <OutputCopy Include="Resources\Meshes\Notes\Flat.obj">
+            <OutputPath>UserData\NoteTweaks\Meshes\Notes\Flat.obj</OutputPath>
+        </OutputCopy>
+        <OutputCopy Include="Resources\Meshes\Notes\Flatter.obj">
+            <OutputPath>UserData\NoteTweaks\Meshes\Notes\Flatter.obj</OutputPath>
+        </OutputCopy>
+        <OutputCopy Include="Resources\Meshes\Notes\Icosahedron.obj">
+            <OutputPath>UserData\NoteTweaks\Meshes\Notes\Icosahedron.obj</OutputPath>
+        </OutputCopy>
+        <OutputCopy Include="Resources\Meshes\Notes\Pointy.obj">
+            <OutputPath>UserData\NoteTweaks\Meshes\Notes\Pointy.obj</OutputPath>
+        </OutputCopy>
+        <OutputCopy Include="Resources\Meshes\Notes\Sphere.obj">
+            <OutputPath>UserData\NoteTweaks\Meshes\Notes\Sphere.obj</OutputPath>
+        </OutputCopy>
+        <OutputCopy Include="Resources\Meshes\Notes\Suzanne.obj">
+            <OutputPath>UserData\NoteTweaks\Meshes\Notes\Suzanne.obj</OutputPath>
         </OutputCopy>
     </ItemGroup>
     <ItemGroup>

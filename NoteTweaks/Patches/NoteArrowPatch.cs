@@ -506,6 +506,14 @@ namespace NoteTweaks.Patches
                 ColorType colorType = __instance._noteData.colorType;
                 bool isLeft = colorType == ColorType.ColorA;
                 bool isChainHead = __instance.gameplayType == NoteData.GameplayType.BurstSliderHead;
+                
+                if (!isChainHead)
+                {
+                    if (noteRoot.TryGetComponent(out MeshFilter meshFilter))
+                    {
+                        meshFilter.sharedMesh = Managers.Meshes.CurrentNoteMesh;
+                    }
+                }
 
                 if (Config.EnableAccDot && !isChainHead && !(_gameplayModifiers.ghostNotes || _gameplayModifiers.disappearingArrows))
                 {

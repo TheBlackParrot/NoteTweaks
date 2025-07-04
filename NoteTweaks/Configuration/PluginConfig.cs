@@ -340,6 +340,9 @@ namespace NoteTweaks.Configuration
         [JsonProperty] public float BombTextureBrightness { get; set; } = 1.0f;
         [JsonProperty] public float NoteTextureContrast { get; set; } = 1.0f;
         [JsonProperty] public float BombTextureContrast { get; set; } = 1.0f;
+        
+        // meshes, also, should be up to the user imo
+        public string NoteMesh { get; set; } = "Default";
 
         internal PluginConfig ShallowCopy()
         {

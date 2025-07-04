@@ -1,4 +1,6 @@
-﻿using NoteTweaks.Configuration;
+﻿using System.IO;
+using IPA.Utilities;
+using NoteTweaks.Configuration;
 using NoteTweaks.Utils;
 using UnityEngine;
 
@@ -7,6 +9,7 @@ namespace NoteTweaks.Managers
     internal abstract class Meshes
     {
         private static PluginConfig Config => PluginConfig.Instance;
+        internal static readonly string MeshFolder = Path.Combine(UnityGame.UserDataPath, "NoteTweaks", "Meshes", "Notes");
         
         private static readonly Mesh TriangleArrowMesh = Utils.Meshes.GenerateBasicTriangleMesh();
         private static readonly Mesh LineArrowMesh = Utils.Meshes.GenerateBasicLineMesh();
@@ -23,7 +26,9 @@ namespace NoteTweaks.Managers
         private static Mesh _sphereMesh = MeshExtensions.CreateSphere(SPHERE_RADIUS, _sphereSlices, _sphereStacks, _sphereNormalsWorld);
         private static Mesh _defaultBombMesh;
 
-        public static Mesh DefaultCubeMesh;
+        public static Mesh DefaultNoteMesh;
+        // ReSharper disable once MemberCanBePrivate.Global
+        public static Mesh CustomNoteMesh;
 
         public static Mesh CurrentBombMesh
         {
@@ -58,6 +63,42 @@ namespace NoteTweaks.Managers
                     default:
                         return _defaultArrowMesh;
                 }
+            }
+        }
+
+        public static void UpdateCustomNoteMesh()
+        {
+            if (!Directory.Exists(MeshFolder))
+            {
+                Directory.CreateDirectory(MeshFolder);
+            }
+
+            if (Config.NoteMesh == "Default")
+            {
+                Outlines.InvertedNoteMesh = Utils.Meshes.MakeReadableMeshCopy(DefaultNoteMesh).Invert();
+                return;
+            }
+
+            CustomNoteMesh = FastObjImporter.Instance.ImportFile(Path.Combine(MeshFolder, $"{Config.NoteMesh}.obj"));
+            CustomNoteMesh.Optimize();
+
+            Outlines.InvertedNoteMesh = Utils.Meshes.MakeReadableMeshCopy(CustomNoteMesh).Invert();
+        }
+
+        public static Mesh CurrentNoteMesh
+        {
+            get
+            {
+                if (Config.NoteMesh == "Default")
+                {
+                    return DefaultNoteMesh;
+                }
+
+                if (CustomNoteMesh == null)
+                {
+                    UpdateCustomNoteMesh();
+                }
+                return CustomNoteMesh;
             }
         }
 

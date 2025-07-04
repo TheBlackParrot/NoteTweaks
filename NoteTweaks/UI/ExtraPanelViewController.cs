@@ -235,6 +235,48 @@ namespace NoteTweaks.UI
             }
         }
 
+        protected string NoteMesh
+        {
+            get => Config.NoteMesh;
+            set
+            {
+                Config.NoteMesh = value;
+                NotifyPropertyChanged();
+
+                Meshes.UpdateCustomNoteMesh();
+                
+                string[] noteNames = { "L_Arrow", "R_Arrow", "L_Dot", "R_Dot" };
+                foreach (string noteName in noteNames)
+                {
+                    string fullName = $"_NoteTweaks_PreviewNote_{noteName}";
+                    GameObject previewNote = GameObject.Find(fullName);
+                    
+                    if (previewNote == null)
+                    {
+                        Plugin.Log.Warn($"{fullName} is null");
+                        continue;
+                    }
+                    if (!previewNote.TryGetComponent(out MeshFilter meshFilter))
+                    {
+                        continue;
+                    }
+                    
+                    meshFilter.sharedMesh = Meshes.CurrentNoteMesh;
+
+                    Transform outlineTransform = previewNote.transform.Find("NoteOutline");
+                    if (outlineTransform == null)
+                    {
+                        continue;
+                    }
+                    
+                    if (outlineTransform.TryGetComponent(out MeshFilter outlineMeshFilter))
+                    {
+                        outlineMeshFilter.sharedMesh = Outlines.InvertedNoteMesh;
+                    }
+                }
+            }
+        }
+
         [UIValue("UpdateIsAvailable")]
         internal bool UpdateIsAvailable
         {
@@ -288,6 +330,36 @@ namespace NoteTweaks.UI
 
         [UIValue("PresetNameField")]
         private string PresetNameField = "Preset";
+
+        [UIComponent("MeshDropdown")]
+#pragma warning disable CS0649
+        public DropDownListSetting MeshDropDown;
+#pragma warning restore CS0649
+        
+        internal void UpdateMeshDropdown()
+        {
+            if (MeshDropDown == null)
+            {
+                return;
+            }
+
+            MeshNames = GetMeshNames();
+            MeshDropDown.Values = MeshNames;
+            MeshDropDown.UpdateChoices();
+        }
+        
+        private static List<object> GetMeshNames()
+        {
+            List<string> files = Directory.GetFiles(Meshes.MeshFolder, "*.obj").ToList();
+            files.Sort();
+            Plugin.Log.Info($"Found {files.Count} note meshes");
+            
+            files = files.Prepend("Default").ToList();
+            return files.Select(Path.GetFileNameWithoutExtension).Cast<object>().ToList();
+        }
+        
+        [UIValue("MeshNames")]
+        private List<object> MeshNames = GetMeshNames();
         
         #pragma warning disable CS0649
         [UIComponent("SaveStatusModal")]
