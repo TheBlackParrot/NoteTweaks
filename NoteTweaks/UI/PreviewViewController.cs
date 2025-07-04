@@ -112,7 +112,7 @@ namespace NoteTweaks.UI
                 _dotGlowMesh = NoteContainer.transform.GetChild(0).Find("NoteCircleGlow").GetComponent<MeshFilter>().mesh;
             }
 
-            Managers.Meshes.DotMesh = Utils.Meshes.GenerateFaceMesh(Config.DotMeshSides);
+            Managers.Meshes.DotMesh = Utils.Meshes.GenerateFaceMesh(Config.DotMeshSides, Vector2.one);
 
             for (int i = 0; i < NoteContainer.transform.childCount; i++)
             {

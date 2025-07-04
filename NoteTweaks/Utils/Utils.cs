@@ -30,7 +30,8 @@ namespace NoteTweaks.Utils
 
             return new Vector2(x, y);
         }
-        public static Mesh GenerateFaceMesh(int sides, float size = 1f)
+        
+        public static Mesh GenerateFaceMesh(int sides, Vector2 scale, float size = 1f)
         {
             // no silly gooses here
             sides = Math.Max(4, sides);
@@ -40,7 +41,7 @@ namespace NoteTweaks.Utils
             List<Vector3> vertices = new List<Vector3> { Vector3.zero };
             for (float i = 0; i < 360f; i += 360f / sides)
             {
-                vertices.Add(PointOnCircle(0.5f * size, i, Vector2.zero));
+                vertices.Add(PointOnCircle(0.5f * size, i, Vector2.zero) * scale);
             }
             
             List<int> triangles = new List<int>();

@@ -1211,7 +1211,7 @@ namespace NoteTweaks.UI
         [UIValue("arrowMeshChoices")]
         [UsedImplicitly]
         // ReSharper disable once InconsistentNaming
-        private List<object> ArrowMeshChoices = new List<object> { "Default", "Chevron", "Line", "Pentagon", "Pointy", "Triangle" };
+        private List<object> ArrowMeshChoices = new List<object> { "Default", "Chevron", "Line", "Oval", "Pentagon", "Pointy", "Triangle" };
         
         [UIValue("bombMeshChoices")]
         [UsedImplicitly]

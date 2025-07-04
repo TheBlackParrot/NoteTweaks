@@ -16,6 +16,7 @@ namespace NoteTweaks.Managers
         private static readonly Mesh ChevronArrowMesh = Utils.Meshes.GenerateChevronMesh();
         private static readonly Mesh PointyMesh = Utils.Meshes.GeneratePointyMesh(new Vector2(0f, -0.0165f));
         private static readonly Mesh PentagonArrowMesh = Utils.Meshes.GeneratePentagonMesh();
+        private static readonly Mesh OvalMesh = Utils.Meshes.GenerateFaceMesh(32, new Vector2(1f, 0.3f), 0.31f);
         private static Mesh _defaultArrowMesh;
 
         private static int _sphereSlices = Config.BombMeshSlices;
@@ -60,6 +61,8 @@ namespace NoteTweaks.Managers
                         return PointyMesh;
                     case "Pentagon":
                         return PentagonArrowMesh;
+                    case "Oval":
+                        return OvalMesh;
                     default:
                         return _defaultArrowMesh;
                 }
@@ -102,7 +105,7 @@ namespace NoteTweaks.Managers
             }
         }
 
-        internal static Mesh DotMesh = Utils.Meshes.GenerateFaceMesh(Config.DotMeshSides);
+        internal static Mesh DotMesh = Utils.Meshes.GenerateFaceMesh(Config.DotMeshSides, Vector2.one);
 
         public static void UpdateDefaultArrowMesh(Mesh mesh)
         {
