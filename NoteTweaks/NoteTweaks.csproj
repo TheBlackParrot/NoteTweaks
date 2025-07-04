@@ -12,7 +12,7 @@
         <Product>NoteTweaks</Product>
         <Copyright>Copyright © TheBlackParrot</Copyright>
         <BSMTProjectType>BSIPA</BSMTProjectType>
-        <Configurations>Release-1.40.3;Debug-1.40.3;Debug-1.39.1;Release-1.39.1;Debug-1.37.1;Release-1.37.1;Debug-1.34.2;Release-1.34.2;Debug-1.29.1;Release-1.29.1</Configurations>
+        <Configurations>Debug-1.39.1;Release-1.39.1;Release-1.40.6;Debug-1.40.6</Configurations>
         <Platforms>AnyCPU</Platforms>
     </PropertyGroup>
     <PropertyGroup>
@@ -23,15 +23,15 @@
         <Optimize Condition="$(Configuration.Contains('Debug'))">false</Optimize>
     </PropertyGroup>
     <ItemGroup>
-        <Reference Include="BGLib.AppFlow" Condition="$(GameVersion) != '1.29.1'">
+        <Reference Include="BGLib.AppFlow">
             <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\BGLib.AppFlow.dll</HintPath>
             <Private>false</Private>
         </Reference>
-        <Reference Include="BGLib.UnityExtension" Condition="$(GameVersion) != '1.29.1'">
+        <Reference Include="BGLib.UnityExtension">
             <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\BGLib.UnityExtension.dll</HintPath>
             <Private>false</Private>
         </Reference>
-        <Reference Include="BeatSaber.ViewSystem" Condition="$(GameVersion) == '1.39.1' Or $(GameVersion) == '1.40.3'">
+        <Reference Include="BeatSaber.ViewSystem">
             <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\BeatSaber.ViewSystem.dll</HintPath>
             <Private>false</Private>
         </Reference>
@@ -44,16 +44,12 @@
             <Private>false</Private>
             <Publicize>True</Publicize>
         </Reference>
-        <Reference Include="DataModels" Condition="$(GameVersion) == '1.37.1' Or $(GameVersion) == '1.39.1' Or $(GameVersion) == '1.40.3'">
+        <Reference Include="DataModels">
             <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\DataModels.dll</HintPath>
             <Private>false</Private>
         </Reference>
         <Reference Include="GameplayCore">
             <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\GameplayCore.dll</HintPath>
-            <Private>false</Private>
-        </Reference>
-        <Reference Include="HMLib" Condition="$(GameVersion) == '1.29.1'">
-            <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\HMLib.dll</HintPath>
             <Private>false</Private>
         </Reference>
         <Reference Include="HMRendering">
@@ -79,20 +75,15 @@
             <Private>False</Private>
             <Publicize>True</Publicize>
         </Reference>
-        <Reference Include="HMUI" Condition="$(GameVersion) != '1.29.1'">
+        <Reference Include="HMUI">
             <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\HMUI.dll</HintPath>
             <Private>False</Private>
-        </Reference>
-        <Reference Include="HMUI" Condition="$(GameVersion) == '1.29.1'">
-            <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\HMUI.dll</HintPath>
-            <Private>False</Private>
-            <Publicize>True</Publicize>
         </Reference>
         <Reference Include="IPA.Loader">
             <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\IPA.Loader.dll</HintPath>
             <Private>False</Private>
         </Reference>
-        <Reference Include="Tweening" Condition="$(GameVersion) != '1.29.1'">
+        <Reference Include="Tweening">
             <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\Tweening.dll</HintPath>
             <Private>false</Private>
         </Reference>

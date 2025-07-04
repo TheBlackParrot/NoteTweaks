@@ -5,9 +5,7 @@ using System.Linq;
 using System.Reflection;
 using HarmonyLib;
 using IPA.Loader;
-#if !V1_29_1
 using IPA.Utilities.Async;
-#endif
 using JetBrains.Annotations;
 using NoteTweaks.Configuration;
 using NoteTweaks.Managers;
@@ -72,20 +70,16 @@ namespace NoteTweaks.Patches
 
 #if LATEST
         private static bool MapHasRequirement(BeatmapKey beatmapKey, string requirement, bool alsoCheckSuggestions = false)
-#elif !PRE_V1_37_1
-        private static bool MapHasRequirement(BeatmapLevel beatmapLevel, BeatmapKey beatmapKey, string requirement, bool alsoCheckSuggestions = false)
 #else
-        private static bool MapHasRequirement(IDifficultyBeatmap beatmapLevel, string requirement, bool alsoCheckSuggestions = false)
+        private static bool MapHasRequirement(BeatmapLevel beatmapLevel, BeatmapKey beatmapKey, string requirement, bool alsoCheckSuggestions = false)
 #endif
         {
             bool hasRequirement = false;
             
 #if LATEST
             SongData.DifficultyData diffData = GetCustomLevelSongDifficultyData(beatmapKey);
-#elif !PRE_V1_37_1
-            ExtraSongData.DifficultyData diffData = RetrieveDifficultyData(beatmapLevel, beatmapKey);
 #else
-            ExtraSongData.DifficultyData diffData = RetrieveDifficultyData(beatmapLevel);
+            ExtraSongData.DifficultyData diffData = RetrieveDifficultyData(beatmapLevel, beatmapKey);
 #endif
             if (diffData != null)
             {
@@ -131,7 +125,7 @@ namespace NoteTweaks.Patches
                 {
                     _fixDots = Config.FixDotsIfNoodle;
                 }
-#elif !PRE_V1_37_1
+#else
                 AutoDisable =
                     (MapHasRequirement(__instance.beatmapLevel, __instance.beatmapKey, "Noodle Extensions") &&
                      Config.DisableIfNoodle) ||
@@ -146,21 +140,6 @@ namespace NoteTweaks.Patches
                 {
                     _fixDots = Config.FixDotsIfNoodle;
                 }
-#else
-                AutoDisable =
-                    (MapHasRequirement(__instance.difficultyBeatmap, "Noodle Extensions") &&
-                     Config.DisableIfNoodle) ||
-                    (MapHasRequirement(__instance.difficultyBeatmap, "Vivify") &&
-                     Config.DisableIfVivify);
-                
-                UsesChroma = PluginManager.GetPluginFromId("Chroma") != null &&
-                             MapHasRequirement(__instance.difficultyBeatmap, "Chroma", true);
-
-                _fixDots = true;
-                if (MapHasRequirement(__instance.difficultyBeatmap, "Noodle Extensions"))
-                {
-                    _fixDots = Config.FixDotsIfNoodle;
-                }
 #endif
                 
                 _gameplayModifiers = gameplayModifiers;
@@ -169,39 +148,6 @@ namespace NoteTweaks.Patches
                 Plugin.ClampSettings();
             }
             
-#if PRE_V1_39_1
-            [HarmonyPatch(typeof(EnvironmentSceneSetup), "InstallBindings")]
-            internal class EnvironmentSceneSetupPatch
-            {
-                internal static void Postfix()
-                {
-                    if (!Config.Enabled)
-                    {
-                        return;
-                    }
-                
-    #if V1_29_1
-                    Materials.UpdateMainEffectContainerWorkaroundThing();
-                
-                    Managers.Textures.SetDefaultTextures();
-                    Managers.Meshes.UpdateSphereMesh(Config.BombMeshSlices, Config.BombMeshStacks, Config.BombMeshSmoothNormals, Config.BombMeshWorldNormals);
-                    GlowTextures.LoadTextures(); // for some reason this needs to be explicitly called here in 1.29. idk
-                    Materials.UpdateAll();
-                    BombPatch.SetStaticBombColor();
-    #else
-                    Managers.Textures.SetDefaultTextures();
-                
-                    Managers.Meshes.UpdateSphereMesh(Config.BombMeshSlices, Config.BombMeshStacks, Config.BombMeshSmoothNormals, Config.BombMeshWorldNormals);
-                
-                    UnityMainThreadTaskScheduler.Factory.StartNew(async () =>
-                    {
-                        await Materials.UpdateAll();
-                        BombPatch.SetStaticBombColor();
-                    });
-    #endif
-                }
-            }
-#else
             // ReSharper disable once InconsistentNaming
             internal static bool Prefix(StandardLevelScenesTransitionSetupDataSO __instance)
             {
@@ -220,7 +166,6 @@ namespace NoteTweaks.Patches
                 
                 return true;
             }
-#endif
         }
 
         [HarmonyPatch]
@@ -252,7 +197,7 @@ namespace NoteTweaks.Patches
                 {
                     _fixDots = Config.FixDotsIfNoodle;
                 }
-#elif !PRE_V1_37_1
+#else
                 AutoDisable =
                     (MapHasRequirement(__instance.beatmapLevel, __instance.beatmapKey, "Noodle Extensions") &&
                      Config.DisableIfNoodle) ||
@@ -267,60 +212,12 @@ namespace NoteTweaks.Patches
                 {
                     _fixDots = Config.FixDotsIfNoodle;
                 }
-#else
-                AutoDisable =
-                    (MapHasRequirement(__instance.difficultyBeatmap, "Noodle Extensions") &&
-                     Config.DisableIfNoodle) ||
-                    (MapHasRequirement(__instance.difficultyBeatmap, "Vivify") &&
-                     Config.DisableIfVivify);
-                
-                UsesChroma = PluginManager.GetPluginFromId("Chroma") != null &&
-                             MapHasRequirement(__instance.difficultyBeatmap, "Chroma", true);
-
-                _fixDots = true;
-                if (MapHasRequirement(__instance.difficultyBeatmap, "Noodle Extensions"))
-                {
-                    _fixDots = Config.FixDotsIfNoodle;
-                }
 #endif
                 
                 _gameplayModifiers = gameplayModifiers;
                 Plugin.ClampSettings();
             }
             
-#if PRE_V1_39_1
-            [HarmonyPatch(typeof(EnvironmentSceneSetup), "InstallBindings")]
-            internal class EnvironmentSceneSetupPatch
-            {
-                internal static void Postfix()
-                {
-                    if (!Config.Enabled)
-                    {
-                        return;
-                    }
-                
-    #if V1_29_1
-                    Materials.UpdateMainEffectContainerWorkaroundThing();
-                
-                    Managers.Textures.SetDefaultTextures();
-                    Managers.Meshes.UpdateSphereMesh(Config.BombMeshSlices, Config.BombMeshStacks, Config.BombMeshSmoothNormals, Config.BombMeshWorldNormals);
-                    GlowTextures.LoadTextures(); // for some reason this needs to be explicitly called here in 1.29. idk
-                    Materials.UpdateAll();
-                    BombPatch.SetStaticBombColor();
-    #else
-                    Managers.Textures.SetDefaultTextures();
-                
-                    Managers.Meshes.UpdateSphereMesh(Config.BombMeshSlices, Config.BombMeshStacks, Config.BombMeshSmoothNormals, Config.BombMeshWorldNormals);
-                
-                    UnityMainThreadTaskScheduler.Factory.StartNew(async () =>
-                    {
-                        await Materials.UpdateAll();
-                        BombPatch.SetStaticBombColor();
-                    });
-    #endif
-                }
-            }
-#else
             [HarmonyPatch(typeof(MultiplayerLevelScenesTransitionSetupDataSO), "Init")]
             // ReSharper disable once InconsistentNaming
             internal static bool Prefix(MultiplayerLevelScenesTransitionSetupDataSO __instance)
@@ -340,7 +237,6 @@ namespace NoteTweaks.Patches
                 
                 return true;
             }
-#endif            
         }
 
         internal static bool IsAllowedToScaleNotes
@@ -443,12 +339,7 @@ namespace NoteTweaks.Patches
                         Color outlineColor = Color.LerpUnclamped(isLeft ? Config.NoteOutlineLeftColor : Config.NoteOutlineRightColor, noteColor, isLeft ? Config.NoteOutlineLeftColorSkew : Config.NoteOutlineRightColorSkew);
                         
                         bool applyBloom = Config.AddBloomForOutlines && Materials.MainEffectContainer.value;
-#if PRE_V1_39_1
-                        controller.materialPropertyBlock.SetColor(ColorNoteVisuals._colorId, outlineColor.ColorWithAlpha(applyBloom ? Config.OutlineBloomAmount : 1f));
-                        controller.materialPropertyBlock.SetFloat(Materials.FinalColorMul, isLeft ? Config.LeftOutlineFinalColorMultiplier : Config.RightOutlineFinalColorMultiplier);
-#else
                         controller.materialPropertyBlock.SetColor(ColorNoteVisuals._colorId, outlineColor.ColorWithAlpha(applyBloom ? Config.OutlineBloomAmount : Materials.SaneAlphaValue));
-#endif
                         controller.ApplyChanges();
                     }
                 }
@@ -669,12 +560,7 @@ namespace NoteTweaks.Patches
                         Color outlineColor = Color.LerpUnclamped(isLeft ? Config.NoteOutlineLeftColor : Config.NoteOutlineRightColor, noteColor, isLeft ? Config.NoteOutlineLeftColorSkew : Config.NoteOutlineRightColorSkew);
                         
                         bool applyBloom = Config.AddBloomForOutlines && Materials.MainEffectContainer.value;
-#if PRE_V1_39_1
-                        controller.materialPropertyBlock.SetColor(ColorNoteVisuals._colorId, outlineColor.ColorWithAlpha(applyBloom ? Config.OutlineBloomAmount : 1f));
-                        controller.materialPropertyBlock.SetFloat(Materials.FinalColorMul, isLeft ? Config.LeftOutlineFinalColorMultiplier : Config.RightOutlineFinalColorMultiplier);
-#else
                         controller.materialPropertyBlock.SetColor(ColorNoteVisuals._colorId, outlineColor.ColorWithAlpha(applyBloom ? Config.OutlineBloomAmount : Materials.SaneAlphaValue));
-#endif
                         controller.ApplyChanges();
                     }
                 }
@@ -682,30 +568,6 @@ namespace NoteTweaks.Patches
                 Transform dotRoot = noteRoot.Find("NoteCircleGlow");
                 bool applyBloomToFace = Config.AddBloomForFaceSymbols && Materials.MainEffectContainer.value;
                 
-#if PRE_V1_39_1
-                if (_fixDots && dotRoot != null)
-                {
-                    if (noteRoot.gameObject.TryGetComponent(out MaterialPropertyBlockController noteController) && dotRoot.gameObject.TryGetComponent(out MaterialPropertyBlockController dotController))
-                    {
-                        Color noteColor = noteController.materialPropertyBlock.GetColor(ColorNoteVisuals._colorId);
-                        Color faceColor = noteColor;
-                    
-                        if (isLeft ? Config.NormalizeLeftFaceColor : Config.NormalizeRightFaceColor)
-                        {
-                            float colorScalar = noteColor.maxColorComponent;
-                            if (colorScalar != 0)
-                            {
-                                faceColor /= colorScalar;
-                            }
-                        }
-                        
-                        Color c = Color.LerpUnclamped(isLeft ? Config.LeftFaceColor : Config.RightFaceColor, faceColor, isLeft ? Config.LeftFaceColorNoteSkew : Config.RightFaceColorNoteSkew);
-                        c.a = applyBloomToFace ? Config.FaceSymbolBloomAmount : Materials.SaneAlphaValue;
-                        dotController.materialPropertyBlock.SetColor(ColorNoteVisuals._colorId, c);
-                        dotController.ApplyChanges();
-                    }   
-                }
-#else
                 if (applyBloomToFace && dotRoot != null && _fixDots)
                 {
                     if (dotRoot.gameObject.TryGetComponent(out MaterialPropertyBlockController dotController))
@@ -716,7 +578,6 @@ namespace NoteTweaks.Patches
                         dotController.ApplyChanges();
                     }
                 }
-#endif
 
                 if (!IsAllowedToScaleNotes)
                 {

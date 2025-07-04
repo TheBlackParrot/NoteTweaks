@@ -14,42 +14,26 @@ namespace NoteTweaks.UI
     internal class ModSettingsViewController : IInitializable, IDisposable, INotifyPropertyChanged
     {
         private static PluginConfig _config;
-#if !V1_29_1
         private readonly GameplaySetup _gameplaySetup;
-#endif
         private readonly GameplaySetupViewController _gameplaySetupViewController;
         public event PropertyChangedEventHandler PropertyChanged;
         
-#if V1_29_1
-        private ModSettingsViewController(PluginConfig config, GameplaySetupViewController gameplaySetupViewController)
-#else
         private ModSettingsViewController(PluginConfig config, GameplaySetup gameplaySetup, GameplaySetupViewController gameplaySetupViewController)
-#endif
         {
             _config = config;
-#if !V1_29_1
             _gameplaySetup = gameplaySetup;
-#endif
             _gameplaySetupViewController = gameplaySetupViewController;
         }
         
         public void Initialize()
         {
-#if V1_29_1
-            GameplaySetup.instance.AddTab("NoteTweaks", "NoteTweaks.UI.BSML.SideSettings.bsml", this);
-#else
             _gameplaySetup.AddTab("NoteTweaks", "NoteTweaks.UI.BSML.SideSettings.bsml", this);
-#endif
             _gameplaySetupViewController.didActivateEvent += GameplaySetupViewController_DidActivateEvent;
         }
 
         public void Dispose()
         {
-#if V1_29_1
-            GameplaySetup.instance.RemoveTab("NoteTweaks");
-#else
             _gameplaySetup.RemoveTab("NoteTweaks");
-#endif
             _gameplaySetupViewController.didActivateEvent -= GameplaySetupViewController_DidActivateEvent;
         }
 
@@ -71,11 +55,9 @@ namespace NoteTweaks.UI
                 LatestVersion = $"(<alpha=#CC>{modVersion.ToString(3)} <alpha=#88>-> <alpha=#CC>{VersionManager.LatestVersion?.ToString(3)}<alpha=#FF>)";
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(LatestVersion)));
                 
-#if !V1_29_1
                 // this... looks like a bad idea. but it works? how tf else do i refresh this? at least firstActivation only triggers it once. idk
                 _gameplaySetup.RemoveTab("NoteTweaks");
                 _gameplaySetup.AddTab("NoteTweaks", "NoteTweaks.UI.BSML.SideSettings.bsml", this);
-#endif
             }
         }
         

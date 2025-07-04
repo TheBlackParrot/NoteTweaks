@@ -24,52 +24,32 @@ namespace NoteTweaks.Managers
         {
             if (_defaultNoteMesh == null)
             {
-#if PRE_V1_39_1
-                _defaultNoteMesh = mesh;
-                InvertedNoteMesh = _defaultNoteMesh;
-#else
                 _defaultNoteMesh = Utils.Meshes.MakeReadableMeshCopy(mesh);
                 InvertedNoteMesh = _defaultNoteMesh.Invert();
-#endif
             }
         }
         public static void UpdateDefaultChainMesh(Mesh mesh)
         {
             if (_defaultChainMesh == null)
             {
-#if PRE_V1_39_1
-                _defaultChainMesh = mesh;
-                InvertedChainMesh = _defaultChainMesh;
-#else
                 _defaultChainMesh = Utils.Meshes.MakeReadableMeshCopy(mesh);
                 InvertedChainMesh = _defaultChainMesh.Invert();
-#endif
             }
         }
         public static void UpdateDefaultChainHeadMesh(Mesh mesh)
         {
             if (_defaultChainHeadMesh == null)
             {
-#if PRE_V1_39_1
-                _defaultChainHeadMesh = mesh;
-                InvertedChainHeadMesh = _defaultChainHeadMesh;
-#else
                 _defaultChainHeadMesh = Utils.Meshes.MakeReadableMeshCopy(mesh);
                 InvertedChainHeadMesh = _defaultChainHeadMesh.Invert();
-#endif
             }
         }
         public static void UpdateDefaultBombMesh(Mesh mesh, bool force = false)
         {
             if (_defaultBombMesh == null || force)
             {
-#if PRE_V1_39_1
-                _defaultBombMesh = mesh;
-                InvertedBombMesh = _defaultBombMesh;
-#else
                 _defaultBombMesh = Utils.Meshes.MakeReadableMeshCopy(mesh);
                 InvertedBombMesh = _defaultBombMesh.Invert();
-#endif
             }
         }
 

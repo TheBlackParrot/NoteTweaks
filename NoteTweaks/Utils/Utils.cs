@@ -284,7 +284,6 @@ namespace NoteTweaks.Utils
             return mesh;
         }
         
-#if !PRE_V1_39_1
         internal static Mesh Invert(this Mesh mesh)
         {
             Vector3[] normals = mesh.normals;
@@ -346,7 +345,6 @@ namespace NoteTweaks.Utils
 
             return meshCopy;
         }
-#endif
     }
 
     internal static class Vectors

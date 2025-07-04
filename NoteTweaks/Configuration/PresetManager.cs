@@ -1,13 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-#if PRE_V1_39_1
-using System.Linq;
-#endif
 using System.Reflection;
-#if !V1_29_1
 using System.Threading.Tasks;
-#endif
 using IPA.Config.Data;
 using IPA.Config.Stores.Converters;
 using IPA.Utilities;
@@ -129,11 +124,7 @@ namespace NoteTweaks.Configuration
         {
             string path = Path.Combine(PresetPath, presetName + ".json");
             string[] dirs = path.Split(Path.DirectorySeparatorChar);
-#if PRE_V1_39_1
-            string safePath = String.Join(Path.DirectorySeparatorChar.ToString(), dirs.ToList().GetRange(dirs.Length - 4, 4).ToArray());
-#else
             string safePath = String.Join(Path.DirectorySeparatorChar.ToString(), dirs.GetRange(dirs.Length - 4, 4).ToArray());
-#endif
 
             try
             {
@@ -147,11 +138,7 @@ namespace NoteTweaks.Configuration
             }
         }
         
-#if V1_29_1
-        public static void LoadPreset(string presetName)
-#else
         public static async Task LoadPreset(string presetName)
-#endif
         {
             string path = Path.Combine(PresetPath, presetName + ".json");
             if (!File.Exists(path))
@@ -186,11 +173,7 @@ namespace NoteTweaks.Configuration
             }
             
             Plugin.ClampSettings();
-#if V1_29_1
-            UI.SettingsFlowCoordinator._settingsViewController.RefreshAll();
-#else
             await UI.SettingsFlowCoordinator._settingsViewController.RefreshAll();
-#endif
         }
     }
 }

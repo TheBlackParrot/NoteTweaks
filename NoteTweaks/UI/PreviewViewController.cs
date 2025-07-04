@@ -517,12 +517,8 @@ namespace NoteTweaks.UI
                     bombMatController.materialPropertyBlock.SetColor(Color1, bombColor);
                     bombMatController.ApplyChanges();
                 }
-
-#if PRE_V1_39_1
-                Transform noteOutline = bombObj.transform.GetChild(0).Find("NoteOutline");
-#else
+                
                 Transform noteOutline = bombObj.transform.FindChildRecursively("NoteOutline");
-#endif
                 if (noteOutline == null)
                 {
                     continue;
@@ -558,22 +554,15 @@ namespace NoteTweaks.UI
                     originalArrowMeshFilter.mesh = Managers.Meshes.CurrentArrowMesh;
                 }
             }
-
-#if V1_29_1
-            GlowTextures.UpdateTextures();
-            UpdateColors();
-#else
+            
             _ = ForceAsyncUpdateForGlowTexture();
-#endif
         }
         
-#if !V1_29_1
         private static async Task ForceAsyncUpdateForGlowTexture()
         {
             await GlowTextures.UpdateTextures();
             UpdateColors();
         }
-#endif
 
         public static void UpdateOutlines()
         {
@@ -603,12 +592,8 @@ namespace NoteTweaks.UI
                 {
                     outlineColor = Color.LerpUnclamped(isLeft ? Config.NoteOutlineLeftColor : Config.NoteOutlineRightColor, noteColor, isLeft ? Config.NoteOutlineLeftColorSkew : Config.NoteOutlineRightColorSkew);   
                 }
-
-#if PRE_V1_39_1
-                Transform noteOutline = isBomb ? noteCube.transform.Find("Mesh").Find("NoteOutline") : noteCube.transform.Find("NoteOutline");
-#else
+                
                 Transform noteOutline = noteCube.transform.FindChildRecursively("NoteOutline");
-#endif
                 if (!noteOutline)
                 {
                     continue;
@@ -626,20 +611,8 @@ namespace NoteTweaks.UI
                 if (noteOutline.gameObject.TryGetComponent(out MaterialPropertyBlockController controller))
                 {
                     int applyBloom = Config.AddBloomForOutlines && Materials.MainEffectContainer.value ? 1 : 0;
-#if PRE_V1_39_1
-                        float mult = isBomb
-                            ? Config.BombOutlineFinalColorMultiplier
-                            : (isLeft
-                                ? Config.LeftOutlineFinalColorMultiplier
-                                : Config.RightOutlineFinalColorMultiplier);
-                        
-                        controller.materialPropertyBlock.SetColor(ColorNoteVisuals._colorId, outlineColor.ColorWithAlpha(applyBloom == 1 ? Config.OutlineBloomAmount : 1f));
-                        controller.materialPropertyBlock.SetFloat(Materials.FinalColorMul, mult);
-                        Materials.OutlineMaterial.SetInt(Materials.SrcFactorAlphaID, applyBloom);
-#else
                     Materials.OutlineMaterial.SetInt(Materials.SrcFactorAlphaID, applyBloom);
                     controller.materialPropertyBlock.SetColor(ColorNoteVisuals._colorId, outlineColor.ColorWithAlpha(applyBloom == 1 ? Config.OutlineBloomAmount : Materials.SaneAlphaValue));
-#endif
                     controller.ApplyChanges();
                 }
             }
@@ -698,11 +671,7 @@ namespace NoteTweaks.UI
                     Outlines.UpdateDefaultBombMesh(Managers.Meshes.CurrentBombMesh, true);
                 }
                 
-#if PRE_V1_39_1
-                Transform noteOutline = bombObj.transform.GetChild(0).Find("NoteOutline");
-#else
                 Transform noteOutline = bombObj.transform.FindChildRecursively("NoteOutline");
-#endif
                 if (noteOutline)
                 {
                     noteOutline.GetComponent<MeshFilter>().sharedMesh = Outlines.InvertedBombMesh;
@@ -772,11 +741,7 @@ namespace NoteTweaks.UI
                     newGlowMeshRenderer.sharedMaterial = Materials.DotGlowMaterial;
                 }
                 
-#if PRE_V1_39_1
-                GameObject arrowObj = NoteContainer.transform.GetChild(0).Find("NoteArrow").gameObject;
-#else
                 GameObject arrowObj = NoteContainer.transform.FindChildRecursively("NoteArrow").gameObject;
-#endif
                 GameObject dotObj = originalDot.gameObject;
                 
                 if (arrowObj.transform.TryGetComponent(out CutoutEffect parentCutoutEffect))
@@ -1156,16 +1121,10 @@ namespace NoteTweaks.UI
                 await Task.Yield();
             }
         }
-
-#if V1_29_1
-        internal static void RefreshEverything()
-        {
-            Materials.UpdateAll();
-#else
+        
         internal static async Task RefreshEverything()
         {
             await Materials.UpdateAll();
-#endif
 
             UpdateAccDots();
             UpdateColors();
@@ -1192,17 +1151,9 @@ namespace NoteTweaks.UI
                 DontDestroyOnLoad(NoteContainer);
             }
             
-#if V1_29_1
-            Materials.UpdateMainEffectContainerWorkaroundThing();
-#endif
-            
             if (HasInitialized)
             {
-#if V1_29_1
-                RefreshEverything();
-#else
                 _ = RefreshEverything();
-#endif
                 _ = CutoutFadeIn();
                 return;
             }
@@ -1229,14 +1180,7 @@ namespace NoteTweaks.UI
                             // ReSharper restore PossibleNullReferenceException
                             
                             SettingsViewController.LoadTextures = true;
-#if PRE_V1_39_1
-                            Managers.Textures.SetDefaultTextures();
-#endif
-#if V1_29_1
-                            Materials.UpdateAll();
-#else
                             await Materials.UpdateAll();
-#endif
                             
                             List<string> noteNames = new List<string> { "L_Arrow", "R_Arrow", "L_Dot", "R_Dot" };
                             for (int i = 0; i < noteNames.Count; i++)

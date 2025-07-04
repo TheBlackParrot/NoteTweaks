@@ -5,9 +5,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-#if !V1_29_1
 using System.Threading.Tasks;
-#endif
 using BeatSaberMarkupLanguage.Attributes;
 using BeatSaberMarkupLanguage.Components.Settings;
 using BeatSaberMarkupLanguage.ViewControllers;
@@ -175,11 +173,7 @@ namespace NoteTweaks.UI
             }
             
             string[] dirs = filepath.Split(Path.DirectorySeparatorChar);
-#if PRE_V1_39_1
-            string safePath = String.Join(Path.DirectorySeparatorChar.ToString(), dirs.ToList().GetRange(dirs.Length - 4, 4).ToArray());
-#else
             string safePath = String.Join(Path.DirectorySeparatorChar.ToString(), dirs.GetRange(dirs.Length - 4, 4).ToArray());
-#endif
 
             try
             {
@@ -305,11 +299,7 @@ namespace NoteTweaks.UI
 
             PresetNames = GetPresetNames();
             
-#if PRE_V1_39_1
-            PresetDropDown.values = PresetNames;
-#else
             PresetDropDown.Values = PresetNames;
-#endif
             PresetDropDown.UpdateChoices();
         }
 
@@ -396,11 +386,7 @@ namespace NoteTweaks.UI
         }
         
         [UIAction("LoadPreset")]
-#if V1_29_1
-        private void LoadPreset()
-#else
         private async Task LoadPreset()
-#endif
         {
             NotifyPropertyChanged(nameof(SelectedPreset));
             
@@ -408,11 +394,7 @@ namespace NoteTweaks.UI
             NotifyPropertyChanged(nameof(PresetNameField));
             PresetNameInput.Text = SelectedPreset;
             
-#if V1_29_1
-            ConfigurationPresetManager.LoadPreset(SelectedPreset);
-#else
             await ConfigurationPresetManager.LoadPreset(SelectedPreset);
-#endif
         }
     }
 }

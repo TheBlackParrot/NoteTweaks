@@ -2,9 +2,7 @@
 using System.IO;
 using System.Linq;
 using System.Reflection;
-#if !V1_29_1
 using System.Threading.Tasks;
-#endif
 using BeatSaberMarkupLanguage.Attributes;
 using BeatSaberMarkupLanguage.Components.Settings;
 using BeatSaberMarkupLanguage.ViewControllers;
@@ -568,11 +566,7 @@ namespace NoteTweaks.UI
                 Config.NoteTexture = value;
                 if (LoadTextures)
                 {
-#if V1_29_1
-                    Textures.LoadNoteTexture(value, false, true);
-#else
                     _ = Textures.LoadNoteTexture(value, false, true);
-#endif
                 }
             }
         }
@@ -605,11 +599,7 @@ namespace NoteTweaks.UI
                 Config.BombTexture = value;
                 if (LoadTextures)
                 {
-#if V1_29_1
-                    Textures.LoadNoteTexture(value, true, true);
-#else
                     _ = Textures.LoadNoteTexture(value, true, true);
-#endif
                 }
             }
         }
@@ -632,11 +622,7 @@ namespace NoteTweaks.UI
                 Config.InvertBombTexture = value;
                 if (LoadTextures)
                 {
-#if V1_29_1
-                    Textures.LoadNoteTexture(Config.BombTexture, true, true);
-#else
                     _ = Textures.LoadNoteTexture(Config.BombTexture, true, true);
-#endif
                 }
             }
         }
@@ -649,11 +635,7 @@ namespace NoteTweaks.UI
                 Config.InvertNoteTexture = value;
                 if (LoadTextures)
                 {
-#if V1_29_1
-                    Textures.LoadNoteTexture(Config.NoteTexture, false, true);
-#else
                     _ = Textures.LoadNoteTexture(Config.NoteTexture, false, true);
-#endif
                 }
             }
         }
@@ -707,22 +689,15 @@ namespace NoteTweaks.UI
             set
             {
                 Config.GlowTexture = value;
-#if V1_29_1
-                GlowTextures.UpdateTextures();
-                NotePreviewViewController.UpdateColors();
-#else
                 _ = ForceAsyncUpdateForGlowTexture();
-#endif
             }
         }
-
-#if !V1_29_1
+        
         private static async Task ForceAsyncUpdateForGlowTexture()
         {
             await GlowTextures.UpdateTextures();
             NotePreviewViewController.UpdateColors();
         }
-#endif
 
         protected string ArrowMesh
         {
@@ -731,12 +706,7 @@ namespace NoteTweaks.UI
             {
                 Config.ArrowMesh = value;
                 NotePreviewViewController.UpdateArrowMeshes();
-#if V1_29_1
-                GlowTextures.UpdateTextures();
-                NotePreviewViewController.UpdateColors();
-#else
                 _ = ForceAsyncUpdateForGlowTexture();
-#endif
             }
         }
 
@@ -790,12 +760,7 @@ namespace NoteTweaks.UI
             set
             {
                 Config.LeftGlowBlendOp = value;
-#if V1_29_1
-                GlowTextures.UpdateTextures();
-                NotePreviewViewController.UpdateColors();
-#else
                 _ = ForceAsyncUpdateForGlowTexture();
-#endif
             }
         }
         
@@ -805,12 +770,7 @@ namespace NoteTweaks.UI
             set
             {
                 Config.RightGlowBlendOp = value;
-#if V1_29_1
-                GlowTextures.UpdateTextures();
-                NotePreviewViewController.UpdateColors();
-#else
                 _ = ForceAsyncUpdateForGlowTexture();
-#endif
             }
         }
 
@@ -1095,38 +1055,6 @@ namespace NoteTweaks.UI
             }
         }
         
-#if PRE_V1_39_1
-        protected float LeftOutlineFinalColorMultiplier
-        {
-            get => Config.LeftOutlineFinalColorMultiplier;
-            set
-            {
-                Config.LeftOutlineFinalColorMultiplier = value;
-                NotePreviewViewController.UpdateOutlines();
-            }
-        }
-        
-        protected float RightOutlineFinalColorMultiplier
-        {
-            get => Config.RightOutlineFinalColorMultiplier;
-            set
-            {
-                Config.RightOutlineFinalColorMultiplier = value;
-                NotePreviewViewController.UpdateOutlines();
-            }
-        }
-        
-        protected float BombOutlineFinalColorMultiplier
-        {
-            get => Config.BombOutlineFinalColorMultiplier;
-            set
-            {
-                Config.BombOutlineFinalColorMultiplier = value;
-                NotePreviewViewController.UpdateOutlines();
-            }
-        }
-#endif
-        
         protected bool AddBloomForOutlines
         {
             get => Config.AddBloomForOutlines;
@@ -1166,12 +1094,6 @@ namespace NoteTweaks.UI
                 NotePreviewViewController.UpdateColors();
             }
         }
-
-#if PRE_V1_39_1
-        [UIValue("wowIReallyHateOldGameVersions")]
-        [UsedImplicitly]
-        private string GuhMoment => "<size=85%><color=#FFEE99FF><b>NOTE</b>: <color=#FFFFFFAA>Bloom will not work for outlines on game versions older than 1.37.1.";  
-#endif
 
         protected string BombMesh
         {
@@ -1254,11 +1176,7 @@ namespace NoteTweaks.UI
         {
             if (LoadTextures)
             {
-#if V1_29_1
-                    Textures.LoadNoteTexture(Config.NoteTexture, false, true);
-#else
                 _ = Textures.LoadNoteTexture(Config.NoteTexture, false, true);
-#endif
             }
         }
         
@@ -1267,11 +1185,7 @@ namespace NoteTweaks.UI
         {
             if (LoadTextures)
             {
-#if V1_29_1
-                    Textures.LoadNoteTexture(Config.BombTexture, true, true);
-#else
                 _ = Textures.LoadNoteTexture(Config.BombTexture, true, true);
-#endif
             }
         }
 
@@ -1326,11 +1240,7 @@ namespace NoteTweaks.UI
                 return;
             }
             
-#if PRE_V1_39_1
-            noteTextureDropDown.values = NoteTextureChoices;
-#else
             noteTextureDropDown.Values = NoteTextureChoices;
-#endif
             noteTextureDropDown.UpdateChoices();
         }
 
@@ -1397,12 +1307,8 @@ namespace NoteTweaks.UI
 
             return choices;
         }
-
-#if V1_29_1
-        internal void RefreshAll()
-#else
+        
         internal async Task RefreshAll()
-#endif
         {
             foreach (PropertyInfo propertyInfo in GetType()
                          .GetProperties(BindingFlags.Instance | BindingFlags.NonPublic)
@@ -1414,11 +1320,7 @@ namespace NoteTweaks.UI
             
             NotifyPropertyChanged(nameof(BombMeshIsSphere));
             
-#if V1_29_1
-            NotePreviewViewController.RefreshEverything();
-#else
             await NotePreviewViewController.RefreshEverything();
-#endif
         }
     }
 }
