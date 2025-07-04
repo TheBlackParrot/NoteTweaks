@@ -51,6 +51,7 @@ namespace NoteTweaks.UI
             NotePreviewViewController.NoteContainer.SetActive(true);
             
             _extraPanelViewController.UpdatePresetDropdown();
+            _extraPanelViewController.UpdateMeshDropdown();
         }
 
         // ReSharper disable once ParameterHidesMember
