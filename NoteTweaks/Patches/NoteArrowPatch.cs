@@ -621,6 +621,11 @@ namespace NoteTweaks.Patches
                 {
                     debrisRenderer.sharedMaterial = Materials.DebrisMaterial;
                 }
+                
+                if (__instance.transform.GetChild(0).TryGetComponent(out MeshFilter debrisMeshFilter))
+                {
+                    debrisMeshFilter.sharedMesh = Managers.Meshes.CurrentNoteMesh;
+                }
             }
         }
 
