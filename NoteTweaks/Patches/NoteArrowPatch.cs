@@ -608,10 +608,13 @@ namespace NoteTweaks.Patches
                 {
                     debrisRenderer.sharedMaterial = Materials.DebrisMaterial;
                 }
-                
                 if (__instance.transform.GetChild(0).TryGetComponent(out MeshFilter debrisMeshFilter))
                 {
-                    debrisMeshFilter.sharedMesh = Managers.Meshes.CurrentNoteMesh;
+                    bool isChainHead = __instance.gameObject.name.Contains("CubeNoteHalfDebris");
+                    bool isChainLink = __instance.gameObject.name.Contains("CubeNoteSliceDebris");
+                    
+                    debrisMeshFilter.sharedMesh = isChainHead ? Managers.Meshes.CurrentChainHeadMesh :
+                        isChainLink ? Managers.Meshes.CurrentChainLinkMesh : Managers.Meshes.CurrentNoteMesh;
                 }
             }
         }
