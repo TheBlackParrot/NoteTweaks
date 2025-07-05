@@ -187,6 +187,8 @@ namespace NoteTweaks.UI
             Vector3 dotPosition = new Vector3(_initialDotPosition.x + Config.DotPosition.x, _initialDotPosition.y + Config.DotPosition.y, _initialDotPosition.z);
             Vector3 initialDotGlowPosition = new Vector3(_initialDotPosition.x + Config.DotPosition.x, _initialDotPosition.y + Config.DotPosition.y, _initialDotPosition.z + 0.001f);
             
+            dotPosition.Scale(Config.NoteScale);
+            
             for (int i = 0; i < NoteContainer.transform.childCount; i++)
             {
                 GameObject noteCube = NoteContainer.transform.GetChild(i).gameObject;
@@ -202,6 +204,7 @@ namespace NoteTweaks.UI
                 }
                 
                 Vector3 dotGlowPosition = initialDotGlowPosition + (Vector3)(noteCube.name.Contains("_L_") ? Config.LeftGlowOffset : Config.RightGlowOffset);
+                dotGlowPosition.Scale(Config.NoteScale);
                     
                 noteCircleGlowTransform.localPosition = dotPosition;
                 noteCube.transform.Find("AddedNoteCircleGlow").localPosition = dotGlowPosition;
@@ -214,6 +217,11 @@ namespace NoteTweaks.UI
             Vector3 glowScale = new Vector3((Config.DotScale.x / 1.5f) * Config.DotGlowScale, (Config.DotScale.y / 1.5f) * Config.DotGlowScale, 1.0f);
             Vector3 chainLinkDotScale = new Vector3(Config.ChainDotScale.x / 18f, Config.ChainDotScale.y / 18f, 1.0f);
             Vector3 chainLinkGlowScale = new Vector3((Config.ChainDotScale.x / 5.4f) * Config.DotGlowScale, (Config.ChainDotScale.y / 5.4f) * Config.DotGlowScale, 1.0f);
+            
+            scale.Scale(Config.NoteScale);
+            glowScale.Scale(Config.NoteScale);
+            chainLinkDotScale.Scale(Config.NoteScale);
+            chainLinkGlowScale.Scale(Config.NoteScale);
             
             for (int i = 0; i < NoteContainer.transform.childCount; i++)
             {
@@ -273,6 +281,7 @@ namespace NoteTweaks.UI
             }
             
             Vector3 position = new Vector3(Config.ArrowPosition.x, _initialArrowPosition.y + Config.ArrowPosition.y, _initialArrowPosition.z);
+            position.Scale(Config.NoteScale);
             
             for (int i = 0; i < NoteContainer.transform.childCount; i++)
             {
@@ -293,6 +302,9 @@ namespace NoteTweaks.UI
             Vector3 scale = new Vector3(Config.ArrowScale.x, Config.ArrowScale.y, 1.0f);
             Vector3 glowScale = new Vector3(scale.x * Config.ArrowGlowScale * 0.6f, scale.y * Config.ArrowGlowScale * 0.3f, 0.6f);
             
+            scale.Scale(Config.NoteScale);
+            glowScale.Scale(Config.NoteScale);
+            
             for (int i = 0; i < NoteContainer.transform.childCount; i++)
             {
                 GameObject noteCube = NoteContainer.transform.GetChild(i).gameObject;
@@ -309,6 +321,9 @@ namespace NoteTweaks.UI
 
         public static void UpdateNoteScale()
         {
+            Managers.Meshes.UpdateCustomNoteMesh();
+            UpdateOutlines();
+            
             for (int i = 0; i < NoteContainer.transform.childCount; i++)
             {
                 GameObject noteCube = NoteContainer.transform.GetChild(i).gameObject;
@@ -317,9 +332,39 @@ namespace NoteTweaks.UI
                     // bombs are not notes
                     continue;
                 }
-
-                noteCube.transform.localScale = noteCube.name.Contains("_Chain_") ? Vectors.Max(Config.NoteScale * Config.LinkScale, 0.1f) : Config.NoteScale;
+                if (!noteCube.name.Contains("_PreviewNote_"))
+                {
+                    continue;
+                }
+                
+                if (!noteCube.name.Contains("_Chain_"))
+                {
+                    if (noteCube.TryGetComponent(out MeshFilter meshFilter))
+                    {
+                        meshFilter.sharedMesh = Managers.Meshes.CurrentNoteMesh;
+                    }
+                    if (noteCube.transform.Find("NoteOutline").TryGetComponent(out MeshFilter outlineMeshFilter))
+                    {
+                        outlineMeshFilter.sharedMesh = Outlines.InvertedNoteMesh;
+                    }
+                }
+                else
+                {
+                    if (noteCube.TryGetComponent(out MeshFilter meshFilter))
+                    {
+                        meshFilter.sharedMesh = Managers.Meshes.CurrentChainLinkMesh;
+                    }
+                    if (noteCube.transform.Find("NoteOutline").TryGetComponent(out MeshFilter outlineMeshFilter))
+                    {
+                        outlineMeshFilter.sharedMesh = Outlines.InvertedChainMesh;
+                    }
+                }
             }
+            
+            UpdateDotScale();
+            UpdateDotPosition();
+            UpdateArrowScale();
+            UpdateArrowPosition();
         }
         
         public static void UpdateBombScale()
@@ -687,13 +732,15 @@ namespace NoteTweaks.UI
             chainNote.name = "_NoteTweaks_PreviewNote_" + extraName + $"_{linkNum}";
             DestroyImmediate(chainNote.transform.Find("BigCuttable").gameObject);
             DestroyImmediate(chainNote.transform.Find("SmallCuttable").gameObject);
-            
-            if (Outlines.InvertedChainMesh == null)
+
+            if (chainNote.TryGetComponent(out MeshFilter chainMeshFilter))
             {
-                if (chainNote.TryGetComponent(out MeshFilter chainMeshFilter))
+                if (Outlines.InvertedChainMesh == null)
                 {
                     Outlines.UpdateDefaultChainMesh(chainMeshFilter.sharedMesh);
                 }
+                
+                Managers.Meshes.UpdateDefaultChainLinkMesh(chainMeshFilter.sharedMesh);
             }
 
             Outlines.AddOutlineObject(chainNote.transform, Outlines.InvertedChainMesh);
@@ -1125,6 +1172,7 @@ namespace NoteTweaks.UI
             UpdateColors();
             UpdateBombColors();
             UpdateBombScale();
+            UpdateNoteScale();
             UpdateArrowMeshes();
             UpdateArrowPosition();
             UpdateArrowScale();
@@ -1132,7 +1180,6 @@ namespace NoteTweaks.UI
             UpdateDotPosition();
             UpdateDotScale();
             UpdateDotRotation();
-            UpdateNoteScale();
             UpdateOutlines();
             UpdateVisibility();
             UpdateBombMeshes();
@@ -1202,6 +1249,7 @@ namespace NoteTweaks.UI
                             UpdateColors();
                             UpdateBombColors();
                             UpdateBombScale();
+                            UpdateNoteScale();
                             UpdateArrowMeshes();
                             UpdateArrowPosition();
                             UpdateArrowScale();
@@ -1209,7 +1257,6 @@ namespace NoteTweaks.UI
                             UpdateDotPosition();
                             UpdateDotScale();
                             UpdateDotRotation();
-                            UpdateNoteScale();
                             UpdateOutlines();
                             UpdateVisibility();
                             UpdateBombMeshes();

@@ -30,8 +30,14 @@ namespace NoteTweaks.Managers
         private static Mesh _defaultNoteMesh;
         private static Mesh _defaultChainHeadMesh;
         private static Mesh _defaultChainLinkMesh;
-        // ReSharper disable once MemberCanBePrivate.Global
         private static Mesh _customNoteMesh;
+        private static Mesh _defaultNoteMeshScaled;
+        private static Mesh _defaultChainHeadMeshScaled;
+        private static Mesh _defaultChainLinkMeshScaled;
+        
+        // (for now)
+        public static Mesh CurrentChainHeadMesh => _defaultChainHeadMeshScaled;
+        public static Mesh CurrentChainLinkMesh => _defaultChainLinkMeshScaled;
 
         public static Mesh CurrentBombMesh
         {
@@ -80,11 +86,15 @@ namespace NoteTweaks.Managers
 
             if (Config.NoteMesh == "Default")
             {
-                Outlines.InvertedNoteMesh = Utils.Meshes.MakeReadableMeshCopy(_defaultNoteMesh).Invert();
+                _defaultNoteMeshScaled = Utils.Meshes.Scale(Utils.Meshes.MakeReadableMeshCopy(_defaultNoteMesh), Config.NoteScale);
+                Outlines.InvertedNoteMesh = Utils.Meshes.MakeReadableMeshCopy(_defaultNoteMeshScaled).Invert();
                 return;
             }
-
-            _customNoteMesh = FastObjImporter.Instance.ImportFile(Path.Combine(MeshFolder, $"{Config.NoteMesh}.obj"));
+            
+            _customNoteMesh =
+                Utils.Meshes.Scale(
+                    FastObjImporter.Instance.ImportFile(Path.Combine(MeshFolder, $"{Config.NoteMesh}.obj")),
+                    Config.NoteScale);
             _customNoteMesh.Optimize();
 
             Outlines.InvertedNoteMesh = Utils.Meshes.MakeReadableMeshCopy(_customNoteMesh).Invert();
@@ -96,7 +106,7 @@ namespace NoteTweaks.Managers
             {
                 if (Config.NoteMesh == "Default")
                 {
-                    return _defaultNoteMesh;
+                    return _defaultNoteMeshScaled;
                 }
 
                 if (_customNoteMesh == null)
@@ -143,26 +153,37 @@ namespace NoteTweaks.Managers
 
         public static void UpdateDefaultNoteMesh(Mesh mesh)
         {
-            if (_defaultNoteMesh == null)
+            if (_defaultNoteMesh != null)
             {
-                _defaultNoteMesh = mesh;
+                return;
             }
+            
+            _defaultNoteMesh = mesh;
+            _defaultNoteMeshScaled = Utils.Meshes.Scale(Utils.Meshes.MakeReadableMeshCopy(mesh), Config.NoteScale);
         }
 
         public static void UpdateDefaultChainHeadMesh(Mesh mesh)
         {
-            if (_defaultChainHeadMesh == null)
+            if (_defaultChainHeadMesh != null)
             {
-                _defaultChainHeadMesh = mesh;
+                return;
             }
+            
+            _defaultChainHeadMesh = mesh;
+            _defaultChainHeadMeshScaled = Utils.Meshes.Scale(Utils.Meshes.MakeReadableMeshCopy(mesh), Config.NoteScale);
+            Outlines.InvertedChainHeadMesh = Utils.Meshes.MakeReadableMeshCopy(_defaultChainHeadMeshScaled).Invert();
         }
 
         public static void UpdateDefaultChainLinkMesh(Mesh mesh)
         {
-            if (_defaultChainLinkMesh == null)
+            if (_defaultChainLinkMesh != null)
             {
-                _defaultChainLinkMesh = mesh;
+                return;
             }
+            
+            _defaultChainLinkMesh = mesh;
+            _defaultChainLinkMeshScaled = Utils.Meshes.Scale(Utils.Meshes.MakeReadableMeshCopy(mesh), Config.NoteScale * Config.LinkScale);
+            Outlines.InvertedChainMesh = Utils.Meshes.MakeReadableMeshCopy(_defaultChainLinkMeshScaled).Invert();
         }
     }
 }

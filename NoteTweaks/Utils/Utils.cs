@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-//using AssetBundleLoadingTools.Models.Shaders;
-//using AssetBundleLoadingTools.Utilities;
 using UnityEngine;
 using UnityEngine.Rendering;
 
@@ -345,6 +343,24 @@ namespace NoteTweaks.Utils
             meshCopy.RecalculateBounds();
 
             return meshCopy;
+        }
+
+        public static Mesh Scale(Mesh mesh, Vector3? scale)
+        {
+            Vector3[] vertices = mesh.vertices;
+            for (int i = 0; i < vertices.Length; i++)
+            {
+                vertices[i].Scale(scale ?? Vector3.one);
+            }
+
+            Mesh scaledMesh = new Mesh
+            {
+                vertices = vertices,
+                triangles = mesh.triangles,
+                normals = mesh.normals
+            };
+
+            return scaledMesh;
         }
     }
 

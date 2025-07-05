@@ -265,6 +265,12 @@ namespace NoteTweaks.Patches
                 
                 Transform chainRoot = __instance.transform.GetChild(0);
                 
+                if (chainRoot.TryGetComponent(out MeshFilter meshFilter))
+                {
+                    Managers.Meshes.UpdateDefaultChainLinkMesh(meshFilter.sharedMesh);
+                    meshFilter.sharedMesh = Managers.Meshes.CurrentChainLinkMesh;
+                }
+                
                 if (chainRoot.TryGetComponent(out MeshRenderer cubeRenderer))
                 {
                     cubeRenderer.sharedMaterial = Materials.NoteMaterial;
@@ -357,26 +363,6 @@ namespace NoteTweaks.Patches
                         dotController.ApplyChanges();
                     }
                 }
-
-                if (!IsAllowedToScaleNotes)
-                {
-                    return;
-                }
-                
-                Vector3 scale = Vectors.Max(Config.NoteScale * Config.LinkScale, 0.1f);
-                Vector3 invertedScale = new Vector3(1.0f / scale.x, 1.0f / scale.y, 1.0f / scale.z);
-
-                __instance.transform.localScale = scale;
-                
-                foreach (BoxCuttableBySaber saberBox in ____bigCuttableBySaberList)
-                {
-                    saberBox.transform.localScale = invertedScale;
-                }
-                
-                foreach (BoxCuttableBySaber saberBox in ____smallCuttableBySaberList)
-                {
-                    saberBox.transform.localScale = invertedScale;
-                }
             }
         }
         
@@ -397,13 +383,18 @@ namespace NoteTweaks.Patches
                 ColorType colorType = __instance._noteData.colorType;
                 bool isLeft = colorType == ColorType.ColorA;
                 bool isChainHead = __instance.gameplayType == NoteData.GameplayType.BurstSliderHead;
-                
-                if (!isChainHead)
+
+                if (noteRoot.TryGetComponent(out MeshFilter meshFilter))
                 {
-                    if (noteRoot.TryGetComponent(out MeshFilter meshFilter))
+                    if (!isChainHead)
                     {
                         Managers.Meshes.UpdateDefaultNoteMesh(meshFilter.sharedMesh);
                         meshFilter.sharedMesh = Managers.Meshes.CurrentNoteMesh;
+                    }
+                    else
+                    {
+                        Managers.Meshes.UpdateDefaultChainHeadMesh(meshFilter.sharedMesh);
+                        meshFilter.sharedMesh = Managers.Meshes.CurrentChainHeadMesh;
                     }
                 }
 
@@ -580,25 +571,25 @@ namespace NoteTweaks.Patches
                     }
                 }
 
-                if (!IsAllowedToScaleNotes)
+                /*if (!IsAllowedToScaleNotes)
                 {
                     return;
                 }
-                
+
                 Vector3 scale = Config.NoteScale;
                 Vector3 invertedScale = new Vector3(1.0f / scale.x, 1.0f / scale.y, 1.0f / scale.z);
 
                 __instance.transform.localScale = scale;
-                
+
                 foreach (BoxCuttableBySaber saberBox in ____bigCuttableBySaberList)
                 {
                     saberBox.transform.localScale = invertedScale;
                 }
-                
+
                 foreach (BoxCuttableBySaber saberBox in ____smallCuttableBySaberList)
                 {
                     saberBox.transform.localScale = invertedScale;
-                }
+                }*/
             }
         }
 
@@ -625,7 +616,7 @@ namespace NoteTweaks.Patches
             }
         }
 
-        [HarmonyPatch(typeof(NoteDebrisSpawner), "SpawnDebris")]
+        /*[HarmonyPatch(typeof(NoteDebrisSpawner), "SpawnDebris")]
         internal class DebrisSpawnerPatch
         {
             // ReSharper disable once InconsistentNaming
@@ -640,7 +631,7 @@ namespace NoteTweaks.Patches
                 
                 return true;
             }
-        }
+        }*/
 
         [HarmonyPatch(typeof(ColorNoteVisuals), "HandleNoteControllerDidInit")]
         [HarmonyAfter("aeroluna.Chroma")]
@@ -673,6 +664,9 @@ namespace NoteTweaks.Patches
                     
                     Vector3 scale = new Vector3(Config.ArrowScale.x, Config.ArrowScale.y, 1.0f);
                     Vector3 position = new Vector3(Config.ArrowPosition.x, InitialPosition.y + Config.ArrowPosition.y, InitialPosition.z);
+                    
+                    scale.Scale(Config.NoteScale);
+                    position.Scale(Config.NoteScale);
                     
                     arrowTransform.localScale = scale;
                     arrowTransform.localPosition = position;
@@ -729,8 +723,10 @@ namespace NoteTweaks.Patches
                         Transform arrowGlowTransform = arrowGlowObject.transform;
                         
                         Vector3 glowScale = new Vector3(scale.x * Config.ArrowGlowScale * 0.6f, scale.y * Config.ArrowGlowScale * 0.3f, 0.6f);
+                        
                         Vector3 glowPosition = new Vector3(InitialPosition.x + Config.ArrowPosition.x, InitialPosition.y + Config.ArrowPosition.y, InitialPosition.z);
                         glowPosition += (Vector3)(isLeft ? Config.LeftGlowOffset : Config.RightGlowOffset);
+                        glowPosition.Scale(Config.NoteScale);
                         
                         arrowGlowTransform.localScale = glowScale;
                         arrowGlowTransform.localPosition = glowPosition;
@@ -766,6 +762,11 @@ namespace NoteTweaks.Patches
                     }
                     
                     glowPosition += (Vector3)(isLeft ? Config.LeftGlowOffset : Config.RightGlowOffset);
+
+                    dotPosition.Scale(Config.NoteScale);
+                    glowPosition.Scale(Config.NoteScale);
+                    dotScale.Scale(Config.NoteScale);
+                    glowScale.Scale(Config.NoteScale);
                     
                     Transform originalDot = isChainLink ? meshRenderer.transform.parent.Find("Circle") : meshRenderer.transform.parent.Find("NoteCircleGlow");
                     Transform addedDot = meshRenderer.transform.parent.Find("AddedNoteCircleGlow");
