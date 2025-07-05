@@ -299,6 +299,20 @@
         <None Include="Resources\Meshes\Notes\Suzanne.obj">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
+
+        <None Include="Resources\Meshes\ChainHeads\Bevel.obj">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Include="Resources\Meshes\ChainHeads\Bliss.obj">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Include="Resources\Meshes\ChainHeads\Flat.obj">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+
+        <None Include="Resources\Meshes\ChainLinks\Bliss.obj">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
     </ItemGroup>
     <ItemGroup>
         <OutputCopy Include="Resources\Presets\$(PresetsFolder)\Bold.json">
@@ -373,6 +387,20 @@
         </OutputCopy>
         <OutputCopy Include="Resources\Meshes\Notes\Suzanne.obj">
             <OutputPath>UserData\NoteTweaks\Meshes\Notes\Suzanne.obj</OutputPath>
+        </OutputCopy>
+
+        <OutputCopy Include="Resources\Meshes\ChainHeads\Bevel.obj">
+            <OutputPath>UserData\NoteTweaks\Meshes\ChainHeads\Bevel.obj</OutputPath>
+        </OutputCopy>
+        <OutputCopy Include="Resources\Meshes\ChainHeads\Bliss.obj">
+            <OutputPath>UserData\NoteTweaks\Meshes\ChainHeads\Bliss.obj</OutputPath>
+        </OutputCopy>
+        <OutputCopy Include="Resources\Meshes\ChainHeads\Flat.obj">
+            <OutputPath>UserData\NoteTweaks\Meshes\ChainHeads\Flat.obj</OutputPath>
+        </OutputCopy>
+
+        <OutputCopy Include="Resources\Meshes\ChainLinks\Bliss.obj">
+            <OutputPath>UserData\NoteTweaks\Meshes\ChainLinks\Bliss.obj</OutputPath>
         </OutputCopy>
     </ItemGroup>
     <ItemGroup>
