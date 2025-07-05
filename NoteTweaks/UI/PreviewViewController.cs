@@ -778,12 +778,7 @@ namespace NoteTweaks.UI
 
             if (noteCube.TryGetComponent(out MeshFilter cubeMeshFilter))
             {
-                // this too is probably null, just check it here
-                if (Managers.Meshes.DefaultNoteMesh == null)
-                {
-                    Managers.Meshes.DefaultNoteMesh = cubeMeshFilter.sharedMesh;
-                }
-                
+                Managers.Meshes.UpdateDefaultNoteMesh(cubeMeshFilter.sharedMesh);
                 cubeMeshFilter.sharedMesh = Managers.Meshes.CurrentNoteMesh;
                 
                 if (Outlines.InvertedNoteMesh == null)

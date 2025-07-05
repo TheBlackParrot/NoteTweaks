@@ -27,9 +27,11 @@ namespace NoteTweaks.Managers
         private static Mesh _sphereMesh = MeshExtensions.CreateSphere(SPHERE_RADIUS, _sphereSlices, _sphereStacks, _sphereNormalsWorld);
         private static Mesh _defaultBombMesh;
 
-        public static Mesh DefaultNoteMesh;
+        private static Mesh _defaultNoteMesh;
+        private static Mesh _defaultChainHeadMesh;
+        private static Mesh _defaultChainLinkMesh;
         // ReSharper disable once MemberCanBePrivate.Global
-        public static Mesh CustomNoteMesh;
+        private static Mesh _customNoteMesh;
 
         public static Mesh CurrentBombMesh
         {
@@ -78,14 +80,14 @@ namespace NoteTweaks.Managers
 
             if (Config.NoteMesh == "Default")
             {
-                Outlines.InvertedNoteMesh = Utils.Meshes.MakeReadableMeshCopy(DefaultNoteMesh).Invert();
+                Outlines.InvertedNoteMesh = Utils.Meshes.MakeReadableMeshCopy(_defaultNoteMesh).Invert();
                 return;
             }
 
-            CustomNoteMesh = FastObjImporter.Instance.ImportFile(Path.Combine(MeshFolder, $"{Config.NoteMesh}.obj"));
-            CustomNoteMesh.Optimize();
+            _customNoteMesh = FastObjImporter.Instance.ImportFile(Path.Combine(MeshFolder, $"{Config.NoteMesh}.obj"));
+            _customNoteMesh.Optimize();
 
-            Outlines.InvertedNoteMesh = Utils.Meshes.MakeReadableMeshCopy(CustomNoteMesh).Invert();
+            Outlines.InvertedNoteMesh = Utils.Meshes.MakeReadableMeshCopy(_customNoteMesh).Invert();
         }
 
         public static Mesh CurrentNoteMesh
@@ -94,14 +96,14 @@ namespace NoteTweaks.Managers
             {
                 if (Config.NoteMesh == "Default")
                 {
-                    return DefaultNoteMesh;
+                    return _defaultNoteMesh;
                 }
 
-                if (CustomNoteMesh == null)
+                if (_customNoteMesh == null)
                 {
                     UpdateCustomNoteMesh();
                 }
-                return CustomNoteMesh;
+                return _customNoteMesh;
             }
         }
 
@@ -137,6 +139,30 @@ namespace NoteTweaks.Managers
             _sphereNormalsSmooth = smoothNormals;
             _sphereNormalsWorld = worldNormals;
             _sphereMesh = MeshExtensions.CreateSphere(SPHERE_RADIUS, _sphereSlices, _sphereStacks, _sphereNormalsWorld);
+        }
+
+        public static void UpdateDefaultNoteMesh(Mesh mesh)
+        {
+            if (_defaultNoteMesh == null)
+            {
+                _defaultNoteMesh = mesh;
+            }
+        }
+
+        public static void UpdateDefaultChainHeadMesh(Mesh mesh)
+        {
+            if (_defaultChainHeadMesh == null)
+            {
+                _defaultChainHeadMesh = mesh;
+            }
+        }
+
+        public static void UpdateDefaultChainLinkMesh(Mesh mesh)
+        {
+            if (_defaultChainLinkMesh == null)
+            {
+                _defaultChainLinkMesh = mesh;
+            }
         }
     }
 }
