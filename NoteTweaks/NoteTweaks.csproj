@@ -275,7 +275,13 @@
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
 
+        <None Include="Resources\Meshes\Notes\Bevel.obj">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
         <None Include="Resources\Meshes\Notes\Bliss.obj">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Include="Resources\Meshes\Notes\Chumby.obj">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
         <None Include="Resources\Meshes\Notes\Cylinder.obj">
@@ -285,6 +291,9 @@
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
         <None Include="Resources\Meshes\Notes\Flatter.obj">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Include="Resources\Meshes\Notes\HardSphere.obj">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
         <None Include="Resources\Meshes\Notes\Icosahedron.obj">
@@ -299,6 +308,9 @@
         <None Include="Resources\Meshes\Notes\Suzanne.obj">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
+        <None Include="Resources\Meshes\Notes\Voxel.obj">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
 
         <None Include="Resources\Meshes\ChainHeads\Bevel.obj">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -306,11 +318,47 @@
         <None Include="Resources\Meshes\ChainHeads\Bliss.obj">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
+        <None Include="Resources\Meshes\ChainHeads\Chumby.obj">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Include="Resources\Meshes\ChainHeads\Cylinder.obj">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
         <None Include="Resources\Meshes\ChainHeads\Flat.obj">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
+        <None Include="Resources\Meshes\ChainHeads\Flatter.obj">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Include="Resources\Meshes\ChainHeads\Sphere.obj">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
 
+        <None Include="Resources\Meshes\ChainLinks\Bevel.obj">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
         <None Include="Resources\Meshes\ChainLinks\Bliss.obj">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Include="Resources\Meshes\ChainLinks\Chumby.obj">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Include="Resources\Meshes\ChainLinks\Cylinder.obj">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Include="Resources\Meshes\ChainLinks\Disc.obj">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Include="Resources\Meshes\ChainLinks\Dot.obj">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Include="Resources\Meshes\ChainLinks\Flat.obj">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Include="Resources\Meshes\ChainLinks\Flatter.obj">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Include="Resources\Meshes\ChainLinks\Ring.obj">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
     </ItemGroup>
@@ -364,8 +412,14 @@
             <OutputPath>UserData\NoteTweaks\Presets\Visible.json</OutputPath>
         </OutputCopy>
 
+        <OutputCopy Include="Resources\Meshes\Notes\Bevel.obj">
+            <OutputPath>UserData\NoteTweaks\Meshes\Notes\Bevel.obj</OutputPath>
+        </OutputCopy>
         <OutputCopy Include="Resources\Meshes\Notes\Bliss.obj">
             <OutputPath>UserData\NoteTweaks\Meshes\Notes\Bliss.obj</OutputPath>
+        </OutputCopy>
+        <OutputCopy Include="Resources\Meshes\Notes\Chumby.obj">
+            <OutputPath>UserData\NoteTweaks\Meshes\Notes\Chumby.obj</OutputPath>
         </OutputCopy>
         <OutputCopy Include="Resources\Meshes\Notes\Cylinder.obj">
             <OutputPath>UserData\NoteTweaks\Meshes\Notes\Cylinder.obj</OutputPath>
@@ -375,6 +429,9 @@
         </OutputCopy>
         <OutputCopy Include="Resources\Meshes\Notes\Flatter.obj">
             <OutputPath>UserData\NoteTweaks\Meshes\Notes\Flatter.obj</OutputPath>
+        </OutputCopy>
+        <OutputCopy Include="Resources\Meshes\Notes\HardSphere.obj">
+            <OutputPath>UserData\NoteTweaks\Meshes\Notes\HardSphere.obj</OutputPath>
         </OutputCopy>
         <OutputCopy Include="Resources\Meshes\Notes\Icosahedron.obj">
             <OutputPath>UserData\NoteTweaks\Meshes\Notes\Icosahedron.obj</OutputPath>
@@ -388,6 +445,9 @@
         <OutputCopy Include="Resources\Meshes\Notes\Suzanne.obj">
             <OutputPath>UserData\NoteTweaks\Meshes\Notes\Suzanne.obj</OutputPath>
         </OutputCopy>
+        <OutputCopy Include="Resources\Meshes\Notes\Voxel.obj">
+            <OutputPath>UserData\NoteTweaks\Meshes\Notes\Voxel.obj</OutputPath>
+        </OutputCopy>
 
         <OutputCopy Include="Resources\Meshes\ChainHeads\Bevel.obj">
             <OutputPath>UserData\NoteTweaks\Meshes\ChainHeads\Bevel.obj</OutputPath>
@@ -395,12 +455,48 @@
         <OutputCopy Include="Resources\Meshes\ChainHeads\Bliss.obj">
             <OutputPath>UserData\NoteTweaks\Meshes\ChainHeads\Bliss.obj</OutputPath>
         </OutputCopy>
+        <OutputCopy Include="Resources\Meshes\ChainHeads\Chumby.obj">
+            <OutputPath>UserData\NoteTweaks\Meshes\ChainHeads\Chumby.obj</OutputPath>
+        </OutputCopy>
+        <OutputCopy Include="Resources\Meshes\ChainHeads\Cylinder.obj">
+            <OutputPath>UserData\NoteTweaks\Meshes\ChainHeads\Cylinder.obj</OutputPath>
+        </OutputCopy>
         <OutputCopy Include="Resources\Meshes\ChainHeads\Flat.obj">
             <OutputPath>UserData\NoteTweaks\Meshes\ChainHeads\Flat.obj</OutputPath>
         </OutputCopy>
+        <OutputCopy Include="Resources\Meshes\ChainHeads\Flatter.obj">
+            <OutputPath>UserData\NoteTweaks\Meshes\ChainHeads\Flatter.obj</OutputPath>
+        </OutputCopy>
+        <OutputCopy Include="Resources\Meshes\ChainHeads\Sphere.obj">
+            <OutputPath>UserData\NoteTweaks\Meshes\ChainHeads\Sphere.obj</OutputPath>
+        </OutputCopy>
 
+        <OutputCopy Include="Resources\Meshes\ChainLinks\Bevel.obj">
+            <OutputPath>UserData\NoteTweaks\Meshes\ChainLinks\Bevel.obj</OutputPath>
+        </OutputCopy>
         <OutputCopy Include="Resources\Meshes\ChainLinks\Bliss.obj">
             <OutputPath>UserData\NoteTweaks\Meshes\ChainLinks\Bliss.obj</OutputPath>
+        </OutputCopy>
+        <OutputCopy Include="Resources\Meshes\ChainLinks\Chumby.obj">
+            <OutputPath>UserData\NoteTweaks\Meshes\ChainLinks\Chumby.obj</OutputPath>
+        </OutputCopy>
+        <OutputCopy Include="Resources\Meshes\ChainLinks\Cylinder.obj">
+            <OutputPath>UserData\NoteTweaks\Meshes\ChainLinks\Cylinder.obj</OutputPath>
+        </OutputCopy>
+        <OutputCopy Include="Resources\Meshes\ChainLinks\Disc.obj">
+            <OutputPath>UserData\NoteTweaks\Meshes\ChainLinks\Disc.obj</OutputPath>
+        </OutputCopy>
+        <OutputCopy Include="Resources\Meshes\ChainLinks\Dot.obj">
+            <OutputPath>UserData\NoteTweaks\Meshes\ChainLinks\Dot.obj</OutputPath>
+        </OutputCopy>
+        <OutputCopy Include="Resources\Meshes\ChainLinks\Flat.obj">
+            <OutputPath>UserData\NoteTweaks\Meshes\ChainLinks\Flat.obj</OutputPath>
+        </OutputCopy>
+        <OutputCopy Include="Resources\Meshes\ChainLinks\Flatter.obj">
+            <OutputPath>UserData\NoteTweaks\Meshes\ChainLinks\Flatter.obj</OutputPath>
+        </OutputCopy>
+        <OutputCopy Include="Resources\Meshes\ChainLinks\Ring.obj">
+            <OutputPath>UserData\NoteTweaks\Meshes\ChainLinks\Ring.obj</OutputPath>
         </OutputCopy>
     </ItemGroup>
     <ItemGroup>
