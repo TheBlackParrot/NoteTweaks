@@ -337,6 +337,8 @@ namespace NoteTweaks.Configuration
         
         // meshes, also, should be up to the user imo
         public string NoteMesh { get; set; } = "Default";
+        public string ChainHeadMesh { get; set; } = "Default";
+        public string ChainLinkMesh { get; set; } = "Default";
 
         internal PluginConfig ShallowCopy()
         {

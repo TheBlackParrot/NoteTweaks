@@ -322,6 +322,8 @@ namespace NoteTweaks.UI
         public static void UpdateNoteScale()
         {
             Managers.Meshes.UpdateCustomNoteMesh();
+            Managers.Meshes.UpdateCustomChainHeadMesh();
+            Managers.Meshes.UpdateCustomChainLinkMesh();
             UpdateOutlines();
             
             for (int i = 0; i < NoteContainer.transform.childCount; i++)

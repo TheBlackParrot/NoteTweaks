@@ -570,26 +570,6 @@ namespace NoteTweaks.Patches
                         dotController.ApplyChanges();
                     }
                 }
-
-                /*if (!IsAllowedToScaleNotes)
-                {
-                    return;
-                }
-
-                Vector3 scale = Config.NoteScale;
-                Vector3 invertedScale = new Vector3(1.0f / scale.x, 1.0f / scale.y, 1.0f / scale.z);
-
-                __instance.transform.localScale = scale;
-
-                foreach (BoxCuttableBySaber saberBox in ____bigCuttableBySaberList)
-                {
-                    saberBox.transform.localScale = invertedScale;
-                }
-
-                foreach (BoxCuttableBySaber saberBox in ____smallCuttableBySaberList)
-                {
-                    saberBox.transform.localScale = invertedScale;
-                }*/
             }
         }
 

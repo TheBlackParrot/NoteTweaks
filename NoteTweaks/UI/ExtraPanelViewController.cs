@@ -270,6 +270,63 @@ namespace NoteTweaks.UI
                 }
             }
         }
+        
+        protected string ChainHeadMesh
+        {
+            get => Config.ChainHeadMesh;
+            set
+            {
+                Config.ChainHeadMesh = value;
+                NotifyPropertyChanged();
+
+                Meshes.UpdateCustomChainHeadMesh();
+            }
+        }
+        
+        protected string ChainLinkMesh
+        {
+            get => Config.ChainLinkMesh;
+            set
+            {
+                Config.ChainLinkMesh = value;
+                NotifyPropertyChanged();
+
+                Meshes.UpdateCustomChainLinkMesh();
+                
+                string[] noteNames = { "L_Chain", "R_Chain" };
+                foreach (string noteName in noteNames)
+                {
+                    for (int i = 0; i < 6; i++)
+                    {
+                        string fullName = $"_NoteTweaks_PreviewNote_{noteName}_{i}";
+                        GameObject previewNote = GameObject.Find(fullName);
+                    
+                        if (previewNote == null)
+                        {
+                            Plugin.Log.Warn($"{fullName} is null");
+                            continue;
+                        }
+                        if (!previewNote.TryGetComponent(out MeshFilter meshFilter))
+                        {
+                            continue;
+                        }
+                    
+                        meshFilter.sharedMesh = Meshes.CurrentChainLinkMesh;
+
+                        Transform outlineTransform = previewNote.transform.Find("NoteOutline");
+                        if (outlineTransform == null)
+                        {
+                            continue;
+                        }
+                    
+                        if (outlineTransform.TryGetComponent(out MeshFilter outlineMeshFilter))
+                        {
+                            outlineMeshFilter.sharedMesh = Outlines.InvertedChainMesh;
+                        }   
+                    }
+                }
+            }
+        }
 
         [UIValue("UpdateIsAvailable")]
         internal bool UpdateIsAvailable
@@ -321,9 +378,13 @@ namespace NoteTweaks.UI
         [UIValue("PresetNameField")]
         private string PresetNameField = "Preset";
 
-        [UIComponent("MeshDropdown")]
 #pragma warning disable CS0649
+        [UIComponent("MeshDropdown")]
         public DropDownListSetting MeshDropDown;
+        [UIComponent("ChainHeadMeshDropdown")]
+        public DropDownListSetting ChainHeadMeshDropDown;
+        [UIComponent("ChainLinkMeshDropdown")]
+        public DropDownListSetting ChainLinkMeshDropDown;
 #pragma warning restore CS0649
         
         internal void UpdateMeshDropdown()
@@ -340,7 +401,7 @@ namespace NoteTweaks.UI
         
         private static List<object> GetMeshNames()
         {
-            List<string> files = Directory.GetFiles(Meshes.MeshFolder, "*.obj").ToList();
+            List<string> files = Directory.GetFiles(Path.Combine(Meshes.MeshFolder, "Notes"), "*.obj").ToList();
             files.Sort();
             Plugin.Log.Info($"Found {files.Count} note meshes");
             
@@ -348,8 +409,56 @@ namespace NoteTweaks.UI
             return files.Select(Path.GetFileNameWithoutExtension).Cast<object>().ToList();
         }
         
+        internal void UpdateChainHeadMeshDropdown()
+        {
+            if (ChainHeadMeshDropDown == null)
+            {
+                return;
+            }
+
+            ChainHeadMeshNames = GetChainHeadMeshNames();
+            ChainHeadMeshDropDown.Values = ChainHeadMeshNames;
+            ChainHeadMeshDropDown.UpdateChoices();
+        }
+        
+        private static List<object> GetChainHeadMeshNames()
+        {
+            List<string> files = Directory.GetFiles(Path.Combine(Meshes.MeshFolder, "ChainHeads"), "*.obj").ToList();
+            files.Sort();
+            Plugin.Log.Info($"Found {files.Count} chain head meshes");
+            
+            files = files.Prepend("Default").ToList();
+            return files.Select(Path.GetFileNameWithoutExtension).Cast<object>().ToList();
+        }
+        
+        internal void UpdateChainLinkMeshDropdown()
+        {
+            if (ChainLinkMeshDropDown == null)
+            {
+                return;
+            }
+
+            ChainLinkMeshNames = GetChainLinkMeshNames();
+            ChainLinkMeshDropDown.Values = ChainLinkMeshNames;
+            ChainLinkMeshDropDown.UpdateChoices();
+        }
+        
+        private static List<object> GetChainLinkMeshNames()
+        {
+            List<string> files = Directory.GetFiles(Path.Combine(Meshes.MeshFolder, "ChainLinks"), "*.obj").ToList();
+            files.Sort();
+            Plugin.Log.Info($"Found {files.Count} chain link meshes");
+            
+            files = files.Prepend("Default").ToList();
+            return files.Select(Path.GetFileNameWithoutExtension).Cast<object>().ToList();
+        }
+        
         [UIValue("MeshNames")]
         private List<object> MeshNames = GetMeshNames();
+        [UIValue("ChainHeadMeshNames")]
+        private List<object> ChainHeadMeshNames = GetChainHeadMeshNames();
+        [UIValue("ChainLinkMeshNames")]
+        private List<object> ChainLinkMeshNames = GetChainLinkMeshNames();
         
         #pragma warning disable CS0649
         [UIComponent("SaveStatusModal")]

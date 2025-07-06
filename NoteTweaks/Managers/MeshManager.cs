@@ -9,7 +9,7 @@ namespace NoteTweaks.Managers
     internal abstract class Meshes
     {
         private static PluginConfig Config => PluginConfig.Instance;
-        internal static readonly string MeshFolder = Path.Combine(UnityGame.UserDataPath, "NoteTweaks", "Meshes", "Notes");
+        internal static readonly string MeshFolder = Path.Combine(UnityGame.UserDataPath, "NoteTweaks", "Meshes");
         
         private static readonly Mesh TriangleArrowMesh = Utils.Meshes.GenerateBasicTriangleMesh();
         private static readonly Mesh LineArrowMesh = Utils.Meshes.GenerateBasicLineMesh();
@@ -30,14 +30,13 @@ namespace NoteTweaks.Managers
         private static Mesh _defaultNoteMesh;
         private static Mesh _defaultChainHeadMesh;
         private static Mesh _defaultChainLinkMesh;
-        private static Mesh _customNoteMesh;
         private static Mesh _defaultNoteMeshScaled;
         private static Mesh _defaultChainHeadMeshScaled;
         private static Mesh _defaultChainLinkMeshScaled;
         
-        // (for now)
-        public static Mesh CurrentChainHeadMesh => _defaultChainHeadMeshScaled;
-        public static Mesh CurrentChainLinkMesh => _defaultChainLinkMeshScaled;
+        private static Mesh _customNoteMesh;
+        private static Mesh _customChainHeadMesh;
+        private static Mesh _customChainLinkMesh;
 
         public static Mesh CurrentBombMesh
         {
@@ -79,9 +78,10 @@ namespace NoteTweaks.Managers
 
         public static void UpdateCustomNoteMesh()
         {
-            if (!Directory.Exists(MeshFolder))
+            string noteMeshFolder = Path.Combine(MeshFolder, "Notes");
+            if (!Directory.Exists(noteMeshFolder))
             {
-                Directory.CreateDirectory(MeshFolder);
+                Directory.CreateDirectory(noteMeshFolder);
             }
 
             if (Config.NoteMesh == "Default")
@@ -93,11 +93,59 @@ namespace NoteTweaks.Managers
             
             _customNoteMesh =
                 Utils.Meshes.Scale(
-                    FastObjImporter.Instance.ImportFile(Path.Combine(MeshFolder, $"{Config.NoteMesh}.obj")),
+                    FastObjImporter.Instance.ImportFile(Path.Combine(noteMeshFolder, $"{Config.NoteMesh}.obj")),
                     Config.NoteScale);
             _customNoteMesh.Optimize();
 
             Outlines.InvertedNoteMesh = Utils.Meshes.MakeReadableMeshCopy(_customNoteMesh).Invert();
+        }
+        
+        public static void UpdateCustomChainHeadMesh()
+        {
+            string chainMeshFolder = Path.Combine(MeshFolder, "ChainHeads");
+            if (!Directory.Exists(chainMeshFolder))
+            {
+                Directory.CreateDirectory(chainMeshFolder);
+            }
+
+            if (Config.ChainHeadMesh == "Default")
+            {
+                _defaultChainHeadMeshScaled = Utils.Meshes.Scale(Utils.Meshes.MakeReadableMeshCopy(_defaultChainHeadMesh), Config.NoteScale);
+                Outlines.InvertedChainHeadMesh = Utils.Meshes.MakeReadableMeshCopy(_defaultChainHeadMeshScaled).Invert();
+                return;
+            }
+            
+            _customChainHeadMesh =
+                Utils.Meshes.Scale(
+                    FastObjImporter.Instance.ImportFile(Path.Combine(chainMeshFolder, $"{Config.ChainHeadMesh}.obj")),
+                    Config.NoteScale);
+            _customChainHeadMesh.Optimize();
+
+            Outlines.InvertedChainHeadMesh = Utils.Meshes.MakeReadableMeshCopy(_customChainHeadMesh).Invert();
+        }
+        
+        public static void UpdateCustomChainLinkMesh()
+        {
+            string chainMeshFolder = Path.Combine(MeshFolder, "ChainLinks");
+            if (!Directory.Exists(chainMeshFolder))
+            {
+                Directory.CreateDirectory(chainMeshFolder);
+            }
+
+            if (Config.ChainLinkMesh == "Default")
+            {
+                _defaultChainLinkMeshScaled = Utils.Meshes.Scale(Utils.Meshes.MakeReadableMeshCopy(_defaultChainLinkMesh), Config.NoteScale * Config.LinkScale);
+                Outlines.InvertedChainMesh = Utils.Meshes.MakeReadableMeshCopy(_defaultChainLinkMeshScaled).Invert();
+                return;
+            }
+            
+            _customChainLinkMesh =
+                Utils.Meshes.Scale(
+                    FastObjImporter.Instance.ImportFile(Path.Combine(chainMeshFolder, $"{Config.ChainLinkMesh}.obj")),
+                    Config.NoteScale * Config.LinkScale);
+            _customChainLinkMesh.Optimize();
+
+            Outlines.InvertedChainMesh = Utils.Meshes.MakeReadableMeshCopy(_customChainLinkMesh).Invert();
         }
 
         public static Mesh CurrentNoteMesh
@@ -114,6 +162,40 @@ namespace NoteTweaks.Managers
                     UpdateCustomNoteMesh();
                 }
                 return _customNoteMesh;
+            }
+        }
+        
+        public static Mesh CurrentChainHeadMesh
+        {
+            get
+            {
+                if (Config.ChainHeadMesh == "Default")
+                {
+                    return _defaultChainHeadMeshScaled;
+                }
+
+                if (_customChainHeadMesh == null)
+                {
+                    UpdateCustomChainHeadMesh();
+                }
+                return _customChainHeadMesh;
+            }
+        }
+        
+        public static Mesh CurrentChainLinkMesh
+        {
+            get
+            {
+                if (Config.ChainLinkMesh == "Default")
+                {
+                    return _defaultChainLinkMeshScaled;
+                }
+
+                if (_customChainLinkMesh == null)
+                {
+                    UpdateCustomChainLinkMesh();
+                }
+                return _customChainLinkMesh;
             }
         }
 
@@ -171,7 +253,6 @@ namespace NoteTweaks.Managers
             
             _defaultChainHeadMesh = mesh;
             _defaultChainHeadMeshScaled = Utils.Meshes.Scale(Utils.Meshes.MakeReadableMeshCopy(mesh), Config.NoteScale);
-            Outlines.InvertedChainHeadMesh = Utils.Meshes.MakeReadableMeshCopy(_defaultChainHeadMeshScaled).Invert();
         }
 
         public static void UpdateDefaultChainLinkMesh(Mesh mesh)
@@ -183,7 +264,6 @@ namespace NoteTweaks.Managers
             
             _defaultChainLinkMesh = mesh;
             _defaultChainLinkMeshScaled = Utils.Meshes.Scale(Utils.Meshes.MakeReadableMeshCopy(mesh), Config.NoteScale * Config.LinkScale);
-            Outlines.InvertedChainMesh = Utils.Meshes.MakeReadableMeshCopy(_defaultChainLinkMeshScaled).Invert();
         }
     }
 }
