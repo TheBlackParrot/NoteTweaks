@@ -200,13 +200,20 @@ namespace NoteTweaks.UI
                 Transform noteCircleGlowTransform = noteCube.transform.Find("NoteCircleGlow");
                 if (noteCircleGlowTransform == null)
                 {
-                    continue;
+                    // is a chain
+                    dotPosition *= Config.LinkScale;
+                    initialDotGlowPosition *= Config.LinkScale;
+                    
+                    noteCube.transform.Find("Circle").localPosition = dotPosition;
+                }
+                else
+                {
+                    noteCircleGlowTransform.localPosition = dotPosition;
                 }
                 
                 Vector3 dotGlowPosition = initialDotGlowPosition + (Vector3)(noteCube.name.Contains("_L_") ? Config.LeftGlowOffset : Config.RightGlowOffset);
                 dotGlowPosition.Scale(Config.NoteScale);
-                    
-                noteCircleGlowTransform.localPosition = dotPosition;
+
                 noteCube.transform.Find("AddedNoteCircleGlow").localPosition = dotGlowPosition;
             }
         }
@@ -220,8 +227,8 @@ namespace NoteTweaks.UI
             
             scale.Scale(Config.NoteScale);
             glowScale.Scale(Config.NoteScale);
-            chainLinkDotScale.Scale(Config.NoteScale);
-            chainLinkGlowScale.Scale(Config.NoteScale);
+            chainLinkDotScale.Scale(Config.NoteScale * Config.LinkScale);
+            chainLinkGlowScale.Scale(Config.NoteScale * Config.LinkScale);
             
             for (int i = 0; i < NoteContainer.transform.childCount; i++)
             {
@@ -338,28 +345,18 @@ namespace NoteTweaks.UI
                 {
                     continue;
                 }
-                
-                if (!noteCube.name.Contains("_Chain_"))
+
+                if (noteCube.TryGetComponent(out MeshFilter meshFilter))
                 {
-                    if (noteCube.TryGetComponent(out MeshFilter meshFilter))
-                    {
-                        meshFilter.sharedMesh = Managers.Meshes.CurrentNoteMesh;
-                    }
-                    if (noteCube.transform.Find("NoteOutline").TryGetComponent(out MeshFilter outlineMeshFilter))
-                    {
-                        outlineMeshFilter.sharedMesh = Outlines.InvertedNoteMesh;
-                    }
+                    meshFilter.sharedMesh = noteCube.name.Contains("_Chain_")
+                        ? Managers.Meshes.CurrentChainLinkMesh
+                        : Managers.Meshes.CurrentNoteMesh;
                 }
-                else
+                if (noteCube.transform.Find("NoteOutline").TryGetComponent(out MeshFilter outlineMeshFilter))
                 {
-                    if (noteCube.TryGetComponent(out MeshFilter meshFilter))
-                    {
-                        meshFilter.sharedMesh = Managers.Meshes.CurrentChainLinkMesh;
-                    }
-                    if (noteCube.transform.Find("NoteOutline").TryGetComponent(out MeshFilter outlineMeshFilter))
-                    {
-                        outlineMeshFilter.sharedMesh = Outlines.InvertedChainMesh;
-                    }
+                    outlineMeshFilter.sharedMesh = noteCube.name.Contains("_Chain_")
+                        ? Outlines.InvertedChainMesh
+                        : Outlines.InvertedNoteMesh;
                 }
             }
             
