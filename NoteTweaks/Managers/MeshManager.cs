@@ -110,6 +110,10 @@ namespace NoteTweaks.Managers
 
             if (Config.ChainHeadMesh == "Default")
             {
+                if (_defaultChainHeadMesh == null)
+                {
+                    return;
+                }
                 _defaultChainHeadMeshScaled = Utils.Meshes.Scale(Utils.Meshes.MakeReadableMeshCopy(_defaultChainHeadMesh), Config.NoteScale);
                 Outlines.InvertedChainHeadMesh = Utils.Meshes.MakeReadableMeshCopy(_defaultChainHeadMeshScaled).Invert();
                 return;
