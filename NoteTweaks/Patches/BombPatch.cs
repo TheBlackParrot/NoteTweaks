@@ -83,16 +83,6 @@ namespace NoteTweaks.Patches
                     materialPropertyBlockController.ApplyChanges();   
                 }
             }
-
-            if (!NotePhysicalTweaks.IsAllowedToScaleNotes)
-            {
-                return;
-            }
-
-            Vector3 scale = Vector3.one * Config.BombScale;
-            
-            __instance.transform.localScale = scale;
-            __instance._cuttableBySaber.GetComponent<SphereCollider>().radius = 0.18f * (1.0f / Config.BombScale);
         }
         
         [HarmonyPatch(typeof(BeatmapObjectsInstaller), "InstallBindings")]

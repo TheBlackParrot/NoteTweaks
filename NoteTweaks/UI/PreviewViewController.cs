@@ -368,6 +368,11 @@ namespace NoteTweaks.UI
         
         public static void UpdateBombScale()
         {
+            Managers.Meshes.UpdateDefaultBombMesh(null, true);
+            Managers.Meshes.UpdateSphereMesh(Config.BombMeshSlices, Config.BombMeshStacks, Config.BombMeshSmoothNormals, Config.BombMeshWorldNormals, true);
+            Outlines.UpdateDefaultBombMesh(Managers.Meshes.CurrentBombMesh, true);
+            UpdateOutlines();
+            
             for (int i = 0; i < NoteContainer.transform.childCount; i++)
             {
                 GameObject bombObject = NoteContainer.transform.GetChild(i).gameObject;
@@ -376,7 +381,16 @@ namespace NoteTweaks.UI
                     continue;
                 }
 
-                bombObject.transform.localScale = Vector3.one * Config.BombScale;
+                Transform actualBomb = bombObject.transform.GetChild(0);
+
+                if (actualBomb.TryGetComponent(out MeshFilter meshFilter))
+                {
+                    meshFilter.sharedMesh = Managers.Meshes.CurrentBombMesh;
+                }
+                if (actualBomb.Find("NoteOutline").TryGetComponent(out MeshFilter outlineMeshFilter))
+                {
+                    outlineMeshFilter.sharedMesh = Outlines.InvertedBombMesh;
+                }
             }
         }
 

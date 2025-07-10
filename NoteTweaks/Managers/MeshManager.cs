@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using IPA.Utilities;
+using JetBrains.Annotations;
 using NoteTweaks.Configuration;
 using NoteTweaks.Utils;
 using UnityEngine;
@@ -19,13 +20,18 @@ namespace NoteTweaks.Managers
         private static readonly Mesh OvalMesh = Utils.Meshes.GenerateFaceMesh(32, new Vector2(1f, 0.3f), 0.31f);
         private static Mesh _defaultArrowMesh;
 
+        private static Vector3 BombScaleVector => new Vector3(Config.BombScale, Config.BombScale, Config.BombScale);
         private static int _sphereSlices = Config.BombMeshSlices;
         private static int _sphereStacks = Config.BombMeshStacks;
         private static bool _sphereNormalsSmooth = Config.BombMeshSmoothNormals;
         private static bool _sphereNormalsWorld = Config.BombMeshWorldNormals;
         private const float SPHERE_RADIUS = 0.225f;
-        private static Mesh _sphereMesh = MeshExtensions.CreateSphere(SPHERE_RADIUS, _sphereSlices, _sphereStacks, _sphereNormalsWorld);
+        private static Mesh _sphereMesh =
+            Utils.Meshes.Scale(
+                MeshExtensions.CreateSphere(SPHERE_RADIUS, _sphereSlices, _sphereStacks, _sphereNormalsWorld),
+                BombScaleVector);
         private static Mesh _defaultBombMesh;
+        private static Mesh _defaultBombMeshScaled;
 
         private static Mesh _defaultNoteMesh;
         private static Mesh _defaultChainHeadMesh;
@@ -47,7 +53,7 @@ namespace NoteTweaks.Managers
                     case "Sphere":
                         return _sphereMesh;
                     default:
-                        return _defaultBombMesh;
+                        return _defaultBombMeshScaled;
                 }
             }
         }
@@ -213,17 +219,29 @@ namespace NoteTweaks.Managers
             }
         }
         
-        public static void UpdateDefaultBombMesh(Mesh mesh)
+        public static void UpdateDefaultBombMesh([CanBeNull] Mesh mesh, bool allowRescale = false)
         {
-            if (_defaultBombMesh == null)
+            if (_defaultBombMesh != null || mesh == null)
             {
-                _defaultBombMesh = mesh;
+                if (allowRescale)
+                {
+                    _defaultBombMeshScaled = Utils.Meshes.Scale(Utils.Meshes.MakeReadableMeshCopy(_defaultBombMesh), BombScaleVector);
+                }
+                
+                return;
             }
+            
+            _defaultBombMesh = mesh;
+            _defaultBombMeshScaled = Utils.Meshes.Scale(Utils.Meshes.MakeReadableMeshCopy(mesh), BombScaleVector);
         }
 
-        public static void UpdateSphereMesh(int slices, int stacks, bool smoothNormals = false, bool worldNormals = false)
+        public static void UpdateSphereMesh(int slices, int stacks, bool smoothNormals = false, bool worldNormals = false, bool force = false)
         {
-            if (slices == _sphereSlices && stacks == _sphereStacks && smoothNormals == _sphereNormalsSmooth && worldNormals == _sphereNormalsWorld)
+            if (slices == _sphereSlices &&
+                stacks == _sphereStacks &&
+                smoothNormals == _sphereNormalsSmooth &&
+                worldNormals == _sphereNormalsWorld &&
+                !force)
             {
                 return;
             }
@@ -234,7 +252,7 @@ namespace NoteTweaks.Managers
             _sphereStacks = stacks;
             _sphereNormalsSmooth = smoothNormals;
             _sphereNormalsWorld = worldNormals;
-            _sphereMesh = MeshExtensions.CreateSphere(SPHERE_RADIUS, _sphereSlices, _sphereStacks, _sphereNormalsWorld);
+            _sphereMesh = Utils.Meshes.Scale(MeshExtensions.CreateSphere(SPHERE_RADIUS, _sphereSlices, _sphereStacks, _sphereNormalsWorld), BombScaleVector);
         }
 
         public static void UpdateDefaultNoteMesh(Mesh mesh)
