@@ -11,8 +11,7 @@ See the [releases page](https://github.com/TheBlackParrot/NoteTweaks/releases) f
 - It is recommended to disable other mods that also change aspects of the default note if you want to use this mod, as conflicts *can* occur.
   - The Custom Notes mod does not appear to cause any conflicts, should be fine.
   - Some users have reported that NalulunaNoteDecor causes some conflicts, although I haven't seen any issues crop up with it. ~~(ymmv)~~
-- Note Scaling is forcibly turned off if the Pro Mode, Strict Angles, or Small Notes modifiers are enabled.
-- Face symbol modification is forcibly turned off if the Ghost Notes or Disappearing Arrows modifiers are enabled.
+- Face symbols are forced to their default colors if the *Ghost Notes* modifier is enabled.
 
 ## Configuration
 Configuration is done in-game via a Menu button in the left panel of the Main Menu, or by editing `UserData/NoteTweaks.json`.  
