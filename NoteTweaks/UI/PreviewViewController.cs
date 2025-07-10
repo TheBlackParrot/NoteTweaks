@@ -198,21 +198,21 @@ namespace NoteTweaks.UI
                 }
                 
                 Transform noteCircleGlowTransform = noteCube.transform.Find("NoteCircleGlow");
+                
+                Vector3 dotGlowPosition = initialDotGlowPosition + (Vector3)(noteCube.name.Contains("_L_") ? Config.LeftGlowOffset : Config.RightGlowOffset);
+                dotGlowPosition.Scale(Config.NoteScale);
+                
                 if (noteCircleGlowTransform == null)
                 {
                     // is a chain
-                    dotPosition *= Config.LinkScale;
-                    initialDotGlowPosition *= Config.LinkScale;
+                    dotGlowPosition *= Config.LinkScale;
                     
-                    noteCube.transform.Find("Circle").localPosition = dotPosition;
+                    noteCube.transform.Find("Circle").localPosition = dotPosition * Config.LinkScale;
                 }
                 else
                 {
                     noteCircleGlowTransform.localPosition = dotPosition;
                 }
-                
-                Vector3 dotGlowPosition = initialDotGlowPosition + (Vector3)(noteCube.name.Contains("_L_") ? Config.LeftGlowOffset : Config.RightGlowOffset);
-                dotGlowPosition.Scale(Config.NoteScale);
 
                 noteCube.transform.Find("AddedNoteCircleGlow").localPosition = dotGlowPosition;
             }
