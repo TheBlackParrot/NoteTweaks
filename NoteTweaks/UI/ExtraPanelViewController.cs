@@ -401,7 +401,8 @@ namespace NoteTweaks.UI
         
         private static List<object> GetMeshNames()
         {
-            List<string> files = Directory.GetFiles(Path.Combine(Meshes.MeshFolder, "Notes"), "*.obj").ToList();
+            List<string> files = Directory.GetFiles(Path.Combine(Meshes.MeshFolder, "Notes"), "*.obj")
+                .Where(x => x.ToLower() != "default.obj").ToList();
             files.Sort();
             Plugin.Log.Info($"Found {files.Count} note meshes");
             
@@ -423,7 +424,8 @@ namespace NoteTweaks.UI
         
         private static List<object> GetChainHeadMeshNames()
         {
-            List<string> files = Directory.GetFiles(Path.Combine(Meshes.MeshFolder, "ChainHeads"), "*.obj").ToList();
+            List<string> files = Directory.GetFiles(Path.Combine(Meshes.MeshFolder, "ChainHeads"), "*.obj")
+                .Where(x => x.ToLower() != "default.obj").ToList();
             files.Sort();
             Plugin.Log.Info($"Found {files.Count} chain head meshes");
             
@@ -445,7 +447,8 @@ namespace NoteTweaks.UI
         
         private static List<object> GetChainLinkMeshNames()
         {
-            List<string> files = Directory.GetFiles(Path.Combine(Meshes.MeshFolder, "ChainLinks"), "*.obj").ToList();
+            List<string> files = Directory.GetFiles(Path.Combine(Meshes.MeshFolder, "ChainLinks"), "*.obj")
+                .Where(x => x.ToLower() != "default.obj").ToList();
             files.Sort();
             Plugin.Log.Info($"Found {files.Count} chain link meshes");
             
