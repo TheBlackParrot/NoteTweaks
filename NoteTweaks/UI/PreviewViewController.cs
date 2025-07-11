@@ -109,7 +109,10 @@ namespace NoteTweaks.UI
         {
             if (_dotGlowMesh == null)
             {
-                _dotGlowMesh = NoteContainer.transform.GetChild(0).Find("NoteCircleGlow").GetComponent<MeshFilter>().mesh;
+                if(NoteContainer.transform.GetChild(0).Find("NoteCircleGlow") != null)
+                {
+                    _dotGlowMesh = NoteContainer.transform.GetChild(0).Find("NoteCircleGlow").GetComponent<MeshFilter>().mesh;
+                }
             }
 
             Managers.Meshes.DotMesh = Utils.Meshes.GenerateFaceMesh(Config.DotMeshSides, Vector2.one);
@@ -123,13 +126,14 @@ namespace NoteTweaks.UI
                 }
                 
                 Transform noteCircleGlowTransform = noteCube.transform.Find("NoteCircleGlow");
+                Transform noteCircleTransform = noteCube.transform.Find("Circle");
                 if (noteCircleGlowTransform != null)
                 {
                     noteCircleGlowTransform.GetComponent<MeshFilter>().mesh = Managers.Meshes.DotMesh;
                 }
-                else
+                if(noteCircleTransform != null)
                 {
-                    noteCube.transform.Find("Circle").GetComponent<MeshFilter>().mesh = Managers.Meshes.DotMesh;
+                    noteCircleTransform.GetComponent<MeshFilter>().mesh = Managers.Meshes.DotMesh;
                 }
             }
         }
@@ -197,24 +201,25 @@ namespace NoteTweaks.UI
                     continue;
                 }
                 
-                Transform noteCircleGlowTransform = noteCube.transform.Find("NoteCircleGlow");
-                
                 Vector3 dotGlowPosition = initialDotGlowPosition + (Vector3)(noteCube.name.Contains("_L_") ? Config.LeftGlowOffset : Config.RightGlowOffset);
                 dotGlowPosition.Scale(Config.NoteScale);
                 
-                if (noteCircleGlowTransform == null)
+                Transform noteCircleGlowTransform = noteCube.transform.Find("NoteCircleGlow");
+                Transform noteCircleTransform = noteCube.transform.Find("Circle");
+                
+                if (noteCircleTransform != null)
                 {
                     // is a chain
                     dotGlowPosition *= Config.LinkScale;
                     
-                    noteCube.transform.Find("Circle").localPosition = dotPosition * Config.LinkScale;
+                    noteCircleTransform.localPosition = dotPosition * Config.LinkScale;
+                    noteCube.transform.Find("AddedNoteCircleGlow").localPosition = dotGlowPosition;
                 }
-                else
+                if(noteCircleGlowTransform != null)
                 {
                     noteCircleGlowTransform.localPosition = dotPosition;
+                    noteCube.transform.Find("AddedNoteCircleGlow").localPosition = dotGlowPosition;
                 }
-
-                noteCube.transform.Find("AddedNoteCircleGlow").localPosition = dotGlowPosition;
             }
         }
 
@@ -244,7 +249,9 @@ namespace NoteTweaks.UI
                     noteCircleGlowTransform.localScale = scale;
                     noteCube.transform.Find("AddedNoteCircleGlow").localScale = glowScale;   
                 }
-                else
+
+                Transform noteCircleTransform = noteCube.transform.Find("Circle");
+                if (noteCircleTransform != null)
                 {
                     noteCube.transform.Find("Circle").localScale = chainLinkDotScale;  
                     noteCube.transform.Find("AddedNoteCircleGlow").localScale = chainLinkGlowScale;  
@@ -336,12 +343,7 @@ namespace NoteTweaks.UI
             for (int i = 0; i < NoteContainer.transform.childCount; i++)
             {
                 GameObject noteCube = NoteContainer.transform.GetChild(i).gameObject;
-                if (noteCube.name.Contains("_Bomb_"))
-                {
-                    // bombs are not notes
-                    continue;
-                }
-                if (!noteCube.name.Contains("_PreviewNote_"))
+                if (!noteCube.name.Contains("_PreviewNote_") || noteCube.name.Contains("_Bomb_"))
                 {
                     continue;
                 }
@@ -350,13 +352,15 @@ namespace NoteTweaks.UI
                 {
                     meshFilter.sharedMesh = noteCube.name.Contains("_Chain_")
                         ? Managers.Meshes.CurrentChainLinkMesh
-                        : Managers.Meshes.CurrentNoteMesh;
+                        : (noteCube.name.Contains("_ChainHead") ? Managers.Meshes.CurrentChainHeadMesh
+                                                               : Managers.Meshes.CurrentNoteMesh);
                 }
                 if (noteCube.transform.Find("NoteOutline").TryGetComponent(out MeshFilter outlineMeshFilter))
                 {
                     outlineMeshFilter.sharedMesh = noteCube.name.Contains("_Chain_")
                         ? Outlines.InvertedChainMesh
-                        : Outlines.InvertedNoteMesh;
+                        : (noteCube.name.Contains("_ChainHead") ? Outlines.InvertedChainHeadMesh
+                            : Outlines.InvertedNoteMesh);
                 }
             }
             
@@ -758,7 +762,7 @@ namespace NoteTweaks.UI
 
             Outlines.AddOutlineObject(chainNote.transform, Outlines.InvertedChainMesh);
             
-            Vector3 position = new Vector3(((-NOTE_SIZE / 2) + (cell - (NOTE_SIZE * 2)) * NOTE_SIZE) - 0.1f, linkNum / 6.667f, linkNum * -0.05f);
+            Vector3 position = new Vector3(((-NOTE_SIZE / 2) + (cell - (NOTE_SIZE * 2)) * NOTE_SIZE) - 0.1f, -0.05f + (linkNum / 5.667f), 0.2f + (linkNum * -0.05f));
             chainNote.transform.localPosition = position;
             chainNote.transform.Rotate(90f, 0f, 0f);
             
@@ -816,6 +820,53 @@ namespace NoteTweaks.UI
                     cutoutEffect._useRandomCutoutOffset = parentCutoutEffect._useRandomCutoutOffset;
                 }
             }
+            
+            chainNote.gameObject.SetActive(true);
+        }
+        
+        private static void CreateChainHeadNote(GameNoteController notePrefab, string extraName, int cell)
+        {
+            GameObject chainNote = Instantiate(notePrefab.transform.GetChild(0).gameObject, NoteContainer.transform);
+            chainNote.gameObject.SetActive(false);
+            
+            chainNote.name = "_NoteTweaks_PreviewNote_" + extraName;
+            DestroyImmediate(chainNote.transform.Find("BigCuttable").gameObject);
+            DestroyImmediate(chainNote.transform.Find("SmallCuttable").gameObject);
+
+            if (chainNote.TryGetComponent(out MeshFilter chainMeshFilter))
+            {
+                if (Outlines.InvertedChainHeadMesh == null)
+                {
+                    Outlines.UpdateDefaultChainHeadMesh(chainMeshFilter.sharedMesh);
+                }
+                
+                Managers.Meshes.UpdateDefaultChainHeadMesh(chainMeshFilter.sharedMesh);
+            }
+
+            Outlines.AddOutlineObject(chainNote.transform, Outlines.InvertedChainHeadMesh);
+            
+            Vector3 position = new Vector3(((-NOTE_SIZE / 2) + (cell - (NOTE_SIZE * 2)) * NOTE_SIZE) - 0.1f, NOTE_SIZE + 0.15f, 0);
+            chainNote.transform.localPosition = position;
+            chainNote.transform.Rotate(90f, 0f, 0f);
+            
+            MeshRenderer noteMeshRenderer = chainNote.gameObject.GetComponent<MeshRenderer>();
+            noteMeshRenderer.sharedMaterial = Materials.NoteMaterial;
+            
+            chainNote.transform.Find("NoteArrowGlow").GetComponent<MeshRenderer>().sharedMaterial = Materials.ArrowGlowMaterial;
+
+            Transform arrowTransform = chainNote.transform.Find("NoteArrow");
+            
+            #pragma warning disable CS0612
+            if (arrowTransform.TryGetComponent(out ConditionalMaterialSwitcher switcher))
+            {
+                switcher._material0 = Materials.ReplacementArrowMaterial;
+                switcher._material1 = Materials.ReplacementArrowMaterial;   
+            }
+            #pragma warning restore CS0612
+
+            arrowTransform.GetComponent<Renderer>().sharedMaterial = Materials.ReplacementArrowMaterial;
+            
+            DestroyImmediate(chainNote.transform.Find("NoteCircleGlow")?.gameObject);
             
             chainNote.gameObject.SetActive(true);
         }
@@ -1230,6 +1281,7 @@ namespace NoteTweaks.UI
                             BeatmapObjectsInstaller beatmapObjectsInstaller = Resources.FindObjectsOfTypeAll<BeatmapObjectsInstaller>().FirstOrDefault();
                             
                             GameNoteController notePrefab = beatmapObjectsInstaller._normalBasicNotePrefab;
+                            GameNoteController chainHeadPrefab = beatmapObjectsInstaller._burstSliderHeadNotePrefab;
                             BombNoteController bombPrefab = beatmapObjectsInstaller._bombNotePrefab;
                             BurstSliderGameNoteController chainPrefab = beatmapObjectsInstaller._burstSliderNotePrefab;
                             // ReSharper restore PossibleNullReferenceException
@@ -1243,9 +1295,14 @@ namespace NoteTweaks.UI
                                 CreateNote(notePrefab, noteNames[i], i);
                             }
                             
+                            List<string> chainHeadNames = new List<string> { "L_ChainHead", "R_ChainHead" };
+                            for (int i = 0; i < chainHeadNames.Count; i++)
+                            {
+                                CreateChainHeadNote(chainHeadPrefab, chainHeadNames[i], i);
+                            }
+                            
                             List<string> chainNames = new List<string> { "L_Chain", "R_Chain" };
-                            const int chainLinkCount = 6;
-                            for (int j = 0; j < chainLinkCount; j++)
+                            for (int j = 0; j < 4; j++)
                             {
                                 for (int i = 0; i < chainNames.Count; i++)
                                 {

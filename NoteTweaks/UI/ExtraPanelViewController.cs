@@ -280,6 +280,36 @@ namespace NoteTweaks.UI
                 NotifyPropertyChanged();
 
                 Meshes.UpdateCustomChainHeadMesh();
+                
+                string[] noteNames = { "L_ChainHead", "R_ChainHead" };
+                foreach (string noteName in noteNames)
+                {
+                    string fullName = $"_NoteTweaks_PreviewNote_{noteName}";
+                    GameObject previewNote = GameObject.Find(fullName);
+                    
+                    if (previewNote == null)
+                    {
+                        Plugin.Log.Warn($"{fullName} is null");
+                        continue;
+                    }
+                    if (!previewNote.TryGetComponent(out MeshFilter meshFilter))
+                    {
+                        continue;
+                    }
+                    
+                    meshFilter.sharedMesh = Meshes.CurrentChainHeadMesh;
+
+                    Transform outlineTransform = previewNote.transform.Find("NoteOutline");
+                    if (outlineTransform == null)
+                    {
+                        continue;
+                    }
+                    
+                    if (outlineTransform.TryGetComponent(out MeshFilter outlineMeshFilter))
+                    {
+                        outlineMeshFilter.sharedMesh = Outlines.InvertedChainHeadMesh;
+                    }
+                }
             }
         }
         
