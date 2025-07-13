@@ -293,10 +293,16 @@
         <None Include="Resources\Meshes\Notes\Flatter.obj">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
+        <None Include="Resources\Meshes\Notes\Frame.obj">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
         <None Include="Resources\Meshes\Notes\HardSphere.obj">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
         <None Include="Resources\Meshes\Notes\Icosahedron.obj">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Include="Resources\Meshes\Notes\Inset.obj">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
         <None Include="Resources\Meshes\Notes\Pointy.obj">
@@ -430,11 +436,17 @@
         <OutputCopy Include="Resources\Meshes\Notes\Flatter.obj">
             <OutputPath>UserData\NoteTweaks\Meshes\Notes\Flatter.obj</OutputPath>
         </OutputCopy>
+        <OutputCopy Include="Resources\Meshes\Notes\Frame.obj">
+            <OutputPath>UserData\NoteTweaks\Meshes\Notes\Frame.obj</OutputPath>
+        </OutputCopy>
         <OutputCopy Include="Resources\Meshes\Notes\HardSphere.obj">
             <OutputPath>UserData\NoteTweaks\Meshes\Notes\HardSphere.obj</OutputPath>
         </OutputCopy>
         <OutputCopy Include="Resources\Meshes\Notes\Icosahedron.obj">
             <OutputPath>UserData\NoteTweaks\Meshes\Notes\Icosahedron.obj</OutputPath>
+        </OutputCopy>
+        <OutputCopy Include="Resources\Meshes\Notes\Inset.obj">
+            <OutputPath>UserData\NoteTweaks\Meshes\Notes\Inset.obj</OutputPath>
         </OutputCopy>
         <OutputCopy Include="Resources\Meshes\Notes\Pointy.obj">
             <OutputPath>UserData\NoteTweaks\Meshes\Notes\Pointy.obj</OutputPath>
