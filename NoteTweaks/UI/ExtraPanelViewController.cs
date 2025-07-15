@@ -326,7 +326,7 @@ namespace NoteTweaks.UI
                 string[] noteNames = { "L_Chain", "R_Chain" };
                 foreach (string noteName in noteNames)
                 {
-                    for (int i = 0; i < 6; i++)
+                    for (int i = 0; i < 4; i++)
                     {
                         string fullName = $"_NoteTweaks_PreviewNote_{noteName}_{i}";
                         GameObject previewNote = GameObject.Find(fullName);
