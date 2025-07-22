@@ -77,15 +77,22 @@
                         <string-setting text="Preset Name" value="PresetNameField" id="PresetNameInput" bind-value="true" apply-on-change="true" pref-width="70"/>
                         <action-button text="Save" on-click="SavePreset"/>
                     </horizontal>
+                </scroll-view>
+            </vertical>
+        </tab>
 
-                    <horizontal><text text="-----" font-size="4" color="#00000000"/></horizontal>
-                    
+        <tab tags="tabs" tab-name="Meshes">
+            <vertical vertical-fit="PreferredSize" pref-height="65" pref-width="100" anchored-position-x="4">
+                <scroll-view spacing="0" pref-height="65" child-expand-width="true">
                     <dropdown-list-setting id="ArrowNoteMeshDropdown" text="Arrow Note Mesh" value="NoteMesh"
                                            choices="MeshNames"
                                            apply-on-change="true"/>
                     <dropdown-list-setting id="DotNoteMeshDropdown" text="Dot Note Mesh" value="DotNoteMesh"
                                            choices="MeshNames"
                                            apply-on-change="true"/>
+                    
+                    <horizontal><text text="-----" font-size="4" color="#00000000"/></horizontal>
+                    
                     <dropdown-list-setting id="ChainHeadMeshDropdown" text="Chain Head Mesh" value="ChainHeadMesh"
                                            choices="ChainHeadMeshNames"
                                            apply-on-change="true"/>
