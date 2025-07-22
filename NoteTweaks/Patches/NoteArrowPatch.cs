@@ -550,6 +550,36 @@ namespace NoteTweaks.Patches
             }
         }
 
+        private static NoteCutDirection _lastDirection;
+        
+        [HarmonyPatch]
+        [SuppressMessage("ReSharper", "InconsistentNaming")]
+        internal class HandleCutDataPersistencePatch
+        {
+            private static void SetLastDirection(ref NoteController noteController)
+            {
+                _lastDirection = noteController.noteData.cutDirection;
+            }
+            
+            // this fixes debris meshes in BeatLeader replays specifically...
+            // (this is never called in normal gameplay)
+            [HarmonyPatch(typeof(ScoreController), "HandleNoteWasCut")]
+            [HarmonyPrefix]
+            internal static void SetLastDirectionScoreController(NoteController noteController)
+            {
+                SetLastDirection(ref noteController);
+            }
+            
+            // ...and this fixes it in normal gameplay
+            // (this is never called in BeatLeader replays)
+            [HarmonyPatch(typeof(NoteController), "SendNoteWasCutEvent")]
+            [HarmonyPrefix]
+            internal static void SetLastDirectionNoteController(NoteController __instance)
+            {
+                SetLastDirection(ref __instance);
+            }
+        }
+
         [HarmonyPatch(typeof(NoteDebris), "Init")]
         internal class DebrisPatch
         {
@@ -569,9 +599,11 @@ namespace NoteTweaks.Patches
                 {
                     bool isChainHead = __instance.gameObject.name.Contains("CubeNoteHalfDebris");
                     bool isChainLink = __instance.gameObject.name.Contains("CubeNoteSliceDebris");
+                    bool isDotNote = _lastDirection == NoteCutDirection.Any;
                     
                     debrisMeshFilter.sharedMesh = isChainHead ? Managers.Meshes.CurrentChainHeadMesh :
-                        isChainLink ? Managers.Meshes.CurrentChainLinkMesh : Managers.Meshes.CurrentNoteMesh;
+                        isChainLink ? Managers.Meshes.CurrentChainLinkMesh :
+                        isDotNote ? Managers.Meshes.CurrentDotNoteMesh : Managers.Meshes.CurrentNoteMesh;
                 }
             }
         }
