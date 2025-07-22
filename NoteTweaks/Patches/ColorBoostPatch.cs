@@ -11,6 +11,7 @@ namespace NoteTweaks.Patches
     {
         private static PluginConfig Config => PluginConfig.Instance;
 
+        internal static ColorScheme PrePatchedScheme;
         internal static ColorScheme PatchedScheme;
         
         private static ColorScheme PatchColors(ColorSchemeSO schemeObj)
@@ -68,6 +69,9 @@ namespace NoteTweaks.Patches
             {
                 return;
             }
+
+            PrePatchedScheme = __instance.colorScheme;
+            
             ColorSchemeSO schemeObj = ScriptableObject.CreateInstance<ColorSchemeSO>();
             schemeObj._colorScheme = __instance.colorScheme;
 
@@ -87,6 +91,9 @@ namespace NoteTweaks.Patches
             {
                 return;
             }
+            
+            PrePatchedScheme = __instance.colorScheme;
+            
             ColorSchemeSO schemeObj = ScriptableObject.CreateInstance<ColorSchemeSO>();
             schemeObj._colorScheme = __instance.colorScheme;
 
@@ -106,8 +113,9 @@ namespace NoteTweaks.Patches
             {
                 return;
             }
+            
             ColorSchemeSO schemeObj = ScriptableObject.CreateInstance<ColorSchemeSO>();
-            schemeObj._colorScheme = __instance._standardLevelSceneSetupData.colorScheme;
+            schemeObj._colorScheme = PrePatchedScheme;
             ColorScheme patchedColors = PatchColors(schemeObj);
 
             __instance._standardLevelSceneSetupData.usingOverrideColorScheme = true;

@@ -31,7 +31,7 @@
     <PluginName>NoteTweaks</PluginName>
     <AssemblyName>NoteTweaks</AssemblyName>
     <Authors>TheBlackParrot</Authors>
-    <Version>0.10.0+$(GameVersion)</Version>
+    <Version>0.10.1+$(GameVersion)</Version>
     <Description>Change various aspects of the default note</Description>
     <ProjectHome>https://github.com/TheBlackParrot/NoteTweaks</ProjectHome>
     <ProjectSource>https://github.com/TheBlackParrot/NoteTweaks</ProjectSource>
