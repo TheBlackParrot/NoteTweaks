@@ -346,7 +346,7 @@ namespace NoteTweaks.Patches
                 ColorType colorType = __instance._noteData.colorType;
                 bool isLeft = colorType == ColorType.ColorA;
                 bool isChainHead = __instance.gameplayType == NoteData.GameplayType.BurstSliderHead;
-                bool isDot = __instance.noteData.cutDirection == NoteCutDirection.Any;
+                bool isDot = __instance.noteData.cutDirection == NoteCutDirection.Any || __instance.noteData.cutDirection == NoteCutDirection.None;
 
                 if (noteRoot.TryGetComponent(out MeshFilter meshFilter))
                 {
@@ -599,7 +599,7 @@ namespace NoteTweaks.Patches
                 {
                     bool isChainHead = __instance.gameObject.name.Contains("CubeNoteHalfDebris");
                     bool isChainLink = __instance.gameObject.name.Contains("CubeNoteSliceDebris");
-                    bool isDotNote = _lastDirection == NoteCutDirection.Any;
+                    bool isDotNote = _lastDirection == NoteCutDirection.Any || _lastDirection == NoteCutDirection.None;
                     
                     debrisMeshFilter.sharedMesh = isChainHead ? Managers.Meshes.CurrentChainHeadMesh :
                         isChainLink ? Managers.Meshes.CurrentChainLinkMesh :
