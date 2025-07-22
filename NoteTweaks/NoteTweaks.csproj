@@ -317,6 +317,9 @@
         <None Include="Resources\Meshes\Notes\Trigonal.obj">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
+        <None Include="Resources\Meshes\Notes\Valley.obj">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
         <None Include="Resources\Meshes\Notes\Voxel.obj">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
@@ -462,6 +465,9 @@
         </OutputCopy>
         <OutputCopy Include="Resources\Meshes\Notes\Trigonal.obj">
             <OutputPath>UserData\NoteTweaks\Meshes\Notes\Trigonal.obj</OutputPath>
+        </OutputCopy>
+        <OutputCopy Include="Resources\Meshes\Notes\Valley.obj">
+            <OutputPath>UserData\NoteTweaks\Meshes\Notes\Valley.obj</OutputPath>
         </OutputCopy>
         <OutputCopy Include="Resources\Meshes\Notes\Voxel.obj">
             <OutputPath>UserData\NoteTweaks\Meshes\Notes\Voxel.obj</OutputPath>
