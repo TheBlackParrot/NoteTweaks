@@ -68,7 +68,7 @@ namespace NoteTweaks.Patches
         private static bool _fixDots = true;
         internal static bool UsesChroma;
 
-#if LATEST
+#if V1_40_6
         private static bool MapHasRequirement(BeatmapKey beatmapKey, string requirement, bool alsoCheckSuggestions = false)
 #else
         private static bool MapHasRequirement(BeatmapLevel beatmapLevel, BeatmapKey beatmapKey, string requirement, bool alsoCheckSuggestions = false)
@@ -76,7 +76,7 @@ namespace NoteTweaks.Patches
         {
             bool hasRequirement = false;
             
-#if LATEST
+#if V1_40_6
             SongData.DifficultyData diffData = GetCustomLevelSongDifficultyData(beatmapKey);
 #else
             ExtraSongData.DifficultyData diffData = RetrieveDifficultyData(beatmapLevel, beatmapKey);
@@ -110,7 +110,7 @@ namespace NoteTweaks.Patches
                     return;
                 }
 
-#if LATEST
+#if V1_40_6
                 AutoDisable =
                     (MapHasRequirement(__instance.beatmapKey, "Noodle Extensions") &&
                      Config.DisableIfNoodle) ||
@@ -182,7 +182,7 @@ namespace NoteTweaks.Patches
                     return;
                 }
 
-#if LATEST
+#if V1_40_6
                 AutoDisable =
                     (MapHasRequirement(__instance.beatmapKey, "Noodle Extensions") &&
                      Config.DisableIfNoodle) ||
