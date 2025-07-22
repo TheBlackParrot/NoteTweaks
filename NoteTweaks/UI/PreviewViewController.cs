@@ -148,14 +148,16 @@ namespace NoteTweaks.UI
                     continue;
                 }
                 
+                bool isArrowNote = noteCube.name.Contains("_Arrow") || noteCube.name.Contains("_ChainHead");
                 Transform noteArrowTransform = noteCube.transform.Find("NoteArrow");
 
                 if (noteArrowTransform != null)
                 {
-                    if (noteCube.transform.Find("NoteArrow").gameObject.activeSelf)
+                    if (isArrowNote)
                     {
                         // is not a dot note
-                        noteCube.transform.Find("NoteArrowGlow").gameObject.SetActive(Config.EnableFaceGlow);
+                        noteCube.transform.Find("NoteArrow").gameObject.SetActive(Config.EnableArrows);
+                        noteCube.transform.Find("NoteArrowGlow").gameObject.SetActive(Config.EnableFaceGlow && Config.EnableArrows);
                     }
                     else
                     {

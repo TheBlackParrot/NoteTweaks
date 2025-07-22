@@ -348,6 +348,11 @@
     <tab tags="tabs" tab-name="Arrows">
         <vertical vertical-fit="PreferredSize" pref-height="70" pref-width="100" anchored-position-x="4">
             <scroll-view spacing="0" pref-height="70" child-expand-width="true">
+                <toggle-setting apply-on-change="true" value="EnableArrows" text="Show Arrows" bind-value="true"
+                                hover-hint="Show arrows"/>
+
+                <horizontal><text text="-----" font-size="2" color="#00000000"/></horizontal>
+                
                 <dropdown-list-setting apply-on-change="true" value="ArrowMesh" text="Arrow Mesh" choices="arrowMeshChoices" bind-value="true"
                                        hover-hint="Change the mesh used for arrows"/>
                 

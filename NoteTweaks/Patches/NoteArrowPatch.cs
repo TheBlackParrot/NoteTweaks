@@ -635,6 +635,12 @@ namespace NoteTweaks.Patches
                 
                 foreach (MeshRenderer meshRenderer in ____arrowMeshRenderers)
                 {
+                    meshRenderer.gameObject.SetActive(Config.EnableArrows);
+                    if (!Config.EnableArrows)
+                    {
+                        continue;
+                    }
+                    
                     Transform arrowTransform = meshRenderer.gameObject.transform;
                     
                     Vector3 scale = new Vector3(Config.ArrowScale.x, Config.ArrowScale.y, 1.0f);

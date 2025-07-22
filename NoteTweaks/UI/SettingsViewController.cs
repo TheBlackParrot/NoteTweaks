@@ -159,6 +159,16 @@ namespace NoteTweaks.UI
                 NotePreviewViewController.UpdateVisibility();
             }
         }
+        
+        protected bool EnableArrows
+        {
+            get => Config.EnableArrows;
+            set
+            {
+                Config.EnableArrows = value;
+                NotePreviewViewController.UpdateVisibility();
+            }
+        }
 
         protected float NoteScaleX
         {

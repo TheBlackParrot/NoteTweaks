@@ -70,6 +70,7 @@ namespace NoteTweaks.Configuration
         }
         
         [JsonProperty] public bool EnableDots { get; set; } = true;
+        [JsonProperty] public bool EnableArrows { get; set; } = true;
         [JsonProperty] public Vector2 DotScale { get; set; } = Vector2.one;
         [Ignore] public virtual float DotScaleX
         {
