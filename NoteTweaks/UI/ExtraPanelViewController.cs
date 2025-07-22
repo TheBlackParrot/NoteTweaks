@@ -239,7 +239,7 @@ namespace NoteTweaks.UI
 
                 Meshes.UpdateCustomNoteMesh();
                 
-                string[] noteNames = { "L_Arrow", "R_Arrow", "L_Dot", "R_Dot" };
+                string[] noteNames = { "L_Arrow", "R_Arrow" };
                 foreach (string noteName in noteNames)
                 {
                     string fullName = $"_NoteTweaks_PreviewNote_{noteName}";
@@ -266,6 +266,48 @@ namespace NoteTweaks.UI
                     if (outlineTransform.TryGetComponent(out MeshFilter outlineMeshFilter))
                     {
                         outlineMeshFilter.sharedMesh = Outlines.InvertedNoteMesh;
+                    }
+                }
+            }
+        }
+        
+        protected string DotNoteMesh
+        {
+            get => Config.DotNoteMesh;
+            set
+            {
+                Config.DotNoteMesh = value;
+                NotifyPropertyChanged();
+
+                Meshes.UpdateCustomNoteMesh(true);
+                
+                string[] noteNames = { "L_Dot", "R_Dot" };
+                foreach (string noteName in noteNames)
+                {
+                    string fullName = $"_NoteTweaks_PreviewNote_{noteName}";
+                    GameObject previewNote = GameObject.Find(fullName);
+                    
+                    if (previewNote == null)
+                    {
+                        Plugin.Log.Warn($"{fullName} is null");
+                        continue;
+                    }
+                    if (!previewNote.TryGetComponent(out MeshFilter meshFilter))
+                    {
+                        continue;
+                    }
+                    
+                    meshFilter.sharedMesh = Meshes.CurrentDotNoteMesh;
+
+                    Transform outlineTransform = previewNote.transform.Find("NoteOutline");
+                    if (outlineTransform == null)
+                    {
+                        continue;
+                    }
+                    
+                    if (outlineTransform.TryGetComponent(out MeshFilter outlineMeshFilter))
+                    {
+                        outlineMeshFilter.sharedMesh = Outlines.InvertedDotNoteMesh;
                     }
                 }
             }
@@ -409,8 +451,10 @@ namespace NoteTweaks.UI
         private string PresetNameField = "Preset";
 
 #pragma warning disable CS0649
-        [UIComponent("MeshDropdown")]
+        [UIComponent("ArrowNoteMeshDropdown")]
         public DropDownListSetting MeshDropDown;
+        [UIComponent("DotNoteMeshDropdown")]
+        public DropDownListSetting DotMeshDropDown;
         [UIComponent("ChainHeadMeshDropdown")]
         public DropDownListSetting ChainHeadMeshDropDown;
         [UIComponent("ChainLinkMeshDropdown")]
@@ -419,14 +463,18 @@ namespace NoteTweaks.UI
         
         internal void UpdateMeshDropdown()
         {
-            if (MeshDropDown == null)
+            if (MeshDropDown == null || DotMeshDropDown == null)
             {
                 return;
             }
 
             MeshNames = GetMeshNames();
+            
             MeshDropDown.Values = MeshNames;
+            DotMeshDropDown.Values = MeshNames;
+            
             MeshDropDown.UpdateChoices();
+            DotMeshDropDown.UpdateChoices();
         }
         
         private static List<object> GetMeshNames()

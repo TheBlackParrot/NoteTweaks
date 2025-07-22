@@ -80,7 +80,10 @@
 
                     <horizontal><text text="-----" font-size="4" color="#00000000"/></horizontal>
                     
-                    <dropdown-list-setting id="MeshDropdown" text="Note Mesh" value="NoteMesh"
+                    <dropdown-list-setting id="ArrowNoteMeshDropdown" text="Arrow Note Mesh" value="NoteMesh"
+                                           choices="MeshNames"
+                                           apply-on-change="true"/>
+                    <dropdown-list-setting id="DotNoteMeshDropdown" text="Dot Note Mesh" value="DotNoteMesh"
                                            choices="MeshNames"
                                            apply-on-change="true"/>
                     <dropdown-list-setting id="ChainHeadMeshDropdown" text="Chain Head Mesh" value="ChainHeadMesh"

@@ -281,7 +281,7 @@ namespace NoteTweaks.Patches
 
                 if (Config.EnableNoteOutlines && !_gameplayModifiers.ghostNotes)
                 {
-                    Outlines.AddOutlineObject(chainRoot, Outlines.InvertedChainMesh);
+                    Outlines.AddOutlineObject(chainRoot, Outlines.InvertedChainMesh, false);
                     Transform noteOutline = chainRoot.Find("NoteOutline");
                     
                     noteOutline.gameObject.SetActive(Config.EnableNoteOutlines);
@@ -346,13 +346,14 @@ namespace NoteTweaks.Patches
                 ColorType colorType = __instance._noteData.colorType;
                 bool isLeft = colorType == ColorType.ColorA;
                 bool isChainHead = __instance.gameplayType == NoteData.GameplayType.BurstSliderHead;
+                bool isDot = __instance.noteData.cutDirection == NoteCutDirection.Any;
 
                 if (noteRoot.TryGetComponent(out MeshFilter meshFilter))
                 {
                     if (!isChainHead)
                     {
                         Managers.Meshes.UpdateDefaultNoteMesh(meshFilter.sharedMesh);
-                        meshFilter.sharedMesh = Managers.Meshes.CurrentNoteMesh;
+                        meshFilter.sharedMesh = isDot ? Managers.Meshes.CurrentDotNoteMesh : Managers.Meshes.CurrentNoteMesh;
                     }
                     else
                     {
@@ -469,18 +470,31 @@ namespace NoteTweaks.Patches
                 }
                 else
                 {
-                    if (Outlines.InvertedNoteMesh == null)
+                    if (isDot)
                     {
-                        if (noteRoot.TryGetComponent(out MeshFilter cubeMeshFilter))
+                        if (Outlines.InvertedDotNoteMesh == null)
                         {
-                            Outlines.UpdateDefaultNoteMesh(cubeMeshFilter.sharedMesh);
-                        }
-                    }   
+                            if (noteRoot.TryGetComponent(out MeshFilter cubeMeshFilter))
+                            {
+                                Outlines.UpdateDefaultDotNoteMesh(cubeMeshFilter.sharedMesh);
+                            }
+                        }  
+                    }
+                    else
+                    {
+                       if (Outlines.InvertedNoteMesh == null)
+                       {
+                           if (noteRoot.TryGetComponent(out MeshFilter cubeMeshFilter))
+                           {
+                               Outlines.UpdateDefaultNoteMesh(cubeMeshFilter.sharedMesh);
+                           }
+                       }   
+                    }
                 }
                 
                 if (Config.EnableNoteOutlines && !_gameplayModifiers.ghostNotes)
                 {
-                    Outlines.AddOutlineObject(noteRoot, isChainHead ? Outlines.InvertedChainHeadMesh : Outlines.InvertedNoteMesh);
+                    Outlines.AddOutlineObject(noteRoot, isChainHead ? Outlines.InvertedChainHeadMesh : (isDot ? Outlines.InvertedDotNoteMesh : Outlines.InvertedNoteMesh), !isChainHead);
                     Transform noteOutline = noteRoot.Find("NoteOutline");
                     
                     noteOutline.gameObject.SetActive(Config.EnableNoteOutlines);

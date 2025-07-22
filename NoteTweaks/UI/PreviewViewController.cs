@@ -353,14 +353,16 @@ namespace NoteTweaks.UI
                     meshFilter.sharedMesh = noteCube.name.Contains("_Chain_")
                         ? Managers.Meshes.CurrentChainLinkMesh
                         : (noteCube.name.Contains("_ChainHead") ? Managers.Meshes.CurrentChainHeadMesh
-                                                               : Managers.Meshes.CurrentNoteMesh);
+                                                               : (noteCube.name.Contains("_Dot")
+                                                                   ? Managers.Meshes.CurrentDotNoteMesh
+                                                                   : Managers.Meshes.CurrentNoteMesh));
                 }
                 if (noteCube.transform.Find("NoteOutline").TryGetComponent(out MeshFilter outlineMeshFilter))
                 {
                     outlineMeshFilter.sharedMesh = noteCube.name.Contains("_Chain_")
                         ? Outlines.InvertedChainMesh
                         : (noteCube.name.Contains("_ChainHead") ? Outlines.InvertedChainHeadMesh
-                            : Outlines.InvertedNoteMesh);
+                            : (noteCube.name.Contains("_Dot") ? Outlines.InvertedDotNoteMesh : Outlines.InvertedNoteMesh));
                 }
             }
             
@@ -760,7 +762,7 @@ namespace NoteTweaks.UI
                 Managers.Meshes.UpdateDefaultChainLinkMesh(chainMeshFilter.sharedMesh);
             }
 
-            Outlines.AddOutlineObject(chainNote.transform, Outlines.InvertedChainMesh);
+            Outlines.AddOutlineObject(chainNote.transform, Outlines.InvertedChainMesh, false);
             
             Vector3 position = new Vector3(((-NOTE_SIZE / 2) + (cell - (NOTE_SIZE * 2)) * NOTE_SIZE) - 0.1f, -0.05f + (linkNum / 5.667f), 0.2f + (linkNum * -0.05f));
             chainNote.transform.localPosition = position;
@@ -843,7 +845,7 @@ namespace NoteTweaks.UI
                 Managers.Meshes.UpdateDefaultChainHeadMesh(chainMeshFilter.sharedMesh);
             }
 
-            Outlines.AddOutlineObject(chainNote.transform, Outlines.InvertedChainHeadMesh);
+            Outlines.AddOutlineObject(chainNote.transform, Outlines.InvertedChainHeadMesh, false);
             
             Vector3 position = new Vector3(((-NOTE_SIZE / 2) + (cell - (NOTE_SIZE * 2)) * NOTE_SIZE) - 0.1f, NOTE_SIZE + 0.15f, 0);
             chainNote.transform.localPosition = position;
@@ -875,6 +877,8 @@ namespace NoteTweaks.UI
 
         private static void CreateNote(GameNoteController notePrefab, string extraName, int cell)
         {
+            bool isDotNote = cell >= 2;
+            
             GameObject noteCube = Instantiate(notePrefab.transform.GetChild(0).gameObject, NoteContainer.transform);
             noteCube.gameObject.SetActive(false);
             
@@ -890,15 +894,25 @@ namespace NoteTweaks.UI
             if (noteCube.TryGetComponent(out MeshFilter cubeMeshFilter))
             {
                 Managers.Meshes.UpdateDefaultNoteMesh(cubeMeshFilter.sharedMesh);
-                cubeMeshFilter.sharedMesh = Managers.Meshes.CurrentNoteMesh;
+                cubeMeshFilter.sharedMesh = isDotNote ? Managers.Meshes.CurrentDotNoteMesh : Managers.Meshes.CurrentNoteMesh;
                 
-                if (Outlines.InvertedNoteMesh == null)
+                if (isDotNote)
                 {
-                    Outlines.UpdateDefaultNoteMesh(cubeMeshFilter.sharedMesh);
+                    if (Outlines.InvertedDotNoteMesh == null)
+                    {
+                        Outlines.UpdateDefaultDotNoteMesh(cubeMeshFilter.sharedMesh);
+                    }
+                }
+                else
+                {
+                    if (Outlines.InvertedNoteMesh == null)
+                    {
+                        Outlines.UpdateDefaultNoteMesh(cubeMeshFilter.sharedMesh);
+                    }
                 }
             }
 
-            Outlines.AddOutlineObject(noteCube.transform, Outlines.InvertedNoteMesh);
+            Outlines.AddOutlineObject(noteCube.transform, isDotNote ? Outlines.InvertedDotNoteMesh : Outlines.InvertedNoteMesh);
             
             Vector3 position = new Vector3(((NOTE_SIZE / 2) + (cell % 2) * NOTE_SIZE) + 0.1f, (-(int)Math.Floor((float)cell / 2) * NOTE_SIZE) + NOTE_SIZE + 0.15f, 0);
             noteCube.transform.localPosition = position;
@@ -981,9 +995,8 @@ namespace NoteTweaks.UI
 
             arrowTransform.GetComponent<Renderer>().sharedMaterial = Materials.ReplacementArrowMaterial;
             
-            if (cell >= 2)
+            if (isDotNote)
             {
-                // dot notes
                 noteCube.transform.Find("NoteArrow").gameObject.SetActive(false);
                 noteCube.transform.Find("NoteArrowGlow").gameObject.SetActive(false);
                 noteCube.transform.Find("NoteArrow").GetComponent<Renderer>().enabled = false;

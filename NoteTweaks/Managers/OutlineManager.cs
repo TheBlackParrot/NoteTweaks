@@ -13,6 +13,8 @@ namespace NoteTweaks.Managers
         
         private static Mesh _defaultNoteMesh;
         public static Mesh InvertedNoteMesh;
+        private static Mesh _defaultDotNoteMesh;
+        public static Mesh InvertedDotNoteMesh;
         private static Mesh _defaultChainMesh;
         public static Mesh InvertedChainMesh;
         private static Mesh _defaultChainHeadMesh;
@@ -26,6 +28,14 @@ namespace NoteTweaks.Managers
             {
                 _defaultNoteMesh = Utils.Meshes.MakeReadableMeshCopy(mesh);
                 InvertedNoteMesh = _defaultNoteMesh.Invert();
+            }
+        }
+        public static void UpdateDefaultDotNoteMesh(Mesh mesh)
+        {
+            if (_defaultDotNoteMesh == null)
+            {
+                _defaultDotNoteMesh = Utils.Meshes.MakeReadableMeshCopy(mesh);
+                InvertedDotNoteMesh = _defaultDotNoteMesh.Invert();
             }
         }
         public static void UpdateDefaultChainMesh(Mesh mesh)
@@ -53,7 +63,7 @@ namespace NoteTweaks.Managers
             }
         }
 
-        public static void AddOutlineObject(Transform rootTransform, Mesh wantedMesh)
+        public static void AddOutlineObject(Transform rootTransform, Mesh wantedMesh, bool isFullNote = true)
         {
             if (wantedMesh == InvertedBombMesh)
             {
@@ -64,8 +74,16 @@ namespace NoteTweaks.Managers
             }
             else
             {
-                if (rootTransform.Find("NoteOutline") != null)
+                Transform noteOutlineTransform = rootTransform.Find("NoteOutline");
+                if (noteOutlineTransform != null)
                 {
+                    if (isFullNote)
+                    {
+                        if (noteOutlineTransform.TryGetComponent(out MeshFilter existingOutlineMeshFilter))
+                        {
+                            existingOutlineMeshFilter.sharedMesh = wantedMesh;
+                        }
+                    }
                     return;
                 }
             }

@@ -37,10 +37,12 @@ namespace NoteTweaks.Managers
         private static Mesh _defaultChainHeadMesh;
         private static Mesh _defaultChainLinkMesh;
         private static Mesh _defaultNoteMeshScaled;
+        private static Mesh _defaultDotNoteMeshScaled;
         private static Mesh _defaultChainHeadMeshScaled;
         private static Mesh _defaultChainLinkMeshScaled;
         
         private static Mesh _customNoteMesh;
+        private static Mesh _customDotNoteMesh;
         private static Mesh _customChainHeadMesh;
         private static Mesh _customChainLinkMesh;
 
@@ -82,7 +84,7 @@ namespace NoteTweaks.Managers
             }
         }
 
-        public static void UpdateCustomNoteMesh()
+        public static void UpdateCustomNoteMesh(bool isDotNote = false)
         {
             string noteMeshFolder = Path.Combine(MeshFolder, "Notes");
             if (!Directory.Exists(noteMeshFolder))
@@ -90,20 +92,38 @@ namespace NoteTweaks.Managers
                 Directory.CreateDirectory(noteMeshFolder);
             }
 
-            if (Config.NoteMesh == "Default")
+            switch (isDotNote)
             {
-                _defaultNoteMeshScaled = Utils.Meshes.Scale(Utils.Meshes.MakeReadableMeshCopy(_defaultNoteMesh), Config.NoteScale);
-                Outlines.InvertedNoteMesh = Utils.Meshes.MakeReadableMeshCopy(_defaultNoteMeshScaled).Invert();
-                return;
-            }
-            
-            _customNoteMesh =
-                Utils.Meshes.Scale(
-                    FastObjImporter.Instance.ImportFile(Path.Combine(noteMeshFolder, $"{Config.NoteMesh}.obj")),
-                    Config.NoteScale);
-            _customNoteMesh.Optimize();
+                case true when Config.DotNoteMesh == "Default":
+                    _defaultDotNoteMeshScaled = Utils.Meshes.Scale(Utils.Meshes.MakeReadableMeshCopy(_defaultNoteMesh), Config.NoteScale);
+                    Outlines.InvertedDotNoteMesh = Utils.Meshes.MakeReadableMeshCopy(_defaultDotNoteMeshScaled).Invert();
+                    return;
+                
+                case false when Config.NoteMesh == "Default":
+                    _defaultNoteMeshScaled = Utils.Meshes.Scale(Utils.Meshes.MakeReadableMeshCopy(_defaultNoteMesh), Config.NoteScale);
+                    Outlines.InvertedNoteMesh = Utils.Meshes.MakeReadableMeshCopy(_defaultNoteMeshScaled).Invert();   
+                    return;
+                
+                case true:
+                    _customDotNoteMesh =
+                        Utils.Meshes.Scale(
+                            FastObjImporter.Instance.ImportFile(Path.Combine(noteMeshFolder, $"{Config.DotNoteMesh}.obj")),
+                            Config.NoteScale);
+                    _customDotNoteMesh.Optimize();
 
-            Outlines.InvertedNoteMesh = Utils.Meshes.MakeReadableMeshCopy(_customNoteMesh).Invert();
+                    Outlines.InvertedDotNoteMesh = Utils.Meshes.MakeReadableMeshCopy(_customDotNoteMesh).Invert();
+                    break;
+                
+                default:
+                    _customNoteMesh =
+                        Utils.Meshes.Scale(
+                            FastObjImporter.Instance.ImportFile(Path.Combine(noteMeshFolder, $"{Config.NoteMesh}.obj")),
+                            Config.NoteScale);
+                    _customNoteMesh.Optimize();
+
+                    Outlines.InvertedNoteMesh = Utils.Meshes.MakeReadableMeshCopy(_customNoteMesh).Invert();
+                    break;
+            }
         }
         
         public static void UpdateCustomChainHeadMesh()
@@ -172,6 +192,23 @@ namespace NoteTweaks.Managers
                     UpdateCustomNoteMesh();
                 }
                 return _customNoteMesh;
+            }
+        }
+        
+        public static Mesh CurrentDotNoteMesh
+        {
+            get
+            {
+                if (Config.DotNoteMesh == "Default")
+                {
+                    return _defaultDotNoteMeshScaled;
+                }
+
+                if (_customDotNoteMesh == null)
+                {
+                    UpdateCustomNoteMesh(true);
+                }
+                return _customDotNoteMesh;
             }
         }
         
@@ -264,6 +301,7 @@ namespace NoteTweaks.Managers
             
             _defaultNoteMesh = mesh;
             _defaultNoteMeshScaled = Utils.Meshes.Scale(Utils.Meshes.MakeReadableMeshCopy(mesh), Config.NoteScale);
+            _defaultDotNoteMeshScaled = Utils.Meshes.Scale(Utils.Meshes.MakeReadableMeshCopy(mesh), Config.NoteScale);
         }
 
         public static void UpdateDefaultChainHeadMesh(Mesh mesh)
