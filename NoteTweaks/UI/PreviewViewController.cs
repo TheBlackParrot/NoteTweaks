@@ -338,6 +338,7 @@ namespace NoteTweaks.UI
         public static void UpdateNoteScale()
         {
             Managers.Meshes.UpdateCustomNoteMesh();
+            Managers.Meshes.UpdateCustomNoteMesh(true);
             Managers.Meshes.UpdateCustomChainHeadMesh();
             Managers.Meshes.UpdateCustomChainLinkMesh();
             UpdateOutlines();
