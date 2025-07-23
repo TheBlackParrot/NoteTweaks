@@ -290,6 +290,9 @@
         <None Include="Resources\Meshes\Notes\Cylinder.obj">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
+        <None Include="Resources\Meshes\Notes\Cylinder90.obj">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
         <None Include="Resources\Meshes\Notes\Flat.obj">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
@@ -441,6 +444,9 @@
         </OutputCopy>
         <OutputCopy Include="Resources\Meshes\Notes\Cylinder.obj">
             <OutputPath>UserData\NoteTweaks\Meshes\Notes\Cylinder.obj</OutputPath>
+        </OutputCopy>
+        <OutputCopy Include="Resources\Meshes\Notes\Cylinder90.obj">
+            <OutputPath>UserData\NoteTweaks\Meshes\Notes\Cylinder90.obj</OutputPath>
         </OutputCopy>
         <OutputCopy Include="Resources\Meshes\Notes\Flat.obj">
             <OutputPath>UserData\NoteTweaks\Meshes\Notes\Flat.obj</OutputPath>
